@@ -1,6 +1,6 @@
 {
 	"name": "frontend",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Comprehensive frontend development toolkit with TypeScript, React, Vite, TanStack Router & Query support. Role-based agents for architecture, development, code review, testing, and UI validation. Includes Figma Make integration for importing working prototypes.",
 	"author": {
 		"name": "Jack Rudenko",
@@ -27,13 +27,15 @@
 		"./agents/api-analyst.md",
 		"./agents/cleaner.md",
 		"./agents/reviewer.md",
-		"./agents/codex-reviewer.md"
+		"./agents/codex-reviewer.md",
+		"./agents/ui-validator.md"
 	],
 	"commands": [
 		"./commands/implement.md",
 		"./commands/import-figma.md",
 		"./commands/api-docs.md",
-		"./commands/cleanup-artifacts.md"
+		"./commands/cleanup-artifacts.md",
+		"./commands/validate-ui.md"
 	],
 	"skills": [
 		"./skills/browser-debugger",
