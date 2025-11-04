@@ -14,8 +14,8 @@ A comprehensive plugin marketplace created and maintained by [MadAppGang](https:
 Add this marketplace to your Claude Code instance and start using our curated plugins:
 
 ```bash
-# Add the marketplace (use your GitHub URL once pushed)
-/plugin marketplace add madappgang/claude-plugins
+# Add the marketplace from GitHub
+/plugin marketplace add MadAppGang/claude-code
 
 # Install a plugin
 /plugin install frontend-development@mag-claude-plugins
@@ -29,42 +29,33 @@ This repository contains production-ready plugins designed for modern web develo
 
 ### Available Plugins
 
-#### 🎨 [Frontend Development](/.claude-plugin/plugins/frontend-development)
+#### 🎨 Frontend Development
 
-**Version:** 1.0.0
-**Category:** Development
+**Version:** 1.0.0 | **Category:** Development | **[📖 Full Documentation](./docs/frontend-development.md)**
 
-Comprehensive toolkit for TypeScript/React development with Vite, TanStack Router, and TanStack Query.
+Professional toolkit for TypeScript/React development with orchestrated workflows, quality automation, and team collaboration features.
 
-**Includes:**
-- **8 Specialized Agents**
-  - `typescript-frontend-dev` - Expert TypeScript/React implementation agent
-  - `frontend-architect-planner` - Architecture planning and system design
-  - `ui-manual-tester` - Browser-based UI testing with Chrome DevTools
-  - `vitest-test-architect` - Comprehensive testing strategy and implementation
-  - `api-documentation-analyzer` - API documentation analysis and integration
-  - `project-cleaner` - Clean up temporary artifacts and development files
-  - `senior-code-reviewer` - Comprehensive code review with best practices
-  - `senior-code-reviewer-codex` - Automated AI code review using Codex
+**Highlights:**
+- **8 Specialized Agents** - From architecture planning to code review
+- **5 Slash Commands** - Including `/implement` for full-cycle orchestration
+- **2 Skills** - Browser testing and API analysis
+- **4 MCP Servers** - Apidog, Figma, GitHub, PostgreSQL
 
-- **5 Slash Commands**
-  - `/implement` - Full-cycle feature implementation orchestrator with multi-agent workflow
-  - `/import-figma` - Import Figma components into your React project
-  - `/configure-mcp` - Configure MCP servers (Apidog, Figma, etc.) for your project
-  - `/api-docs` - Analyze and work with API documentation
-  - `/cleanup-artifacts` - Clean up temporary development artifacts
+**The `/implement` Workflow:**
 
-- **2 Skills**
-  - `browser-debugger` - Systematic UI testing and debugging using Chrome DevTools
-  - `api-spec-analyzer` - Analyze OpenAPI/Swagger specifications and generate clients
+The star feature is the `/implement` command—a complete 7-stage orchestration that takes you from idea to production-ready code:
 
-- **MCP Servers**
-  - Apidog integration (with dynamic project configuration)
-  - Figma integration
-  - GitHub integration
-  - Database tools (PostgreSQL)
+1. **Architecture Planning** → Designs solution, asks questions, gets approval
+2. **Implementation** → Generates code following project patterns
+3. **Triple Review** → Manual review + AI analysis + browser testing
+4. **Test Generation** → Creates comprehensive test suites
+5. **User Approval** → Final review gate
+6. **Cleanup** → Removes temporary artifacts
+7. **Delivery** → Production-ready feature with documentation
 
-**Best for:** React/TypeScript projects, TanStack ecosystem, frontend teams
+**Perfect for:** React/TypeScript teams, TanStack ecosystem, API-driven apps, Figma workflows
+
+👉 **[Read the complete guide](./docs/frontend-development.md)** for detailed workflow documentation
 
 ---
 
@@ -73,40 +64,35 @@ Comprehensive toolkit for TypeScript/React development with Vite, TanStack Route
 ### Prerequisites
 
 - Claude Code installed and configured
-- Git access (for adding marketplace)
+- Git access to GitHub
 
-### Option A: Global Installation (All Projects)
+### Option A: Global Installation
 
 Install plugins globally to use across all your projects:
 
-**Step 1: Add Marketplace Globally**
 ```bash
-# GitHub (recommended)
-/plugin marketplace add madappgang/claude-plugins
+# Add the marketplace from GitHub
+/plugin marketplace add MadAppGang/claude-code
 
-# Local path (for development/testing)
-/plugin marketplace add /path/to/claude-code
-
-# GitLab or other Git hosting
-/plugin marketplace add https://gitlab.com/your-org/claude-plugins.git
-```
-
-**Step 2: Install Plugin Globally**
-```bash
-# Install a specific plugin
+# Install the frontend development plugin
 /plugin install frontend-development@mag-claude-plugins
 
-# Check installed plugins
+# Verify installation
 /plugin list
 ```
 
 **Result:** Plugin available in all your projects ✅
 
+**Best for:**
+- Individual developers
+- Testing the plugin
+- Using across multiple projects
+
 ---
 
 ### Option B: Project-Specific Installation (Recommended for Teams)
 
-Install plugins only for a specific project/folder. Perfect for teams!
+Install plugins for a specific project. Team members get automatic setup!
 
 **Step 1: Add to Project Settings**
 
@@ -118,7 +104,7 @@ Create or edit `.claude/settings.json` in your project root:
     "mag-claude-plugins": {
       "source": {
         "source": "github",
-        "repo": "madappgang/claude-plugins"
+        "repo": "MadAppGang/claude-code"
       }
     }
   },
@@ -128,9 +114,18 @@ Create or edit `.claude/settings.json` in your project root:
 }
 ```
 
-**Step 2: Trust the Folder**
+**Step 2: Commit to Git**
 
-When Claude Code prompts to trust the folder, accept:
+```bash
+git add .claude/settings.json
+git commit -m "Add MAG Claude plugins configuration"
+git push
+```
+
+**Step 3: Team Members Trust the Folder**
+
+When team members pull and open the project, Claude Code prompts:
+
 ```
 🔒 Trust this folder?
    Folder: /path/to/your/project
@@ -139,159 +134,87 @@ When Claude Code prompts to trust the folder, accept:
    [Trust] [Don't Trust]
 ```
 
-**Step 3: Verify**
-```bash
-# Check plugins enabled for this project
-/plugin list
+After trusting, plugins install automatically!
 
-# Should show: frontend-development@mag-claude-plugins (project)
-```
-
-**Result:** Plugin only available in this project ✅
+**Result:** Consistent plugin setup across entire team ✅
 
 **Benefits:**
-- ✅ Team members auto-install when they trust the folder
-- ✅ Consistent setup across team
-- ✅ No manual installation steps
-- ✅ Project-specific plugins don't affect other projects
+- ✅ Zero manual setup for team members
+- ✅ Configuration in version control
+- ✅ No environment drift
+- ✅ Project-specific, doesn't affect other projects
 
 ---
 
-### Option C: Local Marketplace (Development)
+### Local Development
 
-For testing plugins locally before publishing:
+**Testing plugins locally or contributing?**
 
-**Step 1: Add Local Marketplace**
-```bash
-/plugin marketplace add /Users/jack/mag/claude-code
-```
-
-**Step 2: Install from Local**
-```bash
-/plugin install frontend-development@mag-claude-plugins
-```
-
-**Result:** Test changes immediately without git push ✅
+See the **[Local Development Guide](./docs/local-development.md)** for detailed instructions on:
+- Testing changes before publishing
+- Debugging plugins
+- Development workflow
+- Contributing guidelines
 
 ---
 
 ## 📚 Usage Guide
 
-### Using Agents
+### Quick Start
 
-Once a plugin is installed, its agents are available via the Task tool or proactively invoked by Claude:
+Once installed, plugins work seamlessly with Claude Code:
 
-**Example: Planning a new feature**
-```
-User: "I need to build a user management dashboard with CRUD operations"
+**Agents** are automatically invoked by Claude when appropriate, or you can request them explicitly.
 
-Claude automatically invokes the frontend-architect-planner agent to:
-1. Perform gap analysis
-2. Ask clarifying questions
-3. Design architecture
-4. Create implementation plan in AI-DOCS/
-5. Get user approval before proceeding
-```
+**Slash Commands** provide powerful one-line workflows for common tasks.
 
-**Example: Implementing a feature**
-```
-User: "Implement the user management feature following the plan"
+**Skills** enhance Claude's capabilities and are automatically used when relevant.
 
-Claude uses the typescript-frontend-dev agent to:
-1. Create todo list for tracking
-2. Implement features following project patterns
-3. Run quality checks (Biome, TypeScript, tests)
-4. Present completed implementation
-```
+### Example: Full-Cycle Feature Implementation
 
-### Using Slash Commands
-
-Slash commands provide powerful workflows:
-
-**`/implement` - Full-cycle implementation**
 ```bash
-/implement Create a user profile card component with avatar, name, and bio fields
+/implement Create a user profile page with avatar upload and bio editing
 ```
 
-This orchestrates a complete workflow:
-1. Architecture planning (frontend-architect-planner)
-2. User approval gate
-3. Implementation (typescript-frontend-dev)
-4. Triple review (code review + automated analysis + UI testing)
-5. Test creation (vitest-test-architect)
-6. User final approval
-7. Project cleanup
+This single command:
+1. Plans the architecture and gets your approval
+2. Implements all components following your project patterns
+3. Reviews code with 3 different approaches (human + AI + browser)
+4. Generates comprehensive tests
+5. Cleans up artifacts
+6. Delivers production-ready code with documentation
 
-**`/import-figma` - Import Figma components**
+**Result:** Complete feature in minutes, not hours.
+
+### Example: Import Figma Design
+
 ```bash
-/import-figma UserCard
+/import-figma NavigationBar
 ```
 
-Automatically imports a Figma component with:
-- Code adaptation for your project structure
-- Dependency installation
-- Test route creation
-- Browser validation
-- CLAUDE.md documentation
+Fetches your Figma component, adapts it to your codebase, installs dependencies, and opens it in browser for validation.
 
-**`/configure-mcp` - Configure MCP servers**
+### Example: Configure API Access
+
 ```bash
 /configure-mcp apidog
 ```
 
-Smart interactive setup for MCP servers:
-- **Checks existing config first** - won't ask if already configured
-- **Validates credentials** - tests connection before and after saving
-- Collects credentials (project ID, API tokens)
-- Writes to `.claude/settings.json`
-- Tests MCP server availability
-- Offers reconfiguration if config invalid
-- Supports: Apidog, Figma, GitHub, Database tools
+Smart setup that checks existing configuration, validates credentials, and only asks for what's missing.
 
-**Smart behavior:**
-```bash
-# If already configured:
-✅ Already configured! Connection test: Successful
-   [1] Keep [2] Reconfigure [3] Test again
+---
 
-# If config broken:
-⚠️ Config found but invalid (expired token)
-   [1] Reconfigure [2] Keep anyway [3] Remove
+**📖 For comprehensive documentation, examples, and detailed workflow explanations:**
 
-# If no config:
-📝 Let's set up Apidog MCP...
-```
+👉 **[Frontend Development Plugin - Complete Guide](./docs/frontend-development.md)**
 
-### Using Skills
-
-Skills provide specialized capabilities that Claude invokes automatically:
-
-**`browser-debugger` skill**
-
-Automatically invoked when you:
-- Implement UI features
-- Report console errors
-- Need to test forms or interactions
-
-Claude will launch the ui-manual-tester agent to:
-- Navigate to your app
-- Test interactions
-- Monitor console and network
-- Report issues with reproduction steps
-
-**`api-spec-analyzer` skill**
-
-Automatically invoked when you:
-- Work with OpenAPI/Swagger specifications
-- Need to generate API clients
-- Analyze API endpoints
-- Validate API schemas
-
-Claude will:
-- Parse OpenAPI/Swagger specs
-- Generate TypeScript clients
-- Create type definitions
-- Validate endpoint schemas
+The complete guide includes:
+- Detailed `/implement` workflow (all 7 stages explained)
+- Complete agent reference with use cases
+- All slash commands with examples
+- Skills documentation
+- MCP server setup guides
+- Troubleshooting and best practices
 
 ---
 
@@ -631,17 +554,18 @@ You can also reference an external MCP configuration file:
 
 ### Team Distribution
 
-**Option 1: GitHub/GitLab Distribution**
+**GitHub Distribution (Recommended)**
 
-1. Push this repository to GitHub/GitLab
-2. Team members add the marketplace:
-   ```bash
-   /plugin marketplace add your-org/claude-plugins
-   ```
+Team members add the marketplace once:
 
-**Option 2: Project-Level Auto-Install**
+```bash
+/plugin marketplace add MadAppGang/claude-code
+/plugin install frontend-development@mag-claude-plugins
+```
 
-In your project's `.claude/settings.json`:
+**Project-Level Auto-Install (Best for Teams)**
+
+Add to your project's `.claude/settings.json` and commit to git:
 
 ```json
 {
@@ -649,7 +573,7 @@ In your project's `.claude/settings.json`:
     "mag-claude-plugins": {
       "source": {
         "source": "github",
-        "repo": "madappgang/claude-plugins"
+        "repo": "MadAppGang/claude-code"
       }
     }
   },
@@ -657,7 +581,7 @@ In your project's `.claude/settings.json`:
 }
 ```
 
-When team members trust the folder, plugins auto-install.
+When team members pull and trust the folder, plugins auto-install. Zero manual setup!
 
 ### Version Management
 
@@ -716,7 +640,7 @@ When team members trust the folder, plugins auto-install.
 
 ### Community Requests
 
-Have a plugin idea? [Open an issue](https://github.com/madappgang/claude-plugins/issues) with the `plugin-request` label.
+Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/issues) with the `plugin-request` label.
 
 ---
 
@@ -757,25 +681,31 @@ Have a plugin idea? [Open an issue](https://github.com/madappgang/claude-plugins
 1. Check the [documentation](https://docs.claude.com/en/docs/claude-code/plugins)
 2. Review [plugin examples](./.claude-plugin/plugins)
 3. Check [ai-docs](./ai-docs/) for detailed guides
-4. [Open an issue](https://github.com/madappgang/claude-plugins/issues)
+4. [Open an issue](https://github.com/MadAppGang/claude-code/issues)
 5. Contact: [i@madappgang.com](mailto:i@madappgang.com)
 
 ---
 
 ## 📖 Detailed Documentation
 
-For comprehensive guides and technical details, see the **[ai-docs](./ai-docs/)** directory:
+### User Documentation
 
-### Architecture & Configuration
+- **[Frontend Development Plugin Guide](./docs/frontend-development.md)** - Complete user guide with `/implement` workflow deep-dive
+
+### Technical Documentation
+
+For technical details and architecture, see the **[ai-docs](./ai-docs/)** directory:
+
+#### Architecture & Configuration
 - **[TEAM_CONFIG_ARCHITECTURE.md](./ai-docs/TEAM_CONFIG_ARCHITECTURE.md)** - Team-first configuration, shareable config vs private secrets
 - **[DYNAMIC_MCP_GUIDE.md](./ai-docs/DYNAMIC_MCP_GUIDE.md)** - Dynamic MCP server configuration patterns
 - **[IMPROVEMENTS_SUMMARY.md](./ai-docs/IMPROVEMENTS_SUMMARY.md)** - Configuration command design decisions
 
-### Reference
+#### Reference
 - **[COMPLETE_PLUGIN_SUMMARY.md](./ai-docs/COMPLETE_PLUGIN_SUMMARY.md)** - Complete plugin inventory (8 agents, 5 commands, 2 skills)
 - **[FINAL_SUMMARY.md](./ai-docs/FINAL_SUMMARY.md)** - Project overview and statistics
 
-### Plugin-Specific Docs
+#### Plugin-Specific Technical Docs
 - **[DEPENDENCIES.md](./.claude-plugin/plugins/frontend-development/DEPENDENCIES.md)** - All dependencies and environment variables
 - **[CONFIGURE_MCP_FLOW.md](./.claude-plugin/plugins/frontend-development/commands/CONFIGURE_MCP_FLOW.md)** - Configuration flow diagram
 
@@ -808,8 +738,8 @@ Company: [MadAppGang](https://madappgang.com)
 ## 📞 Contact & Support
 
 - **Email**: [i@madappgang.com](mailto:i@madappgang.com)
-- **Issues**: [GitHub Issues](https://github.com/madappgang/claude-plugins/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/madappgang/claude-plugins/discussions)
+- **Issues**: [GitHub Issues](https://github.com/MadAppGang/claude-code/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/MadAppGang/claude-code/discussions)
 - **Website**: [madappgang.com](https://madappgang.com)
 
 ---

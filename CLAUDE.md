@@ -147,13 +147,13 @@ CODEX_API_KEY=your-codex-key
 
 ### Publish to GitHub
 ```bash
-git remote add origin https://github.com/madappgang/claude-plugins.git
+git remote add origin https://github.com/MadAppGang/claude-code.git
 git push -u origin main
 ```
 
 ### Team Installation
 ```bash
-/plugin marketplace add madappgang/claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 /plugin install frontend-development@mag-claude-plugins
 ```
 
@@ -163,7 +163,7 @@ Add to project's `.claude/settings.json`:
 {
   "extraKnownMarketplaces": {
     "mag-claude-plugins": {
-      "source": {"source": "github", "repo": "madappgang/claude-plugins"}
+      "source": {"source": "github", "repo": "MadAppGang/claude-code"}
     }
   },
   "enabledPlugins": ["frontend-development@mag-claude-plugins"]

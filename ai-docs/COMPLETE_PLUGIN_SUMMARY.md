@@ -152,7 +152,7 @@ git commit -m "Complete plugin marketplace with all agents, skills, and MCP supp
 git push origin main
 
 # Team members install
-/plugin marketplace add madappgang/claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 /plugin install frontend-development@mag-claude-plugins
 ```
 
@@ -160,11 +160,11 @@ git push origin main
 
 ```bash
 # Push to GitLab or other git hosting
-git remote add origin https://gitlab.com/madappgang/claude-plugins.git
+git remote add origin https://gitlab.com/MadAppGang/claude-code.git
 git push -u origin main
 
 # Team members install
-/plugin marketplace add https://gitlab.com/madappgang/claude-plugins.git
+/plugin marketplace add https://gitlab.com/MadAppGang/claude-code.git
 /plugin install frontend-development@mag-claude-plugins
 ```
 
@@ -178,7 +178,7 @@ Add to project's `.claude/settings.json`:
     "mag-claude-plugins": {
       "source": {
         "source": "github",
-        "repo": "madappgang/claude-plugins"
+        "repo": "MadAppGang/claude-code"
       }
     }
   },
@@ -356,8 +356,8 @@ Agents work together with **handoffs, quality gates, and feedback loops** for pr
 **Company:** MadAppGang
 **Website:** https://madappgang.com
 
-**Issues:** https://github.com/madappgang/claude-plugins/issues
-**Discussions:** https://github.com/madappgang/claude-plugins/discussions
+**Issues:** https://github.com/MadAppGang/claude-code/issues
+**Discussions:** https://github.com/MadAppGang/claude-code/discussions
 
 ---
 

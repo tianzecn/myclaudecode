@@ -195,13 +195,13 @@ claude-code/ (27 files)
 ```bash
 # Push to GitHub
 cd /Users/jack/mag/claude-code
-git remote add origin https://github.com/madappgang/claude-plugins.git
+git remote add origin https://github.com/MadAppGang/claude-code.git
 git add .
 git commit -m "Complete plugin marketplace with team architecture"
 git push -u origin main
 
 # Team members install
-/plugin marketplace add madappgang/claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 /plugin install frontend-development@mag-claude-plugins
 ```
 
@@ -223,7 +223,7 @@ Add to project's `.claude/settings.json`:
     "mag-claude-plugins": {
       "source": {
         "source": "github",
-        "repo": "madappgang/claude-plugins"
+        "repo": "MadAppGang/claude-code"
       }
     }
   },
@@ -241,7 +241,7 @@ Add to project's `.claude/settings.json`:
 ```bash
 git clone project-repo
 cd project-repo
-/plugin marketplace add madappgang/claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 /plugin install frontend-development@mag-claude-plugins
 ```
 
