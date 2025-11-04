@@ -186,8 +186,8 @@ Read these:
 ## 🔗 Related Documentation
 
 ### In Plugin Directory
-- `plugins/frontend-development/DEPENDENCIES.md` - Dependencies guide
-- `plugins/frontend-development/commands/CONFIGURE_MCP_FLOW.md` - Configuration flow
+- `plugins/frontend/DEPENDENCIES.md` - Dependencies guide
+- `plugins/frontend/commands/CONFIGURE_MCP_FLOW.md` - Configuration flow
 
 ### In Root Directory
 - `README.md` - Main documentation and quick start

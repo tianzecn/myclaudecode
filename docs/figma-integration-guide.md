@@ -1,6 +1,6 @@
 # Figma Integration Guide
 
-Complete guide for integrating Figma Make projects with the frontend-development plugin.
+Complete guide for integrating Figma Make projects with the frontend plugin.
 
 ## What is Figma Make?
 
@@ -329,7 +329,7 @@ Track imported components from Figma Make:
 
 If you're still having issues:
 
-1. Check the [DEPENDENCIES.md](../plugins/frontend-development/DEPENDENCIES.md) for MCP server setup
+1. Check the [DEPENDENCIES.md](../plugins/frontend/DEPENDENCIES.md) for MCP server setup
 2. Verify Figma access token is valid
 3. Ensure the component exists in your Figma file
 4. Try a different component to test if issue is specific
@@ -337,4 +337,4 @@ If you're still having issues:
 ---
 
 **Last Updated:** November 2024
-**Plugin Version:** frontend-development v1.1.0
+**Plugin Version:** frontend v1.1.0

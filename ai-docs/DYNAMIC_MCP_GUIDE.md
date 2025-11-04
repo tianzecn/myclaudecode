@@ -261,7 +261,7 @@ ${USER}                      # Current username
 ### Plugin Structure
 
 ```
-frontend-development/
+frontend/
 ├── mcp-servers/
 │   ├── mcp-config.example.json        # Template with ${VARS}
 │   └── README.md                      # Setup instructions
@@ -274,7 +274,7 @@ frontend-development/
 
 **Step 1: Install plugin**
 ```bash
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 **Step 2: Run setup**
@@ -442,7 +442,7 @@ npx -y @apidog/mcp-server --project-id abc123 --token secret
 
 ## Additional Resources
 
-- [Plugin Example: frontend-development](./plugins/frontend-development)
+- [Plugin Example: frontend-development](./plugins/frontend)
 - [Setup Command Example](./commands/setup-apidog.md)
 - [MCP Config Examples](./mcp-servers/mcp-config.example.json)
 - [Claude Code Docs](https://docs.claude.com/en/docs/claude-code/plugins)

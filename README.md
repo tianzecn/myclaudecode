@@ -23,7 +23,7 @@ Then add to your project's `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
@@ -40,7 +40,7 @@ This repository contains production-ready plugins designed for modern web develo
 
 #### 🎨 Frontend Development
 
-**Version:** 1.0.0 | **Category:** Development | **[📖 Full Documentation](./docs/frontend-development.md)**
+**Version:** 1.0.0 | **Category:** Development | **[📖 Full Documentation](./docs/frontend.md)**
 
 Professional toolkit for TypeScript/React development with orchestrated workflows, quality automation, and team collaboration features.
 
@@ -64,7 +64,7 @@ The star feature is the `/implement` command—a complete 7-stage orchestration 
 
 **Perfect for:** React/TypeScript teams, TanStack ecosystem, API-driven apps, Figma workflows
 
-👉 **[Read the complete guide](./docs/frontend-development.md)** for detailed workflow documentation
+👉 **[Read the complete guide](./docs/frontend.md)** for detailed workflow documentation
 
 ---
 
@@ -96,7 +96,7 @@ Add or edit `.claude/settings.json` in your project root:
 ```json
 {
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
@@ -135,7 +135,7 @@ Need more than one plugin? Just add to the array:
 ```json
 {
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins",
+    "frontend@mag-claude-plugins",
     "code-quality@mag-claude-plugins",
     "api-tools@mag-claude-plugins"
   ]
@@ -156,7 +156,7 @@ After setup, verify everything works:
 /plugin list
 
 # Should show:
-# frontend-development@mag-claude-plugins (project-specific)
+# frontend@mag-claude-plugins (project-specific)
 #   Version: 1.2.0
 #   Status: ✓ Loaded
 ```
@@ -216,7 +216,7 @@ Smart setup that checks existing configuration, validates credentials, and only 
 
 **📖 For comprehensive documentation, examples, and detailed workflow explanations:**
 
-👉 **[Frontend Development Plugin - Complete Guide](./docs/frontend-development.md)**
+👉 **[Frontend Development Plugin - Complete Guide](./docs/frontend.md)**
 
 The complete guide includes:
 - Detailed `/implement` workflow (all 7 stages explained)
@@ -570,7 +570,7 @@ If you prefer to install plugins globally (available in all projects), you can u
 /plugin marketplace add MadAppGang/claude-code
 
 # Install plugin globally
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Verify
 /plugin list
@@ -602,10 +602,10 @@ See the **[Local Development Guide](./docs/local-development.md)** for:
 ```bash
 # Test local plugin
 /plugin marketplace add /path/to/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Make changes and reload
-/plugin reload frontend-development@mag-claude-plugins
+/plugin reload frontend@mag-claude-plugins
 ```
 
 ### Adding Marketplace to Specific Project
@@ -623,7 +623,7 @@ If you don't want to add the marketplace globally, you can include it in project
     }
   },
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
@@ -638,7 +638,7 @@ If you don't want to add the marketplace globally, you can include it in project
 {
   "plugins": [
     {
-      "name": "frontend-development",
+      "name": "frontend",
       "version": "1.0.0",
       "source": "./plugins/frontend-development"
     }
@@ -649,7 +649,7 @@ If you don't want to add the marketplace globally, you can include it in project
 **Install specific versions:**
 
 ```bash
-/plugin install frontend-development@mag-claude-plugins@1.0.0
+/plugin install frontend@mag-claude-plugins@1.0.0
 ```
 
 ### Plugin Updates
@@ -663,8 +663,8 @@ If you don't want to add the marketplace globally, you can include it in project
 **Reinstall plugin to get latest:**
 
 ```bash
-/plugin remove frontend-development@mag-claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ---
@@ -699,12 +699,12 @@ Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/is
 ```json
 // ✅ CORRECT - Array format (recommended)
 "enabledPlugins": [
-  "frontend-development@mag-claude-plugins"
+  "frontend@mag-claude-plugins"
 ]
 
 // ✅ ALSO CORRECT - Object format (legacy, still works)
 "enabledPlugins": {
-  "frontend-development@mag-claude-plugins": true
+  "frontend@mag-claude-plugins": true
 }
 ```
 
@@ -712,7 +712,7 @@ Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/is
 1. Ensure marketplace is added globally: `/plugin marketplace add MadAppGang/claude-code`
 2. Verify `.claude/settings.json` is in project root
 3. Check plugin list: `/plugin list`
-4. Reload Claude Code or run `/plugin reload frontend-development@mag-claude-plugins`
+4. Reload Claude Code or run `/plugin reload frontend@mag-claude-plugins`
 
 **Marketplace not found:**
 - Verify marketplace added: `/plugin marketplace list`
@@ -725,7 +725,7 @@ Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/is
 - See [Frontend Development Dependencies](./plugins/frontend-development/DEPENDENCIES.md)
 
 **Need help?**
-- [Frontend Development Guide](./docs/frontend-development.md) - Complete usage guide
+- [Frontend Development Guide](./docs/frontend.md) - Complete usage guide
 - [Local Development Guide](./docs/local-development.md) - Detailed debugging
 - [Open an issue](https://github.com/MadAppGang/claude-code/issues)
 - Email: [i@madappgang.com](mailto:i@madappgang.com)
@@ -736,7 +736,7 @@ Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/is
 
 ### User Documentation
 
-- **[Frontend Development Plugin Guide](./docs/frontend-development.md)** - Complete user guide with `/implement` workflow deep-dive
+- **[Frontend Development Plugin Guide](./docs/frontend.md)** - Complete user guide with `/implement` workflow deep-dive
 - **[Figma Integration Guide](./docs/figma-integration-guide.md)** - How to get Figma URLs and set up design imports
 
 ### Technical Documentation

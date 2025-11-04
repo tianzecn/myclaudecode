@@ -19,14 +19,14 @@
 
 | Agent | Purpose | File |
 |-------|---------|------|
-| typescript-frontend-dev | Expert TypeScript/React implementation | agents/typescript-frontend-dev.md |
-| frontend-architect-planner | Architecture planning & design | agents/frontend-architect-planner.md |
-| ui-manual-tester | Browser-based UI testing with Chrome DevTools | agents/ui-manual-tester.md |
-| vitest-test-architect | Testing strategy & implementation | agents/vitest-test-architect.md |
-| api-documentation-analyzer | API docs analysis & integration | agents/api-documentation-analyzer.md |
-| project-cleaner | Cleanup temporary artifacts | agents/project-cleaner.md |
-| senior-code-reviewer | Human-style code review | agents/senior-code-reviewer.md |
-| senior-code-reviewer-codex | AI-powered code review using Codex | agents/senior-code-reviewer-codex.md |
+| developer | Expert TypeScript/React implementation | agents/developer.md |
+| architect | Architecture planning & design | agents/architect.md |
+| tester | Browser-based UI testing with Chrome DevTools | agents/tester.md |
+| test-architect | Testing strategy & implementation | agents/test-architect.md |
+| api-analyst | API docs analysis & integration | agents/api-analyst.md |
+| cleaner | Cleanup temporary artifacts | agents/cleaner.md |
+| reviewer | Human-style code review | agents/reviewer.md |
+| codex-reviewer | AI-powered code review using Codex | agents/codex-reviewer.md |
 
 #### 5 Slash Commands
 
@@ -101,17 +101,17 @@ claude-code/
 └── .claude-plugin/
     ├── marketplace.json               # Marketplace config
     └── plugins/
-        └── frontend-development/      # Complete plugin (18 files)
+        └── frontend/      # Complete plugin (18 files)
             ├── plugin.json            # Plugin manifest
             ├── agents/                # 8 agents
-            │   ├── typescript-frontend-dev.md
-            │   ├── frontend-architect-planner.md
-            │   ├── ui-manual-tester.md
-            │   ├── vitest-test-architect.md
-            │   ├── api-documentation-analyzer.md
-            │   ├── project-cleaner.md
-            │   ├── senior-code-reviewer.md
-            │   └── senior-code-reviewer-codex.md
+            │   ├── developer.md
+            │   ├── architect.md
+            │   ├── tester.md
+            │   ├── test-architect.md
+            │   ├── api-analyst.md
+            │   ├── cleaner.md
+            │   ├── reviewer.md
+            │   └── codex-reviewer.md
             ├── commands/              # 5 commands
             │   ├── implement.md
             │   ├── import-figma.md
@@ -139,7 +139,7 @@ claude-code/
 /plugin marketplace add /Users/jack/mag/claude-code
 
 # Install plugin
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Option 2: GitHub Distribution
@@ -153,7 +153,7 @@ git push origin main
 
 # Team members install
 /plugin marketplace add MadAppGang/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Option 3: GitLab/Other Git
@@ -165,7 +165,7 @@ git push -u origin main
 
 # Team members install
 /plugin marketplace add https://gitlab.com/MadAppGang/claude-code.git
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Option 4: Auto-Install in Projects
@@ -183,7 +183,7 @@ Add to project's `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
+    "frontend@mag-claude-plugins": true
   }
 }
 ```
@@ -198,12 +198,12 @@ Add to project's `.claude/settings.json`:
 User: "Create a user profile page with avatar, name, bio, and edit functionality"
 
 Claude: [Uses /implement command]
-1. Launches frontend-architect-planner → creates plan
+1. Launches architect → creates plan
 2. Waits for user approval
-3. Launches typescript-frontend-dev → implements feature
-4. Launches dual code reviewers (senior-code-reviewer + senior-code-reviewer-codex)
-5. Launches ui-manual-tester → validates in browser
-6. Launches vitest-test-architect → creates tests
+3. Launches developer → implements feature
+4. Launches dual code reviewers (reviewer + codex-reviewer)
+5. Launches tester → validates in browser
+6. Launches test-architect → creates tests
 7. Presents final implementation for approval
 ```
 
@@ -218,7 +218,7 @@ Claude: [Uses /import-figma command]
 3. Adapts imports for project structure
 4. Installs dependencies
 5. Creates test route at /playground/user-card
-6. Validates with ui-manual-tester
+6. Validates with tester
 7. Updates CLAUDE.md with mapping
 ```
 
@@ -245,7 +245,7 @@ Claude: [Uses apidog MCP with configured project ID]
 User: "I just implemented the login form"
 
 Claude: [Automatically invokes browser-debugger skill]
-1. Launches ui-manual-tester agent
+1. Launches tester agent
 2. Navigates to localhost:5173
 3. Tests form interactions
 4. Monitors console & network

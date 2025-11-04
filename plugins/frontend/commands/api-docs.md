@@ -5,7 +5,7 @@ allowed-tools: Task, Read, Bash
 
 ## Mission
 
-Provide comprehensive API documentation analysis for the Tenant Management Portal API by leveraging the api-documentation-analyzer agent. Answer questions about endpoints, data structures, authentication, and usage patterns.
+Provide comprehensive API documentation analysis for the Tenant Management Portal API by leveraging the api-analyst agent. Answer questions about endpoints, data structures, authentication, and usage patterns.
 
 ## User Query
 
@@ -26,7 +26,7 @@ Analyze the user's question to determine what they need:
 
 ### STEP 2: Launch API Documentation Analyzer
 
-Use the Task tool with `subagent_type: "api-documentation-analyzer"` and provide a detailed prompt:
+Use the Task tool with `subagent_type: "api-analyst"` and provide a detailed prompt:
 
 ```
 The user is asking: {{ARGS}}

@@ -114,18 +114,18 @@ claude-code/ (27 files)
 └── .claude-plugin/
     ├── marketplace.json               # Marketplace config
     └── plugins/
-        └── frontend-development/      # Complete plugin (20 files)
+        └── frontend/      # Complete plugin (20 files)
             ├── plugin.json
             ├── DEPENDENCIES.md        # Complete dependencies
             ├── agents/ (8 agents)
-            │   ├── typescript-frontend-dev.md
-            │   ├── frontend-architect-planner.md
-            │   ├── ui-manual-tester.md
-            │   ├── vitest-test-architect.md
-            │   ├── api-documentation-analyzer.md
-            │   ├── project-cleaner.md
-            │   ├── senior-code-reviewer.md
-            │   └── senior-code-reviewer-codex.md
+            │   ├── developer.md
+            │   ├── architect.md
+            │   ├── tester.md
+            │   ├── test-architect.md
+            │   ├── api-analyst.md
+            │   ├── cleaner.md
+            │   ├── reviewer.md
+            │   └── codex-reviewer.md
             ├── commands/ (5 commands)
             │   ├── implement.md
             │   ├── import-figma.md
@@ -202,7 +202,7 @@ git push -u origin main
 
 # Team members install
 /plugin marketplace add MadAppGang/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Option 2: Local Testing
@@ -210,7 +210,7 @@ git push -u origin main
 ```bash
 # Add locally for testing
 /plugin marketplace add /Users/jack/mag/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Option 3: Auto-Install in Projects
@@ -228,7 +228,7 @@ Add to project's `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
+    "frontend@mag-claude-plugins": true
   }
 }
 ```
@@ -244,7 +244,7 @@ Add to project's `.claude/settings.json`:
 git clone project-repo
 cd project-repo
 /plugin marketplace add MadAppGang/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 **Step 2: Set Up Environment**

@@ -1,0 +1,44 @@
+{
+	"name": "frontend",
+	"version": "2.0.0",
+	"description": "Comprehensive frontend development toolkit with TypeScript, React, Vite, TanStack Router & Query support. Role-based agents for architecture, development, code review, testing, and UI validation. Includes Figma Make integration for importing working prototypes.",
+	"author": {
+		"name": "Jack Rudenko",
+		"email": "i@madappgang.com",
+		"company": "MadAppGang"
+	},
+	"license": "MIT",
+	"keywords": [
+		"frontend",
+		"typescript",
+		"react",
+		"vite",
+		"tanstack",
+		"testing",
+		"architecture",
+		"ui-testing"
+	],
+	"category": "development",
+	"agents": [
+		"./agents/developer.md",
+		"./agents/architect.md",
+		"./agents/tester.md",
+		"./agents/test-architect.md",
+		"./agents/api-analyst.md",
+		"./agents/cleaner.md",
+		"./agents/reviewer.md",
+		"./agents/codex-reviewer.md"
+	],
+	"commands": [
+		"./commands/implement.md",
+		"./commands/import-figma.md",
+		"./commands/configure-mcp.md",
+		"./commands/api-docs.md",
+		"./commands/cleanup-artifacts.md"
+	],
+	"skills": [
+		"./skills/browser-debugger",
+		"./skills/api-spec-analyzer"
+	],
+	"mcpServers": "./mcp-servers/mcp-config.example.json"
+}

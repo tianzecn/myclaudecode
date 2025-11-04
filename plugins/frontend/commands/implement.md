@@ -25,14 +25,14 @@ Orchestrate a complete feature implementation workflow using specialized agents 
 - Fix bugs yourself
 - Create new files yourself
 - Modify existing code yourself
-- "Quickly fix" small issues - always delegate to typescript-frontend-dev
+- "Quickly fix" small issues - always delegate to developer
 
 **Delegation Rules:**
-- ALL code changes → typescript-frontend-dev agent
-- ALL planning → frontend-architect-planner agent
-- ALL code reviews → senior-code-reviewer + senior-code-reviewer-codex agents
-- ALL testing → vitest-test-architect agent
-- ALL cleanup → project-cleaner agent
+- ALL code changes → developer agent
+- ALL planning → architect agent
+- ALL code reviews → reviewer + codex-reviewer agents
+- ALL testing → test-architect agent
+- ALL cleanup → cleaner agent
 
 If you find yourself about to use Write or Edit tools, STOP and delegate to the appropriate agent instead.
 
@@ -48,15 +48,15 @@ $ARGUMENTS
 
 ```
 TodoWrite with the following items:
-- content: "PHASE 1: Launch frontend-architect-planner for architecture planning"
+- content: "PHASE 1: Launch architect for architecture planning"
   status: "in_progress"
-  activeForm: "PHASE 1: Launching frontend-architect-planner for architecture planning"
+  activeForm: "PHASE 1: Launching architect for architecture planning"
 - content: "PHASE 1: User approval gate - wait for plan approval"
   status: "pending"
   activeForm: "PHASE 1: Waiting for user approval of architecture plan"
-- content: "PHASE 2: Launch typescript-frontend-dev for implementation"
+- content: "PHASE 2: Launch developer for implementation"
   status: "pending"
-  activeForm: "PHASE 2: Launching typescript-frontend-dev for implementation"
+  activeForm: "PHASE 2: Launching developer for implementation"
 - content: "PHASE 2: Get manual testing instructions from implementation agent"
   status: "pending"
   activeForm: "PHASE 2: Getting manual testing instructions from implementation agent"
@@ -69,18 +69,18 @@ TodoWrite with the following items:
 - content: "PHASE 3: Quality gate - ensure all three reviewers approved"
   status: "pending"
   activeForm: "PHASE 3: Ensuring all three reviewers approved"
-- content: "PHASE 4: Launch vitest-test-architect for test implementation"
+- content: "PHASE 4: Launch test-architect for test implementation"
   status: "pending"
-  activeForm: "PHASE 4: Launching vitest-test-architect for test implementation"
+  activeForm: "PHASE 4: Launching test-architect for test implementation"
 - content: "PHASE 4: Quality gate - ensure all tests pass"
   status: "pending"
   activeForm: "PHASE 4: Ensuring all tests pass"
 - content: "PHASE 5: User approval gate - present implementation for final review"
   status: "pending"
   activeForm: "PHASE 5: Presenting implementation for user final review"
-- content: "PHASE 5: Launch project-cleaner to clean up temporary artifacts"
+- content: "PHASE 5: Launch cleaner to clean up temporary artifacts"
   status: "pending"
-  activeForm: "PHASE 5: Launching project-cleaner to clean up temporary artifacts"
+  activeForm: "PHASE 5: Launching cleaner to clean up temporary artifacts"
 - content: "PHASE 6: Generate comprehensive final summary"
   status: "pending"
   activeForm: "PHASE 6: Generating comprehensive final summary"
@@ -97,15 +97,15 @@ TodoWrite with the following items:
 
 **IMPORTANT**: This global todo list provides high-level workflow tracking. Each agent will also maintain its own internal todo list for detailed task tracking.
 
-### PHASE 1: Architecture Planning (frontend-architect-planner)
+### PHASE 1: Architecture Planning (architect)
 
 1. **Launch Planning Agent**:
-   - **Update TodoWrite**: Ensure "PHASE 1: Launch frontend-architect-planner" is marked as in_progress
-   - Use Task tool with `subagent_type: frontend-architect-planner`
+   - **Update TodoWrite**: Ensure "PHASE 1: Launch architect" is marked as in_progress
+   - Use Task tool with `subagent_type: architect`
    - Provide the feature request: $ARGUMENTS
    - Agent will perform gap analysis and ask clarifying questions
    - Agent will create comprehensive plan in AI-DOCS/
-   - **Update TodoWrite**: Mark "PHASE 1: Launch frontend-architect-planner" as completed
+   - **Update TodoWrite**: Mark "PHASE 1: Launch architect" as completed
 
 2. **User Approval Gate**:
    - **Update TodoWrite**: Mark "PHASE 1: User approval gate" as in_progress
@@ -117,18 +117,18 @@ TodoWrite with the following items:
    - IF user not satisfied:
      * Collect specific feedback
      * **Update TodoWrite**: Add "PHASE 1 - Iteration X: Re-run planner with feedback" task
-     * Re-run frontend-architect-planner with feedback
+     * Re-run architect with feedback
      * Repeat approval gate
    - IF user satisfied:
      * **Update TodoWrite**: Mark "PHASE 1: User approval gate" as completed
      * Proceed to Phase 2
    - **DO NOT proceed without user approval**
 
-### PHASE 2: Implementation (typescript-frontend-dev)
+### PHASE 2: Implementation (developer)
 
 1. **Launch Implementation Agent**:
-   - **Update TodoWrite**: Mark "PHASE 2: Launch typescript-frontend-dev" as in_progress
-   - Use Task tool with `subagent_type: typescript-frontend-dev`
+   - **Update TodoWrite**: Mark "PHASE 2: Launch developer" as in_progress
+   - Use Task tool with `subagent_type: developer`
    - Provide:
      * Path to approved plan documentation in AI-DOCS/
      * Clear instruction to follow the plan step-by-step
@@ -139,11 +139,11 @@ TodoWrite with the following items:
    - Agent implements features following the plan
    - Agent should document decisions and patterns used
    - If agent encounters blocking issues, it should report them and request guidance
-   - **Update TodoWrite**: Mark "PHASE 2: Launch typescript-frontend-dev" as completed when implementation is done
+   - **Update TodoWrite**: Mark "PHASE 2: Launch developer" as completed when implementation is done
 
 3. **Get Manual Testing Instructions** (NEW STEP):
    - **Update TodoWrite**: Mark "PHASE 2: Get manual testing instructions from implementation agent" as in_progress
-   - **Launch typescript-frontend-dev agent** using Task tool with:
+   - **Launch developer agent** using Task tool with:
      * Context: "Implementation is complete. Now prepare manual UI testing instructions."
      * Request: "Create comprehensive, step-by-step manual testing instructions for the implemented features."
      * Instructions should include:
@@ -156,7 +156,7 @@ TodoWrite with the following items:
      * Format: Clear numbered steps that a manual tester can follow without deep page analysis
    - Agent returns structured testing guide
    - **Update TodoWrite**: Mark "PHASE 2: Get manual testing instructions" as completed
-   - Save testing instructions for use by ui-manual-tester agent
+   - Save testing instructions for use by tester agent
 
 ### PHASE 3: Triple Review Loop (Code + Code AI + Manual UI Testing)
 
@@ -175,13 +175,13 @@ TodoWrite with the following items:
    ```
    Send a single message with THREE Task calls:
 
-   Task 1: Launch senior-code-reviewer
-   Task 2: Launch senior-code-reviewer-codex
-   Task 3: Launch ui-manual-tester
+   Task 1: Launch reviewer
+   Task 2: Launch codex-reviewer
+   Task 3: Launch tester
    ```
 
    - **Reviewer 1 - Senior Code Reviewer (Human-Focused Review)**:
-     * Use Task tool with `subagent_type: senior-code-reviewer`
+     * Use Task tool with `subagent_type: reviewer`
      * Provide context:
        - "Review all unstaged git changes from the current implementation"
        - Path to the original plan for reference (AI-DOCS/...)
@@ -193,7 +193,7 @@ TodoWrite with the following items:
          * Alignment with the approved plan
 
    - **Reviewer 2 - Codex Code Analyzer (Automated AI Review)**:
-     * Use Task tool with `subagent_type: senior-code-reviewer-codex`
+     * Use Task tool with `subagent_type: codex-reviewer`
      * **IMPORTANT**: This agent is a PROXY to Codex AI. Prepare a COMPLETE prompt with all context.
      * Provide a fully prepared prompt containing:
        ```
@@ -235,9 +235,9 @@ TodoWrite with the following items:
      * The agent will forward this complete prompt to Codex AI and return the results
 
    - **Reviewer 3 - UI Manual Tester (Real Browser Testing)**:
-     * Use Task tool with `subagent_type: ui-manual-tester`
+     * Use Task tool with `subagent_type: tester`
      * Provide context:
-       - **Manual testing instructions** from Phase 2 Step 3 (the structured guide from typescript-frontend-dev)
+       - **Manual testing instructions** from Phase 2 Step 3 (the structured guide from developer)
        - Application URL (e.g., http://localhost:5173 or staging URL)
        - Feature being tested (e.g., "User Management Feature")
        - Planning context from AI-DOCS for understanding expected behavior
@@ -279,12 +279,12 @@ TodoWrite with the following items:
    - IF **ANY** reviewer identifies issues:
      * Document all feedback clearly from ALL THREE reviewers
      * Categorize and prioritize the combined feedback:
-       - **Code issues** (from senior-code-reviewer and codex)
-       - **UI/runtime issues** (from ui-manual-tester)
-       - **Console errors** (from ui-manual-tester)
+       - **Code issues** (from reviewer and codex)
+       - **UI/runtime issues** (from tester)
+       - **Console errors** (from tester)
      * **Update TodoWrite**: Add "PHASE 3 - Iteration X: Fix issues and re-run all reviewers" task
-     * **CRITICAL**: Do NOT fix issues yourself - delegate to typescript-frontend-dev agent
-     * **Launch typescript-frontend-dev agent** using Task tool with:
+     * **CRITICAL**: Do NOT fix issues yourself - delegate to developer agent
+     * **Launch developer agent** using Task tool with:
        - Original plan reference (path to AI-DOCS)
        - Combined feedback from ALL THREE reviewers:
          * Code review feedback (logic, security, quality issues)
@@ -294,7 +294,7 @@ TodoWrite with the following items:
        - Priority order for fixes (Critical first, then Medium, then Minor)
        - Note: Some UI bugs may require code changes, console errors may indicate missing error handling
        - Instruction to run quality checks after fixes
-     * After typescript-frontend-dev completes fixes:
+     * After developer completes fixes:
        - **IMPORTANT**: Request updated manual testing instructions if implementation changed significantly
        - Re-run ALL THREE reviewers in parallel (loop back to step 2)
      * Repeat until ALL THREE reviewers approve
@@ -304,13 +304,13 @@ TodoWrite with the following items:
      * Proceed to Phase 4
    - **Track loop iterations** (document how many review cycles occurred and feedback from each reviewer/tester)
 
-   **REMINDER**: You are orchestrating. You do NOT fix code yourself. Always use Task to delegate to typescript-frontend-dev.
+   **REMINDER**: You are orchestrating. You do NOT fix code yourself. Always use Task to delegate to developer.
 
-### PHASE 4: Testing Loop (vitest-test-architect)
+### PHASE 4: Testing Loop (test-architect)
 
 1. **Launch Testing Agent**:
-   - **Update TodoWrite**: Mark "PHASE 4: Launch vitest-test-architect" as in_progress
-   - Use Task tool with `subagent_type: vitest-test-architect`
+   - **Update TodoWrite**: Mark "PHASE 4: Launch test-architect" as in_progress
+   - Use Task tool with `subagent_type: test-architect`
    - Provide:
      * Implemented code (reference to files)
      * Original plan requirements
@@ -320,33 +320,33 @@ TodoWrite with the following items:
 2. **Test Results Analysis**:
    - Agent writes tests and executes them
    - Analyzes test results
-   - **Update TodoWrite**: Mark "PHASE 4: Launch vitest-test-architect" as completed
+   - **Update TodoWrite**: Mark "PHASE 4: Launch test-architect" as completed
    - **Update TodoWrite**: Mark "PHASE 4: Quality gate - ensure all tests pass" as in_progress
 
 3. **Test Feedback Loop** (Inner Loop):
    - IF tests fail due to implementation bugs:
      * **Update TodoWrite**: Add "PHASE 4 - Iteration X: Fix implementation bugs and re-test" task
      * Document the test failures and root cause analysis
-     * **CRITICAL**: Do NOT fix bugs yourself - delegate to typescript-frontend-dev agent
-     * **Launch typescript-frontend-dev agent** using Task tool with:
+     * **CRITICAL**: Do NOT fix bugs yourself - delegate to developer agent
+     * **Launch developer agent** using Task tool with:
        - Test failure details (which tests failed, error messages, stack traces)
        - Root cause analysis from test architect
        - Instruction: "Fix implementation bugs causing test failures"
        - Original plan reference
        - Instruction to run quality checks after fixes
-     * After typescript-frontend-dev completes fixes, re-run BOTH reviewers in parallel (Loop back to Phase 3)
-     * After code review approval, re-run vitest-test-architect
+     * After developer completes fixes, re-run BOTH reviewers in parallel (Loop back to Phase 3)
+     * After code review approval, re-run test-architect
      * Repeat until all tests pass
    - IF tests fail due to test issues (not implementation):
      * **Update TodoWrite**: Add "PHASE 4 - Iteration X: Fix test issues" task
-     * **Launch vitest-test-architect agent** using Task tool to fix the test code
+     * **Launch test-architect agent** using Task tool to fix the test code
      * Re-run tests after test fixes
    - IF all tests pass:
      * **Update TodoWrite**: Mark "PHASE 4: Quality gate - ensure all tests pass" as completed
      * Proceed to Phase 5
    - **Track loop iterations** (document how many test-fix cycles occurred)
 
-   **REMINDER**: You are orchestrating. You do NOT fix implementation bugs yourself. Always use Task to delegate to typescript-frontend-dev.
+   **REMINDER**: You are orchestrating. You do NOT fix implementation bugs yourself. Always use Task to delegate to developer.
 
 ### PHASE 5: User Review & Project Cleanup
 
@@ -354,8 +354,8 @@ TodoWrite with the following items:
    - **Update TodoWrite**: Mark "PHASE 5: User approval gate - present implementation for final review" as in_progress
    - Present the completed implementation to the user:
      * Summary of what was implemented
-     * All code review approvals received (senior-code-reviewer + codex)
-     * Manual UI testing passed (ui-manual-tester)
+     * All code review approvals received (reviewer + codex)
+     * Manual UI testing passed (tester)
      * All automated tests passing confirmation (vitest)
      * Key files created/modified
    - Use AskUserQuestion to ask: "Are you satisfied with this implementation? All code has been reviewed, UI tested manually, and automated tests pass."
@@ -367,9 +367,9 @@ TodoWrite with the following items:
      * **Update TodoWrite**: Add "PHASE 5 - Iteration X: Address user feedback" task
      * **CRITICAL**: Do NOT make changes yourself - delegate to appropriate agent
      * Determine which agent to use based on feedback type:
-       - If architectural changes needed: **Launch frontend-architect-planner** (Loop back to Phase 1)
-       - If implementation changes needed: **Launch typescript-frontend-dev** with user feedback (Loop back to Phase 2)
-       - If only test changes needed: **Launch vitest-test-architect** (Loop back to Phase 4)
+       - If architectural changes needed: **Launch architect** (Loop back to Phase 1)
+       - If implementation changes needed: **Launch developer** with user feedback (Loop back to Phase 2)
+       - If only test changes needed: **Launch test-architect** (Loop back to Phase 4)
      * After agent addresses feedback, go through subsequent phases again
      * Repeat until user is satisfied
    - IF user satisfied:
@@ -380,8 +380,8 @@ TodoWrite with the following items:
    **REMINDER**: You are orchestrating. You do NOT implement user feedback yourself. Always use Task to delegate to the appropriate agent.
 
 3. **Launch Project Cleanup**:
-   - **Update TodoWrite**: Mark "PHASE 5: Launch project-cleaner to clean up temporary artifacts" as in_progress
-   - Use Task tool with `subagent_type: project-cleaner`
+   - **Update TodoWrite**: Mark "PHASE 5: Launch cleaner to clean up temporary artifacts" as in_progress
+   - Use Task tool with `subagent_type: cleaner`
    - Provide context:
      * The implementation is complete and user-approved
      * Request cleanup of:
@@ -397,7 +397,7 @@ TodoWrite with the following items:
 
 4. **Cleanup Completion**:
    - Agent removes temporary files and provides cleanup summary
-   - **Update TodoWrite**: Mark "PHASE 5: Launch project-cleaner to clean up temporary artifacts" as completed
+   - **Update TodoWrite**: Mark "PHASE 5: Launch cleaner to clean up temporary artifacts" as completed
    - Proceed to Phase 6 for final summary
 
 ### PHASE 6: Final Summary & Completion
@@ -451,7 +451,7 @@ TodoWrite with the following items:
    - User feedback iterations: [number]
    - Files changed: [number]
    - Lines added/removed: [from git diff --stat]
-   - Files cleaned up by project-cleaner: [number]
+   - Files cleaned up by cleaner: [number]
 
    - **Update TodoWrite**: Mark "PHASE 6: Generate comprehensive final summary" as completed
 
@@ -487,7 +487,7 @@ TodoWrite with the following items:
 
 ### Quality Gates:
 - User approval required after Phase 1 (architecture plan)
-- **ALL THREE** reviewer approvals required before Phase 4 (senior-code-reviewer AND Codex AND ui-manual-tester)
+- **ALL THREE** reviewer approvals required before Phase 4 (reviewer AND Codex AND tester)
 - All automated tests must pass before Phase 5
 - User approval required after Phase 5 (final implementation review)
 - Each gate is mandatory - no skipping
@@ -498,7 +498,7 @@ The command is complete when:
 1. ✅ User approved the architecture plan (Phase 1 gate)
 2. ✅ Implementation follows the approved plan
 3. ✅ Manual testing instructions generated by implementation agent
-4. ✅ **ALL THREE** reviewers approved the implementation (Phase 3 gate: senior-code-reviewer AND Codex AND ui-manual-tester)
+4. ✅ **ALL THREE** reviewers approved the implementation (Phase 3 gate: reviewer AND Codex AND tester)
 5. ✅ Manual UI testing passed with no critical issues
 6. ✅ All automated tests written and passing (Phase 4 gate)
 7. ✅ User approved the final implementation (Phase 5 gate)
@@ -522,7 +522,7 @@ WRONG BEHAVIOR:
 > Fixed! Now re-running reviewers...
 ```
 
-**Why this is wrong**: The orchestrator used Edit tool to fix code directly instead of delegating to typescript-frontend-dev agent.
+**Why this is wrong**: The orchestrator used Edit tool to fix code directly instead of delegating to developer agent.
 
 ### ✅ CORRECT: Orchestrator Delegating to Agent
 
@@ -531,10 +531,10 @@ Scenario: Code reviewer finds a TypeScript type error
 
 CORRECT BEHAVIOR:
 > I see the reviewer found a type error in src/api/mockUserApi.ts.
-> I need to delegate this fix to the typescript-frontend-dev agent.
+> I need to delegate this fix to the developer agent.
 >
 > Task(
->   subagent_type: "typescript-frontend-dev",
+>   subagent_type: "developer",
 >   prompt: "Fix the TypeScript type error identified by code reviewer:
 >
 >   File: src/api/mockUserApi.ts
@@ -544,7 +544,7 @@ CORRECT BEHAVIOR:
 > )
 ```
 
-**Why this is correct**: The orchestrator delegated the fix to typescript-frontend-dev agent using the Task tool.
+**Why this is correct**: The orchestrator delegated the fix to developer agent using the Task tool.
 
 ### ❌ INCORRECT: Orchestrator Creating New Files
 
@@ -560,7 +560,7 @@ WRONG BEHAVIOR:
 > )
 ```
 
-**Why this is wrong**: The orchestrator created a file directly instead of delegating to typescript-frontend-dev agent.
+**Why this is wrong**: The orchestrator created a file directly instead of delegating to developer agent.
 
 ### ✅ CORRECT: Orchestrator Delegating File Creation
 
@@ -569,10 +569,10 @@ Scenario: Need to create a new utility file
 
 CORRECT BEHAVIOR:
 > I need a new utility file for date formatting.
-> I'll delegate this to the typescript-frontend-dev agent.
+> I'll delegate this to the developer agent.
 >
 > Task(
->   subagent_type: "typescript-frontend-dev",
+>   subagent_type: "developer",
 >   prompt: "Create a new utility file src/lib/dateUtils.ts with date formatting functions.
 >
 >   Include:
@@ -583,7 +583,7 @@ CORRECT BEHAVIOR:
 > )
 ```
 
-**Why this is correct**: The orchestrator delegated file creation to typescript-frontend-dev agent.
+**Why this is correct**: The orchestrator delegated file creation to developer agent.
 
 ### ❌ INCORRECT: Orchestrator Analyzing and Fixing Test Failures
 
@@ -603,7 +603,7 @@ WRONG BEHAVIOR:
 > Edit(file_path: "src/components/users/UserForm.tsx", ...)
 ```
 
-**Why this is wrong**: The orchestrator analyzed the issue and fixed it directly instead of delegating to typescript-frontend-dev agent.
+**Why this is wrong**: The orchestrator analyzed the issue and fixed it directly instead of delegating to developer agent.
 
 ### ✅ CORRECT: Orchestrator Delegating Test Failure Resolution
 
@@ -611,13 +611,13 @@ WRONG BEHAVIOR:
 Scenario: Tests are failing
 
 CORRECT BEHAVIOR:
-> Tests are failing in UserForm component. The vitest-test-architect
+> Tests are failing in UserForm component. The test-architect
 > has identified that the onChange handler signature is incorrect.
 >
-> I'll delegate this implementation bug fix to typescript-frontend-dev.
+> I'll delegate this implementation bug fix to developer.
 >
 > Task(
->   subagent_type: "typescript-frontend-dev",
+>   subagent_type: "developer",
 >   prompt: "Fix implementation bugs causing test failures:
 >
 >   Test File: src/components/users/UserForm.test.ts
@@ -631,7 +631,7 @@ CORRECT BEHAVIOR:
 > )
 ```
 
-**Why this is correct**: The orchestrator delegated the bug fix to typescript-frontend-dev agent with clear context.
+**Why this is correct**: The orchestrator delegated the bug fix to developer agent with clear context.
 
 ### Summary of Orchestrator Role
 
@@ -660,21 +660,21 @@ CORRECT BEHAVIOR:
 
 - This is a long-running orchestration - expect multiple agent invocations
 - **CRITICAL**: Always run all three reviewers in parallel using THREE Task tool calls in a single message:
-  * Task 1: `subagent_type: senior-code-reviewer` (human-focused code review using Sonnet)
-  * Task 2: `subagent_type: senior-code-reviewer-codex` (automated AI code review using Codex via mcp__codex-cli__ask-codex)
-  * Task 3: `subagent_type: ui-manual-tester` (real browser manual UI testing with Chrome DevTools)
+  * Task 1: `subagent_type: reviewer` (human-focused code review using Sonnet)
+  * Task 2: `subagent_type: codex-reviewer` (automated AI code review using Codex via mcp__codex-cli__ask-codex)
+  * Task 3: `subagent_type: tester` (real browser manual UI testing with Chrome DevTools)
   * All THREE Task calls must be in the SAME message for true parallel execution
-- Before running ui-manual-tester, ensure you have manual testing instructions from the implementation agent
+- Before running tester, ensure you have manual testing instructions from the implementation agent
 - Maintain clear communication with user at each quality gate (Plan, Implementation, Triple Review, Tests, Final Implementation)
 - Document all decisions and iterations from all three reviewers
 - Be transparent about any compromises or trade-offs made
 - If anything is unclear during execution, ask the user rather than making assumptions
 - The triple-review system provides comprehensive validation through three independent perspectives:
-  * **senior-code-reviewer**: Traditional human-style review with 15+ years experience perspective (code quality, architecture, security)
-  * **senior-code-reviewer-codex**: Automated AI analysis using Codex models for pattern detection (best practices, potential bugs)
-  * **ui-manual-tester**: Real browser testing with manual interaction (runtime behavior, UI/UX, console errors)
-- The ui-manual-tester follows specific testing instructions with accessibility selectors, making tests efficient and reproducible
+  * **reviewer**: Traditional human-style review with 15+ years experience perspective (code quality, architecture, security)
+  * **codex-reviewer**: Automated AI analysis using Codex models for pattern detection (best practices, potential bugs)
+  * **tester**: Real browser testing with manual interaction (runtime behavior, UI/UX, console errors)
+- The tester follows specific testing instructions with accessibility selectors, making tests efficient and reproducible
 - UI testing catches runtime issues that static code review cannot detect (event handlers, state management, API integration)
 - Console errors found during UI testing often reveal missing error handling or race conditions in the code
-- The project-cleaner agent runs only after user approval to ensure no important artifacts are removed prematurely
+- The cleaner agent runs only after user approval to ensure no important artifacts are removed prematurely
 - User approval gates ensure the user stays in control of the implementation direction and final deliverable

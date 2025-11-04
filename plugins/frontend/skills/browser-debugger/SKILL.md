@@ -6,7 +6,7 @@ allowed-tools: Task
 
 # Browser Debugger
 
-This Skill provides comprehensive browser-based UI testing and debugging capabilities using the ui-manual-tester agent and Chrome DevTools MCP server.
+This Skill provides comprehensive browser-based UI testing and debugging capabilities using the tester agent and Chrome DevTools MCP server.
 
 ## When to use this Skill
 
@@ -32,17 +32,17 @@ First, determine what needs to be tested:
 3. **Specific feature**: Focus testing on the mentioned feature
 4. **Specific elements**: If user mentions buttons, forms, tables, test those
 
-### Phase 2: Invoke ui-manual-tester Agent
+### Phase 2: Invoke tester Agent
 
-Use the Task tool to launch the ui-manual-tester agent with comprehensive instructions:
+Use the Task tool to launch the tester agent with comprehensive instructions:
 
 ```
 Use Task tool with:
-- subagent_type: "ui-manual-tester"
+- subagent_type: "tester"
 - prompt: [Detailed testing instructions below]
 ```
 
-**Prompt structure for ui-manual-tester**:
+**Prompt structure for tester**:
 
 ```markdown
 # Browser UI Testing Task
@@ -263,7 +263,7 @@ Or: ✓ No visual issues detected
 
 ### Phase 3: Summarize Findings
 
-After receiving the ui-manual-tester report:
+After receiving the tester report:
 
 1. **Present the test summary** to the user
 2. **Highlight critical issues** that need immediate attention
@@ -274,7 +274,7 @@ After receiving the ui-manual-tester report:
 
 ## Expected Test Report Structure
 
-The ui-manual-tester will provide a detailed markdown report. Present it to the user in a clear, organized way:
+The tester will provide a detailed markdown report. Present it to the user in a clear, organized way:
 
 ```markdown
 ## 🧪 Browser Test Results
@@ -387,7 +387,7 @@ Before completing testing, ensure:
 
 ## Chrome DevTools Integration
 
-The ui-manual-tester agent has access to these Chrome DevTools MCP tools:
+The tester agent has access to these Chrome DevTools MCP tools:
 
 **Navigation:**
 - `mcp__chrome-devtools__navigate_page` - Load URL
@@ -482,7 +482,7 @@ When user says: "I just implemented the user creation dialog"
 1. Recognize this needs browser testing (invoke browser-debugger Skill)
 2. Determine test scope: user creation dialog functionality
 3. Prepare comprehensive test instructions
-4. Invoke ui-manual-tester agent via Task tool
+4. Invoke tester agent via Task tool
 5. Provide instructions to:
    - Navigate to users page
    - Click "Create User" button
@@ -502,7 +502,7 @@ When user says: "I just implemented the user creation dialog"
 
 "I'll test the user creation dialog functionality in the browser to verify everything works correctly and check for any console errors or issues."
 
-[Invoke ui-manual-tester via Task tool with detailed instructions]
+[Invoke tester via Task tool with detailed instructions]
 
 [After receiving report:]
 

@@ -50,7 +50,7 @@ claude-code/
 ├── .claude-plugin/
 │   ├── marketplace.json          # Marketplace configuration
 │   └── plugins/
-│       └── frontend-development/  # Plugin directory
+│       └── frontend/  # Plugin directory
 │           ├── plugin.json       # Plugin manifest
 │           ├── agents/           # Agent markdown files
 │           ├── commands/         # Command markdown files
@@ -74,7 +74,7 @@ Add the local marketplace globally to test across all projects:
 /plugin marketplace add /Users/jack/mag/claude-code
 
 # Install plugin from local marketplace
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 **Result:** Plugin available in all Claude Code projects from your local copy.
@@ -103,7 +103,7 @@ Add local marketplace to a specific test project:
     }
   },
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
@@ -129,13 +129,13 @@ Edit any plugin files:
 
 ```bash
 # Example: Edit an agent
-vim plugins/frontend-development/agents/typescript-frontend-dev.md
+vim plugins/frontend/agents/typescript-frontend-dev.md
 
 # Example: Edit a command
-vim plugins/frontend-development/commands/implement.md
+vim plugins/frontend/commands/implement.md
 
 # Example: Update plugin manifest
-vim plugins/frontend-development/plugin.json
+vim plugins/frontend/plugin.json
 ```
 
 ### 2. Reload Plugin in Claude Code
@@ -144,8 +144,8 @@ After making changes, reload the plugin:
 
 **Method 1: Reinstall plugin**
 ```bash
-/plugin remove frontend-development@mag-claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 **Method 2: Restart Claude Code session**
@@ -177,7 +177,7 @@ Check that plugin is loaded correctly:
 /plugin list
 
 # Should show:
-# frontend-development@mag-claude-plugins (global) - from /Users/jack/mag/claude-code
+# frontend@mag-claude-plugins (global) - from /Users/jack/mag/claude-code
 ```
 
 ---
@@ -190,7 +190,7 @@ Check that plugin is loaded correctly:
 
 ```bash
 # Create new agent file
-touch plugins/frontend-development/agents/test-agent.md
+touch plugins/frontend/agents/test-agent.md
 ```
 
 **2. Add agent frontmatter:**
@@ -236,8 +236,8 @@ Provide a concise summary of findings.
 **4. Reload and test:**
 
 ```bash
-/plugin remove frontend-development@mag-claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Ask Claude to invoke test-agent
 ```
@@ -249,7 +249,7 @@ Provide a concise summary of findings.
 **1. Create a test command:**
 
 ```bash
-touch plugins/frontend-development/commands/test-command.md
+touch plugins/frontend/commands/test-command.md
 ```
 
 **2. Add command content:**
@@ -294,8 +294,8 @@ Provide a summary of the current project structure.
 **4. Reload and test:**
 
 ```bash
-/plugin remove frontend-development@mag-claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Test the command
 /test-command
@@ -322,7 +322,7 @@ Provide a summary of the current project structure.
 **2. Create mock server (optional):**
 
 ```bash
-mkdir -p plugins/frontend-development/test
+mkdir -p plugins/frontend/test
 ```
 
 ```javascript
@@ -349,8 +349,8 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 
 ```bash
 # Reload plugin
-/plugin remove frontend-development@mag-claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Check if MCP server is loaded
 # Claude will have access to test-server tools
@@ -367,7 +367,7 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 /plugin list
 
 # Should show local path:
-# frontend-development@mag-claude-plugins (global)
+# frontend@mag-claude-plugins (global)
 #   from /Users/jack/mag/claude-code
 ```
 
@@ -378,7 +378,7 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 cat .claude-plugin/marketplace.json | python -m json.tool
 
 # Validate plugin.json
-cat plugins/frontend-development/plugin.json | python -m json.tool
+cat plugins/frontend/plugin.json | python -m json.tool
 ```
 
 ### Check File Paths
@@ -405,7 +405,7 @@ Ensure all paths in `plugin.json` are relative and correct:
   "agents": [
     "agents/agent-name.md",                                    // ❌ Missing ./
     "/full/path/agents/agent-name.md",                        // ❌ Absolute path
-    "../plugins/frontend-development/agents/agent-name.md"    // ❌ Parent relative
+    "../plugins/frontend/agents/agent-name.md"    // ❌ Parent relative
   ]
 }
 ```
@@ -414,7 +414,7 @@ Ensure all paths in `plugin.json` are relative and correct:
 
 ```bash
 # Check if agents are available
-# Ask Claude: "What agents are available from the frontend-development plugin?"
+# Ask Claude: "What agents are available from the frontend plugin?"
 
 # Test agent invocation
 # Ask Claude: "Use the typescript-frontend-dev agent to create a test file"
@@ -427,7 +427,7 @@ Ensure all paths in `plugin.json` are relative and correct:
 # In your MCP server code, log the variable:
 console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 
-# Should output: /Users/jack/mag/claude-code/plugins/frontend-development
+# Should output: /Users/jack/mag/claude-code/plugins/frontend
 ```
 
 ---
@@ -457,7 +457,7 @@ cat > .claude/settings.json << 'EOF'
     }
   },
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 EOF
@@ -518,21 +518,21 @@ Compare behavior to ensure changes work as expected.
 2. **Validate JSON syntax:**
    ```bash
    cat .claude-plugin/marketplace.json | python -m json.tool
-   cat plugins/frontend-development/plugin.json | python -m json.tool
+   cat plugins/frontend/plugin.json | python -m json.tool
    ```
 
 3. **Check file permissions:**
    ```bash
    ls -la .claude-plugin/marketplace.json
-   ls -la plugins/frontend-development/plugin.json
+   ls -la plugins/frontend/plugin.json
    ```
 
 4. **Reinstall plugin:**
    ```bash
-   /plugin remove frontend-development@mag-claude-plugins
+   /plugin remove frontend@mag-claude-plugins
    /plugin marketplace remove mag-claude-plugins
    /plugin marketplace add /Users/jack/mag/claude-code
-   /plugin install frontend-development@mag-claude-plugins
+   /plugin install frontend@mag-claude-plugins
    ```
 
 ---
@@ -547,8 +547,8 @@ Compare behavior to ensure changes work as expected.
 
 1. **Reinstall plugin:**
    ```bash
-   /plugin remove frontend-development@mag-claude-plugins
-   /plugin install frontend-development@mag-claude-plugins
+   /plugin remove frontend@mag-claude-plugins
+   /plugin install frontend@mag-claude-plugins
    ```
 
 2. **Restart Claude Code:**
@@ -573,7 +573,7 @@ Compare behavior to ensure changes work as expected.
 
 1. **Check MCP configuration:**
    ```bash
-   cat plugins/frontend-development/plugin.json | grep -A 10 "mcpServers"
+   cat plugins/frontend/plugin.json | grep -A 10 "mcpServers"
    ```
 
 2. **Verify command exists:**
@@ -588,7 +588,7 @@ Compare behavior to ensure changes work as expected.
 3. **Test command manually:**
    ```bash
    # Navigate to plugin directory
-   cd plugins/frontend-development
+   cd plugins/frontend
 
    # Test command
    npx -y @modelcontextprotocol/server-postgres
@@ -636,14 +636,14 @@ After pushing, test the GitHub version:
 
 ```bash
 # Remove local version
-/plugin remove frontend-development@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
 /plugin marketplace remove mag-claude-plugins
 
 # Add GitHub version
 /plugin marketplace add MadAppGang/claude-code
 
 # Install from GitHub
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 
 # Test to ensure changes work
 ```
@@ -657,18 +657,18 @@ If making significant changes, update version numbers:
 {
   "plugins": [
     {
-      "name": "frontend-development",
+      "name": "frontend",
       "version": "1.1.0",  // ← Update version
-      "source": "./plugins/frontend-development"
+      "source": "./plugins/frontend"
     }
   ]
 }
 ```
 
-**In `plugins/frontend-development/plugin.json`:**
+**In `plugins/frontend/plugin.json`:**
 ```json
 {
-  "name": "frontend-development",
+  "name": "frontend",
   "version": "1.1.0",  // ← Update version
   "description": "..."
 }
@@ -701,7 +701,7 @@ Always test new features in isolated test projects before using in production pr
 
 Update relevant documentation:
 - `README.md` - If adding new features
-- `docs/frontend-development.md` - If changing workflows
+- `docs/frontend.md` - If changing workflows
 - `DEPENDENCIES.md` - If adding new dependencies
 - `ai-docs/` - If changing architecture
 
@@ -743,13 +743,13 @@ git push --tags
 /plugin marketplace list
 
 # Plugin management
-/plugin install frontend-development@mag-claude-plugins
-/plugin remove frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@mag-claude-plugins
 /plugin list
 
 # Validation
 cat .claude-plugin/marketplace.json | python -m json.tool
-cat plugins/frontend-development/plugin.json | python -m json.tool
+cat plugins/frontend/plugin.json | python -m json.tool
 
 # Git
 git status
@@ -768,10 +768,10 @@ git push origin main
 /Users/jack/mag/claude-code/.claude-plugin/marketplace.json
 
 # Plugin root
-/Users/jack/mag/claude-code/plugins/frontend-development
+/Users/jack/mag/claude-code/plugins/frontend
 
 # Plugin manifest
-/Users/jack/mag/claude-code/plugins/frontend-development/plugin.json
+/Users/jack/mag/claude-code/plugins/frontend/plugin.json
 ```
 
 ---

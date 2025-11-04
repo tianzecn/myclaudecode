@@ -11,7 +11,7 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 /plugin marketplace add madappgang/claude-plugins
 
 # Install plugin
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Setup
@@ -36,20 +36,20 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 ### Agents (8)
 
 **Development:**
-- `typescript-frontend-dev` - TypeScript/React implementation with best practices
-- `frontend-architect-planner` - Architecture planning and system design
-- `vitest-test-architect` - Testing strategy and implementation
+- `developer` - TypeScript/React implementation with best practices
+- `architect` - Architecture planning and system design
+- `test-architect` - Testing strategy and implementation
 
 **Quality Assurance:**
-- `ui-manual-tester` - Browser-based UI testing and validation
-- `senior-code-reviewer` - Manual code review
-- `senior-code-reviewer-codex` - AI-powered code review with Codex
+- `tester` - Browser-based UI testing and validation
+- `reviewer` - Manual code review
+- `codex-reviewer` - AI-powered code review with Codex
 
 **Analysis:**
-- `api-documentation-analyzer` - API docs analysis and integration
+- `api-analyst` - API docs analysis and integration
 
 **Utilities:**
-- `project-cleaner` - Cleanup temporary files and artifacts
+- `cleaner` - Cleanup temporary files and artifacts
 
 ### Commands (5)
 
@@ -112,11 +112,11 @@ CODEX_API_KEY=your-codex-key
 /implement
 
 # Claude will:
-# 1. Plan architecture with frontend-architect-planner
-# 2. Implement with typescript-frontend-dev
-# 3. Write tests with vitest-test-architect
-# 4. Review code with senior-code-reviewer
-# 5. Validate UI with ui-manual-tester
+# 1. Plan architecture with architect
+# 2. Implement with developer
+# 3. Write tests with test-architect
+# 4. Review code with reviewer
+# 5. Validate UI with tester
 ```
 
 ### Import Figma Design
@@ -174,7 +174,7 @@ Add to your project's `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
+    "frontend@mag-claude-plugins": true
   },
   "env": {
     "APIDOG_PROJECT_ID": "your-project-id",

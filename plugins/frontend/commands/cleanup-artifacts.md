@@ -5,7 +5,7 @@ allowed-tools: Task, AskUserQuestion, Bash, Read, Glob, Grep
 
 ## Mission
 
-Analyze the current project state, identify temporary artifacts and development files, then run the project-cleaner agent to clean them up safely while preserving important implementation code and documentation.
+Analyze the current project state, identify temporary artifacts and development files, then run the cleaner agent to clean them up safely while preserving important implementation code and documentation.
 
 ## Workflow
 
@@ -86,8 +86,8 @@ If user approves:
    - Specify files to preserve
    - Include any user-specific instructions for uncertain files
 
-2. **Launch project-cleaner Agent**:
-   - Use Task tool with `subagent_type: project-cleaner`
+2. **Launch cleaner Agent**:
+   - Use Task tool with `subagent_type: cleaner`
    - Provide comprehensive context:
      ```
      You are cleaning up artifacts from: [task description]
@@ -173,7 +173,7 @@ After cleanup completes, present results:
 
 ## Error Handling
 
-- If project-cleaner encounters any errors, pause and report to user
+- If cleaner encounters any errors, pause and report to user
 - If uncertain about any file, err on the side of caution (don't delete)
 - Provide option to undo cleanup if files were accidentally removed (via git if tracked)
 
@@ -213,7 +213,7 @@ User approves → Comprehensive cleanup of all dev artifacts
 
 - This command can be run at any time, not just after /implement
 - It's safe to run frequently - nothing important will be removed without confirmation
-- The project-cleaner agent is conservative and will ask before removing uncertain files
+- The cleaner agent is conservative and will ask before removing uncertain files
 - All git-tracked files that are removed can be restored via git
 - For maximum safety, ensure important work is committed before running cleanup
 - The command learns from project patterns - if you frequently keep certain file types, it will remember

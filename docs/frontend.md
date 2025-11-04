@@ -764,7 +764,7 @@ Access GitHub repositories and issues.
 ### Global Installation
 ```bash
 /plugin marketplace add madappgang/claude-plugins
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Project-Specific Installation
@@ -780,7 +780,7 @@ Add to `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
+    "frontend@mag-claude-plugins": true
   }
 }
 ```
@@ -864,7 +864,7 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom
 - **Documentation:** [Main README](../README.md)
 - **Issues:** [GitHub Issues](https://github.com/madappgang/claude-plugins/issues)
 - **Email:** i@madappgang.com
-- **Dependencies:** [DEPENDENCIES.md](../plugins/frontend-development/DEPENDENCIES.md)
+- **Dependencies:** [DEPENDENCIES.md](../plugins/frontend/DEPENDENCIES.md)
 
 ---
 

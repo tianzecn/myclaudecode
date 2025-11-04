@@ -33,7 +33,7 @@ sudo apt-get install -y nodejs
 
 ### 2. Chrome Browser
 
-**Required for:** `ui-manual-tester` agent, `browser-debugger` skill
+**Required for:** `tester` agent, `browser-debugger` skill
 
 **Why:** Browser-based UI testing via Chrome DevTools
 
@@ -69,7 +69,7 @@ sudo apt install git
 
 ### 4. Codex CLI (Optional but Recommended)
 
-**Required for:** `senior-code-reviewer-codex` agent
+**Required for:** `codex-reviewer` agent
 
 **What it does:** AI-powered code review using Codex
 
@@ -83,7 +83,7 @@ codex --version
 npm install -g @anthropic-ai/codex-cli
 ```
 
-**Note:** If Codex CLI is not installed, `senior-code-reviewer-codex` agent will gracefully degrade to using `senior-code-reviewer` instead.
+**Note:** If Codex CLI is not installed, `codex-reviewer` agent will gracefully degrade to using `reviewer` instead.
 
 ## Environment Variables
 
@@ -214,9 +214,9 @@ These go in `.claude/settings.json` (committed to git):
 
 | MCP Server | Required By | Install Command | Env Vars |
 |------------|-------------|----------------|----------|
-| @apidog/mcp-server | api-documentation-analyzer, /api-docs | `npx -y @apidog/mcp-server` | APIDOG_API_TOKEN |
+| @apidog/mcp-server | api-analyst, /api-docs | `npx -y @apidog/mcp-server` | APIDOG_API_TOKEN |
 | @modelcontextprotocol/server-figma | /import-figma | `npx -y @modelcontextprotocol/server-figma` | FIGMA_ACCESS_TOKEN |
-| @modelcontextprotocol/server-chrome-devtools | ui-manual-tester, browser-debugger | `npx -y @modelcontextprotocol/server-chrome-devtools` | None |
+| @modelcontextprotocol/server-chrome-devtools | tester, browser-debugger | `npx -y @modelcontextprotocol/server-chrome-devtools` | None |
 | @modelcontextprotocol/server-github | Optional - for GitHub operations | `npx -y @modelcontextprotocol/server-github` | GITHUB_PERSONAL_ACCESS_TOKEN |
 
 **Note:** MCP servers are installed on-demand by `npx` when first used. No pre-installation required.
@@ -396,7 +396,7 @@ npx -y @modelcontextprotocol/server-chrome-devtools \
 /plugin list
 
 # Should show:
-# ✅ frontend-development@mag-claude-plugins
+# ✅ frontend@mag-claude-plugins
 ```
 
 ## Troubleshooting
@@ -455,7 +455,7 @@ codex --version
 ```
 
 **Alternative:** Use regular code reviewer instead:
-- The plugin will automatically fall back to `senior-code-reviewer` if Codex is not available
+- The plugin will automatically fall back to `reviewer` if Codex is not available
 
 ## Environment Template (.env.example)
 

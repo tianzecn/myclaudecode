@@ -60,7 +60,7 @@ This command will:
 7. Install any missing dependencies via pnpm
 8. Create component file in appropriate location
 9. Create test route at /playground/{component-name}
-10. Invoke ui-manual-tester agent for validation
+10. Invoke tester agent for validation
 11. Apply fixes if validation fails (up to 5 iterations)
 12. Update CLAUDE.md with component mapping
 13. Present comprehensive summary
@@ -470,7 +470,7 @@ Once test route is created:
 
 ### STEP 9: Run Validation Tests
 
-This is a critical step that uses an iterative validation loop with the ui-manual-tester agent.
+This is a critical step that uses an iterative validation loop with the tester agent.
 
 #### 9.1 Initialize Loop Variables
 
@@ -484,13 +484,13 @@ testResult = ''
 
 While `iteration < MAX_ITERATIONS` and `!testPassed`:
 
-**A. Invoke ui-manual-tester Agent**
+**A. Invoke tester Agent**
 
-Use Task tool to invoke the ui-manual-tester agent with comprehensive testing instructions:
+Use Task tool to invoke the tester agent with comprehensive testing instructions:
 
 ```typescript
 Task({
-  subagent_type: 'ui-manual-tester',
+  subagent_type: 'tester',
   description: `Test ${componentName} component`,
   prompt: `Test the ${componentName} component at /playground/${kebabName}
 
@@ -597,7 +597,7 @@ If error mentions missing properties or type mismatches:
 After applying fixes:
 - Reformat the file with Biome
 - Increment iteration counter
-- Loop back to invoke ui-manual-tester again
+- Loop back to invoke tester again
 
 #### 9.3 Max Iterations Exceeded
 
@@ -810,7 +810,7 @@ Check if project uses path alias (@/ or ~/) by reading tsconfig.json or vite.con
 - **Use package manager from project** - detect pnpm/npm/yarn by checking lock files
 - Apply Biome formatting after all file creation/edits
 - Keep user informed via TodoWrite updates throughout
-- Use Task tool only for ui-manual-tester agent (no other agents)
+- Use Task tool only for tester agent (no other agents)
 - Maximum 5 validation iterations before asking user
 - Always provide clear, actionable error messages
 - Preserve user control via AskUserQuestion for critical decisions

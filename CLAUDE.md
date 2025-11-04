@@ -83,26 +83,26 @@ claude-code/
 
 ### For Maintainers
 - `.claude-plugin/marketplace.json` - Marketplace configuration
-- `plugins/frontend-development/plugin.json` - Plugin manifest
+- `plugins/frontend/plugin.json` - Plugin manifest
 - `ai-docs/DYNAMIC_MCP_GUIDE.md` - MCP configuration patterns
 
 ### For Contributors
 - `ai-docs/COMPLETE_PLUGIN_SUMMARY.md` - Complete reference
-- `plugins/frontend-development/DEPENDENCIES.md` - Dependencies
+- `plugins/frontend/DEPENDENCIES.md` - Dependencies
 
 ## Commands Available
 
-### From Frontend Development Plugin
+### From Frontend Plugin
 
 **Agents:**
-- `typescript-frontend-dev` - TypeScript/React implementation
-- `frontend-architect-planner` - Architecture planning
-- `ui-manual-tester` - Browser UI testing
-- `vitest-test-architect` - Testing strategy
-- `api-documentation-analyzer` - API docs analysis
-- `project-cleaner` - Cleanup utilities
-- `senior-code-reviewer` - Code review
-- `senior-code-reviewer-codex` - AI code review
+- `developer` - TypeScript/React implementation
+- `architect` - Architecture planning
+- `tester` - Browser UI testing
+- `test-architect` - Testing strategy
+- `api-analyst` - API docs analysis
+- `cleaner` - Cleanup utilities
+- `reviewer` - Code review
+- `codex-reviewer` - AI code review
 
 **Commands:**
 - `/implement` - Full-cycle implementation
@@ -155,7 +155,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
@@ -167,7 +167,7 @@ Commit this file and team members get automatic setup!
 Install plugin globally (not recommended for teams):
 ```bash
 /plugin marketplace add MadAppGang/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Local Development
@@ -175,7 +175,7 @@ Install plugin globally (not recommended for teams):
 Test local changes:
 ```bash
 /plugin marketplace add /Users/jack/mag/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin install frontend@mag-claude-plugins
 ```
 
 ### Advanced: Project-Specific Marketplace
@@ -189,7 +189,7 @@ Include marketplace in project settings (requires folder trust):
     }
   },
   "enabledPlugins": [
-    "frontend-development@mag-claude-plugins"
+    "frontend@mag-claude-plugins"
   ]
 }
 ```
