@@ -142,26 +142,45 @@ CODEX_API_KEY=your-codex-key
 
 ## Quick Reference
 
-### Test Locally
+### Recommended Setup (Global Marketplace + Per-Project Plugins)
+
+**Step 1: Add marketplace globally (one-time):**
 ```bash
-/plugin marketplace add /Users/jack/mag/claude-code
-/plugin install frontend-development@mag-claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 ```
 
-### Publish to GitHub
-```bash
-git remote add origin https://github.com/MadAppGang/claude-code.git
-git push -u origin main
+**Step 2: Enable plugins in project settings:**
+
+Add to `.claude/settings.json`:
+```json
+{
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins"
+  ]
+}
 ```
 
-### Team Installation
+Commit this file and team members get automatic setup!
+
+### Alternative: Global Plugin Installation
+
+Install plugin globally (not recommended for teams):
 ```bash
 /plugin marketplace add MadAppGang/claude-code
 /plugin install frontend-development@mag-claude-plugins
 ```
 
-### Project-Specific Installation
-Add to project's `.claude/settings.json`:
+### Local Development
+
+Test local changes:
+```bash
+/plugin marketplace add /Users/jack/mag/claude-code
+/plugin install frontend-development@mag-claude-plugins
+```
+
+### Advanced: Project-Specific Marketplace
+
+Include marketplace in project settings (requires folder trust):
 ```json
 {
   "extraKnownMarketplaces": {
@@ -169,9 +188,9 @@ Add to project's `.claude/settings.json`:
       "source": {"source": "github", "repo": "MadAppGang/claude-code"}
     }
   },
-  "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
-  }
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins"
+  ]
 }
 ```
 

@@ -11,15 +11,24 @@ A comprehensive plugin marketplace created and maintained by [MadAppGang](https:
 
 ## 📦 Quick Start
 
-Add this marketplace to your Claude Code instance and start using our curated plugins:
+**Recommended Setup:** Add marketplace globally, enable plugins per-project.
 
 ```bash
-# Add the marketplace from GitHub
+# Step 1: Add marketplace globally (one-time setup)
 /plugin marketplace add MadAppGang/claude-code
-
-# Install a plugin
-/plugin install frontend-development@mag-claude-plugins
 ```
+
+Then add to your project's `.claude/settings.json`:
+
+```json
+{
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins"
+  ]
+}
+```
+
+**That's it!** The plugin is now enabled for this project. Commit `.claude/settings.json` so your team gets the same setup automatically.
 
 ---
 
@@ -59,96 +68,85 @@ The star feature is the `/implement` command—a complete 7-stage orchestration 
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Setup
 
 ### Prerequisites
 
 - Claude Code installed and configured
 - Git access to GitHub
 
-### Option A: Global Installation
+### Recommended Setup: Global Marketplace + Per-Project Plugins
 
-Install plugins globally to use across all your projects:
+This approach gives you the best of both worlds: marketplace installed once globally, plugins enabled individually per project.
+
+#### Step 1: Add Marketplace Globally (One-Time Setup)
+
+Each developer on your team does this once:
 
 ```bash
-# Add the marketplace from GitHub
 /plugin marketplace add MadAppGang/claude-code
-
-# Install the frontend development plugin
-/plugin install frontend-development@mag-claude-plugins
-
-# Verify installation
-/plugin list
 ```
 
-**Result:** Plugin available in all your projects ✅
+This registers the MAG Claude Plugins marketplace in your Claude Code installation. You only need to do this once, and it works for all your projects.
 
-**Best for:**
-- Individual developers
-- Testing the plugin
-- Using across multiple projects
+#### Step 2: Enable Plugins in Your Project
 
----
-
-### Option B: Project-Specific Installation (Recommended for Teams)
-
-Install plugins for a specific project. Team members get automatic setup!
-
-**Step 1: Add to Project Settings**
-
-Create or edit `.claude/settings.json` in your project root:
+Add or edit `.claude/settings.json` in your project root:
 
 ```json
 {
-  "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "MadAppGang/claude-code"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
-  }
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins"
+  ]
 }
 ```
 
-**Step 2: Commit to Git**
+**Commit this file to git:**
 
 ```bash
 git add .claude/settings.json
-git commit -m "Add MAG Claude plugins configuration"
+git commit -m "Enable MAG Claude plugins for this project"
 git push
 ```
 
-**Step 3: Team Members Trust the Folder**
+#### Step 3: Team Members Get Automatic Setup
 
-When team members pull and open the project, Claude Code prompts:
+When team members who have added the marketplace (Step 1) pull your project, Claude Code automatically:
 
+1. Detects the enabled plugins
+2. Installs them for this project
+3. Activates them immediately
+
+**No manual installation needed!**
+
+#### Why This Approach?
+
+✅ **One-time marketplace setup** - Add the marketplace once, use in all projects
+✅ **Per-project plugin control** - Each project specifies its own plugins
+✅ **Team consistency** - Everyone gets the same plugins automatically
+✅ **Version controlled** - Plugin configuration committed with your code
+✅ **No environment drift** - All team members have identical plugin setup
+✅ **Project isolation** - Plugins only active where you need them
+
+#### Multiple Plugins
+
+Need more than one plugin? Just add to the array:
+
+```json
+{
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins",
+    "code-quality@mag-claude-plugins",
+    "api-tools@mag-claude-plugins"
+  ]
+}
 ```
-🔒 Trust this folder?
-   Folder: /path/to/your/project
-   Plugins: frontend-development@mag-claude-plugins
-
-   [Trust] [Don't Trust]
-```
-
-After trusting, plugins install automatically!
-
-**Result:** Consistent plugin setup across entire team ✅
-
-**Benefits:**
-- ✅ Zero manual setup for team members
-- ✅ Configuration in version control
-- ✅ No environment drift
-- ✅ Project-specific, doesn't affect other projects
 
 ---
 
 ### Verify Installation
 
-After installing, verify everything works:
+After setup, verify everything works:
 
 ```bash
 # Check for any errors
@@ -158,27 +156,15 @@ After installing, verify everything works:
 /plugin list
 
 # Should show:
-# frontend-development@mag-claude-plugins (global or project)
-#   Version: 1.1.0
+# frontend-development@mag-claude-plugins (project-specific)
+#   Version: 1.2.0
 #   Status: ✓ Loaded
 ```
 
 **Common issues:**
 - If `/doctor` shows errors, see [Troubleshooting](#-troubleshooting) below
-- If plugin not listed, ensure marketplace was added first
-- For project-specific installation, you must trust the folder when prompted
-
----
-
-### Local Development
-
-**Testing plugins locally or contributing?**
-
-See the **[Local Development Guide](./docs/local-development.md)** for detailed instructions on:
-- Testing changes before publishing
-- Debugging plugins
-- Development workflow
-- Contributing guidelines
+- If plugin not listed, ensure marketplace was added in Step 1
+- Plugin activates automatically when you open a project with `.claude/settings.json`
 
 ---
 
@@ -575,20 +561,56 @@ You can also reference an external MCP configuration file:
 
 ## 🔧 Advanced Usage
 
-### Team Distribution
+### Alternative: Global Plugin Installation
 
-**GitHub Distribution (Recommended)**
-
-Team members add the marketplace once:
+If you prefer to install plugins globally (available in all projects), you can use:
 
 ```bash
+# Add marketplace (one-time)
 /plugin marketplace add MadAppGang/claude-code
+
+# Install plugin globally
 /plugin install frontend-development@mag-claude-plugins
+
+# Verify
+/plugin list
 ```
 
-**Project-Level Auto-Install (Best for Teams)**
+**When to use global installation:**
+- Individual developers working alone
+- Testing a plugin before adding to team projects
+- Personal projects without team coordination
 
-Add to your project's `.claude/settings.json` and commit to git:
+**Trade-offs:**
+- ❌ Not tracked in version control
+- ❌ Team members must install manually
+- ❌ Can cause environment drift across team
+- ✅ Available in all projects immediately
+
+### Local Development
+
+**Contributing or testing plugin changes locally?**
+
+See the **[Local Development Guide](./docs/local-development.md)** for:
+- Testing plugins from local filesystem
+- Plugin development workflow
+- Debugging techniques
+- Publishing to marketplace
+
+**Quick reference:**
+
+```bash
+# Test local plugin
+/plugin marketplace add /path/to/claude-code
+/plugin install frontend-development@mag-claude-plugins
+
+# Make changes and reload
+/plugin reload frontend-development@mag-claude-plugins
+```
+
+### Adding Marketplace to Specific Project
+
+If you don't want to add the marketplace globally, you can include it in project settings:
 
 ```json
 {
@@ -600,13 +622,13 @@ Add to your project's `.claude/settings.json` and commit to git:
       }
     }
   },
-  "enabledPlugins": {
-    "frontend-development@mag-claude-plugins": true
-  }
+  "enabledPlugins": [
+    "frontend-development@mag-claude-plugins"
+  ]
 }
 ```
 
-When team members pull and trust the folder, plugins auto-install. Zero manual setup!
+**Note:** This requires each developer to trust the folder. The recommended approach (global marketplace + per-project plugins) is simpler.
 
 ### Version Management
 
@@ -673,23 +695,37 @@ Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/is
 
 ### Common Issues
 
-**Settings format error:**
+**Settings format:**
 ```json
-// ✅ CORRECT
+// ✅ CORRECT - Array format (recommended)
+"enabledPlugins": [
+  "frontend-development@mag-claude-plugins"
+]
+
+// ✅ ALSO CORRECT - Object format (legacy, still works)
 "enabledPlugins": {
   "frontend-development@mag-claude-plugins": true
 }
-
-// ❌ WRONG
-"enabledPlugins": ["frontend-development@mag-claude-plugins"]
 ```
 
 **Plugin not loading:**
-- Ensure marketplace added: `/plugin marketplace add MadAppGang/claude-code`
-- For project-specific: Trust folder when prompted
-- Refresh marketplace: `/plugin marketplace update mag-claude-plugins`
+1. Ensure marketplace is added globally: `/plugin marketplace add MadAppGang/claude-code`
+2. Verify `.claude/settings.json` is in project root
+3. Check plugin list: `/plugin list`
+4. Reload Claude Code or run `/plugin reload frontend-development@mag-claude-plugins`
+
+**Marketplace not found:**
+- Verify marketplace added: `/plugin marketplace list`
+- Update marketplace: `/plugin marketplace update mag-claude-plugins`
+- Re-add if needed: `/plugin marketplace add MadAppGang/claude-code`
+
+**Environment variables missing:**
+- Check plugin documentation for required variables
+- Copy from `.env.example` if available
+- See [Frontend Development Dependencies](./plugins/frontend-development/DEPENDENCIES.md)
 
 **Need help?**
+- [Frontend Development Guide](./docs/frontend-development.md) - Complete usage guide
 - [Local Development Guide](./docs/local-development.md) - Detailed debugging
 - [Open an issue](https://github.com/MadAppGang/claude-code/issues)
 - Email: [i@madappgang.com](mailto:i@madappgang.com)
