@@ -1,0 +1,38 @@
+{
+	"name": "mag-claude-plugins",
+	"owner": {
+		"name": "Jack Rudenko",
+		"email": "i@madappgang.com",
+		"company": "MadAppGang"
+	},
+	"metadata": {
+		"description": "MAG team's curated collection of Claude Code plugins for modern frontend development",
+		"version": "1.0.0",
+		"pluginRoot": "./plugins"
+	},
+	"plugins": [
+		{
+			"name": "frontend-development",
+			"source": "./plugins/frontend-development",
+			"description": "Comprehensive frontend development toolkit with TypeScript, React, Vite, TanStack Router & Query support. Includes specialized agents for architecture planning, implementation, code review, testing, and UI validation.",
+			"version": "1.0.0",
+			"author": {
+				"name": "Jack Rudenko",
+				"email": "i@madappgang.com",
+				"company": "MadAppGang"
+			},
+			"category": "development",
+			"keywords": [
+				"frontend",
+				"typescript",
+				"react",
+				"vite",
+				"tanstack",
+				"testing",
+				"architecture",
+				"ui-testing"
+			],
+			"strict": true
+		}
+	]
+}

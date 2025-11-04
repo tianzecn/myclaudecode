@@ -1,0 +1,39 @@
+{
+  "apidog": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "@apidog/mcp-server",
+      "--project-id",
+      "${APIDOG_PROJECT_ID}",
+      "--token",
+      "${APIDOG_API_TOKEN}"
+    ],
+    "env": {
+      "APIDOG_PROJECT_ID": "${APIDOG_PROJECT_ID}",
+      "APIDOG_API_TOKEN": "${APIDOG_API_TOKEN}",
+      "APIDOG_BASE_URL": "${APIDOG_BASE_URL:-https://api.apidog.com}"
+    }
+  },
+  "figma": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-figma"],
+    "env": {
+      "FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"
+    }
+  },
+  "github": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "env": {
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+    }
+  },
+  "database": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-postgres"],
+    "env": {
+      "POSTGRES_CONNECTION_STRING": "${POSTGRES_CONNECTION_STRING}"
+    }
+  }
+}
