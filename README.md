@@ -9,7 +9,7 @@
 
 **This isn't theory. This is what actually works.**
 
-At [MadAppGang](https://madappgang.com) and [10xLabs](https://10xlabs.io), we represent the top 1% of developers worldwide. We don't just build software—we architect multi-million dollar platforms serving hundreds of thousands of users across enterprise teams.
+At [MadAppGang](https://madappgang.com) and [10xLabs](https://10xlabs.com.au), we represent the top 1% of developers worldwide. We don't just build software—we architect multi-million dollar platforms serving hundreds of thousands of users across enterprise teams.
 
 **Our obsession:** Find the absolute best tools, implement the most productive approaches, and ship features that matter.
 
