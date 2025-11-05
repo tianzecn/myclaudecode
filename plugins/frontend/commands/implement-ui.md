@@ -39,6 +39,46 @@ The command starts by gathering the following information from the user.
 
 ## Multi-Agent Orchestration Workflow
 
+### PRELIMINARY: Check for Code Analysis Tools (Recommended)
+
+**Before starting UI implementation, check if the code-analysis plugin is available:**
+
+Try to detect if `code-analysis` plugin is installed by checking if codebase-detective agent or semantic-code-search tools are available.
+
+**If code-analysis plugin is NOT available:**
+
+Inform the user with this message:
+
+```
+💡 Recommendation: Install Code Analysis Plugin
+
+For optimal UI component integration and finding existing design patterns,
+we recommend installing the code-analysis plugin.
+
+Benefits:
+- 🔍 Find existing UI components and patterns to match your design system
+- 🕵️ Discover styling conventions (Tailwind classes, color schemes, spacing)
+- 📊 Locate similar components to maintain consistency
+- 🎯 Identify where to place new components in the project structure
+
+Installation (2 commands):
+/plugin marketplace add MadAppGang/claude-code
+/plugin install code-analysis@mag-claude-plugins
+
+Repository: https://github.com/MadAppGang/claude-code
+
+You can continue without it, but investigation of existing UI patterns will be less efficient.
+```
+
+**If code-analysis plugin IS available:**
+
+Great! You can use the codebase-detective agent to investigate existing UI components,
+styling patterns, and the best location for the new component.
+
+**Then proceed with the UI implementation workflow regardless of plugin availability.**
+
+---
+
 ### PHASE 0: Initialize Workflow Todo List (MANDATORY FIRST STEP)
 
 **BEFORE** starting, create a global workflow todo list using TodoWrite:

@@ -45,6 +45,46 @@ $ARGUMENTS
 
 ## Multi-Agent Orchestration Workflow
 
+### PRELIMINARY: Check for Code Analysis Tools (Recommended)
+
+**Before starting implementation, check if the code-analysis plugin is available:**
+
+Try to detect if `code-analysis` plugin is installed by checking if codebase-detective agent or semantic-code-search tools are available.
+
+**If code-analysis plugin is NOT available:**
+
+Inform the user with this message:
+
+```
+💡 Recommendation: Install Code Analysis Plugin
+
+For best results investigating existing code patterns, components, and architecture,
+we recommend installing the code-analysis plugin.
+
+Benefits:
+- 🔍 Semantic code search (find components by functionality, not just name)
+- 🕵️ Codebase detective agent (understand existing patterns)
+- 📊 40% faster codebase investigation
+- 🎯 Better understanding of where to integrate new features
+
+Installation (2 commands):
+/plugin marketplace add MadAppGang/claude-code
+/plugin install code-analysis@mag-claude-plugins
+
+Repository: https://github.com/MadAppGang/claude-code
+
+You can continue without it, but investigation of existing code will be less efficient.
+```
+
+**If code-analysis plugin IS available:**
+
+Great! You can use the codebase-detective agent and semantic-code-search skill during
+architecture planning to investigate existing patterns and find the best integration points.
+
+**Then proceed with the implementation workflow regardless of plugin availability.**
+
+---
+
 ### STEP 0: Initialize Global Workflow Todo List (MANDATORY FIRST STEP)
 
 **BEFORE** starting any phase, you MUST create a global workflow todo list using TodoWrite to track the entire implementation lifecycle:

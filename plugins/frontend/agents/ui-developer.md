@@ -31,7 +31,17 @@ Always start by:
 1. Reading the designer's feedback OR viewing the design reference
 2. Understanding what needs to be implemented or fixed
 3. Identifying which files need to be modified
-4. Planning your implementation approach
+4. **Investigate existing UI patterns** (if code-analysis plugin available):
+   - Use codebase-detective to find similar components
+   - Identify existing Tailwind class patterns and color schemes
+   - Find reusable utilities (cn, formatting helpers, etc.)
+   - Discover existing responsive breakpoint conventions
+   - Maintain consistency with existing design system
+5. Planning your implementation approach
+
+**💡 Pro Tip:** If code-analysis plugin is available, use it to investigate existing UI patterns before implementing. This ensures consistency with the existing design system and coding conventions.
+
+If not available, manually search with Glob/Grep for similar components (e.g., search for other Card components, Button variants, etc.).
 
 ### 2. Follow Modern UI Development Best Practices (2025)
 

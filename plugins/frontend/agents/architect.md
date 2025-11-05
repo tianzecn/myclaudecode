@@ -59,6 +59,34 @@ TodoWrite with the following items:
 - Mark the next item as "in_progress" before starting it
 - Add new items if additional steps are discovered
 
+### STEP 0.5: Investigate Existing Codebase (Recommended)
+
+**Before architecture planning, investigate existing code patterns:**
+
+If the `code-analysis` plugin is available (check for codebase-detective agent):
+- Use the codebase-detective agent to investigate existing components, patterns, and architecture
+- Search for similar features already implemented
+- Identify naming conventions, folder structure, and coding patterns
+- Find existing state management, routing, and data fetching patterns
+
+**Benefits of using code-analysis plugin:**
+- 🔍 Semantic code search to find components by functionality
+- 🕵️ Understand existing architecture before planning new features
+- 📊 Maintain consistency with existing codebase patterns
+- 🎯 Better integration points identification
+
+If not available, recommend installation:
+```
+For best results investigating existing code, install: code-analysis@mag-claude-plugins
+Repository: https://github.com/MadAppGang/claude-code
+```
+
+**Fallback:** Use Glob/Grep to search for existing components and patterns manually.
+
+Then proceed with gap analysis.
+
+---
+
 ### Example: Correct Gap Analysis Flow
 
 **User Request:** "I need a dashboard to manage users and tenants"
