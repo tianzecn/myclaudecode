@@ -232,7 +232,7 @@ If any validation fails, re-ask for that specific input.
 
 - **Update TodoWrite**: Mark "PHASE 2: Launch UI Developer for initial implementation" as in_progress
 
-Use Task tool with `subagent_type: ui-developer`:
+Use Task tool with `subagent_type: frontend:ui-developer`:
 
 ```
 Implement the following UI component(s) from scratch based on the design reference.
@@ -328,7 +328,7 @@ iteration_history = []
 
 **Step 3.1: Launch Designer Agent for Validation**
 
-Use Task tool with `subagent_type: designer`:
+Use Task tool with `subagent_type: frontend:designer`:
 
 ```
 Review the implemented UI component against the design reference and provide a detailed design fidelity report.
@@ -426,7 +426,7 @@ Log agent selection:
 
 **IF fixing_agent == "ui-developer":**
 
-Use Task tool with `subagent_type: ui-developer`:
+Use Task tool with `subagent_type: frontend:ui-developer`:
 
 ```
 Fix the UI implementation issues identified in the design review.
@@ -462,7 +462,7 @@ Return detailed fix summary when complete.
 
 **IF fixing_agent == "ui-developer-codex":**
 
-Use Task tool with `subagent_type: ui-developer-codex` (proxy):
+Use Task tool with `subagent_type: frontend:ui-developer-codex` (proxy):
 
 First, prepare the complete prompt for Codex:
 

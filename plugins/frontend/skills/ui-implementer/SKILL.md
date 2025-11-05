@@ -168,7 +168,7 @@ Validate all inputs using the same logic as /implement-ui command:
 
 ### PHASE 2: Initial Implementation from Scratch
 
-Launch UI Developer agent using Task tool with `subagent_type: ui-developer`:
+Launch UI Developer agent using Task tool with `subagent_type: frontend:ui-developer`:
 
 ```
 Implement the following UI component(s) from scratch based on the design reference.
@@ -246,7 +246,7 @@ design_fidelity_achieved = false
 
 **Step 3.1: Launch Designer for Validation**
 
-Use Task tool with `subagent_type: designer`:
+Use Task tool with `subagent_type: frontend:designer`:
 
 ```
 Review the implemented UI component against the design reference.
@@ -319,12 +319,12 @@ function determineFix ingAgent() {
 **Step 3.4: Launch Fixing Agent**
 
 If `fixing_agent == "ui-developer"`:
-- Use Task with `subagent_type: ui-developer`
+- Use Task with `subagent_type: frontend:ui-developer`
 - Provide designer feedback
 - Request fixes
 
 If `fixing_agent == "ui-developer-codex"`:
-- Use Task with `subagent_type: ui-developer-codex`
+- Use Task with `subagent_type: frontend:ui-developer-codex`
 - Prepare complete prompt with designer feedback + current code
 - Request expert fix plan
 

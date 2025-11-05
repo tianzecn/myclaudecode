@@ -49,7 +49,7 @@ Use the Task tool to launch the agent:
 
 ```
 Task(
-  subagent_type: "codebase-detective",
+  subagent_type: "code-analysis:codebase-detective",
   description: "Analyze codebase for [brief description]",
   prompt: `
     Investigate the following in the codebase:

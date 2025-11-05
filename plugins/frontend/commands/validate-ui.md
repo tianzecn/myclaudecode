@@ -117,7 +117,7 @@ Wait for designer agent to return design review report.
 
 If user selected "Yes" for Codex review:
 
-Use Task tool with `subagent_type: ui-developer-codex` (proxy agent):
+Use Task tool with `subagent_type: frontend:ui-developer-codex` (proxy agent):
 
 ```
 You are an expert UI/UX developer reviewing a React TypeScript component.
@@ -164,7 +164,7 @@ Wait for ui-developer-codex agent to return expert review.
 
 #### Step 3.3: Launch UI Developer Agent to Apply Fixes
 
-Use Task tool with `subagent_type: ui-developer`:
+Use Task tool with `subagent_type: frontend:ui-developer`:
 
 ```
 Fix the UI implementation issues identified in the design review.
