@@ -144,6 +144,79 @@ claude-code/
 - `deep-analysis` - Automatic code investigation and analysis
 - `semantic-code-search` - Expert guidance on claude-context MCP usage
 
+## MCP Error Handling
+
+### Claude-Context "Not Indexed" Error
+
+**CRITICAL**: When using `mcp__claude-context__search_code` and receiving an error "Codebase 'X' is not indexed", follow this **ERROR-TRIGGERED INDEXING** pattern:
+
+```
+# ❌ WRONG - Don't index proactively every time
+mcp__claude-context__index_codebase(path: "/path")
+mcp__claude-context__search_code(path: "/path", query: "...")
+
+# ✅ CORRECT - Only index when error occurs
+1. Try search FIRST:
+   mcp__claude-context__search_code(path: "/path", query: "...")
+
+2. IF error contains "not indexed":
+   - Log: "Codebase not indexed. Indexing now..."
+   - Run: mcp__claude-context__index_codebase(path: "/path", splitter: "ast")
+   - Wait for indexing to complete
+   - Retry: mcp__claude-context__search_code(path: "/path", query: "...")
+
+3. IF error is different (e.g., invalid path):
+   - Report error to user
+   - Ask for correct path
+```
+
+**Key Principles:**
+- ✅ **Always try search first** - Don't assume codebase isn't indexed
+- ✅ **Only index on error** - Check if "not indexed" is in error message
+- ✅ **Use AST splitter by default** - Best for code search
+- ✅ **Retry search after indexing** - Complete the original operation
+- ❌ **Never index proactively** - Wastes time if already indexed
+- ❌ **Never re-index unnecessarily** - Check status first if unsure
+
+**Example Error Handling:**
+
+```typescript
+// User asks: "Find authentication logic"
+
+// Step 1: Try search first
+result = mcp__claude-context__search_code({
+  path: "/Users/jack/project",
+  query: "user authentication login flow"
+})
+
+// Step 2: Handle error if not indexed
+if (result.error && result.error.includes("not indexed")) {
+  console.log("Codebase not indexed. Indexing now (first time setup)...")
+
+  // Index the codebase
+  mcp__claude-context__index_codebase({
+    path: "/Users/jack/project",
+    splitter: "ast",
+    force: false  // Don't overwrite existing index
+  })
+
+  // Retry the search
+  result = mcp__claude-context__search_code({
+    path: "/Users/jack/project",
+    query: "user authentication login flow"
+  })
+}
+
+// Step 3: Use search results
+// ... process results ...
+```
+
+**This Pattern Ensures:**
+- Fast searches when codebase is already indexed (99% of cases)
+- Automatic indexing only when needed (first time or after clear)
+- No wasted time re-indexing already-indexed codebases
+- Seamless user experience (error is handled transparently)
+
 ## Environment Variables
 
 ### Required (Per Developer)
