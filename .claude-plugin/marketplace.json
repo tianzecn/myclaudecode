@@ -7,7 +7,7 @@
 	},
 	"metadata": {
 		"description": "MAG team's curated collection of Claude Code plugins for modern frontend development",
-		"version": "2.2.0",
+		"version": "2.3.0",
 		"pluginRoot": "./plugins"
 	},
 	"plugins": [
@@ -55,6 +55,30 @@
 				"patterns",
 				"debugging",
 				"code-navigation"
+			],
+			"strict": true
+		},
+		{
+			"name": "qfrontend",
+			"source": "./plugins/qfrontend",
+			"description": "Quick frontend development toolkit with Haiku-powered agents for fast implementation, code review, and testing. Includes general-purpose agent and frontend-specific agents using the same proven workflows as the full frontend plugin.",
+			"version": "1.0.0",
+			"author": {
+				"name": "Jack Rudenko",
+				"email": "i@madappgang.com",
+				"company": "MadAppGang"
+			},
+			"category": "development",
+			"keywords": [
+				"quick",
+				"haiku",
+				"fast",
+				"development",
+				"frontend",
+				"typescript",
+				"react",
+				"review",
+				"testing"
 			],
 			"strict": true
 		}

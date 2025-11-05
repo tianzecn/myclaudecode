@@ -12,11 +12,18 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v2.2.0)
+- **Frontend Development Plugin** (v2.2.0) - Full-featured Sonnet-powered
   - 9 Specialized Agents
   - 5 Slash Commands
   - 2 Skills
-  - 2 MCP Servers (auto-configured)
+  - MCP Servers (auto-configured)
+- **Quick Frontend Plugin** (v1.0.0) - Fast Haiku-powered
+  - 4 Specialized Agents (general, developer, reviewer, tester)
+  - 1 Slash Command (/implement)
+  - Cost-effective and optimized for speed
+- **Code Analysis Plugin** (v1.0.0) - Deep codebase investigation
+  - 1 Specialized Agent (codebase-detective)
+  - Pattern discovery and bug investigation
 
 ## Key Architecture Decisions
 
@@ -64,14 +71,21 @@ claude-code/
 ├── .claude-plugin/
 │   └── marketplace.json
 └── plugins/
-    └── frontend-development/
+    ├── frontend/                     # Full-featured frontend plugin
+    │   ├── plugin.json
+    │   ├── DEPENDENCIES.md
+    │   ├── README.md
+    │   ├── agents/                   (9 agents)
+    │   ├── commands/                 (5 commands)
+    │   ├── skills/                   (2 skills)
+    │   └── mcp-servers/
+    ├── qfrontend/                    # Quick frontend plugin (Haiku)
+    │   ├── plugin.json
+    │   ├── agents/                   (4 agents)
+    │   └── commands/                 (1 command)
+    └── code-analysis/                # Code analysis plugin
         ├── plugin.json
-        ├── DEPENDENCIES.md
-        ├── README.md
-        ├── agents/          (8 agents)
-        ├── commands/        (5 commands)
-        ├── skills/          (2 skills)
-        └── mcp-servers/
+        └── agents/                   (1 agent)
 ```
 
 ## Important Files
@@ -90,30 +104,48 @@ claude-code/
 - `ai-docs/COMPLETE_PLUGIN_SUMMARY.md` - Complete reference
 - `plugins/frontend/DEPENDENCIES.md` - Dependencies
 
-## Commands Available
+## Commands and Agents Available
 
-### From Frontend Plugin
+### Frontend Plugin (Full-Featured - Sonnet)
 
 **Agents:**
-- `developer` - TypeScript/React implementation
-- `architect` - Architecture planning
-- `tester` - Browser UI testing
-- `test-architect` - Testing strategy
-- `api-analyst` - API docs analysis
-- `cleaner` - Cleanup utilities
-- `reviewer` - Code review
-- `codex-reviewer` - AI code review
+- `typescript-frontend-dev` - TypeScript/React implementation (Sonnet)
+- `frontend-architect` - Architecture planning (Sonnet)
+- `ui-manual-tester` - Browser UI testing (Haiku)
+- `test-architect` - Testing strategy (Sonnet)
+- `api-documentation-analyst` - API docs analysis (Sonnet)
+- `project-cleaner` - Cleanup utilities (Haiku)
+- `senior-code-reviewer` - Code review (Sonnet)
+- `codex-code-reviewer` - AI code review via Codex (Proxy)
+- `ui-implementation-validator` - UI validation orchestrator (Sonnet)
 
 **Commands:**
-- `/implement` - Full-cycle implementation
+- `/implement` - Full-cycle implementation (7 phases)
 - `/import-figma` - Import Figma components
 - `/configure-mcp` - Configure MCP servers
 - `/api-docs` - API documentation workflows
 - `/cleanup-artifacts` - Clean temporary files
+- `/validate-ui` - UI validation workflow
 
 **Skills:**
 - `browser-debugger` - UI testing & debugging
 - `api-spec-analyzer` - OpenAPI/Swagger analysis
+
+### Quick Frontend Plugin (Haiku-Powered)
+
+**Agents:**
+- `quick-general` - General-purpose quick tasks (Haiku)
+- `typescript-frontend-dev` - Fast TypeScript/React implementation (Haiku)
+- `senior-code-reviewer` - Quick code review (Haiku)
+- `ui-manual-tester` - Efficient UI testing (Haiku)
+
+**Commands:**
+- `/implement` - Streamlined implementation (5 phases)
+
+### Code Analysis Plugin
+
+**Agents:**
+- `codebase-detective` - Deep code investigation (Sonnet)
 
 ## Environment Variables
 
@@ -172,12 +204,19 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@mag-claude-plugins": true,
+    "qfrontend@mag-claude-plugins": true,
+    "code-analysis@mag-claude-plugins": true
   }
 }
 ```
 
 Commit this file and team members get automatic setup!
+
+**Plugin Selection Guide:**
+- Use **frontend** for production code, complex features, comprehensive testing
+- Use **qfrontend** for rapid prototyping, MVPs, cost-effective development
+- Use **code-analysis** for investigating bugs, understanding legacy code
 
 ### Alternative: Global Plugin Installation
 
@@ -222,7 +261,16 @@ Include marketplace in project settings (requires folder trust):
 ## Status
 
 ✅ **Production Ready**
-- Complete plugin (8 agents, 5 commands, 2 skills)
+
+**3 Complete Plugins:**
+1. **Frontend** (v2.2.0) - 9 agents, 5 commands, 2 skills - Full-featured Sonnet
+2. **Quick Frontend** (v1.0.0) - 4 agents, 1 command - Fast Haiku
+3. **Code Analysis** (v1.0.0) - 1 agent - Deep investigation
+
+**Features:**
+- 14+ specialized agents across all plugins
+- 6+ slash commands
+- 2 workflow skills
 - 3000+ lines of documentation
 - Team architecture implemented
 - Smart validation system
@@ -232,5 +280,5 @@ Include marketplace in project settings (requires folder trust):
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Last Updated:** November 4, 2024
-**Version:** 2.2.0
+**Last Updated:** November 5, 2024
+**Version:** 2.3.0
