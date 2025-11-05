@@ -38,7 +38,7 @@ Use the Task tool to launch the tester agent with comprehensive instructions:
 
 ```
 Use Task tool with:
-- subagent_type: "frontend:ui-manual-tester"
+- subagent_type: "frontend:tester"
 - prompt: [Detailed testing instructions below]
 ```
 

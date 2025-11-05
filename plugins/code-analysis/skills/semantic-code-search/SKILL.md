@@ -477,7 +477,7 @@ search_code with query: "password validation and hashing"
 search_code with query: "session token generation and storage"
 
 ## Step 3: Launch Codebase-Detective
-Task tool with subagent_type: "code-analysis:codebase-detective"
+Task tool with subagent_type: "code-analysis:detective"
 Provide detective with:
 - Search results (file locations)
 - User's question

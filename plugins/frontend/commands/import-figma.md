@@ -490,7 +490,7 @@ Use Task tool to invoke the tester agent with comprehensive testing instructions
 
 ```typescript
 Task({
-  subagent_type: 'frontend:ui-manual-tester',
+  subagent_type: 'frontend:tester',
   description: `Test ${componentName} component`,
   prompt: `Test the ${componentName} component at /playground/${kebabName}
 

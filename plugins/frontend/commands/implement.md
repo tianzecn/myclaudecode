@@ -153,7 +153,7 @@ TodoWrite with the following items:
 
 1. **Launch Planning Agent**:
    - **Update TodoWrite**: Ensure "PHASE 1: Launch architect" is marked as in_progress
-   - Use Task tool with `subagent_type: frontend:frontend-architect-planner`
+   - Use Task tool with `subagent_type: frontend:architect`
    - Provide the feature request: $ARGUMENTS
    - Agent will perform gap analysis and ask clarifying questions
    - Agent will create comprehensive plan in AI-DOCS/
@@ -180,7 +180,7 @@ TodoWrite with the following items:
 
 1. **Launch Implementation Agent**:
    - **Update TodoWrite**: Mark "PHASE 2: Launch developer" as in_progress
-   - Use Task tool with `subagent_type: frontend:typescript-frontend-dev`
+   - Use Task tool with `subagent_type: frontend:developer`
    - Provide:
      * Path to approved plan documentation in AI-DOCS/
      * Clear instruction to follow the plan step-by-step
@@ -465,7 +465,7 @@ This phase runs ONLY if Figma design links are detected in the feature request o
    ```
 
    - **Reviewer 1 - Senior Code Reviewer (Human-Focused Review)**:
-     * Use Task tool with `subagent_type: frontend:senior-code-reviewer`
+     * Use Task tool with `subagent_type: frontend:reviewer`
      * Provide context:
        - "Review all unstaged git changes from the current implementation"
        - Path to the original plan for reference (AI-DOCS/...)
@@ -477,7 +477,7 @@ This phase runs ONLY if Figma design links are detected in the feature request o
          * Alignment with the approved plan
 
    - **Reviewer 2 - Codex Code Analyzer (Automated AI Review)**:
-     * Use Task tool with `subagent_type: frontend:senior-code-reviewer-codex`
+     * Use Task tool with `subagent_type: frontend:codex-reviewer`
      * **IMPORTANT**: This agent is a PROXY to Codex AI. Prepare a COMPLETE prompt with all context.
      * Provide a fully prepared prompt containing:
        ```
@@ -519,7 +519,7 @@ This phase runs ONLY if Figma design links are detected in the feature request o
      * The agent will forward this complete prompt to Codex AI and return the results
 
    - **Reviewer 3 - UI Manual Tester (Real Browser Testing)**:
-     * Use Task tool with `subagent_type: frontend:ui-manual-tester`
+     * Use Task tool with `subagent_type: frontend:tester`
      * Provide context:
        - **Manual testing instructions** from Phase 2 Step 3 (the structured guide from developer)
        - Application URL (e.g., http://localhost:5173 or staging URL)
@@ -594,7 +594,7 @@ This phase runs ONLY if Figma design links are detected in the feature request o
 
 1. **Launch Testing Agent**:
    - **Update TodoWrite**: Mark "PHASE 4: Launch test-architect" as in_progress
-   - Use Task tool with `subagent_type: frontend:vitest-test-architect`
+   - Use Task tool with `subagent_type: frontend:test-architect`
    - Provide:
      * Implemented code (reference to files)
      * Original plan requirements
@@ -665,7 +665,7 @@ This phase runs ONLY if Figma design links are detected in the feature request o
 
 3. **Launch Project Cleanup**:
    - **Update TodoWrite**: Mark "PHASE 5: Launch cleaner to clean up temporary artifacts" as in_progress
-   - Use Task tool with `subagent_type: frontend:project-cleaner`
+   - Use Task tool with `subagent_type: frontend:cleaner`
    - Provide context:
      * The implementation is complete and user-approved
      * Request cleanup of:
@@ -833,7 +833,7 @@ CORRECT BEHAVIOR:
 > I need to delegate this fix to the developer agent.
 >
 > Task(
->   subagent_type: "frontend:typescript-frontend-dev",
+>   subagent_type: "frontend:developer",
 >   prompt: "Fix the TypeScript type error identified by code reviewer:
 >
 >   File: src/api/mockUserApi.ts
@@ -871,7 +871,7 @@ CORRECT BEHAVIOR:
 > I'll delegate this to the developer agent.
 >
 > Task(
->   subagent_type: "frontend:typescript-frontend-dev",
+>   subagent_type: "frontend:developer",
 >   prompt: "Create a new utility file src/lib/dateUtils.ts with date formatting functions.
 >
 >   Include:
@@ -916,7 +916,7 @@ CORRECT BEHAVIOR:
 > I'll delegate this implementation bug fix to developer.
 >
 > Task(
->   subagent_type: "frontend:typescript-frontend-dev",
+>   subagent_type: "frontend:developer",
 >   prompt: "Fix implementation bugs causing test failures:
 >
 >   Test File: src/components/users/UserForm.test.ts
@@ -966,9 +966,9 @@ CORRECT BEHAVIOR:
   * Maximum 3 iterations per component before escalating to user
   * Ensures pixel-perfect implementation before code review phase
 - **CRITICAL**: Always run all three reviewers in parallel using THREE Task tool calls in a single message:
-  * Task 1: `subagent_type: frontend:senior-code-reviewer` (human-focused code review using Sonnet)
-  * Task 2: `subagent_type: frontend:senior-code-reviewer-codex` (automated AI code review using Codex via mcp__codex-cli__ask-codex)
-  * Task 3: `subagent_type: frontend:ui-manual-tester` (real browser manual UI testing with Chrome DevTools)
+  * Task 1: `subagent_type: frontend:reviewer` (human-focused code review using Sonnet)
+  * Task 2: `subagent_type: frontend:codex-reviewer` (automated AI code review using Codex via mcp__codex-cli__ask-codex)
+  * Task 3: `subagent_type: frontend:tester` (real browser manual UI testing with Chrome DevTools)
   * All THREE Task calls must be in the SAME message for true parallel execution
 - Before running tester, ensure you have manual testing instructions from the implementation agent
 - Maintain clear communication with user at each quality gate (Plan, Implementation, Triple Review, Tests, Final Implementation)

@@ -41,7 +41,7 @@ Use the Task tool to launch the codebase-detective agent with comprehensive inst
 
 ```
 Use Task tool with:
-- subagent_type: "code-analysis:codebase-detective"
+- subagent_type: "code-analysis:detective"
 - description: "Investigate [brief summary]"
 - prompt: [Detailed investigation instructions]
 ```

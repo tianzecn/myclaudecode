@@ -26,7 +26,7 @@ Analyze the user's question to determine what they need:
 
 ### STEP 2: Launch API Documentation Analyzer
 
-Use the Task tool with `subagent_type: "frontend:api-documentation-analyzer"` and provide a detailed prompt:
+Use the Task tool with `subagent_type: "frontend:api-analyst"` and provide a detailed prompt:
 
 ```
 The user is asking: {{ARGS}}

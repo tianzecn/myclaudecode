@@ -87,7 +87,7 @@ If user approves:
    - Include any user-specific instructions for uncertain files
 
 2. **Launch cleaner Agent**:
-   - Use Task tool with `subagent_type: frontend:project-cleaner`
+   - Use Task tool with `subagent_type: frontend:cleaner`
    - Provide comprehensive context:
      ```
      You are cleaning up artifacts from: [task description]
