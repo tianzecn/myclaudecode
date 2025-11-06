@@ -253,6 +253,160 @@ import { cn } from "@/lib/utils"
 <div className="p-4 md:p-6 lg:p-8"> // 16px -> 24px -> 32px
 ```
 
+#### CVA (class-variance-authority) Best Practices
+
+**CRITICAL: If you're working with shadcn/ui or other CVA-based components, follow these rules.**
+
+**What is CVA?**
+CVA is used by shadcn/ui and modern component libraries to manage component variants with TypeScript type safety. Components like Button, Badge, Alert use CVA.
+
+**🚨 Red Flags - Consult CSS Developer Immediately:**
+- You need `!important` to override component styles
+- Your `className` prop isn't working on CVA components
+- You're creating separate CSS classes for button/badge/alert variants
+- You're fighting with component library styles
+
+**Golden Rule:**
+```tsx
+// ❌ WRONG - Don't fight CVA
+<Button className="bg-red-500">  // Won't work if variant="default"
+<Button className="bg-red-500 !important">  // NEVER do this
+
+// ✅ CORRECT - Work with CVA
+<Button variant="destructive">  // Use proper variant
+```
+
+**Decision Tree: Custom Component Styling**
+
+```
+Need custom Button/Badge/Alert style?
+│
+├─ ONE-OFF customization (margin, width, etc.)?
+│  └─ ✅ Use className prop
+│     <Button variant="default" className="ml-4 w-full">
+│
+├─ REUSABLE style (new button type)?
+│  └─ ⚠️ CONSULT CSS DEVELOPER
+│     They'll guide you to add a CVA variant
+│
+├─ Custom classes NOT working?
+│  └─ ⚠️ CONSULT CSS DEVELOPER
+│     Likely CVA variant conflict
+│
+└─ Considering !important?
+   └─ 🚨 STOP! CONSULT CSS DEVELOPER
+      Never use !important with CVA
+```
+
+**When to Consult CSS Developer:**
+
+1. **Need custom button/component variant:**
+   ```tsx
+   // You need this:
+   <Button variant="delete-secondary">Delete</Button>
+
+   // But "delete-secondary" doesn't exist
+   // → CONSULT CSS Developer
+   // They'll add it to CVA definition
+   ```
+
+2. **className not working:**
+   ```tsx
+   // This isn't working:
+   <Button variant="default" className="bg-red-500">
+   // Still shows blue background
+
+   // → CONSULT CSS Developer
+   // They'll explain CVA variant conflict
+   ```
+
+3. **Thinking about !important:**
+   ```
+   // ❌ NEVER do this:
+   .custom-button {
+     background: red !important;
+   }
+
+   // 🚨 STOP! → CONSULT CSS Developer
+   // They'll provide proper CVA solution
+   ```
+
+**Correct CVA Usage Examples:**
+
+```tsx
+// ✅ Using existing variants
+<Button variant="default" size="lg">Primary Action</Button>
+<Button variant="outline" size="sm">Secondary</Button>
+<Button variant="ghost" size="icon"><Icon /></Button>
+
+// ✅ One-off layout customization
+<Button variant="default" className="ml-auto w-full md:w-auto">
+  Submit
+</Button>
+
+// ✅ Combining variant with minor tweaks
+<Button variant="destructive" className="rounded-full px-8">
+  Delete Forever
+</Button>
+
+// ❌ WRONG - Fighting CVA
+<Button className="bg-green-500 px-6 py-3">
+  // Missing variant prop, loses CVA benefits
+</Button>
+```
+
+**CVA Consultation Examples:**
+
+**Example 1: Need Custom Delete Button**
+```tsx
+// You want:
+<Button /* custom red styling with specific shadow */>
+  Delete
+</Button>
+
+// ⚠️ CONSULT CSS Developer:
+"I need a delete button with red background rgba(235, 87, 87, 0.10),
+red border, specific shadow. Should I create a CSS class?"
+
+// CSS Developer will provide:
+"Add this CVA variant to button.tsx:
+'delete-secondary': 'rounded-lg border border-[#EB5757]/10...'
+Then use: <Button variant='delete-secondary'>Delete</Button>"
+```
+
+**Example 2: Custom Classes Not Working**
+```tsx
+// Problem:
+<Button variant="default" className="bg-red-500">
+  // Still blue!
+</Button>
+
+// ⚠️ CONSULT CSS Developer:
+"I added className='bg-red-500' but button is still blue.
+I tried !important but that's an anti-pattern. Help?"
+
+// CSS Developer will diagnose:
+"CVA variant 'default' has higher specificity. Options:
+1. Use variant='destructive' (already red)
+2. Add new CVA variant for your use case
+3. Omit variant prop if truly one-off"
+```
+
+**What CSS Developer Will Provide:**
+
+When you consult about CVA, they'll give you:
+1. **Diagnosis**: Why your approach isn't working
+2. **Solution**: className vs new variant decision
+3. **Code**: Exact CVA variant to add (if needed)
+4. **Location**: Where to add it (button.tsx, etc.)
+5. **Usage**: How to use the new variant
+
+**Remember:**
+- CVA components (Button, Badge, Alert) need special handling
+- `!important` = wrong implementation with CVA
+- Consult CSS Developer before fighting component styles
+- Work WITH CVA, not against it
+
 #### Accessibility (WCAG 2.1 AA)
 
 **Color Contrast:**

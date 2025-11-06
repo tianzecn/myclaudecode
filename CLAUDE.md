@@ -12,7 +12,7 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v2.6.0) - Full-featured Sonnet-powered
+- **Frontend Development Plugin** (v2.6.1) - Full-featured Sonnet-powered
   - 13 Specialized Agents (including CSS Developer + Designer + Designer-Codex + UI Developer ecosystem)
   - 6 Slash Commands
   - 3 Skills
@@ -334,7 +334,7 @@ Include marketplace in project settings (requires folder trust):
 ✅ **Production Ready**
 
 **2 Complete Plugins:**
-1. **Frontend** (v2.6.0) - 13 agents, 6 commands, 3 skills - Full-featured Sonnet with CSS-aware validation and architecture management
+1. **Frontend** (v2.6.1) - 13 agents, 6 commands, 3 skills - Full-featured Sonnet with CSS-aware validation and CVA best practices
 2. **Code Analysis** (v1.1.0) - 1 agent, 1 command, 2 skills - Deep investigation with semantic search
 
 **Features:**
@@ -356,4 +356,4 @@ Include marketplace in project settings (requires folder trust):
 
 **Maintained by:** Jack Rudenko @ MadAppGang
 **Last Updated:** November 6, 2024
-**Version:** 2.6.0
+**Version:** 2.6.1
