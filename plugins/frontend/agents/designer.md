@@ -133,6 +133,137 @@ For each major element in the component (buttons, inputs, cards, text, etc.):
 - Do NOT generate HTML reports or detailed files
 - Keep analysis focused on CSS properties that affect visual appearance
 
+### 2.5. Detect and Report Layout Issues (Optional)
+
+While reviewing the implementation, check for common responsive layout issues that might affect the design across different viewport sizes.
+
+**When to Check for Layout Issues:**
+- Implementation looks different than expected at certain viewport sizes
+- User reports "horizontal scrolling" or "layout doesn't fit"
+- Elements appear cut off or overflow their containers
+- Layout wraps unexpectedly
+
+**Quick Layout Health Check:**
+
+Run this script to detect horizontal overflow issues:
+
+```javascript
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    const viewport = window.innerWidth;
+    const documentScrollWidth = document.documentElement.scrollWidth;
+    const horizontalOverflow = documentScrollWidth - viewport;
+
+    return {
+      viewport,
+      documentScrollWidth,
+      horizontalOverflow,
+      hasIssue: horizontalOverflow > 20,
+      status: horizontalOverflow < 10 ? '✅ GOOD' :
+              horizontalOverflow < 20 ? '⚠️ ACCEPTABLE' :
+              '❌ ISSUE DETECTED'
+    };
+  }`
+})
+```
+
+**If Layout Issue Detected (`horizontalOverflow > 20px`):**
+
+1. **Find the Overflowing Element:**
+
+```javascript
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    const viewport = window.innerWidth;
+    const allElements = Array.from(document.querySelectorAll('*'));
+
+    const overflowingElements = allElements
+      .filter(el => el.scrollWidth > viewport + 10)
+      .map(el => ({
+        tagName: el.tagName,
+        scrollWidth: el.scrollWidth,
+        overflow: el.scrollWidth - viewport,
+        className: el.className.substring(0, 100)
+      }))
+      .sort((a, b) => b.overflow - a.overflow)
+      .slice(0, 5);
+
+    return { viewport, overflowingElements };
+  }`
+})
+```
+
+2. **Report Layout Issue in Your Review:**
+
+Include in your design review report:
+
+```markdown
+## 🚨 Layout Issue Detected
+
+**Type**: Horizontal Overflow
+**Viewport**: 1380px
+**Overflow Amount**: 85px
+
+**Problematic Element**:
+- Tag: DIV
+- Class: `shrink-0 min-w-[643px] w-full`
+- Location: Likely in [component name] based on class names
+
+**Impact on Design Fidelity**:
+- Layout doesn't fit viewport at standard desktop sizes
+- Forced horizontal scrolling degrades UX
+- May hide portions of the design from view
+
+**Recommendation**:
+This appears to be a responsive layout issue, not a visual design discrepancy.
+I recommend consulting the **UI Developer** or **CSS Developer** to fix the underlying layout constraints.
+
+**Likely Cause**:
+- Element with `shrink-0` class preventing flex shrinking
+- Hard-coded `min-width` forcing minimum size
+- May be Figma-generated code that needs responsive adjustment
+```
+
+3. **Note in Overall Assessment:**
+
+```markdown
+## 🏁 Overall Assessment
+
+**Design Fidelity**: CANNOT FULLY ASSESS due to layout overflow issue
+
+**Layout Issues Found**: YES ❌
+- Horizontal overflow at 1380px viewport
+- Element(s) preventing proper responsive behavior
+- Recommend fixing layout before design review
+
+**Recommendation**: Fix layout overflow first, then request re-review for design fidelity.
+```
+
+**Testing at Multiple Viewport Sizes:**
+
+If you suspect responsive issues, test at common breakpoints:
+
+```javascript
+// Test at different viewport sizes
+mcp__chrome-devtools__resize_page({ width: 1920, height: 1080 })
+// ... check overflow ...
+
+mcp__chrome-devtools__resize_page({ width: 1380, height: 800 })
+// ... check overflow ...
+
+mcp__chrome-devtools__resize_page({ width: 1200, height: 800 })
+// ... check overflow ...
+
+mcp__chrome-devtools__resize_page({ width: 900, height: 800 })
+// ... check overflow ...
+```
+
+**Important**:
+- Layout issues are separate from visual design discrepancies
+- If found, recommend fixing layout FIRST before design review
+- Don't try to fix layout issues yourself - report them to UI Developer or CSS Developer
+- Focus your design review on visual fidelity once layout is stable
+
 ### 3. Consult CSS Developer for Context
 
 **BEFORE analyzing discrepancies, consult CSS Developer agent to understand CSS architecture.**

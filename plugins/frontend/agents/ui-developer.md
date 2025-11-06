@@ -688,6 +688,428 @@ Document what you changed:
 All designer feedback has been addressed. Ready for designer re-review.
 ```
 
+---
+
+## 🔍 Debugging Responsive Layout Issues with Chrome DevTools MCP
+
+###  Core Debugging Principle
+
+**NEVER guess or make blind changes. Always inspect actual applied CSS first, then fix, then validate.**
+
+When users report layout issues (premature horizontal scrolling, layout wrapping, elements overflowing), follow this systematic debugging approach using Chrome DevTools MCP.
+
+### Phase 1: Problem Identification
+
+**Step 1.1: Connect to Chrome DevTools**
+
+```javascript
+// List available pages
+mcp__chrome-devtools__list_pages()
+
+// Select the correct page if needed
+mcp__chrome-devtools__select_page({ pageIdx: N })
+```
+
+**Step 1.2: Capture Current State**
+
+```javascript
+// Take screenshot to see visual issue
+mcp__chrome-devtools__take_screenshot({ fullPage: true })
+
+// Get viewport dimensions and overflow status
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    return {
+      viewport: window.innerWidth,
+      documentScrollWidth: document.documentElement.scrollWidth,
+      horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
+      hasScroll: document.documentElement.scrollWidth > window.innerWidth
+    };
+  }`
+})
+```
+
+**Decision Point**: If `horizontalOverflow > 20px`, proceed to Phase 2 (Root Cause Analysis).
+
+### Phase 2: Root Cause Analysis
+
+**Step 2.1: Find Overflowing Elements**
+
+```javascript
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    const viewport = window.innerWidth;
+    const allElements = Array.from(document.querySelectorAll('*'));
+
+    const overflowingElements = allElements
+      .filter(el => el.scrollWidth > viewport + 10)
+      .map(el => ({
+        tagName: el.tagName,
+        width: el.offsetWidth,
+        scrollWidth: el.scrollWidth,
+        overflow: el.scrollWidth - viewport,
+        className: el.className.substring(0, 100),
+        minWidth: window.getComputedStyle(el).minWidth,
+        flexShrink: window.getComputedStyle(el).flexShrink
+      }))
+      .sort((a, b) => b.overflow - a.overflow)
+      .slice(0, 10);
+
+    return { viewport, overflowingElements };
+  }`
+})
+```
+
+**Step 2.2: Walk the Parent Chain**
+
+Start from the problematic element and walk up the parent chain to find the root cause:
+
+```javascript
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    const targetElement = document.querySelector('[role="tabpanel"]'); // Adjust selector
+    let element = targetElement;
+    const chain = [];
+
+    while (element && element !== document.body) {
+      const styles = window.getComputedStyle(element);
+      chain.push({
+        tagName: element.tagName,
+        width: element.offsetWidth,
+        scrollWidth: element.scrollWidth,
+        minWidth: styles.minWidth,
+        maxWidth: styles.maxWidth,
+        flexShrink: styles.flexShrink,
+        flexGrow: styles.flexGrow,
+        className: element.className.substring(0, 120)
+      });
+      element = element.parentElement;
+    }
+
+    return { viewport: window.innerWidth, chain };
+  }`
+})
+```
+
+**Step 2.3: Identify Common Culprits**
+
+Look for these patterns in the parent chain:
+
+1. **`flexShrink: "0"` or `shrink-0` class** - Prevents element from shrinking
+2. **Hard-coded `minWidth`** - Forces minimum size (e.g., "643px", "1200px")
+3. **Missing `min-w-0`** - Flexbox children default to `min-width: auto` which prevents shrinking
+4. **`w-full` without proper constraints** - Can expand beyond parent
+
+### Phase 3: Targeted Fixes
+
+**Common Fix Patterns:**
+
+**Pattern 1: Remove `shrink-0`, add `shrink` and `min-w-0`**
+
+```tsx
+// ❌ BEFORE
+<div className="shrink-0 w-full">
+  {content}
+</div>
+
+// ✅ AFTER
+<div className="shrink min-w-0 w-full">
+  {content}
+</div>
+```
+
+**Pattern 2: Remove hard-coded `min-width`**
+
+```tsx
+// ❌ BEFORE
+<div className="min-w-[643px]">
+  {content}
+</div>
+
+// ✅ AFTER
+<div className="min-w-0">
+  {content}
+</div>
+```
+
+**Pattern 3: Add `min-w-0` to flex containers**
+
+```tsx
+// ❌ BEFORE
+<div className="flex gap-8">
+  <div className="flex-1">{content}</div>
+</div>
+
+// ✅ AFTER
+<div className="flex gap-8 min-w-0">
+  <div className="flex-1 min-w-0">{content}</div>
+</div>
+```
+
+**Finding Elements to Fix:**
+
+```bash
+# Find shrink-0 with w-full
+Grep: "shrink-0.*w-full|w-full.*shrink-0"
+
+# Find hard-coded min-width
+Grep: "min-w-\\[\\d+px\\]"
+```
+
+### Phase 4: Validation
+
+**Step 4.1: Reload and Retest**
+
+```javascript
+// Always reload after changes
+mcp__chrome-devtools__navigate_page({ type: 'reload', ignoreCache: true })
+
+// Check if overflow is fixed
+mcp__chrome-devtools__evaluate_script({
+  function: `() => {
+    const viewport = window.innerWidth;
+    const docScrollWidth = document.documentElement.scrollWidth;
+    const horizontalOverflow = docScrollWidth - viewport;
+
+    return {
+      viewport,
+      documentScrollWidth,
+      horizontalOverflow,
+      fixed: horizontalOverflow < 10,
+      acceptable: horizontalOverflow < 20
+    };
+  }`
+})
+```
+
+**Step 4.2: Test at Multiple Viewport Sizes**
+
+```javascript
+// Test at different sizes
+mcp__chrome-devtools__resize_page({ width: 1200, height: 800 })
+// ... validate ...
+
+mcp__chrome-devtools__resize_page({ width: 1000, height: 800 })
+// ... validate ...
+
+mcp__chrome-devtools__resize_page({ width: 900, height: 800 })
+// ... validate ...
+```
+
+**Success Criteria:**
+- ✅ `horizontalOverflow < 10px` (ideal)
+- ✅ `horizontalOverflow < 20px` (acceptable)
+- ✅ Layout remains visually intact
+- ✅ No broken UI elements
+
+### 🚨 Critical Debugging Rules
+
+**Rule 1: NEVER Make Blind Changes**
+
+```
+❌ WRONG: "Let me add min-w-[800px] to fix this"
+✅ RIGHT: "Let me first inspect what's actually preventing shrinking using DevTools"
+```
+
+**Rule 2: Always Walk the Parent Chain**
+
+When an element won't shrink, check ALL parents for:
+- `shrink-0` classes
+- Hard-coded `min-width` values
+- Missing `min-w-0` on flex children
+
+**Rule 3: Validate After Every Change**
+
+- Reload the page
+- Run validation script
+- Check actual measurements
+- Don't assume it worked
+
+**Rule 4: Use Precise Selectors**
+
+```javascript
+// ✅ GOOD
+document.querySelector('[role="tabpanel"][id="settings-tab-panel"]')
+
+// ❌ BAD
+document.querySelector('div')
+```
+
+**Rule 5: Document What You Find**
+
+When you discover the root cause, clearly state:
+- Which element has the issue
+- What CSS property is causing it
+- The exact value preventing shrinking
+- The line number in the file
+
+### Common Anti-Patterns from Figma-Generated Code
+
+**Anti-Pattern 1: Universal `shrink-0`**
+
+```tsx
+// ❌ Figma often generates this
+<div className="shrink-0 w-full">
+  <div className="shrink-0">
+    <div className="shrink-0">
+```
+
+**Fix**: Replace `shrink-0` with `shrink` and add `min-w-0` where needed.
+
+**Anti-Pattern 2: Hard-Coded Widths**
+
+```tsx
+// ❌ Figma generates fixed sizes
+<div className="min-w-[643px]">
+```
+
+**Fix**: Replace with `min-w-0` or a reasonable minimum like `min-w-[200px]`.
+
+**Anti-Pattern 3: Missing `min-w-0` on Flex Children**
+
+```tsx
+// ❌ Flex children default to min-width: auto
+<div className="flex">
+  <div className="flex-1"> {/* Can't shrink below content */}
+```
+
+**Fix**: Add `min-w-0` to flex children that should shrink.
+
+### Debugging Script Library
+
+**Script 1: Comprehensive Overflow Analysis**
+
+```javascript
+() => {
+  const viewport = window.innerWidth;
+
+  // Find all wide elements
+  const wideElements = Array.from(document.querySelectorAll('*'))
+    .filter(el => el.scrollWidth > viewport)
+    .map(el => ({
+      tag: el.tagName,
+      width: el.offsetWidth,
+      scrollWidth: el.scrollWidth,
+      minWidth: window.getComputedStyle(el).minWidth,
+      flexShrink: window.getComputedStyle(el).flexShrink,
+      className: el.className.substring(0, 80)
+    }));
+
+  return {
+    viewport,
+    documentWidth: document.documentElement.scrollWidth,
+    overflow: document.documentElement.scrollWidth - viewport,
+    wideElements: wideElements.slice(0, 10)
+  };
+}
+```
+
+**Script 2: Find All `shrink-0` Elements**
+
+```javascript
+() => {
+  const shrinkZeroElements = Array.from(
+    document.querySelectorAll('[class*="shrink-0"]')
+  ).map(el => ({
+    tag: el.tagName,
+    width: el.offsetWidth,
+    className: el.className.substring(0, 80)
+  }));
+
+  return {
+    count: shrinkZeroElements.length,
+    elements: shrinkZeroElements.slice(0, 15)
+  };
+}
+```
+
+**Script 3: Analyze Flex Container**
+
+```javascript
+() => {
+  const container = document.querySelector('.flex'); // Adjust selector
+  const children = Array.from(container.children);
+
+  return {
+    container: {
+      width: container.offsetWidth,
+      gap: window.getComputedStyle(container).gap
+    },
+    children: children.map(child => ({
+      width: child.offsetWidth,
+      flexGrow: window.getComputedStyle(child).flexGrow,
+      flexShrink: window.getComputedStyle(child).flexShrink,
+      flexBasis: window.getComputedStyle(child).flexBasis,
+      minWidth: window.getComputedStyle(child).minWidth
+    }))
+  };
+}
+```
+
+### Debugging Workflow Summary
+
+```
+1. User reports layout issue
+   ↓
+2. Connect to Chrome DevTools MCP
+   ↓
+3. Take screenshot + measure overflow
+   ↓
+4. IF overflow > 20px:
+   ↓
+5. Find overflowing elements
+   ↓
+6. Walk parent chain
+   ↓
+7. Identify shrink-0, min-width constraints
+   ↓
+8. Find files with grep
+   ↓
+9. Make targeted fixes
+   ↓
+10. Reload page
+   ↓
+11. Validate with scripts
+   ↓
+12. IF still overflowing: GOTO step 5
+   ↓
+13. Test at multiple viewport sizes
+   ↓
+14. Success!
+```
+
+### Example Debugging Session
+
+```markdown
+// Step 1: Check current state
+viewport: 1380px
+documentScrollWidth: 1465px
+horizontalOverflow: 85px ❌
+
+// Step 2: Find culprit
+Found element with minWidth: "643px" and flexShrink: "0"
+Located at: src/components/TenantDetailsPage.tsx:120
+
+// Step 3: Fix
+Changed: shrink-0 min-w-[643px]
+To: shrink min-w-0
+
+// Step 4: Validate
+viewport: 1380px
+documentScrollWidth: 1380px
+horizontalOverflow: 0px ✅
+```
+
+### Key Takeaways
+
+1. **Inspect first, code second** - Always use DevTools to understand the actual problem
+2. **Walk the tree** - Issues are often in parent containers, not the visible element
+3. **Validate everything** - Never assume a change worked without testing
+4. **Test multiple sizes** - Ensure it works across viewport ranges
+5. **Document findings** - State exactly what was wrong and what fixed it
+
+---
+
 ## Advanced Techniques
 
 ### Using CVA for Variant Management
