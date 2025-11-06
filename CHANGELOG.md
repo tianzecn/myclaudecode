@@ -5,6 +5,261 @@ All notable changes to the MAG Claude Plugins project will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.1] - 2025-11-06
+
+### Added
+
+#### CVA Best Practices for shadcn/ui
+- **Comprehensive CVA guidance** added to CSS Developer and UI Developer agents
+  - Type-safe component variant patterns
+  - Decision trees for className vs variant props
+  - When to add CVA variants vs use className overrides
+  - Troubleshooting common CVA issues
+  - Documentation templates for CVA components
+
+#### CSS Developer Agent - CVA Section (400+ lines)
+- **Critical CVA Rules:**
+  - NEVER use !important with CVA components
+  - Don't create separate CSS classes for variants (breaks type system)
+  - Always add new variants to CVA definition for reusable styles
+  - Use className prop for one-off customizations only
+  - Let twMerge (via cn()) handle class conflicts
+
+- **Decision Tree for Custom Styling:**
+  - One-off customization → Use className prop
+  - Reusable style (3+ uses) → Add CVA variant
+  - Modifies existing variant slightly → className prop override
+  - Completely different style → Add CVA variant
+
+- **Step-by-Step Variant Addition Guide**
+- **3 Detailed Consultation Scenarios**
+- **Troubleshooting Guide** (variant conflicts, TypeScript errors)
+- **CVA Knowledge Documentation Templates**
+
+#### UI Developer Agent - CVA Integration
+- **Red Flags** triggering CSS Developer consultation
+- **Golden Rule**: Work with CVA, don't fight it
+- **Decision Tree** for when to consult CSS Developer
+- **2 Detailed Consultation Examples**
+- **Clear Guidelines** on what CSS Developer provides
+
+### Changed
+
+- **Version Updates:**
+  - Frontend Plugin: 2.6.0 → 2.6.1
+  - Marketplace: 2.8.0 → 2.8.1
+
+### Benefits
+
+- ✅ Type-safe component variants with IDE autocomplete
+- ✅ Centralized style management (no scattered !important)
+- ✅ Reusable patterns across entire codebase
+- ✅ Automatic class conflict resolution via twMerge
+- ✅ Consistent with shadcn/ui best practices (2025)
+- ✅ No anti-patterns in codebase
+
+---
+
+## [2.6.0] - 2025-11-06
+
+### Added
+
+#### CSS-Aware Design Validation
+- **DOM Inspection** - Designers now inspect actual rendered elements via Chrome DevTools MCP
+- **Computed CSS Analysis** - Get real browser-computed styles (actual values, not just class names)
+- **CSS Rule Identification** - See which CSS rules and Tailwind classes are applied
+- **Pattern Awareness** - Consult CSS Developer to understand existing patterns before suggesting fixes
+- **Safe Fix Recommendations** - Impact assessment (LOCAL/GLOBAL) for each suggested change
+
+#### Enhanced Designer Agent (290+ lines added)
+
+**New 5-Step Workflow:**
+1. **Capture Screenshot & Inspect DOM** - Get computed styles for all major elements
+2. **Consult CSS Developer for Context** - Understand patterns, tokens, and standard classes
+3. **CSS-Aware Design Review** - Compare design vs actual computed CSS values
+4. **Consult CSS Developer for Safe Fixes** - Verify each fix won't break other components
+5. **Generate CSS-Aware Report** - Include computed CSS, pattern analysis, impact assessment
+
+**Report Enhancements:**
+- 🖥️ **Computed CSS Analysis** - Actual padding, colors, fonts from browser
+- 🧩 **CSS Developer Insights** - Pattern compliance, standard usage locations
+- ⚠️ **CSS-Analyzed Discrepancies** - Expected vs Actual with CSS rules and classes
+- 🎯 **CSS Developer Approved Fixes** - Safe changes with impact assessment
+
+#### Enhanced Designer-Codex Agent
+- Now receives computed CSS properties for accurate validation
+- Gets CSS Developer insights about patterns and impact
+- Enables more precise Codex AI recommendations
+
+### Benefits
+
+- ✅ **No More Guessing** - "padding: 8px 16px (computed from px-4 py-2)" vs "the button looks wrong"
+- ✅ **Understand WHY** - See which classes/rules cause the visual differences
+- ✅ **Safe Fixes** - Know if changing affects 1 component or 26 components
+- ✅ **Pattern Awareness** - Align with existing patterns (26 files use bg-blue-600)
+- ✅ **Prevent Breaking Changes** - "LOCAL - Only affects this component ✅"
+
+### Changed
+
+- **Version Updates:**
+  - Frontend Plugin: 2.5.0 → 2.6.0
+  - Marketplace: 2.7.0 → 2.8.0
+
+### Technical Improvements
+
+- **DOM Inspection Integration** via Chrome DevTools MCP
+- **CSS Developer Consultation Workflow** for pattern analysis
+- **Impact Assessment System** (LOCAL vs GLOBAL changes)
+- **Computed CSS Extraction** from actual browser rendering
+
+---
+
+## [2.5.0] - 2025-11-06
+
+### Added
+
+#### CSS Developer Agent (NEW - 879 lines)
+- **CSS Architecture Knowledge Management**
+  - Creates and maintains `.ai-docs/css-knowledge/` directory
+  - 7 knowledge files: README, design-tokens, component-patterns, utility-patterns, element-rules, global-styles, change-log
+  - Tracks what CSS patterns exist and where they're used
+  - Documents design tokens (colors, spacing, typography)
+  - Component pattern registry with usage locations
+  - Prevents breaking changes via impact analysis
+
+- **Modern CSS + Tailwind CSS 4 Best Practices (2025):**
+  - CSS-first configuration with @theme
+  - Container queries for component-responsive design
+  - :has() pseudo-class for parent/sibling selection
+  - CSS cascade layers for predictable specificity
+  - Performance: 5x faster full builds, 100x faster incremental
+  - Strategic @apply usage (only for true component abstraction)
+  - Mobile-first responsive design
+  - WCAG 2.1 AA accessibility compliance
+
+- **Change Impact Assessment:**
+  - HIGH/MEDIUM/LOW risk levels
+  - Analyzes how many files affected by CSS changes
+  - Migration plans for global CSS modifications
+  - Safe vs unsafe change guidelines
+
+- **UI Developer Integration:**
+  - MANDATORY consultation before CSS changes
+  - Step-by-step consultation process
+  - Examples of safe vs unsafe changes
+  - Explicit approval required for global changes
+
+#### Task Decomposition in /implement-ui (446 lines added)
+
+**New PHASE 1.5: Task Analysis & Decomposition**
+- Architect agent analyzes design and splits into independent tasks
+- Each task = one component/screen with specific files
+- Identifies dependencies between tasks
+- Creates parallel execution strategy
+- User approval before proceeding
+
+**Task Structure:**
+- Task ID, Name, Description
+- Files (specific files this task creates/modifies)
+- Dependencies (which tasks must complete first)
+- Priority (1-5, determines execution order)
+- Design Section (specific part of design)
+- Complexity (low/medium/high)
+
+**Parallel Execution Strategy:**
+- Tasks with no dependencies run in PARALLEL (Round 1)
+- Tasks with dependencies wait for prerequisites (Round 2+)
+- Each task modifies DIFFERENT files (no overlap)
+- Changes to Task A can't break Task B (isolation)
+
+**Per-Task Validation Loops:**
+- Each task gets focused validation loop (max 5 iterations)
+- Validates ONLY that task's component/screen
+- Designer agents focus on specific design section and files
+- Prevents "fix Component A, break Component B" problem
+
+### Changed
+
+- **UI Developer Agent** - Added CSS Developer consultation workflow (136+ lines)
+  - When to consult CSS Developer
+  - How to request CSS architecture analysis
+  - Examples of consultation scenarios
+
+- **Version Updates:**
+  - Frontend Plugin: 2.4.1 → 2.5.0
+  - Marketplace: 2.6.1 → 2.7.0
+  - Agent Count: 12 → 13 agents
+
+### Benefits
+
+- ✅ Prevents breaking existing styles when making changes
+- ✅ Maintains CSS architecture knowledge automatically
+- ✅ Small, focused iterations per component
+- ✅ No breaking changes between isolated tasks
+- ✅ Parallel execution for independent tasks
+- ✅ Clear progress tracking
+- ✅ Enforces modern CSS patterns consistently
+
+### Technical Improvements
+
+- **CSS Knowledge Management System** with 7 documentation files
+- **Task Decomposition Algorithm** for parallel execution
+- **Per-Task Validation** for isolated changes
+- **Tailwind CSS 4 Integration** with latest 2025 features
+
+---
+
+## [2.4.1] - 2025-11-06
+
+### Changed
+
+#### MCP Error Handling Improvements
+- Enhanced error handling for claude-context MCP server
+- Added error-triggered indexing pattern (index only when needed)
+- Improved error messages and troubleshooting guidance
+- Better handling of "not indexed" errors
+
+### Technical Improvements
+
+- **Smart Indexing Strategy**: Only index when search returns "not indexed" error
+- **Error Pattern Recognition**: Distinguishes between different MCP error types
+- **Documentation**: Added comprehensive MCP error handling guide to CLAUDE.md
+
+---
+
+## [2.4.0] - 2025-11-06
+
+### Added
+
+#### Parallel Design Validation
+- **Designer + Designer-Codex** dual validation approach
+- **Flexible validation modes:**
+  - Manual only (Designer agent)
+  - Automated only (Designer-Codex proxy to Codex AI)
+  - Both in parallel for comprehensive validation
+- **Independent expert analysis** via external Codex AI
+- **Validation comparison** between human-guided and AI-guided approaches
+
+#### Mandatory User Validation Gates
+- Added explicit user approval checkpoints in all UI workflows
+- Prevents automated changes without user review
+- Clear validation prompts in /implement, /implement-ui, /validate-ui
+
+### Changed
+
+- **Version Updates:**
+  - Frontend Plugin: 2.3.0 → 2.4.0
+  - Marketplace: 2.6.0 → 2.6.1
+
+### Benefits
+
+- ✅ Dual validation catches more design discrepancies
+- ✅ User control over automated changes
+- ✅ External expert validation option
+- ✅ Flexible validation approach based on project needs
+
+---
+
 ## [2.3.0] - 2025-01-05
 
 ### Added

@@ -16,12 +16,21 @@
 
 A professional-grade Claude Code plugin marketplace with enterprise-level architecture for team distribution.
 
-**Frontend Development Plugin v1.0.0**
-- ✅ 8 Specialized Agents
-- ✅ 5 Slash Commands
-- ✅ 2 Skills
+**Frontend Development Plugin v2.6.1**
+- ✅ 13 Specialized Agents (including CSS Developer, Designer ecosystem, UI Developer team)
+- ✅ 6 Slash Commands (including /implement-ui, /validate-ui)
+- ✅ 3 Skills (including ui-implementer)
 - ✅ 4 MCP Server Configurations
-- ✅ Complete Documentation (1000+ lines)
+- ✅ CSS-Aware Design Validation with DOM inspection
+- ✅ CVA Best Practices for shadcn/ui
+- ✅ Task Decomposition for parallel UI implementation
+- ✅ Complete Documentation (2000+ lines)
+
+**Code Analysis Plugin v1.1.0**
+- ✅ 1 Specialized Agent (codebase-detective)
+- ✅ 1 Slash Command (/analyze)
+- ✅ 2 Skills (deep-analysis, semantic-code-search)
+- ✅ Semantic code search with claude-context MCP
 
 ---
 

@@ -107,29 +107,33 @@ This repository contains production-ready plugins designed for modern web develo
 
 #### 🎨 Frontend Development (Full-Featured)
 
-**Version:** 2.3.0 | **Category:** Development | **Model:** Sonnet | **[📖 Full Documentation](./docs/frontend.md)**
+**Version:** 2.6.1 | **Category:** Development | **Model:** Sonnet | **[📖 Full Documentation](./docs/frontend.md)**
 
-Professional toolkit for TypeScript/React development with orchestrated workflows, quality automation, and team collaboration features.
+Professional toolkit for TypeScript/React development with CSS-aware design validation, orchestrated workflows, quality automation, and team collaboration features.
 
 **Highlights:**
-- **9 Specialized Agents** - From architecture planning to code review and UI validation
-- **5 Slash Commands** - Including `/implement` for full-cycle orchestration
-- **2 Skills** - Browser testing and API analysis
-- **MCP Servers** - Apidog, Figma integration
+- **13 Specialized Agents** - Including CSS Developer, Designer ecosystem (designer + designer-codex), UI Developer team (ui-developer + ui-developer-codex), architecture planning, code review, and browser testing
+- **6 Slash Commands** - Including `/implement` (8-phase with design validation), `/implement-ui` (with task decomposition), `/validate-ui`
+- **3 Skills** - Browser testing, API analysis, and proactive UI implementation
+- **MCP Servers** - Apidog, Figma, Chrome DevTools integration
+- **CSS-Aware Validation** - DOM inspection, computed CSS analysis, pattern awareness
+- **CVA Best Practices** - Comprehensive shadcn/ui integration guidance
+- **Task Decomposition** - Parallel execution for independent UI components
 
 **The `/implement` Workflow:**
 
-The star feature is the `/implement` command—a complete 7-stage orchestration that takes you from idea to production-ready code:
+The star feature is the `/implement` command—a complete 8-phase orchestration that takes you from idea to production-ready code:
 
 1. **Architecture Planning** → Designs solution, asks questions, gets approval
 2. **Implementation** → Generates code following project patterns
+2.5. **Design Fidelity Validation** → CSS-aware validation if Figma links present (optional, conditional)
 3. **Triple Review** → Manual review + AI analysis + browser testing
 4. **Test Generation** → Creates comprehensive test suites
 5. **User Approval** → Final review gate
 6. **Cleanup** → Removes temporary artifacts
 7. **Delivery** → Production-ready feature with documentation
 
-**Perfect for:** React/TypeScript teams, TanStack ecosystem, API-driven apps, Figma workflows, production-ready code quality
+**Perfect for:** React/TypeScript teams, TanStack ecosystem, API-driven apps, Figma workflows, shadcn/ui projects, pixel-perfect UI implementation, production-ready code quality
 
 👉 **[Read the complete guide](./docs/frontend.md)** for detailed workflow documentation
 
@@ -355,9 +359,9 @@ For architecture and implementation details, see the **[ai-docs](./ai-docs/)** d
 
 ### Current Focus
 
-- ✅ Frontend Development plugin (v2.3.0 - complete)
-- ✅ Code Analysis plugin (v1.1.0 - complete)
-- 🚧 Backend Development plugin (planned)
+- ✅ Frontend Development plugin (v2.6.1 - complete with CSS-aware validation & CVA best practices)
+- ✅ Code Analysis plugin (v1.1.0 - complete with semantic search)
+- 🚧 Backend Development plugin (Bun/Node.js - in development)
 - 🚧 API Development plugin (planned)
 
 ### Future Plugins
@@ -390,12 +394,12 @@ For technical details and architecture, see the **[ai-docs](./ai-docs/)** direct
 - **[IMPROVEMENTS_SUMMARY.md](./ai-docs/IMPROVEMENTS_SUMMARY.md)** - Configuration command design decisions
 
 #### Reference
-- **[COMPLETE_PLUGIN_SUMMARY.md](./ai-docs/COMPLETE_PLUGIN_SUMMARY.md)** - Complete plugin inventory (8 agents, 5 commands, 2 skills)
+- **[COMPLETE_PLUGIN_SUMMARY.md](./ai-docs/COMPLETE_PLUGIN_SUMMARY.md)** - Complete plugin inventory (13 frontend agents, 6 commands, 3 skills)
 - **[FINAL_SUMMARY.md](./ai-docs/FINAL_SUMMARY.md)** - Project overview and statistics
 
 #### Plugin-Specific Technical Docs
-- **[DEPENDENCIES.md](./plugins/frontend-development/DEPENDENCIES.md)** - All dependencies and environment variables
-- **[CONFIGURE_MCP_FLOW.md](./plugins/frontend-development/commands/CONFIGURE_MCP_FLOW.md)** - Configuration flow diagram
+- **[DEPENDENCIES.md](./plugins/frontend/DEPENDENCIES.md)** - All dependencies and environment variables
+- **[CONFIGURE_MCP_FLOW.md](./plugins/frontend/commands/CONFIGURE_MCP_FLOW.md)** - Configuration flow diagram
 
 ---
 

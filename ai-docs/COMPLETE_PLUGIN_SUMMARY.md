@@ -11,11 +11,21 @@
 
 ## 📦 Complete Plugin Inventory
 
-### Frontend Development Plugin v1.0.0
+### Frontend Development Plugin v2.6.1
 
-**Total Artifacts:** 18 files
+**Total Artifacts:** 22 files
 
-#### 8 Specialized Agents
+**What's New in v2.6.1:**
+- CVA (class-variance-authority) best practices for shadcn/ui
+
+**What's New in v2.6.0:**
+- CSS-aware design validation with DOM inspection and computed CSS analysis
+
+**What's New in v2.5.0:**
+- CSS Developer agent for CSS architecture management
+- Task decomposition in /implement-ui for parallel execution
+
+#### 13 Specialized Agents
 
 | Agent | Purpose | File |
 |-------|---------|------|
@@ -27,23 +37,56 @@
 | cleaner | Cleanup temporary artifacts | agents/cleaner.md |
 | reviewer | Human-style code review | agents/reviewer.md |
 | codex-reviewer | AI-powered code review using Codex | agents/codex-reviewer.md |
+| **designer** | **Senior UX/UI design review with CSS-aware validation** | **agents/designer.md** |
+| **designer-codex** | **Expert design validation proxy via Codex AI** | **agents/designer-codex.md** |
+| **css-developer** | **CSS architecture specialist maintaining CSS knowledge files** | **agents/css-developer.md** |
+| **ui-developer** | **Senior UI/UX developer (React 19, Tailwind CSS 4, WCAG 2.1 AA)** | **agents/ui-developer.md** |
+| **ui-developer-codex** | **Expert UI review proxy via Codex AI** | **agents/ui-developer-codex.md** |
 
-#### 5 Slash Commands
+#### 6 Slash Commands
 
 | Command | Purpose | File |
 |---------|---------|------|
-| /implement | Full-cycle feature implementation orchestrator | commands/implement.md |
+| /implement | Full-cycle feature implementation with 8 phases (includes design validation) | commands/implement.md |
 | /import-figma | Import Figma components into React project | commands/import-figma.md |
 | /configure-mcp | Configure MCP servers (Apidog, Figma, etc.) | commands/configure-mcp.md |
 | /api-docs | Analyze & work with API documentation | commands/api-docs.md |
 | /cleanup-artifacts | Clean up temporary development artifacts | commands/cleanup-artifacts.md |
+| **/validate-ui** | **UI validation workflow with designer & ui-developer agents** | **commands/validate-ui.md** |
+| **/implement-ui** | **Implement UI from scratch with task decomposition & intelligent agent switching** | **commands/implement-ui.md** |
 
-#### 2 Skills
+#### 3 Skills
 
 | Skill | Purpose | Directory |
 |-------|---------|-----------|
 | browser-debugger | Systematic UI testing & debugging | skills/browser-debugger/ |
 | api-spec-analyzer | OpenAPI/Swagger analysis & client generation | skills/api-spec-analyzer/ |
+| **ui-implementer** | **Proactive UI implementation from design references** | **skills/ui-implementer/** |
+
+---
+
+### Code Analysis Plugin v1.1.0
+
+**Total Artifacts:** 5 files
+
+#### 1 Specialized Agent
+
+| Agent | Purpose | File |
+|-------|---------|------|
+| codebase-detective | Deep code investigation and analysis | agents/codebase-detective.md |
+
+#### 1 Slash Command
+
+| Command | Purpose | File |
+|---------|---------|------|
+| /analyze | Launch deep codebase investigation | commands/analyze.md |
+
+#### 2 Skills
+
+| Skill | Purpose | Directory |
+|-------|---------|-----------|
+| deep-analysis | Automatic code investigation | skills/deep-analysis/ |
+| semantic-code-search | Expert guidance on claude-context MCP usage | skills/semantic-code-search/ |
 
 #### MCP Servers
 
@@ -65,11 +108,37 @@
 
 - ✅ Architecture planning
 - ✅ Implementation
+- ✅ **CSS-aware design validation (v2.6.0+)**
+- ✅ **CVA best practices for shadcn/ui (v2.6.1+)**
 - ✅ Code review (human + AI)
 - ✅ UI testing
 - ✅ Unit testing
 - ✅ API integration
 - ✅ Cleanup
+
+### 1.5 CSS-Aware Design Validation (v2.6.0+)
+
+- ✅ DOM inspection via Chrome DevTools MCP
+- ✅ Computed CSS analysis from browser
+- ✅ Pattern awareness through CSS Developer consultation
+- ✅ Safe fix recommendations with impact assessment (LOCAL vs GLOBAL)
+- ✅ Prevents breaking 26 components while fixing 1
+
+### 1.6 CVA Best Practices (v2.6.1+)
+
+- ✅ Type-safe component variants with IDE autocomplete
+- ✅ Decision trees for className vs variant props
+- ✅ Troubleshooting guide for common CVA issues
+- ✅ No anti-patterns (no !important usage)
+- ✅ Consistent with shadcn/ui best practices (2025)
+
+### 1.7 Task Decomposition (v2.5.0+)
+
+- ✅ Automatic task analysis and splitting by Architect agent
+- ✅ Parallel execution for independent tasks
+- ✅ Per-task validation loops (max 5 iterations)
+- ✅ Isolated changes (Task A can't break Task B)
+- ✅ Clear progress tracking
 
 ### 2. Dynamic MCP Configuration
 
@@ -372,6 +441,6 @@ Agents work together with **handoffs, quality gates, and feedback loops** for pr
 
 ---
 
-**Last Updated:** November 4, 2024
+**Last Updated:** November 6, 2025
 **Status:** Production Ready 🚀
-**Version:** 1.0.0
+**Version:** 2.6.1 (Frontend), 1.1.0 (Code Analysis)

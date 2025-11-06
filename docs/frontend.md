@@ -1,8 +1,8 @@
 # Frontend Development Plugin
 
-> **Comprehensive toolkit for professional TypeScript/React development**
+> **Comprehensive toolkit for professional TypeScript/React development with CSS-aware design validation**
 
-Version: 1.0.0
+Version: 2.6.1
 Category: Development
 Author: Jack Rudenko @ MadAppGang
 
@@ -10,14 +10,21 @@ Author: Jack Rudenko @ MadAppGang
 
 ## Overview
 
-The Frontend Development plugin is a complete solution for building modern web applications with TypeScript, React, Vite, TanStack Router, and TanStack Query. It provides an orchestrated workflow that combines specialized AI agents, powerful commands, and intelligent skills to deliver production-ready code with minimal manual intervention.
+The Frontend Development plugin is a complete solution for building modern web applications with TypeScript, React, Vite, TanStack Router, and TanStack Query. It provides CSS-aware design validation, CVA best practices for shadcn/ui, and orchestrated workflows that combine 13 specialized AI agents, powerful commands, and intelligent skills to deliver production-ready code with minimal manual intervention.
+
+**New in v2.6.1:** CVA (class-variance-authority) best practices for shadcn/ui components
+**New in v2.6.0:** CSS-aware design validation with DOM inspection and computed CSS analysis
+**New in v2.5.0:** CSS Developer agent and task decomposition for parallel UI implementation
 
 **Perfect for:**
 - React/TypeScript projects
 - TanStack ecosystem (Router, Query)
 - Frontend teams requiring consistent code quality
 - Projects with Figma designs
+- shadcn/ui component libraries
+- Pixel-perfect UI implementation
 - API-driven applications
+- Teams using Tailwind CSS 4 (2025)
 
 ---
 
@@ -41,11 +48,11 @@ The `/implement` command is the cornerstone of this plugin. It orchestrates a co
 /implement Create a user profile page with avatar upload, bio editing, and settings panel
 ```
 
-This single command triggers a 7-stage orchestration:
+This single command triggers an 8-phase orchestration (with optional Phase 2.5 for design validation):
 
-#### Stage 1: Architecture Planning
+#### Phase 1: Architecture Planning
 
-**Agent:** `frontend-architect-planner`
+**Agent:** `architect`
 
 **What happens:**
 1. **Gap Analysis**
@@ -108,7 +115,7 @@ Plan saved to: AI-DOCS/user-profile-feature.md
 
 #### Stage 2: Implementation
 
-**Agent:** `typescript-frontend-dev`
+**Agent:** `developer`
 
 **What happens:**
 1. **Todo List Creation**
@@ -154,13 +161,79 @@ Implementation complete. Ready for review.
 
 ---
 
+#### Stage 2.5: Design Fidelity Validation (Optional, Conditional)
+
+**Agents:** `designer`, `css-developer`
+
+**When it runs:**
+- Automatically triggered if Figma URLs are present in the feature request
+- Skipped if no design references found (no performance impact)
+- Can be run manually via `/validate-ui` command
+
+**What happens:**
+1. **Screenshot & DOM Inspection**
+   - Captures current implementation in browser
+   - Inspects DOM elements via Chrome DevTools MCP
+   - Gets computed CSS properties (actual rendered values)
+   - Identifies which CSS rules and Tailwind classes apply
+
+2. **CSS Developer Consultation**
+   - Understands existing CSS patterns
+   - Identifies standard component styles
+   - Assesses impact of potential changes (LOCAL vs GLOBAL)
+   - Provides safe fix recommendations
+
+3. **Design Comparison with CSS Awareness**
+   - Compares design reference vs implementation
+   - Shows expected vs actual computed CSS values
+   - Identifies which classes cause discrepancies
+   - Categorizes issues by severity (CRITICAL/MEDIUM/LOW)
+
+4. **Iterative Validation**
+   - UI Developer implements fixes
+   - Designer validates changes
+   - Maximum 3 iterations per component
+   - Design fidelity score (X/60) must be >= 54 to pass
+
+**Benefits:**
+- ✅ No more guessing why UI looks different
+- ✅ Understand which CSS rules cause visual differences
+- ✅ Safe fixes that won't break other components
+- ✅ Pattern-aware changes aligned with codebase
+- ✅ Prevents breaking 26 other components while fixing 1
+
+**Example Output:**
+```
+Design Fidelity Validation
+────────────────────────────────────────
+🖥️  Computed CSS Analysis:
+Button (.btn-primary):
+- padding: 8px 16px (from classes: px-4 py-2)
+- background: #60A5FA (from class: bg-blue-400)
+
+🧩 CSS Developer Insights:
+- Standard button uses bg-blue-600 (26 files)
+- This deviates from standard pattern
+
+⚠️  Discrepancies Found (2 CRITICAL):
+1. Button background color
+   Expected: #3B82F6 (blue-600)
+   Actual: #60A5FA (blue-400)
+   Impact: LOCAL - Only this component
+   Safe Fix: Change bg-blue-400 to bg-blue-600
+
+Design Fidelity Score: 52/60 (FAIL - needs fixes)
+```
+
+---
+
 #### Stage 3: Triple Review Process
 
 The `/implement` workflow includes three distinct review stages to catch different types of issues:
 
 ##### Review 3.1: Senior Code Review
 
-**Agent:** `senior-code-reviewer`
+**Agent:** `reviewer`
 
 **What happens:**
 - **Code Quality Analysis**
@@ -868,6 +941,6 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom
 
 ---
 
-**Plugin Version:** 1.0.0
+**Plugin Version:** 2.6.1
 **Last Updated:** November 2024
 **Maintained by:** Jack Rudenko @ MadAppGang

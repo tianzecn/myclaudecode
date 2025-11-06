@@ -1,6 +1,8 @@
 # Frontend Development Plugin
 
-Professional frontend development toolkit for Claude Code with TypeScript, React, Vite, TanStack Router & Query support.
+Professional frontend development toolkit for Claude Code with TypeScript, React, Vite, TanStack Router & Query support. Features CSS-aware design validation, CVA best practices for shadcn/ui, and modern UI development workflows.
+
+**Version:** 2.6.1
 
 ## Quick Start
 
@@ -8,7 +10,7 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 
 ```bash
 # Add marketplace
-/plugin marketplace add madappgang/claude-plugins
+/plugin marketplace add MadAppGang/claude-code
 
 # Install plugin
 /plugin install frontend@mag-claude-plugins
@@ -33,12 +35,19 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 
 ## Available Tools
 
-### Agents (8)
+### Agents (13)
 
 **Development:**
 - `developer` - TypeScript/React implementation with best practices
 - `architect` - Architecture planning and system design
 - `test-architect` - Testing strategy and implementation
+
+**UI Development & Design:**
+- `ui-developer` - Senior UI/UX developer specializing in pixel-perfect implementation (React 19, Tailwind CSS 4, WCAG 2.1 AA)
+- `ui-developer-codex` - Expert UI review proxy via external Codex AI
+- `designer` - Senior UX/UI design review specialist with CSS-aware validation (DOM inspection, computed CSS analysis)
+- `designer-codex` - Expert design validation proxy via external Codex AI
+- `css-developer` - CSS architecture specialist maintaining CSS knowledge files (.ai-docs/css-knowledge/), preventing breaking changes, enforcing modern CSS + Tailwind CSS 4 best practices
 
 **Quality Assurance:**
 - `tester` - Browser-based UI testing and validation
@@ -51,12 +60,16 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 **Utilities:**
 - `cleaner` - Cleanup temporary files and artifacts
 
-### Commands (5)
+### Commands (6)
 
 **Development Workflows:**
-- `/implement` - Full-cycle feature implementation (plan → code → test → review)
+- `/implement` - Full-cycle feature implementation with 8 phases (plan → code → design validation → test → review)
+- `/implement-ui` - Implement UI components from scratch with task decomposition and intelligent agent switching
 - `/import-figma` - Import Figma designs as React components
 - `/api-docs` - Analyze and integrate API documentation
+
+**UI Validation:**
+- `/validate-ui` - UI validation workflow with designer & ui-developer agents
 
 **Configuration:**
 - `/configure-mcp` - Configure MCP servers (Apidog, Figma, GitHub)
@@ -64,7 +77,7 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 **Maintenance:**
 - `/cleanup-artifacts` - Clean temporary files, build artifacts, and caches
 
-### Skills (2)
+### Skills (3)
 
 **Browser Integration:**
 - `browser-debugger` - Interactive UI testing and debugging in Chrome
@@ -72,12 +85,52 @@ Professional frontend development toolkit for Claude Code with TypeScript, React
 **API Analysis:**
 - `api-spec-analyzer` - OpenAPI/Swagger specification analysis
 
+**UI Implementation:**
+- `ui-implementer` - Proactive UI implementation from design references (automatically triggers on Figma links)
+
 ### MCP Servers (3)
 
 **Integrated Services:**
 - **Apidog** - API documentation and testing platform
 - **Figma** - Design file access and component extraction
 - **GitHub** - Repository integration and PR management
+
+## Key Features
+
+### CSS-Aware Design Validation (v2.6.0+)
+- **DOM Inspection** - Designers inspect actual rendered elements via Chrome DevTools MCP
+- **Computed CSS Analysis** - Get real browser-computed styles (actual values, not just class names)
+- **Pattern Awareness** - Consult CSS Developer to understand existing CSS patterns before suggesting fixes
+- **Safe Fix Recommendations** - Impact assessment (LOCAL/GLOBAL) for each suggested change
+- **Benefits:** No more guessing why UI looks different, understand which CSS rules apply, prevent breaking changes
+
+### CVA Best Practices for shadcn/ui (v2.6.1+)
+- **Comprehensive CVA Guidance** in CSS Developer and UI Developer agents
+- **Type-Safe Component Variants** with IDE autocomplete
+- **Decision Trees** for when to use className vs variant props
+- **Troubleshooting Guide** for common CVA issues
+- **No Anti-Patterns** - Prevents !important usage and CSS class conflicts
+- **Benefits:** Centralized style management, reusable patterns, consistent with shadcn/ui best practices
+
+### Task Decomposition (v2.5.0+)
+- **PHASE 1.5** in `/implement-ui` - Architect analyzes design and splits into independent tasks
+- **Parallel Execution** - Tasks with no dependencies run simultaneously
+- **Per-Task Validation** - Each task gets focused validation loop (max 5 iterations)
+- **Isolated Changes** - Changes to Task A can't break Task B
+- **Benefits:** Faster implementation, clearer progress tracking, no cascade failures
+
+### CSS Knowledge Management (v2.5.0+)
+- **Automatic Documentation** - CSS Developer maintains `.ai-docs/css-knowledge/` directory
+- **7 Knowledge Files** - design-tokens, component-patterns, utility-patterns, element-rules, global-styles, change-log
+- **Change Impact Assessment** - HIGH/MEDIUM/LOW risk levels for CSS modifications
+- **Pattern Tracking** - Knows what CSS patterns exist and where they're used
+- **Benefits:** Prevents breaking changes, maintains consistent CSS architecture, enforces modern patterns
+
+### Modern Best Practices (2025)
+- **Tailwind CSS 4** - CSS-first configuration with @theme, container queries, :has() pseudo-class
+- **React 19** - Functional components, modern hooks, Server Components
+- **Accessibility** - WCAG 2.1 AA compliance, color contrast, keyboard navigation
+- **Performance** - 5x faster full builds, 100x faster incremental (Tailwind CSS 4)
 
 ## Environment Variables
 
@@ -114,9 +167,41 @@ CODEX_API_KEY=your-codex-key
 # Claude will:
 # 1. Plan architecture with architect
 # 2. Implement with developer
+# 2.5. Validate design fidelity with designer (if Figma links present)
 # 3. Write tests with test-architect
 # 4. Review code with reviewer
 # 5. Validate UI with tester
+# 6. Clean up artifacts
+# 7. Deliver production-ready code
+```
+
+### UI Implementation from Design
+
+```bash
+/implement-ui
+
+# Claude will:
+# 1. Analyze design reference (Figma URL, screenshot, mockup)
+# 1.5. Decompose into independent tasks with dependencies
+# 2. Implement each task with ui-developer
+# 3. Validate with designer (CSS-aware validation)
+# 4. Auto-switch to ui-developer-codex if needed (after 2 consecutive failures)
+# 5. Iterate until design fidelity >= 54/60 (max 10 iterations)
+# 6. Complete all tasks with comprehensive metrics
+```
+
+### Design Validation Workflow
+
+```bash
+/validate-ui
+
+# Claude will:
+# 1. Capture screenshot of current implementation
+# 2. Inspect DOM elements and get computed CSS
+# 3. Consult css-developer for pattern analysis
+# 4. Compare design vs implementation with CSS awareness
+# 5. Generate CSS-aware report with safe fix recommendations
+# 6. Optionally use designer-codex for expert validation
 ```
 
 ### Import Figma Design
@@ -295,5 +380,5 @@ Company: MadAppGang
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: November 4, 2024
+**Version**: 2.6.1
+**Last Updated**: November 6, 2025
