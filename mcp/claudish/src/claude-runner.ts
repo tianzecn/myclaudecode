@@ -40,12 +40,10 @@ export async function runClaudeWithProxy(
     ...process.env,
     // Point Claude Code to our local proxy
     ANTHROPIC_BASE_URL: proxyUrl,
-    // Use a valid-looking key that won't trigger "custom key" detection
-    // Real auth happens in proxy with OPENROUTER_API_KEY
-    ANTHROPIC_API_KEY: "sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    // Disable API key validation prompts
-    CLAUDE_NO_API_KEY_PROMPT: "1",
-    CLAUDE_SKIP_API_KEY_CHECK: "1",
+    // Use existing ANTHROPIC_API_KEY from environment if available
+    // Otherwise use a placeholder (proxy handles real auth with OPENROUTER_API_KEY)
+    // Note: If prompt appears, select "Yes" - the key is not used (proxy intercepts all requests)
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || "sk-ant-api03-placeholder-not-used-proxy-handles-auth-with-openrouter-key-xxxxxxxxxxxxxxxxxxxxx",
     // Show model in status line
     CLAUDE_STATUS_SUFFIX: `via ${modelDisplay}`,
   };
@@ -55,12 +53,19 @@ export async function runClaudeWithProxy(
     console.log(`[claudish] Model: ${config.model} (${modelDisplay})`);
     console.log(`[claudish] Proxy URL: ${proxyUrl}`);
     console.log(`[claudish] Status line will show: "via ${modelDisplay}"`);
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.log(`[claudish] NOTE: If Claude Code prompts for API key, select "Yes" (the key is not used - proxy handles auth)`);
+    }
     console.log(`[claudish] You can now interact with Claude Code directly`);
     console.log(`[claudish] Press Ctrl+C or type 'exit' to quit\n`);
   } else {
     console.log(`\n[claudish] Starting Claude Code with ${config.model} (${modelDisplay})`);
     console.log(`[claudish] Proxy URL: ${proxyUrl}`);
-    console.log(`[claudish] Arguments: ${claudeArgs.join(" ")}\n`);
+    console.log(`[claudish] Arguments: ${claudeArgs.join(" ")}`);
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.log(`[claudish] NOTE: If Claude Code prompts for API key, select "Yes" (the key is not used - proxy handles auth)`);
+    }
+    console.log("");
   }
 
   // Spawn claude CLI process

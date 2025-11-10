@@ -42,6 +42,9 @@ cp .env.example .env
 
 # Add your OpenRouter API key
 export OPENROUTER_API_KEY=sk-or-v1-...
+
+# Recommended: Set placeholder to avoid Claude Code's API key prompt
+export ANTHROPIC_API_KEY=sk-ant-api03-placeholder
 ```
 
 ### 2. Run claudish
@@ -81,8 +84,11 @@ claudish [OPTIONS] <claude-args...>
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `OPENROUTER_API_KEY` | Your OpenRouter API key | ✅ Yes |
+| `ANTHROPIC_API_KEY` | Placeholder to skip Claude Code prompt (not used for auth) | ⭐ Recommended |
 | `CLAUDISH_MODEL` | Default model to use | ❌ No |
 | `CLAUDISH_PORT` | Default proxy port | ❌ No |
+
+**Note:** Set `ANTHROPIC_API_KEY=sk-ant-api03-placeholder` to avoid Claude Code's API key confirmation prompt. This key is not used - claudish uses `OPENROUTER_API_KEY` for authentication.
 
 ## Available Models
 

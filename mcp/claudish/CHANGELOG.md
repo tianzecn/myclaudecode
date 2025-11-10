@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.3] - 2024-11-10
+
+### Changed
+- ✅ Improved API key handling for Claude Code prompt
+  - Use existing `ANTHROPIC_API_KEY` from environment if set
+  - Display clear warning and instructions if not set
+  - Updated `.env.example` with recommended placeholder
+  - Updated README with setup instructions
+  - Note: If prompt appears, select "Yes" - key is not used (proxy handles auth)
+
+### Documentation
+- Added `ANTHROPIC_API_KEY` to environment variables table
+- Added setup step in Quick Start guide
+- Clarified that placeholder key is for prompt bypass only
+
+### Changed
+- Build size: 15.80 KB
+
 ## [1.0.2] - 2024-11-10
 
 ### Fixed
@@ -10,10 +28,6 @@
 - ✅ Fixed OpenRouter API error with max_tokens
   - Ensure minimum max_tokens value of 16 (OpenAI requirement)
   - Added automatic adjustment in API translator
-- ✅ Successfully eliminated Claude Code API key prompt
-  - Using valid-looking placeholder: `sk-ant-api03-xxx...`
-  - Added environment variables to skip prompts
-  - Clean startup with no user intervention
 
 ### Changed
 - Build size: 15.1 KB
