@@ -87,6 +87,7 @@ claudish [OPTIONS] <claude-args...>
 | `ANTHROPIC_API_KEY` | Placeholder to prevent Claude Code dialog (not used for auth) | ✅ **Required** |
 | `CLAUDISH_MODEL` | Default model to use | ❌ No |
 | `CLAUDISH_PORT` | Default proxy port | ❌ No |
+| `CLAUDISH_ACTIVE_MODEL_NAME` | Automatically set by claudish to show active model in status line (read-only) | ❌ No |
 
 **Important:** You MUST set `ANTHROPIC_API_KEY=sk-ant-api03-placeholder` (or any value). Without it, Claude Code will show a dialog, and if you select "No", it will bypass the proxy and use real Anthropic API. Claudish now enforces this requirement.
 
@@ -119,6 +120,62 @@ List models anytime with:
 ```bash
 claudish --list-models
 ```
+
+## Status Line Display
+
+Claudish automatically shows critical information in the Claude Code status bar - **no setup required!**
+
+**Ultra-Compact Format:** `directory • model-id • $cost • ctx%`
+
+**Visual Design:**
+- 🔵 **Directory** (bright cyan, bold) - Where you are
+- 🟡 **Model ID** (bright yellow) - Actual OpenRouter model ID
+- 🟢 **Cost** (bright green) - Real-time session cost from OpenRouter
+- 🟣 **Context** (bright magenta) - % of context window remaining
+- ⚪ **Separators** (dim) - Visual dividers
+
+**Examples:**
+- `claudish • x-ai/grok-code-fast-1 • $0.003 • 95%` - Using Grok, $0.003 spent, 95% context left
+- `my-project • openai/gpt-5-codex • $0.12 • 67%` - Using GPT-5, $0.12 spent, 67% context left
+- `backend • minimax/minimax-m2 • $0.05 • 82%` - Using MiniMax M2, $0.05 spent, 82% left
+- `test • openrouter/auto • $0.01 • 90%` - Using any custom model, $0.01 spent, 90% left
+
+**Critical Tracking (Live Updates):**
+- 💰 **Cost tracking** - Real-time USD from Claude Code session data
+- 📊 **Context monitoring** - Percentage of model's context window remaining
+- ⚡ **Performance optimized** - Ultra-compact to fit with thinking mode UI
+
+**Thinking Mode Optimized:**
+- ✅ **Ultra-compact** - Directory limited to 15 chars (leaves room for everything)
+- ✅ **Critical first** - Most important info (directory, model) comes first
+- ✅ **Smart truncation** - Long directories shortened with "..."
+- ✅ **Space reservation** - Reserves ~40 chars for Claude's thinking mode UI
+- ✅ **Color-coded** - Instant visual scanning
+- ✅ **No overflow** - Fits perfectly even with thinking mode enabled
+
+**Custom Model Support:**
+- ✅ **ANY OpenRouter model** - Not limited to shortlist (e.g., `openrouter/auto`, custom models)
+- ✅ **Actual model IDs** - Shows exact OpenRouter model ID (no translation)
+- ✅ **Context fallback** - Unknown models use 100k context window (safe default)
+- ✅ **Shortlist optimized** - Our recommended models have accurate context sizes
+- ✅ **Future-proof** - Works with new models added to OpenRouter
+
+**How it works:**
+- Each Claudish instance creates a temporary settings file with custom status line
+- Settings use `--settings` flag (doesn't modify global Claude Code config)
+- Status line uses simple bash script with ANSI colors (no external dependencies!)
+- Displays actual OpenRouter model ID from `CLAUDISH_ACTIVE_MODEL_NAME` env var
+- Context tracking uses model-specific sizes for our shortlist, 100k fallback for others
+- Temp files are automatically cleaned up when Claudish exits
+- Each instance is completely isolated - run multiple in parallel!
+
+**Per-instance isolation:**
+- ✅ Doesn't modify `~/.claude/settings.json`
+- ✅ Each instance has its own config
+- ✅ Safe to run multiple Claudish instances in parallel
+- ✅ Standard Claude Code unaffected
+- ✅ Temp files auto-cleanup on exit
+- ✅ No external dependencies (bash only, no jq!)
 
 ## Examples
 
@@ -236,19 +293,35 @@ claudish --model minimax/minimax-m2 "task C"
 ```
 mcp/claudish/
 ├── src/
-│   ├── index.ts           # Main entry point
-│   ├── cli.ts             # CLI argument parser
-│   ├── proxy-server.ts    # Anthropic API proxy
-│   ├── api-translator.ts  # API format translation
-│   ├── claude-runner.ts   # Claude CLI runner
-│   ├── port-manager.ts    # Port utilities
-│   ├── config.ts          # Constants and defaults
-│   └── types.ts           # TypeScript types
-├── tests/                 # Test files
+│   ├── index.ts              # Main entry point
+│   ├── cli.ts                # CLI argument parser
+│   ├── proxy-server.ts       # Hono-based proxy server
+│   ├── transform.ts          # API format translation (from claude-code-proxy)
+│   ├── claude-runner.ts      # Claude CLI runner (creates temp settings)
+│   ├── port-manager.ts       # Port utilities
+│   ├── config.ts             # Constants and defaults
+│   └── types.ts              # TypeScript types
+├── tests/                    # Test files
 ├── package.json
 ├── tsconfig.json
 └── biome.json
 ```
+
+### Proxy Implementation
+
+Claudish uses a **Hono-based proxy server** inspired by [claude-code-proxy](https://github.com/kiyo-e/claude-code-proxy):
+
+- **Framework**: [Hono](https://hono.dev/) - Fast, lightweight web framework
+- **API Translation**: Converts Anthropic API format ↔ OpenAI format
+- **Streaming**: Full support for Server-Sent Events (SSE)
+- **Tool Calling**: Handles Claude's tool_use ↔ OpenAI's tool_calls
+- **Battle-tested**: Based on production-ready claude-code-proxy implementation
+
+**Why Hono?**
+- Native Bun support (no adapters needed)
+- Extremely fast and lightweight
+- Middleware support (CORS, logging, etc.)
+- Works across Node.js, Bun, and Cloudflare Workers
 
 ### Build & Test
 
@@ -329,6 +402,45 @@ Check OpenRouter API status:
 Verify your API key works:
 - https://openrouter.ai/keys
 
+### Status line not showing model
+
+If the status line doesn't show the model name:
+
+1. **Check if --settings flag is being passed:**
+   ```bash
+   # Look for this in Claudish output:
+   # [claudish] Instance settings: /tmp/claudish-settings-{timestamp}.json
+   ```
+
+2. **Verify environment variable is set:**
+   ```bash
+   # Should be set automatically by Claudish
+   echo $CLAUDISH_ACTIVE_MODEL_NAME
+   # Should output something like: xAI/Grok-1
+   ```
+
+3. **Test status line command manually:**
+   ```bash
+   export CLAUDISH_ACTIVE_MODEL_NAME="xAI/Grok-1"
+   cat > /dev/null && echo "[$CLAUDISH_ACTIVE_MODEL_NAME] 📁 $(basename "$(pwd)")"
+   # Should output: [xAI/Grok-1] 📁 your-directory-name
+   ```
+
+4. **Check temp settings file:**
+   ```bash
+   # File is created in /tmp/claudish-settings-*.json
+   ls -la /tmp/claudish-settings-*.json 2>/dev/null | tail -1
+   cat /tmp/claudish-settings-*.json | head -1
+   ```
+
+5. **Verify bash is available:**
+   ```bash
+   which bash
+   # Should show path to bash (usually /bin/bash or /usr/bin/bash)
+   ```
+
+**Note:** Temp settings files are automatically cleaned up when Claudish exits. If you see multiple files, you may have crashed instances - they're safe to delete manually.
+
 ## Comparison with Claude Code
 
 | Feature | Claude Code | Claudish |
@@ -365,12 +477,26 @@ Contributions welcome! Please:
 
 MIT © MadAppGang
 
+## Acknowledgments
+
+Claudish's proxy implementation is based on [claude-code-proxy](https://github.com/kiyo-e/claude-code-proxy) by [@kiyo-e](https://github.com/kiyo-e). We've adapted their excellent Hono-based API translation layer for OpenRouter integration.
+
+**Key contributions from claude-code-proxy:**
+- Anthropic ↔ OpenAI API format translation (`transform.ts`)
+- Streaming response handling with Server-Sent Events
+- Tool calling compatibility layer
+- Clean Hono framework architecture
+
+Thank you to the claude-code-proxy team for building a robust, production-ready foundation! 🙏
+
 ## Links
 
 - **GitHub**: https://github.com/MadAppGang/claude-code
 - **OpenRouter**: https://openrouter.ai
 - **Claude Code**: https://claude.com/claude-code
 - **Bun**: https://bun.sh
+- **Hono**: https://hono.dev
+- **claude-code-proxy**: https://github.com/kiyo-e/claude-code-proxy
 
 ---
 

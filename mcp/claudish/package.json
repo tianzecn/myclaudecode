@@ -17,6 +17,7 @@
     "install": "bun run build && bun link"
   },
   "dependencies": {
+    "hono": "^4.9.0",
     "ink": "^6.4.0",
     "react": "^19.2.0"
   },

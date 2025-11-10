@@ -143,9 +143,10 @@ NOTES:
   • Use --dangerous to disable sandbox (use with extreme caution!)
 
 ENVIRONMENT VARIABLES:
-  OPENROUTER_API_KEY       Required: Your OpenRouter API key
-  CLAUDISH_MODEL           Default model to use
-  CLAUDISH_PORT            Default port for proxy
+  OPENROUTER_API_KEY              Required: Your OpenRouter API key
+  CLAUDISH_MODEL                  Default model to use
+  CLAUDISH_PORT                   Default port for proxy
+  CLAUDISH_ACTIVE_MODEL_NAME      Auto-set by claudish (read-only) - shows active model in status line
 
 EXAMPLES:
   # Interactive mode - persistent session (recommended for development)
