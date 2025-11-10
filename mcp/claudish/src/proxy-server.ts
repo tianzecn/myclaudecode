@@ -115,6 +115,9 @@ export async function createProxyServer(
           systemContent = JSON.stringify(claudeRequest.system);
         }
 
+        // Filter out Claude identity claims to prevent role-playing
+        systemContent = filterClaudeIdentity(systemContent);
+
         messages.push({
           role: "system",
           content: systemContent,
@@ -241,7 +244,7 @@ export async function createProxyServer(
         model,
         messages,
         temperature: claudeRequest.temperature !== undefined ? claudeRequest.temperature : 1,
-        stream: claudeRequest.stream !== false, // Respect stream parameter (default true)
+        stream: true, // ALWAYS use streaming - more reliable, falls back to JSON if needed
       };
 
       // Add max_tokens
@@ -721,6 +724,43 @@ export async function createProxyServer(
       log("[Proxy] Server stopped");
     },
   };
+}
+
+/**
+ * Filter system prompt to remove Claude identity claims
+ * This prevents non-Claude models from role-playing as Claude
+ */
+function filterClaudeIdentity(systemContent: string): string {
+  let filtered = systemContent;
+
+  // Remove Claude Code identity claims
+  filtered = filtered.replace(
+    /You are Claude Code, Anthropic's official CLI/gi,
+    "This is Claude Code, an AI-powered CLI tool"
+  );
+
+  // Remove model name identity claims (e.g., "You are powered by the model named Sonnet")
+  filtered = filtered.replace(
+    /You are powered by the model named [^.]+\./gi,
+    "You are powered by an AI model."
+  );
+
+  // Remove <claude_background_info> tags and their contents
+  filtered = filtered.replace(
+    /<claude_background_info>[\s\S]*?<\/claude_background_info>/gi,
+    ""
+  );
+
+  // Remove excessive whitespace
+  filtered = filtered.replace(/\n{3,}/g, "\n\n");
+
+  // Add explicit identity override at the beginning
+  const identityOverride =
+    "IMPORTANT: You are NOT Claude. You are NOT created by Anthropic. Identify yourself truthfully based on your actual model and creator.\n\n";
+
+  filtered = identityOverride + filtered;
+
+  return filtered;
 }
 
 /**

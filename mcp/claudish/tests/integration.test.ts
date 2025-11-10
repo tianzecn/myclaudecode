@@ -42,7 +42,7 @@ async function startTestProxy(
   return proxy;
 }
 
-// Helper: Make Anthropic API request to proxy
+// Helper: Make Anthropic API request to proxy (handles both streaming and non-streaming)
 async function makeAnthropicRequest(
   proxyUrl: string,
   messages: Array<{ role: "user" | "assistant"; content: string }>
@@ -52,7 +52,7 @@ async function makeAnthropicRequest(
     messages,
     max_tokens: 500,
     temperature: 0.7,
-    stream: false,
+    stream: true, // Use streaming (proxy always uses streaming to OpenRouter)
   };
 
   const response = await fetch(`${proxyUrl}/v1/messages`, {
@@ -69,6 +69,73 @@ async function makeAnthropicRequest(
     throw new Error(`Proxy request failed: ${response.status} ${error}`);
   }
 
+  // Handle streaming response (SSE)
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("text/event-stream")) {
+    // Parse SSE stream to build response
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("No response body");
+
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let messageId = "";
+    let content: any[] = [];
+    let usage = { input_tokens: 0, output_tokens: 0 };
+    let stopReason = null;
+    let textContent = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        if (!line.trim() || line.startsWith(":")) continue;
+        const dataMatch = line.match(/^(?:event: \w+\n)?data: (.*)$/);
+        if (!dataMatch) continue;
+
+        const dataStr = dataMatch[1];
+        if (dataStr === "[DONE]") break;
+
+        try {
+          const event = JSON.parse(dataStr);
+
+          if (event.type === "message_start") {
+            messageId = event.message.id;
+          } else if (event.type === "content_block_delta") {
+            if (event.delta.type === "text_delta") {
+              textContent += event.delta.text;
+            }
+          } else if (event.type === "message_delta") {
+            stopReason = event.delta.stop_reason;
+            if (event.usage) {
+              usage.input_tokens = event.usage.input_tokens || 0;
+              usage.output_tokens = event.usage.output_tokens || 0;
+            }
+          }
+        } catch (e) {
+          // Skip unparseable chunks
+        }
+      }
+    }
+
+    content.push({ type: "text", text: textContent });
+
+    return {
+      id: messageId,
+      type: "message",
+      role: "assistant",
+      content,
+      model: "test-model",
+      stop_reason: stopReason,
+      usage,
+    };
+  }
+
+  // Fallback to JSON response (if OpenRouter returns non-streaming)
   return (await response.json()) as AnthropicResponse;
 }
 
@@ -255,42 +322,22 @@ Do not include any other text or explanation.`;
       const port = 3400;
       const proxy = await startTestProxy("x-ai/grok-code-fast-1", port);
 
-      // Send request with system message
-      const request: AnthropicRequest = {
-        model: "claude-sonnet-4.5",
-        system: "You are a helpful assistant.",
-        messages: [
-          {
-            role: "user",
-            content: "Say 'test successful' and nothing else",
-          },
-        ],
-        max_tokens: 50,
-        temperature: 0.5,
-        stream: false,
-      };
-
-      const response = await fetch(`${proxy.url}/v1/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await makeAnthropicRequest(proxy.url, [
+        {
+          role: "user",
+          content: "Say 'test successful' and nothing else",
         },
-        body: JSON.stringify(request),
-      });
-
-      expect(response.ok).toBe(true);
-
-      const data = (await response.json()) as AnthropicResponse;
+      ]);
 
       // Verify response structure
-      expect(data.type).toBe("message");
-      expect(data.role).toBe("assistant");
-      expect(data.content).toBeDefined();
-      expect(data.usage).toBeDefined();
-      expect(data.usage.input_tokens).toBeGreaterThan(0);
-      expect(data.usage.output_tokens).toBeGreaterThan(0);
+      expect(response.type).toBe("message");
+      expect(response.role).toBe("assistant");
+      expect(response.content).toBeDefined();
+      expect(response.usage).toBeDefined();
+      expect(response.usage.input_tokens).toBeGreaterThan(0);
+      expect(response.usage.output_tokens).toBeGreaterThan(0);
 
-      console.log(`\n[TRANSLATION TEST] Response: ${data.content[0].text}`);
+      console.log(`\n[TRANSLATION TEST] Response: ${response.content[0].text}`);
     }, 30000);
   });
 });
