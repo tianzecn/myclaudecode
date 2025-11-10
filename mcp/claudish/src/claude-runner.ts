@@ -53,19 +53,12 @@ export async function runClaudeWithProxy(
     console.log(`[claudish] Model: ${config.model} (${modelDisplay})`);
     console.log(`[claudish] Proxy URL: ${proxyUrl}`);
     console.log(`[claudish] Status line will show: "via ${modelDisplay}"`);
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.log(`[claudish] NOTE: If Claude Code prompts for API key, select "Yes" (the key is not used - proxy handles auth)`);
-    }
     console.log(`[claudish] You can now interact with Claude Code directly`);
     console.log(`[claudish] Press Ctrl+C or type 'exit' to quit\n`);
   } else {
     console.log(`\n[claudish] Starting Claude Code with ${config.model} (${modelDisplay})`);
     console.log(`[claudish] Proxy URL: ${proxyUrl}`);
-    console.log(`[claudish] Arguments: ${claudeArgs.join(" ")}`);
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.log(`[claudish] NOTE: If Claude Code prompts for API key, select "Yes" (the key is not used - proxy handles auth)`);
-    }
-    console.log("");
+    console.log(`[claudish] Arguments: ${claudeArgs.join(" ")}\n`);
   }
 
   // Spawn claude CLI process

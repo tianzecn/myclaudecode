@@ -19,17 +19,6 @@ async function main() {
       process.exit(1);
     }
 
-    // Warn if ANTHROPIC_API_KEY is not set
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.log("\n⚠️  ANTHROPIC_API_KEY not found in environment");
-      console.log("To skip Claude Code's API key prompt, set a placeholder key:");
-      console.log("");
-      console.log("  export ANTHROPIC_API_KEY='sk-ant-api03-placeholder'");
-      console.log("");
-      console.log("(This key is not used - claudish uses OPENROUTER_API_KEY for auth)");
-      console.log("Continuing anyway - select 'Yes' if prompted...\n");
-    }
-
     // If model not specified, show interactive selector
     if (!config.model) {
       console.log(""); // Empty line for better UI

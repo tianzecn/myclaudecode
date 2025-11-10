@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.4] - 2024-11-10
+
+### Fixed
+- ✅ **REQUIRED**: `ANTHROPIC_API_KEY` is now mandatory to prevent Claude Code dialog
+  - Claudish now refuses to start if `ANTHROPIC_API_KEY` is not set
+  - Clear error message with setup instructions
+  - Prevents users from accidentally using real Anthropic API instead of proxy
+  - Ensures status line and model routing work correctly
+
+### Changed
+- Build size: 15.56 KB
+- Stricter environment validation for better UX
+
 ## [1.0.3] - 2024-11-10
 
 ### Changed

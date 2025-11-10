@@ -84,11 +84,11 @@ claudish [OPTIONS] <claude-args...>
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `OPENROUTER_API_KEY` | Your OpenRouter API key | ✅ Yes |
-| `ANTHROPIC_API_KEY` | Placeholder to skip Claude Code prompt (not used for auth) | ⭐ Recommended |
+| `ANTHROPIC_API_KEY` | Placeholder to prevent Claude Code dialog (not used for auth) | ✅ **Required** |
 | `CLAUDISH_MODEL` | Default model to use | ❌ No |
 | `CLAUDISH_PORT` | Default proxy port | ❌ No |
 
-**Note:** Set `ANTHROPIC_API_KEY=sk-ant-api03-placeholder` to avoid Claude Code's API key confirmation prompt. This key is not used - claudish uses `OPENROUTER_API_KEY` for authentication.
+**Important:** You MUST set `ANTHROPIC_API_KEY=sk-ant-api03-placeholder` (or any value). Without it, Claude Code will show a dialog, and if you select "No", it will bypass the proxy and use real Anthropic API. Claudish now enforces this requirement.
 
 ## Available Models
 

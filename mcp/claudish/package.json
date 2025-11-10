@@ -1,6 +1,6 @@
 {
   "name": "claudish",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Run Claude Code with OpenRouter models via local proxy",
   "type": "module",
   "bin": {

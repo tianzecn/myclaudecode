@@ -82,6 +82,20 @@ export function parseArgs(args: string[]): ClaudishConfig {
   }
   config.openrouterApiKey = apiKey;
 
+  // Require ANTHROPIC_API_KEY to prevent Claude Code dialog
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("\nError: ANTHROPIC_API_KEY is not set");
+    console.error("This placeholder key is required to prevent Claude Code from prompting.");
+    console.error("");
+    console.error("Set it now:");
+    console.error("  export ANTHROPIC_API_KEY='sk-ant-api03-placeholder'");
+    console.error("");
+    console.error("Or add it to your shell profile (~/.zshrc or ~/.bashrc) to set permanently.");
+    console.error("");
+    console.error("Note: This key is NOT used for auth - claudish uses OPENROUTER_API_KEY");
+    process.exit(1);
+  }
+
   // Validate we have some arguments for claude (unless in interactive mode)
   if (!config.interactive && (!config.claudeArgs || config.claudeArgs.length === 0)) {
     console.error("Error: No arguments provided for Claude Code");
