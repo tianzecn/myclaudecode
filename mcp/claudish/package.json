@@ -27,6 +27,10 @@
     "@types/react": "^19.2.2",
     "typescript": "^5.7.0"
   },
+  "files": ["dist/"],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": ["claude", "claude-code", "openrouter", "proxy", "cli", "ai"],
   "author": "Jack Rudenko <i@madappgang.com>",
   "license": "MIT"

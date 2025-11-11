@@ -452,6 +452,27 @@ export async function createProxyServer(
             },
           })) || [];
 
+      // GROK FIX: Force OpenAI tool calling format for xAI models
+      // Grok sometimes outputs <xai:function_call> XML format as text instead of proper tool_calls
+      // This system message forces it to use OpenAI-compatible format
+      if (model.includes("grok") || model.includes("x-ai/")) {
+        if (tools.length > 0 && messages.length > 0) {
+          // Check if first message is already a system message
+          if (messages[0]?.role === "system") {
+            // Append to existing system message
+            messages[0].content += "\n\nIMPORTANT: When calling tools, you MUST use the OpenAI tool_calls format with JSON. NEVER use XML format like <xai:function_call>. Use the tools array provided in the request.";
+            log("[Proxy] Added Grok tool format instruction to existing system message");
+          } else {
+            // Insert new system message at the beginning
+            messages.unshift({
+              role: "system",
+              content: "IMPORTANT: When calling tools, you MUST use the OpenAI tool_calls format with JSON. NEVER use XML format like <xai:function_call>. Use the tools array provided in the request."
+            });
+            log("[Proxy] Added Grok tool format instruction as new system message");
+          }
+        }
+      }
+
       // Build OpenRouter payload
       const openrouterPayload: any = {
         model,
