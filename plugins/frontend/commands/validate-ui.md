@@ -2,6 +2,22 @@
 description: Multi-agent orchestrated UI design validation with iterative fixes and optional external AI expert review
 ---
 
+## Architecture Note
+
+This command implements the **UI Issue Debug Flow** from the ultra-efficient frontend development architecture. It focuses specifically on validating and fixing visual/layout/design issues.
+
+For comprehensive information about:
+- User validation loops
+- Issue-specific debug flows (UI, Functional, Mixed)
+- Main thread orchestration principles
+- Context-efficient agent delegation
+
+See: `docs/USER_VALIDATION_FLOW.md`
+
+This validation workflow is also used within the `/implement` command's Phase 5 User Validation Loop when users report UI issues.
+
+---
+
 ## Task
 
 **Multi-agent orchestration command** - coordinate between designer agent (reviews UI fidelity), ui-developer agent (fixes UI issues), and optional external AI models (GPT-5 Codex, Grok) for independent expert review via Claudish CLI to iteratively validate and fix UI implementation against design references.

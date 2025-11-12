@@ -14,8 +14,8 @@
 		{
 			"name": "frontend",
 			"source": "./plugins/frontend",
-			"description": "Comprehensive frontend development toolkit with TypeScript, React, Vite, TanStack Router & Query support. Features Chrome DevTools MCP debugging methodology for responsive layout issues, CSS-aware design validation with DOM inspection, CSS Developer agent for architecture management, and Tailwind CSS 4 best practices (2025).",
-			"version": "2.7.0",
+			"description": "Comprehensive frontend development toolkit with TypeScript, React 19, Vite, TanStack Router & Query v5. Features ultra-efficient agent orchestration with user validation loops, issue-specific debug flows (UI/Functional/Mixed), multi-model code review, modular best practices (11 focused skills), intelligent workflow detection, and Chrome DevTools MCP debugging.",
+			"version": "3.2.0",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",
@@ -62,7 +62,7 @@
 			"name": "bun",
 			"source": "./plugins/bun",
 			"description": "Production-ready TypeScript backend development with Bun runtime. Includes specialized agents for backend development, API design, and DevOps. Features comprehensive best practices, tools integration (Biome, Prisma, Hono, Docker), testing workflows, and AWS ECS deployment guidance (2025).",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",

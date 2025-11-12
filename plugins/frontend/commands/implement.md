@@ -1461,23 +1461,248 @@ e. **Loop Until Tests Pass**:
    - Use AskUserQuestion to ask: "Are you satisfied with this implementation? All code has been reviewed, UI tested manually, and automated tests pass."
    - Options: "Yes, proceed to cleanup and finalization" / "No, I need changes"
 
-2. **User Feedback Loop**:
-   - IF user not satisfied:
-     * Collect specific feedback on what needs to change
-     * **Update TodoWrite**: Add "PHASE 5 - Iteration X: Address user feedback" task
-     * **CRITICAL**: Do NOT make changes yourself - delegate to appropriate agent
-     * Determine which agent to use based on feedback type:
-       - If architectural changes needed: **Launch architect** (Loop back to Phase 1)
-       - If implementation changes needed: **Launch developer** with user feedback (Loop back to Phase 2)
-       - If only test changes needed: **Launch test-architect** (Loop back to Phase 4)
-     * After agent addresses feedback, go through subsequent phases again
-     * Repeat until user is satisfied
-   - IF user satisfied:
-     * **Update TodoWrite**: Mark "PHASE 5: User approval gate - present implementation for final review" as completed
-     * Proceed to cleanup
-   - **DO NOT proceed to cleanup without user approval**
+2. **User Validation Loop with Issue-Specific Debug Flows**:
 
-   **REMINDER**: You are orchestrating. You do NOT implement user feedback yourself. Always use Task to delegate to the appropriate agent.
+   **CRITICAL ARCHITECTURE PRINCIPLE**: You are orchestrating ONLY. Do NOT make ANY changes yourself. ALL work must be delegated to agents.
+
+   - IF user not satisfied:
+     * Collect specific feedback on what issues exist
+     * **Update TodoWrite**: Add "PHASE 5 - Validation Iteration X: User reported issues - running debug flow" task
+     * **Classify issue type**:
+       - **UI Issues**: Visual problems, layout issues, design discrepancies, responsive problems
+       - **Functional Issues**: Bugs, incorrect behavior, missing functionality, errors, performance problems
+       - **Mixed Issues**: Both UI and functional problems
+
+     ---
+
+     **UI Issue Debug Flow** (User reports visual/layout/design problems):
+
+     1. **Launch Designer Agent**:
+        - **Update TodoWrite**: Add "UI Debug Flow - Step 1: Designer analysis" task
+        - Use Task tool with `subagent_type: frontend:designer`
+        - Provide:
+          * User's specific UI feedback
+          * Implementation files to review
+          * Design references (Figma URLs if available)
+          * Instruction: "Analyze design fidelity issues reported by user"
+        - Designer will:
+          * Identify visual/layout problems
+          * Provide design guidance
+          * Use browser-debugger skill if needed
+          * Create detailed fix recommendations
+        - **Update TodoWrite**: Mark "UI Debug Flow - Step 1" as completed after designer returns
+
+     2. **Launch UI Developer Agent**:
+        - **Update TodoWrite**: Add "UI Debug Flow - Step 2: UI Developer fixes" task
+        - Use Task tool with `subagent_type: frontend:ui-developer`
+        - Provide:
+          * Designer's feedback and recommendations
+          * User's original feedback
+          * Files to modify
+          * Instruction: "Implement fixes based on designer feedback"
+        - UI Developer will:
+          * Apply design recommendations
+          * Fix CSS/layout issues
+          * Ensure responsive behavior
+          * Run quality checks
+        - **Update TodoWrite**: Mark "UI Debug Flow - Step 2" as completed
+
+     3. **Launch UI Developer Codex Agent (Optional)**:
+        - **Update TodoWrite**: Add "UI Debug Flow - Step 3: Codex UI review" task
+        - Use Task tool with `subagent_type: frontend:ui-developer-codex`
+        - Provide:
+          * Implementation after UI Developer fixes
+          * Designer's original feedback
+          * Instruction: "Expert review of UI fixes"
+        - Codex will:
+          * Review implementation quality
+          * Check design fidelity
+          * Suggest improvements
+        - **Update TodoWrite**: Mark "UI Debug Flow - Step 3" as completed
+
+     4. **Launch UI Manual Tester Agent**:
+        - **Update TodoWrite**: Add "UI Debug Flow - Step 4: Browser testing" task
+        - Use Task tool with `subagent_type: frontend:tester`
+        - Provide:
+          * Implementation after fixes
+          * User's original UI feedback
+          * Instruction: "Verify UI fixes in real browser"
+        - Tester will:
+          * Test in real browser
+          * Check responsive behavior
+          * Verify visual regression
+          * Report any remaining issues
+        - **Update TodoWrite**: Mark "UI Debug Flow - Step 4" as completed
+
+     5. **Present UI Fix Results to User**:
+        - Summary of issues fixed
+        - Designer feedback summary
+        - UI Developer changes made
+        - Codex review results (if used)
+        - Tester verification results
+        - Request user to validate the UI fixes
+        - IF user still has UI issues → Repeat UI Debug Flow
+        - IF UI approved → Continue (or proceed to cleanup if no other issues)
+
+     ---
+
+     **Functional Issue Debug Flow** (User reports bugs/errors/incorrect behavior):
+
+     1. **Classify Architectural vs Implementation Issue**:
+        - **Update TodoWrite**: Add "Functional Debug Flow - Classify issue type" task
+        - Determine if this requires architectural changes or just implementation fixes
+        - **Update TodoWrite**: Mark classification task as completed
+
+     2A. **IF Architectural Problem - Launch Architect Agent**:
+        - **Update TodoWrite**: Add "Functional Debug Flow - Step 1: Architect analysis" task
+        - Use Task tool with `subagent_type: frontend:architect`
+        - Provide:
+          * User's functional issue description
+          * Current implementation details
+          * Instruction: "Analyze root cause and design architectural fix"
+        - Architect will:
+          * Identify root cause
+          * Design architectural fix
+          * Plan implementation approach
+          * Identify affected components
+        - **Update TodoWrite**: Mark "Functional Debug Flow - Step 1" as completed
+        - Store architect's plan for next step
+
+     2B. **IF Implementation Bug Only - Skip Architect**:
+        - **Update TodoWrite**: Add note "Functional Debug Flow: Implementation-only bug, architect not needed"
+        - Proceed directly to developer
+
+     3. **Launch Developer Agent**:
+        - **Update TodoWrite**: Add "Functional Debug Flow - Step 2: Developer implementation" task
+        - Use Task tool with `subagent_type: frontend:developer`
+        - Provide:
+          * User's functional issue description
+          * Architect's plan (if applicable)
+          * Files to modify
+          * Instruction: "Fix implementation bugs following architect guidance"
+        - Developer will:
+          * Implement fix
+          * Add/update tests
+          * Verify edge cases
+          * Run quality checks
+        - **Update TodoWrite**: Mark "Functional Debug Flow - Step 2" as completed
+
+     4. **Launch Test Architect Agent**:
+        - **Update TodoWrite**: Add "Functional Debug Flow - Step 3: Test Architect testing" task
+        - Use Task tool with `subagent_type: frontend:test-architect`
+        - Provide:
+          * Implementation after fix
+          * User's original functional issue
+          * Instruction: "Write comprehensive tests and verify fix"
+        - Test Architect will:
+          * Write tests for the fix
+          * Run test suite
+          * Verify coverage
+          * Validate fix approach
+        - **IF Tests FAIL**:
+          * **Update TodoWrite**: Add "Functional Debug Flow - Iteration: Tests failed, back to developer" task
+          * Loop back to step 3 (Developer) with test failures
+          * Repeat until tests pass
+        - **IF Tests PASS**: Proceed to code review
+        - **Update TodoWrite**: Mark "Functional Debug Flow - Step 3" as completed
+
+     5. **Launch Code Reviewers in Parallel**:
+        - **Update TodoWrite**: Add "Functional Debug Flow - Step 4: Dual code review" task
+
+        5A. **Launch Senior Code Reviewer**:
+           - Use Task tool with `subagent_type: frontend:reviewer`
+           - Provide:
+             * Implementation after fix
+             * Test results
+             * Instruction: "Review fix implementation for quality and security"
+           - Reviewer will:
+             * Check for regressions
+             * Verify best practices
+             * Security review
+             * Pattern consistency
+
+        5B. **Launch Codex Code Reviewer (Parallel)**:
+           - Use Task tool with `subagent_type: frontend:codex-reviewer`
+           - Provide same context as 5A
+           - Run in parallel with senior reviewer
+           - Codex will provide independent AI review
+
+        - **Wait for BOTH reviews to complete**
+        - **IF Issues Found in Reviews**:
+          * **Update TodoWrite**: Add "Functional Debug Flow - Iteration: Address review feedback" task
+          * Launch Developer agent to address feedback
+          * Re-run reviews after fixes
+          * Repeat until approved
+        - **IF Approved**: Proceed to present results
+        - **Update TodoWrite**: Mark "Functional Debug Flow - Step 4" as completed
+
+     6. **Present Functional Fix Results to User**:
+        - Summary of bug fixed
+        - Architect analysis (if applicable)
+        - Developer changes made
+        - Test results (all passing)
+        - Code review feedback (both reviewers approved)
+        - Request user to validate the functional fix
+        - IF user still has functional issues → Repeat Functional Debug Flow
+        - IF functional fix approved → Continue (or proceed to cleanup if no other issues)
+
+     ---
+
+     **Mixed Issue Debug Flow** (User reports both UI and functional problems):
+
+     1. **Separate Concerns**:
+        - **Update TodoWrite**: Add "Mixed Debug Flow - Separate UI and functional issues" task
+        - Clearly identify which issues are UI vs functional
+        - **Update TodoWrite**: Mark separation task as completed
+
+     2. **Run Functional Debug Flow FIRST**:
+        - **Update TodoWrite**: Add "Mixed Debug Flow - Track 1: Functional fixes" task
+        - Run complete Functional Issue Debug Flow (steps 1-6 above)
+        - Logic must work before polishing UI
+        - **Update TodoWrite**: Mark "Mixed Debug Flow - Track 1" as completed
+
+     3. **Run UI Debug Flow SECOND**:
+        - **Update TodoWrite**: Add "Mixed Debug Flow - Track 2: UI fixes" task
+        - Run complete UI Issue Debug Flow (steps 1-5 above)
+        - Polish and design after functionality works
+        - **Update TodoWrite**: Mark "Mixed Debug Flow - Track 2" as completed
+
+     4. **Integration Verification**:
+        - **Update TodoWrite**: Add "Mixed Debug Flow - Integration testing" task
+        - Use Task tool with `subagent_type: frontend:tester`
+        - Provide:
+          * Both UI and functional fixes implemented
+          * Instruction: "Verify UI and functionality work together end-to-end"
+        - Tester will verify complete user flows
+        - **Update TodoWrite**: Mark "Mixed Debug Flow - Integration testing" as completed
+
+     5. **Present Combined Fix Results to User**:
+        - Summary of ALL issues fixed (UI + functional)
+        - Results from both debug flows
+        - Integration test results
+        - Request user to validate both UI and functionality
+        - IF user still has issues → Route to appropriate debug flow(s) again
+        - IF all approved → Proceed to cleanup
+
+     ---
+
+     **After ALL Issues Resolved**:
+     - IF user satisfied with ALL fixes:
+       * **Update TodoWrite**: Mark "PHASE 5: User approval gate - present implementation for final review" as completed
+       * **Update TodoWrite**: Add "PHASE 5 - Final: All validation loops completed, user approved" task
+       * Proceed to cleanup (step 3)
+     - IF user has NEW issues:
+       * Restart appropriate debug flow(s)
+       * **Update TodoWrite**: Add new iteration task
+       * Repeat until user satisfaction
+
+     **DO NOT proceed to cleanup without explicit user approval of ALL aspects**
+
+   - IF user satisfied on first review (no issues):
+     * **Update TodoWrite**: Mark "PHASE 5: User approval gate - present implementation for final review" as completed
+     * Proceed to cleanup (step 3)
+
+   **REMINDER**: You are orchestrating ONLY. You do NOT implement fixes yourself. Always use Task to delegate to specialized agents based on issue type.
 
 3. **Launch Project Cleanup**:
    - **Update TodoWrite**: Mark "PHASE 5: Launch cleaner to clean up temporary artifacts" as in_progress
