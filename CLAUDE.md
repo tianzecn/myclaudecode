@@ -12,9 +12,9 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v3.2.0) - Full-featured Sonnet-powered
+- **Frontend Development Plugin** (v3.3.0) - Full-featured Sonnet-powered
   - 11 Specialized Agents (Plan Reviewer + CSS Developer + Designer + UI Developer ecosystem with multi-model review)
-  - **Multi-Model Plan Review** (NEW in v3.2.0) - Catch architectural issues before coding with external AI models
+  - **Multi-Model Plan Review** (NEW in v3.3.0) - Catch architectural issues before coding with external AI models
   - 6 Slash Commands
   - **11 Modular Skills** (efficient context usage - load only what you need):
     - **core-principles** - Project structure, execution rules, authoritative sources
@@ -155,7 +155,7 @@ claude-code/
 **Agents:**
 - `typescript-frontend-dev` - TypeScript/React implementation (Sonnet)
 - `frontend-architect` - Architecture planning (Sonnet)
-- `plan-reviewer` - Multi-model architecture plan review (Proxy) **NEW in v3.2.0**
+- `plan-reviewer` - Multi-model architecture plan review (Proxy) **NEW in v3.3.0**
 - `ui-manual-tester` - Browser UI testing (Haiku)
 - `test-architect` - Testing strategy (Sonnet)
 - `api-documentation-analyst` - API docs analysis (Sonnet)
@@ -446,12 +446,12 @@ Include marketplace in project settings (requires folder trust):
 **Detailed Release Notes:** See [RELEASES.md](./RELEASES.md) for comprehensive release documentation
 
 **Current Versions:**
-- Frontend Plugin: **v3.2.0** (2025-11-13)
+- Frontend Plugin: **v3.3.0** (2025-11-13)
 - Code Analysis Plugin: **v1.1.0**
 - Bun Backend Plugin: **v1.2.0**
 - Claudish CLI: **v1.1.2** (2025-11-11)
 
-**Latest Changes (v3.2.0):**
+**Latest Changes (v3.3.0):**
 - ✅ **NEW**: Multi-Model Plan Review (PHASE 1.5) - Get independent AI perspectives on architecture plans before coding
 - ✅ New Agent: `plan-reviewer` - Specialized for reviewing architecture plans via external AI models
 - ✅ Interactive model selection: Choose from Grok, GPT-5 Codex, MiniMax M2, Qwen, or custom OpenRouter models
@@ -462,11 +462,11 @@ Include marketplace in project settings (requires folder trust):
 - ✅ Updated `/implement` command with comprehensive PHASE 1.5 workflow (8 steps)
 
 **Git Tags:**
-- Frontend: `plugins/frontend/v3.2.0`
+- Frontend: `plugins/frontend/v3.3.0`
 - Use correct tag format when releasing: `plugins/{plugin-name}/vX.Y.Z`
 
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
 **Last Updated:** November 13, 2025
-**Version:** 3.2.0
+**Version:** 3.3.0

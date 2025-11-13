@@ -6,9 +6,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
-## Frontend Plugin v3.2.0 (2025-11-13)
+## Frontend Plugin v3.3.0 (2025-11-13)
 
-**Tag:** `plugins/frontend/v3.2.0`
+**Tag:** `plugins/frontend/v3.3.0`
 
 ### 🎯 Overview
 
@@ -119,9 +119,9 @@ PHASE 2: Implementation begins
 **Modified:**
 - `plugins/frontend/commands/implement.md` - Added PHASE 1.5 (500+ lines)
 - `plugins/frontend/plugin.json` - Added plan-reviewer, updated description
-- `CHANGELOG.md` - v3.2.0 entry
+- `CHANGELOG.md` - v3.3.0 entry
 - `RELEASES.md` - This file
-- `CLAUDE.md` - Updated with v3.2.0 information
+- `CLAUDE.md` - Updated with v3.3.0 information
 
 ### 🔧 Configuration (Optional)
 
@@ -148,7 +148,7 @@ PHASE 2: Implementation begins
 **To use multi-model plan review:**
 1. Claudish CLI installed: `npx claudish --version`
 2. OpenRouter API key: `export OPENROUTER_API_KEY=your-key`
-3. Claude Code plugin: Frontend v3.2.0+
+3. Claude Code plugin: Frontend v3.3.0+
 
 **If requirements not met:**
 - Workflow gracefully skips PHASE 1.5
@@ -286,8 +286,8 @@ The `/implement` command now requires PHASE 1.5 completion:
 ### 🏷️ Git Tag
 
 ```bash
-git tag -a plugins/frontend/v3.2.0 -m "Frontend Plugin v3.2.0 - Multi-Model Plan Review (PHASE 1.5)"
-git push origin plugins/frontend/v3.2.0
+git tag -a plugins/frontend/v3.3.0 -m "Frontend Plugin v3.3.0 - Multi-Model Plan Review (PHASE 1.5)"
+git push origin plugins/frontend/v3.3.0
 ```
 
 ### 👥 Credits
