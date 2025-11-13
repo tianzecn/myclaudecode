@@ -137,13 +137,13 @@ TodoWrite with the following items:
 - content: "PHASE 1: Launch architect for architecture planning"
   status: "in_progress"
   activeForm: "PHASE 1: Launching architect for architecture planning"
-- content: "PHASE 1: User approval gate - wait for plan approval"
+- content: "PHASE 1: User approval gate with plan review option"
   status: "pending"
-  activeForm: "PHASE 1: Waiting for user approval of architecture plan"
-- content: "PHASE 1.5: Ask user about multi-model plan review preference"
+  activeForm: "PHASE 1: Waiting for user approval (3 options: proceed/review/feedback)"
+- content: "PHASE 1.5: Select AI models for plan review (conditional)"
   status: "pending"
-  activeForm: "PHASE 1.5: Asking about plan review preference"
-- content: "PHASE 1.5: Run multi-model plan review (if enabled)"
+  activeForm: "PHASE 1.5: Selecting AI models for plan review"
+- content: "PHASE 1.5: Run multi-model plan review (conditional)"
   status: "pending"
   activeForm: "PHASE 1.5: Running multi-model plan review"
 - content: "PHASE 1.5: Consolidate and present multi-model feedback"
@@ -400,43 +400,55 @@ These will be referenced in subsequent phases to route execution correctly.
    - **Update TodoWrite**: Mark "PHASE 1: User approval gate" as in_progress
    - Present the plan to the user clearly
    - Use AskUserQuestion to ask: "Are you satisfied with this architecture plan?"
-   - Options: "Yes, proceed to implementation" / "No, I have feedback"
+   - Options:
+     * "Yes, proceed to implementation"
+     * "Get AI review first (recommended)" - Triggers PHASE 1.5 multi-model plan review
+     * "No, I have feedback" - Allows plan revision
 
 3. **Feedback Loop**:
-   - IF user not satisfied:
+   - IF user selects "No, I have feedback":
      * Collect specific feedback
      * **Update TodoWrite**: Add "PHASE 1 - Iteration X: Re-run planner with feedback" task
      * Re-run architect with feedback
      * Repeat approval gate
-   - IF user satisfied:
+   - IF user selects "Get AI review first":
      * **Update TodoWrite**: Mark "PHASE 1: User approval gate" as completed
-     * Proceed to Phase 1.5
+     * **Proceed to Phase 1.5** (multi-model plan review)
+     * After PHASE 1.5 completes, continue to PHASE 2
+   - IF user selects "Yes, proceed to implementation":
+     * **Update TodoWrite**: Mark "PHASE 1: User approval gate" as completed
+     * **Update TodoWrite**: Mark all PHASE 1.5 tasks as completed with note "(Skipped - user chose direct implementation)"
+     * **Skip PHASE 1.5** and proceed directly to PHASE 2
    - **DO NOT proceed without user approval**
 
 ---
 
 ### PHASE 1.5: Multi-Model Plan Review (Optional)
 
-**NEW in v3.2.0**: Get independent perspectives from external AI models on your architecture plan before implementation begins. This phase helps identify architectural issues, missing considerations, and alternative approaches when changes are still cheap.
+**NEW in v3.3.0**: Get independent perspectives from external AI models on your architecture plan before implementation begins. This phase helps identify architectural issues, missing considerations, and alternative approaches when changes are still cheap.
 
-**When to use**: After user approves the architecture plan (PHASE 1) but before implementation starts (PHASE 2).
+**When to trigger**: When user selects "Get AI review first (recommended)" in PHASE 1 approval gate.
+
+**When to skip**: When user selects "Yes, proceed to implementation" in PHASE 1 (skips directly to PHASE 2).
 
 ---
 
-#### Step 1: Ask User About Plan Review Preference
+#### Step 1: Select AI Models for Review (Multi-Select)
 
-**Update TodoWrite**: Mark "PHASE 1.5: Ask user about plan review preference" as in_progress
+**IMPORTANT**: This step is only reached if user selected "Get AI review first" in PHASE 1 approval gate.
 
-Present the following to the user:
+**Update TodoWrite**: Mark "PHASE 1.5: Ask user about plan review preference" as completed (already decided in PHASE 1)
+
+**Update TodoWrite**: Mark "PHASE 1.5: Run multi-model plan review" as in_progress
+
+Present the multi-model plan review introduction to the user:
 
 ```markdown
-## 🤖 Multi-Model Plan Review Available
+## 🤖 Multi-Model Plan Review
 
-The architecture plan has been approved and is ready for implementation.
+You've chosen to get external AI perspectives on the architecture plan before implementation.
 
-Before we begin, would you like **external AI models** to review the plan for potential improvements, blindspots, or alternative approaches?
-
-**Benefits of multi-model plan review:**
+**Benefits:**
 - ✅ Independent perspectives from different AI models with different strengths
 - ✅ Identify architectural issues early (cheaper to fix in planning than implementation)
 - ✅ Cross-model consensus increases confidence in the plan
@@ -451,34 +463,6 @@ Before we begin, would you like **external AI models** to review the plan for po
 
 **Requirements**: Claudish CLI + OPENROUTER_API_KEY environment variable
 ```
-
-Use **AskUserQuestion**:
-```
-Do you want multi-model AI review of the architecture plan?
-
-This is optional but recommended for complex features.
-
-Options:
-- "Yes - Review the plan with external AI models"
-- "No - Skip plan review and proceed to implementation"
-```
-
-**Store response as `plan_review_enabled`**
-
-**Update TodoWrite**: Mark "PHASE 1.5: Ask user about plan review preference" as completed
-
----
-
-#### Step 2: If Enabled - Select Models (Multi-Select)
-
-**IF `plan_review_enabled` is FALSE:**
-- Log: "User chose to skip multi-model plan review. Proceeding to PHASE 2 (Implementation)."
-- **Update TodoWrite**: Mark all PHASE 1.5 todos as "completed" with note "Skipped by user preference"
-- **Skip to PHASE 2**
-
-**IF `plan_review_enabled` is TRUE:**
-
-**Update TodoWrite**: Mark "PHASE 1.5: Run multi-model plan review" as in_progress
 
 Use **AskUserQuestion** with **multiSelect: true**:
 
@@ -526,16 +510,16 @@ Use **AskUserQuestion** with **multiSelect: true**:
 
 **Collect context for reviewers:**
 
-1. **Read architecture plan** from AI-DOCS/ folder:
+1. **Find architecture plan file(s)** from AI-DOCS/ folder:
    - Use Glob to find plan file(s): `AI-DOCS/*.md`
-   - Read complete plan content
+   - Store the file path(s) (e.g., `AI-DOCS/api-compliance-implementation-plan.md`)
+   - **DO NOT read the file content** - agents can read it themselves
 
 2. **Prepare review prompt** with:
    - Original feature request: `$ARGUMENTS`
-   - Complete architecture plan text
+   - **Architecture plan file path(s)** (not content!)
    - Workflow type: `workflow_type` (from STEP 0.5)
-   - Tech stack information (extracted from plan)
-   - Any constraints or requirements mentioned
+   - Any additional constraints or requirements from the feature request
 
 ---
 
@@ -556,12 +540,12 @@ Review the architecture plan for the following feature and provide critical feed
 **Feature Request:**
 {$ARGUMENTS}
 
-**Architecture Plan:**
-{Complete plan text from AI-DOCS}
+**Architecture Plan File:**
+{file_path} (e.g., AI-DOCS/api-compliance-implementation-plan.md)
+
+Read this file to understand the complete architecture plan before reviewing.
 
 **Workflow Type:** {workflow_type}
-
-**Tech Stack:** {Extracted from plan}
 
 **Your Task:**
 

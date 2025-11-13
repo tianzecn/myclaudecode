@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.3.1] - 2025-11-13
+
+### Fixed
+
+#### `--stdin` Mode
+- **BUG FIX**: `--stdin` mode no longer triggers interactive Ink UI
+  - Fixed logic in `cli.ts` to check `!config.stdin` when determining interactive mode
+  - Previously: Empty `claudeArgs` + `--stdin` → triggered interactive mode → Ink error
+  - Now: `--stdin` correctly uses single-shot mode regardless of `claudeArgs`
+  - Resolves "Raw mode is not supported on the current process.stdin" errors when piping input
+
+#### ANTHROPIC_API_KEY Requirement
+- **BUG FIX**: Removed premature `ANTHROPIC_API_KEY` validation in CLI parser
+  - `claude-runner.ts` automatically sets placeholder if not provided (line 138)
+  - Users only need to set `OPENROUTER_API_KEY` for single-variable setup
+  - Cleaner UX - users don't need to understand placeholder concept
+  - Error message clarified: Only asks for `OPENROUTER_API_KEY`
+
+### Removed
+- **Cleanup**: Removed unused `@types/react` dependency
+  - Leftover from when Ink was used (already replaced with readline in v1.2.0)
+  - No functional change - code already doesn't use React/Ink
+
+### Changed
+- **Documentation**: Simplified setup instructions
+  - Users only need `OPENROUTER_API_KEY` environment variable
+  - `ANTHROPIC_API_KEY` handled automatically by Claudish
+
 ## [1.3.0] - 2025-11-12
 
 ### 🎉 Major: Cross-Platform Compatibility

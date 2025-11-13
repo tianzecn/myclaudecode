@@ -116,7 +116,8 @@ export function parseArgs(args: string[]): ClaudishConfig {
 
   // Determine if this will be interactive mode BEFORE API key check
   // If no prompt provided and not explicitly interactive, default to interactive mode
-  if (!config.claudeArgs || config.claudeArgs.length === 0) {
+  // Exception: --stdin mode reads prompt from stdin, so don't default to interactive
+  if ((!config.claudeArgs || config.claudeArgs.length === 0) && !config.stdin) {
     config.interactive = true;
   }
 
@@ -157,19 +158,10 @@ export function parseArgs(args: string[]): ClaudishConfig {
       config.openrouterApiKey = apiKey;
     }
 
-    // Require ANTHROPIC_API_KEY to prevent Claude Code dialog
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.error("\nError: ANTHROPIC_API_KEY is not set");
-      console.error("This placeholder key is required to prevent Claude Code from prompting.");
-      console.error("");
-      console.error("Set it now:");
-      console.error("  export ANTHROPIC_API_KEY='sk-ant-api03-placeholder'");
-      console.error("");
-      console.error("Or add it to your shell profile (~/.zshrc or ~/.bashrc) to set permanently.");
-      console.error("");
-      console.error("Note: This key is NOT used for auth - claudish uses OPENROUTER_API_KEY");
-      process.exit(1);
-    }
+    // Note: ANTHROPIC_API_KEY is NOT required here
+    // claude-runner.ts automatically sets a placeholder if not provided (see line 138)
+    // This allows single-variable setup - users only need OPENROUTER_API_KEY
+    config.anthropicApiKey = process.env.ANTHROPIC_API_KEY;
   }
 
   // Set default for quiet mode if not explicitly set
@@ -190,7 +182,7 @@ export function parseArgs(args: string[]): ClaudishConfig {
  * Print version information
  */
 function printVersion(): void {
-  console.log("claudish version 1.3.0");
+  console.log("claudish version 1.3.1");
 }
 
 /**

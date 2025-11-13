@@ -26,13 +26,104 @@ PROXY_MODE: {model_name}
    {actual_task}
    ```
 4. **Delegate to external AI** using Claudish CLI via Bash tool:
+
+   **STEP 1: Check environment variables (required)**
+   ```bash
+   # Check if OPENROUTER_API_KEY is set (required for Claudish)
+   # NOTE: ANTHROPIC_API_KEY is NOT required - Claudish sets it automatically
+   if [ -z "$OPENROUTER_API_KEY" ]; then
+     echo "ERROR: OPENROUTER_API_KEY environment variable not set"
+     echo ""
+     echo "To fix this:"
+     echo "  export OPENROUTER_API_KEY='sk-or-v1-your-key-here'"
+     echo ""
+     echo "Or create a .env file in the project root:"
+     echo "  echo 'OPENROUTER_API_KEY=sk-or-v1-your-key-here' > .env"
+     echo ""
+     echo "Get your API key from: https://openrouter.ai/keys"
+     exit 1
+   fi
+   ```
+
+   **STEP 2: Prepare prompt and call Claudish**
    - **Mode**: Single-shot mode (non-interactive, returns result and exits)
    - **Required flags**:
-     - `--model {model_name}` - Specify model (required for non-interactive mode)
-     - `--stdin` - Read prompt from stdin (handles unlimited prompt size)
-     - `--quiet` - Suppress claudish logs (clean output)
-   - **Example**: `echo "$FULL_PROMPT" | npx claudish --stdin --model {model_name} --quiet`
-   - **Note**: Default `claudish` runs interactive mode; we use single-shot for automation
+     - `--model {model_name}` - Specify OpenRouter model
+     - `--stdin` - Read prompt from stdin (handles unlimited size)
+     - `--quiet` - Suppress [claudish] logs (clean output only)
+
+   **Correct syntax using printf + pipe:**
+   ```bash
+   # Use printf to pass prompt via stdin (handles multiline, escapes, etc.)
+   printf '%s' "$FULL_PROMPT" | npx claudish --stdin --model {model_name} --quiet
+   ```
+
+   **WRONG syntax (DO NOT USE):**
+   ```bash
+   # ❌ WRONG: heredoc in subshell context may fail
+   cat <<'EOF' | npx claudish --stdin --model {model_name} --quiet
+   $FULL_PROMPT
+   EOF
+
+   # ❌ WRONG: echo may interpret escapes
+   echo "$FULL_PROMPT" | npx claudish --stdin --model {model_name} --quiet
+
+   # ❌ WRONG: inline prompt (fails for long prompts)
+   npx claudish --model {model_name} --quiet "$FULL_PROMPT"
+   ```
+
+   **Why printf?**
+   - Handles newlines, special characters, and escapes correctly
+   - Works reliably in all shell contexts
+   - No issues with heredoc in subprocesses
+   - Recommended by Bash best practices
+
+   **COMPLETE WORKING EXAMPLE:**
+   ```bash
+   # Step 1: Check environment variables (only OPENROUTER_API_KEY needed)
+   if [ -z "$OPENROUTER_API_KEY" ]; then
+     echo "ERROR: OPENROUTER_API_KEY not set"
+     echo ""
+     echo "Set it with:"
+     echo "  export OPENROUTER_API_KEY='sk-or-v1-your-key-here'"
+     echo ""
+     echo "Get your key from: https://openrouter.ai/keys"
+     echo ""
+     echo "NOTE: ANTHROPIC_API_KEY is not required - Claudish sets it automatically"
+     exit 1
+   fi
+
+   # Step 2: Prepare the full prompt
+   SYSTEM_CONTEXT="You are an expert software architect reviewing an implementation plan BEFORE any code is written."
+
+   TASK_PROMPT="Review the architecture plan and identify:
+   1. Architectural issues
+   2. Missing considerations
+   3. Alternative approaches
+   4. Implementation risks
+
+   **Architecture Plan File:** AI-DOCS/api-compliance-implementation-plan.md
+
+   Read this file and provide comprehensive review."
+
+   FULL_PROMPT="${SYSTEM_CONTEXT}
+
+${TASK_PROMPT}"
+
+   # Step 3: Call Claudish with printf + pipe
+   RESULT=$(printf '%s' "$FULL_PROMPT" | npx claudish --stdin --model x-ai/grok-code-fast-1 --quiet 2>&1)
+
+   # Step 4: Check if Claudish succeeded
+   if [ $? -eq 0 ]; then
+     echo "## External AI Plan Review (x-ai/grok-code-fast-1)"
+     echo ""
+     echo "$RESULT"
+   else
+     echo "ERROR: Claudish failed"
+     echo "$RESULT"
+     exit 1
+   fi
+   ```
 
 5. **Return the external AI's response** with attribution:
    ```markdown

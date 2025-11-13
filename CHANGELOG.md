@@ -5,6 +5,39 @@ All notable changes to the MAG Claude Plugins project will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.1] - 2025-11-13
+
+### Fixed
+
+#### Multi-Model Plan Review Integration
+- **CRITICAL FIX**: Multi-model plan review now proactively offered during PHASE 1 approval
+  - Added "Get AI review first (recommended)" as built-in option alongside "Yes, proceed" and "No, I have feedback"
+  - Previously required users to manually request review via text input
+- **Efficiency improvement**: Pass file paths instead of embedding full plan content in prompts
+  - Massive token savings (1000+ lines not duplicated)
+  - Reviewers read files themselves using Read tool
+  - Faster execution, cleaner prompts
+- **plan-reviewer agent**: Fixed Claudish CLI integration
+  - Correct syntax: `printf '%s' "$PROMPT" | npx claudish --stdin --model X --quiet`
+  - Only checks `OPENROUTER_API_KEY` (Claudish sets `ANTHROPIC_API_KEY` automatically)
+  - Added environment variable validation with clear setup instructions
+  - Complete working example with error handling
+
+#### Claudish CLI Fixes (v1.3.1)
+- **BUG FIX**: `--stdin` mode no longer triggers interactive Ink UI
+  - Fixed condition: `(!config.claudeArgs || config.claudeArgs.length === 0) && !config.stdin`
+  - Resolves "Raw mode is not supported" errors when piping input
+- **BUG FIX**: Removed premature `ANTHROPIC_API_KEY` validation
+  - Let `claude-runner.ts` set automatic placeholder (line 138)
+  - Users only need to set `OPENROUTER_API_KEY` (single-variable setup)
+  - Cleaner UX, no confusing placeholder concept for users
+- **Cleanup**: Removed unused `@types/react` dependency (Ink already replaced with readline)
+
+### Changed
+- **Environment setup**: `.env.example` no longer includes `ANTHROPIC_API_KEY` comment section
+  - Reduced clutter - users only need `OPENROUTER_API_KEY`
+  - Claudish handles placeholder automatically
+
 ## [3.3.0] - 2025-11-13
 
 ### Added

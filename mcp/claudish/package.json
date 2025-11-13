@@ -1,6 +1,6 @@
 {
   "name": "claudish",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "CLI tool to run Claude Code with any OpenRouter model (Grok, GPT-5, MiniMax, etc.) via local Anthropic API-compatible proxy",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "latest",
-    "@types/react": "^19.2.2",
     "typescript": "^5.7.0"
   },
   "files": [
