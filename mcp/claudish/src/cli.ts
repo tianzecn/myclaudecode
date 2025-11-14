@@ -20,9 +20,15 @@ export function parseArgs(args: string[]): ClaudishConfig {
   };
 
   // Check for environment variable overrides
-  const envModel = process.env[ENV.CLAUDISH_MODEL];
-  if (envModel) {
-    config.model = envModel; // Accept any model ID from env
+  // Priority order: CLAUDISH_MODEL (Claudish-specific) > ANTHROPIC_MODEL (Claude Code standard)
+  // CLI --model flag will override both (handled later in arg parsing)
+  const claudishModel = process.env[ENV.CLAUDISH_MODEL];
+  const anthropicModel = process.env[ENV.ANTHROPIC_MODEL];
+
+  if (claudishModel) {
+    config.model = claudishModel; // Claudish-specific takes priority
+  } else if (anthropicModel) {
+    config.model = anthropicModel; // Fall back to Claude Code standard
   }
 
   const envPort = process.env[ENV.CLAUDISH_PORT];
@@ -228,7 +234,9 @@ NOTES:
 
 ENVIRONMENT VARIABLES:
   OPENROUTER_API_KEY              Required: Your OpenRouter API key
-  CLAUDISH_MODEL                  Default model to use
+  CLAUDISH_MODEL                  Default model to use (takes priority)
+  ANTHROPIC_MODEL                 Claude Code standard: model to use (fallback if CLAUDISH_MODEL not set)
+  ANTHROPIC_SMALL_FAST_MODEL      Claude Code standard: fast model (auto-set by claudish)
   CLAUDISH_PORT                   Default port for proxy
   CLAUDISH_ACTIVE_MODEL_NAME      Auto-set by claudish (read-only) - shows active model in status line
 
@@ -295,5 +303,6 @@ function printAvailableModels(): void {
   }
 
   console.log("Set default with: export CLAUDISH_MODEL=<model>");
+  console.log("               or: export ANTHROPIC_MODEL=<model>");
   console.log("Or use: claudish --model <model> ...\n");
 }

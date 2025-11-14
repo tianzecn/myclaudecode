@@ -1,5 +1,50 @@
 # Changelog
 
+## [1.4.0] - 2025-11-15
+
+### Added
+- ✅ **Claude Code Standard Environment Variables Support**
+  - Added `ANTHROPIC_MODEL` environment variable for model selection (Claude Code standard)
+  - Added `ANTHROPIC_SMALL_FAST_MODEL` environment variable (auto-set by Claudish)
+  - Both variables properly set when running Claude Code for UI display consistency
+
+### Changed
+- **Model Selection Priority Order**:
+  1. CLI `--model` flag (highest priority)
+  2. `CLAUDISH_MODEL` environment variable (Claudish-specific)
+  3. `ANTHROPIC_MODEL` environment variable (Claude Code standard, new fallback)
+  4. Interactive prompt (if none set)
+- Updated help text to document new environment variables
+- Updated `--list-models` output to show both `CLAUDISH_MODEL` and `ANTHROPIC_MODEL` options
+
+### Benefits
+- **Better Integration**: Seamless compatibility with Claude Code's standard environment variables
+- **Flexible Configuration**: Three ways to set model (CLI flag, CLAUDISH_MODEL, ANTHROPIC_MODEL)
+- **UI Consistency**: Model names properly displayed in Claude Code UI status line
+- **Backward Compatible**: All existing usage patterns continue to work
+
+### Usage Examples
+```bash
+# Option 1: Claudish-specific (takes priority)
+export CLAUDISH_MODEL=x-ai/grok-code-fast-1
+
+# Option 2: Claude Code standard (new fallback)
+export ANTHROPIC_MODEL=x-ai/grok-code-fast-1
+
+# Option 3: CLI flag (overrides all)
+claudish --model x-ai/grok-code-fast-1
+```
+
+### Technical Details
+- Environment variables set in `claude-runner.ts` for Claude Code:
+  - `ANTHROPIC_MODEL` = selected OpenRouter model
+  - `ANTHROPIC_SMALL_FAST_MODEL` = same model (consistent experience)
+  - `CLAUDISH_ACTIVE_MODEL_NAME` = model display name (status line)
+- Priority order implemented in `cli.ts` argument parser
+- Build size: ~142 KB (unminified for performance)
+
+---
+
 ## [1.3.1] - 2025-11-13
 
 ### Fixed

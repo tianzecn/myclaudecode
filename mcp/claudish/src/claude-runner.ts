@@ -124,6 +124,11 @@ export async function runClaudeWithProxy(
     ANTHROPIC_BASE_URL: proxyUrl,
     // Set active model ID for status line (actual OpenRouter model ID)
     [ENV.CLAUDISH_ACTIVE_MODEL_NAME]: modelId,
+    // Set Claude Code standard model environment variables
+    // Both ANTHROPIC_MODEL and ANTHROPIC_SMALL_FAST_MODEL point to the same model
+    // since we're proxying everything through OpenRouter
+    [ENV.ANTHROPIC_MODEL]: modelId,
+    [ENV.ANTHROPIC_SMALL_FAST_MODEL]: modelId,
   };
 
   // Handle API key based on mode

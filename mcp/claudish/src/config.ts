@@ -58,6 +58,8 @@ export const ENV = {
   CLAUDISH_MODEL: "CLAUDISH_MODEL",
   CLAUDISH_PORT: "CLAUDISH_PORT",
   CLAUDISH_ACTIVE_MODEL_NAME: "CLAUDISH_ACTIVE_MODEL_NAME", // Set by claudish to show active model in status line
+  ANTHROPIC_MODEL: "ANTHROPIC_MODEL", // Claude Code standard env var for model selection
+  ANTHROPIC_SMALL_FAST_MODEL: "ANTHROPIC_SMALL_FAST_MODEL", // Claude Code standard env var for fast model
 } as const;
 
 // OpenRouter API Configuration
