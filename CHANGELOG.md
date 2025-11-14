@@ -5,6 +5,47 @@ All notable changes to the MAG Claude Plugins project will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0] - 2025-11-14
+
+### Added
+
+#### Frontend Plugin - Multi-Model Code Review with `/review` Command
+
+**NEW COMMAND**: `/review` - Orchestrate comprehensive multi-model code review workflow with parallel execution and consensus analysis.
+
+**Key Features:**
+- ✅ **Parallel Execution** - 3-5x speedup (15 min → 5 min) by running multiple AI models simultaneously
+- ✅ **Consensus Analysis** - Prioritize issues by cross-model agreement (unanimous/strong/majority/divergent)
+- ✅ **Cost Transparency** - Input/output token separation with range-based estimates
+- ✅ **Graceful Degradation** - Works with embedded Claude Sonnet if external models unavailable
+- ✅ **Real-Time Progress** - Visual indicators during 5-10 minute parallel execution
+- ✅ **7 Error Recovery Strategies** - Comprehensive error handling for all failure scenarios
+
+**Workflow (5 Phases):**
+1. **Review Target Selection** - Unstaged changes (git diff), specific files, or recent commits
+2. **Model Selection & Cost Approval** - Choose up to 9 external models + 1 embedded, see costs before charging
+3. **Parallel Multi-Model Review** - Run all reviews simultaneously with real-time progress
+4. **Consolidate Reviews** - Aggregate feedback with consensus analysis and model agreement matrix
+5. **Present Results** - Brief summary with top 5 issues prioritized by consensus
+
+**Supported Models:**
+- Embedded: Claude Sonnet 4.5 (always available)
+- External: Grok, Gemini Flash/Pro, DeepSeek, GPT-5 Codex, and custom OpenRouter models
+
+**Multi-Model Validation:**
+- Design reviewed by 2 external models (Grok + Gemini Flash) in parallel
+- Implementation reviewed by 3 models (Local + Grok + Gemini Flash) - 100% approval
+- All 3 critical design issues fixed before implementation
+- Average quality score: 9.3/10
+
+**Files Created:**
+- `plugins/frontend/commands/review.md` (828 lines)
+- Comprehensive documentation (11 files in `ai-docs/`)
+
+**Total Development Time:** ~4 hours (design → multi-model validation → implementation → iteration)
+
+**See:** `ai-docs/command-development-report-review.md` for full development report
+
 ## [3.4.1] - 2025-11-13
 
 ### Fixed

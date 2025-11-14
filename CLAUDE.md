@@ -12,10 +12,10 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v3.3.0) - Full-featured Sonnet-powered
+- **Frontend Development Plugin** (v3.6.0) - Full-featured Sonnet-powered
   - 11 Specialized Agents (Plan Reviewer + CSS Developer + Designer + UI Developer ecosystem with multi-model review)
-  - **Multi-Model Plan Review** (NEW in v3.3.0) - Catch architectural issues before coding with external AI models
-  - 6 Slash Commands
+  - **Multi-Model Code Review** (NEW in v3.6.0) - `/review` command with parallel execution (3-5x speedup), consensus analysis, and cost transparency
+  - 7 Slash Commands (including `/review` for multi-model code review)
   - **11 Modular Skills** (efficient context usage - load only what you need):
     - **core-principles** - Project structure, execution rules, authoritative sources
     - **tooling-setup** - Vite, TypeScript, Biome, Vitest configuration
@@ -118,9 +118,9 @@ claude-code/
     │   ├── plugin.json
     │   ├── DEPENDENCIES.md
     │   ├── README.md
-    │   ├── agents/                   (13 agents)
-    │   ├── commands/                 (6 commands)
-    │   ├── skills/                   (3 skills)
+    │   ├── agents/                   (11 agents)
+    │   ├── commands/                 (7 commands)
+    │   ├── skills/                   (11 skills)
     │   └── mcp-servers/
     ├── code-analysis/                # Code analysis plugin
     │   ├── plugin.json
@@ -184,6 +184,13 @@ claude-code/
 - `/api-docs` - API documentation workflows
 - `/cleanup-artifacts` - Clean temporary files
 - `/validate-ui` - UI validation workflow with designer & ui-developer
+- `/review` - **NEW in v3.6.0**: Multi-model code review orchestrator with parallel execution (3-5x speedup)
+  - Review unstaged changes, specific files, or recent commits
+  - Choose up to 9 external models + 1 embedded (Grok, Gemini, DeepSeek, GPT-5 Codex, etc.)
+  - Parallel execution: 15 min → 5 min with real-time progress indicators
+  - Consensus analysis: Prioritize issues by cross-model agreement (unanimous/strong/majority/divergent)
+  - Cost transparency: Input/output token separation with range-based estimates
+  - Graceful degradation: Works with embedded Claude Sonnet if external models unavailable
 
 **Skills:**
 - `browser-debugger` - UI testing & debugging
@@ -453,27 +460,28 @@ Include marketplace in project settings (requires folder trust):
 **Detailed Release Notes:** See [RELEASES.md](./RELEASES.md) for comprehensive release documentation
 
 **Current Versions:**
-- Frontend Plugin: **v3.3.0** (2025-11-13)
+- Frontend Plugin: **v3.6.0** (2025-11-14)
 - Code Analysis Plugin: **v1.1.0**
 - Bun Backend Plugin: **v1.2.0**
 - Claudish CLI: **v1.1.2** (2025-11-11)
 
-**Latest Changes (v3.3.0):**
-- ✅ **NEW**: Multi-Model Plan Review (PHASE 1.5) - Get independent AI perspectives on architecture plans before coding
-- ✅ New Agent: `plan-reviewer` - Specialized for reviewing architecture plans via external AI models
-- ✅ Interactive model selection: Choose from Grok, GPT-5 Codex, MiniMax M2, Qwen, or custom OpenRouter models
-- ✅ Cross-model consensus highlighting - Issues flagged by multiple models = high confidence
-- ✅ Consolidated feedback with severity levels (Critical/Medium/Low) and actionable recommendations
-- ✅ Optional plan revision loop - Revise architecture based on multi-model feedback before implementation
-- ✅ Fully optional and user-controlled - Skip if not needed, graceful degradation
-- ✅ Updated `/implement` command with comprehensive PHASE 1.5 workflow (8 steps)
+**Latest Changes (v3.6.0):**
+- ✅ **NEW**: `/review` Command - Multi-model code review orchestrator with parallel execution
+- ✅ **Parallel Execution** - 3-5x speedup (15 min → 5 min) by running multiple AI models simultaneously
+- ✅ **Consensus Analysis** - Prioritize issues by cross-model agreement (unanimous/strong/majority/divergent)
+- ✅ **Cost Transparency** - Input/output token separation with range-based estimates
+- ✅ **Real-Time Progress** - Visual indicators during 5-10 minute parallel execution
+- ✅ **Graceful Degradation** - Works with embedded Claude Sonnet if external models unavailable
+- ✅ **7 Error Recovery Strategies** - Comprehensive error handling for all failure scenarios
+- ✅ **5-Phase Workflow** - Review target selection → Model selection → Parallel review → Consolidation → Results
+- ✅ Multi-model validation: 100% approval from all reviewers (Local + Grok + Gemini Flash)
 
 **Git Tags:**
-- Frontend: `plugins/frontend/v3.3.0`
+- Frontend: `plugins/frontend/v3.6.0`
 - Use correct tag format when releasing: `plugins/{plugin-name}/vX.Y.Z`
 
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Last Updated:** November 13, 2025
-**Version:** 3.3.0
+**Last Updated:** November 14, 2025
+**Version:** 3.6.0
