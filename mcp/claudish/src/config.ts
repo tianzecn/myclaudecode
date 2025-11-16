@@ -1,3 +1,6 @@
+// AUTO-GENERATED from shared/recommended-models.md
+// DO NOT EDIT MANUALLY - Run 'bun run extract-models' to regenerate
+
 import type { OpenRouterModel } from "./types.js";
 
 export const DEFAULT_MODEL: OpenRouterModel = "x-ai/grok-code-fast-1";
@@ -9,42 +12,72 @@ export const MODEL_INFO: Record<
   { name: string; description: string; priority: number; provider: string }
 > = {
   "x-ai/grok-code-fast-1": {
-    name: "Grok Code Fast",
-    description: "xAI's fast coding model",
+    name: "Ultra-fast coding",
+    description: "Ultra-fast coding",
     priority: 1,
     provider: "xAI",
   },
-  "openai/gpt-5-codex": {
-    name: "GPT-5 Codex",
-    description: "OpenAI's advanced coding model",
-    priority: 2,
-    provider: "OpenAI",
-  },
   "minimax/minimax-m2": {
-    name: "MiniMax M2",
-    description: "MiniMax's high-performance model",
-    priority: 3,
+    name: "Compact high-efficiency",
+    description: "Compact high-efficiency",
+    priority: 2,
     provider: "MiniMax",
   },
   "z-ai/glm-4.6": {
-    name: "GLM-4.6",
-    description: "Advanced language model",
-    priority: 4,
+    name: "Enhanced coding capabilities",
+    description: "Enhanced coding capabilities",
+    priority: 3,
     provider: "Zhipu AI",
   },
-  "qwen/qwen3-vl-235b-a22b-instruct": {
-    name: "Qwen3 VL 235B",
-    description: "Alibaba's vision-language model",
+  "openai/gpt-5.1-codex": {
+    name: "Specialized software engineering",
+    description: "Specialized software engineering",
+    priority: 4,
+    provider: "OpenAI",
+  },
+  "google/gemini-2.5-flash": {
+    name: "Advanced reasoning with built-in thinking",
+    description: "Advanced reasoning with built-in thinking",
     priority: 5,
+    provider: "Google",
+  },
+  "google/gemini-2.5-pro": {
+    name: "State-of-the-art reasoning",
+    description: "State-of-the-art reasoning",
+    priority: 6,
+    provider: "Google",
+  },
+  "qwen/qwen3-vl-235b-a22b-instruct": {
+    name: "Multimodal vision-language",
+    description: "Multimodal vision-language",
+    priority: 7,
     provider: "Alibaba",
   },
-  "anthropic/claude-sonnet-4.5": {
-    name: "Claude Sonnet 4.5",
-    description: "Anthropic's Claude (for comparison)",
-    priority: 6,
-    provider: "Anthropic",
+  "google/gemini-2.0-flash-001": {
+    name: "Faster TTFT, multimodal",
+    description: "Faster TTFT, multimodal",
+    priority: 8,
+    provider: "Google",
   },
-  custom: {
+  "google/gemini-2.5-flash-lite": {
+    name: "Ultra-low latency",
+    description: "Ultra-low latency",
+    priority: 9,
+    provider: "Google",
+  },
+  "deepseek/deepseek-chat-v3-0324": {
+    name: "685B parameter MoE",
+    description: "685B parameter MoE",
+    priority: 10,
+    provider: "DeepSeek",
+  },
+  "openai/gpt-4o-mini": {
+    name: "Compact multimodal",
+    description: "Compact multimodal",
+    priority: 11,
+    provider: "OpenAI",
+  },
+  "custom": {
     name: "Custom Model",
     description: "Enter any OpenRouter model ID manually",
     priority: 999,

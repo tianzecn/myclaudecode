@@ -1,11 +1,19 @@
+// AUTO-GENERATED from shared/recommended-models.md
+// DO NOT EDIT MANUALLY - Run 'bun run extract-models' to regenerate
+
 // OpenRouter Models - Top Recommended for Development (Priority Order)
 export const OPENROUTER_MODELS = [
   "x-ai/grok-code-fast-1",
-  "openai/gpt-5-codex",
   "minimax/minimax-m2",
   "z-ai/glm-4.6",
+  "openai/gpt-5.1-codex",
+  "google/gemini-2.5-flash",
+  "google/gemini-2.5-pro",
   "qwen/qwen3-vl-235b-a22b-instruct",
-  "anthropic/claude-sonnet-4.5",
+  "google/gemini-2.0-flash-001",
+  "google/gemini-2.5-flash-lite",
+  "deepseek/deepseek-chat-v3-0324",
+  "openai/gpt-4o-mini",
   "custom",
 ] as const;
 

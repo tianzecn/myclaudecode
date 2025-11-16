@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.5.0] - 2025-11-16
+
+### Added
+- ✅ **Shared Model List Integration** - Claudish now uses curated model list from `shared/recommended-models.md`
+  - Build process automatically extracts 11 recommended models from shared source
+  - `--list-models` command now shows all models from the shared curated list
+  - Models are auto-synced during build (no manual updates needed)
+  - Added 4 new models:
+    - `google/gemini-2.5-flash` - Advanced reasoning with built-in thinking
+    - `google/gemini-2.5-pro` - State-of-the-art reasoning
+    - `google/gemini-2.0-flash-001` - Faster TTFT, multimodal
+    - `google/gemini-2.5-flash-lite` - Ultra-low latency
+    - `deepseek/deepseek-chat-v3-0324` - 685B parameter MoE
+
+### Changed
+- **Build Process** - Now runs `extract-models` script before building
+  - Generates `src/config.ts` from shared model list
+  - Generates `src/types.ts` with model IDs
+  - Auto-generated files include warning headers
+
+### Technical Details
+- New script: `scripts/extract-models.ts` - Parses `shared/recommended-models.md` and generates TypeScript
+- Models extracted from "Quick Reference" section
+- Maintains provider, priority, name, and description metadata
+- Build command: `bun run extract-models && bun build ...`
+
+### Benefits
+- **Single Source of Truth** - All plugins and tools use the same curated model list
+- **Auto-Sync** - No manual model list updates needed
+- **Consistency** - Same models available across frontend plugin, backend plugin, and Claudish
+- **Maintainability** - Update once in `shared/recommended-models.md`, syncs everywhere
+
+---
+
 ## [1.4.1] - 2025-11-16
 
 ### Fixed
