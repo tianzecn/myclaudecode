@@ -1,7 +1,7 @@
 import { ENV } from "./config.js";
 import type { ClaudishConfig } from "./types.js";
 import { loadModelInfo, getAvailableModels } from "./model-loader.js";
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -122,6 +122,9 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
       process.exit(0);
     } else if (arg === "--help-ai") {
       printAIAgentGuide();
+      process.exit(0);
+    } else if (arg === "--init") {
+      await initializeClaudishSkill();
       process.exit(0);
     } else if (arg === "--list-models") {
       // Check for --json and --force-update flags
@@ -500,6 +503,7 @@ OPTIONS:
   --version                Show version information
   -h, --help               Show this help message
   --help-ai                Show AI agent usage guide (file-based patterns, sub-agents)
+  --init                   Install Claudish skill in current project (.claude/skills/)
 
 MODES:
   • Interactive mode (default): Shows model selector, starts persistent session
@@ -585,6 +589,85 @@ function printAIAgentGuide(): void {
     console.error("\nThe guide should be located at: AI_AGENT_GUIDE.md");
     console.error("You can also view it online at:");
     console.error("https://github.com/MadAppGang/claude-code/blob/main/mcp/claudish/AI_AGENT_GUIDE.md");
+    process.exit(1);
+  }
+}
+
+/**
+ * Initialize Claudish skill in current project
+ */
+async function initializeClaudishSkill(): Promise<void> {
+  console.log("🔧 Initializing Claudish skill in current project...\n");
+
+  // Get current working directory
+  const cwd = process.cwd();
+  const claudeDir = join(cwd, ".claude");
+  const skillsDir = join(claudeDir, "skills");
+  const claudishSkillDir = join(skillsDir, "claudish-usage");
+  const skillFile = join(claudishSkillDir, "SKILL.md");
+
+  // Check if skill already exists
+  if (existsSync(skillFile)) {
+    console.log("✅ Claudish skill already installed at:");
+    console.log(`   ${skillFile}\n`);
+    console.log("💡 To reinstall, delete the file and run 'claudish --init' again.");
+    return;
+  }
+
+  // Get source skill file from Claudish installation
+  const sourceSkillPath = join(__dirname, "../skills/claudish-usage/SKILL.md");
+
+  if (!existsSync(sourceSkillPath)) {
+    console.error("❌ Error: Claudish skill file not found in installation.");
+    console.error(`   Expected at: ${sourceSkillPath}`);
+    console.error("\n💡 Try reinstalling Claudish:");
+    console.error("   npm install -g claudish@latest");
+    process.exit(1);
+  }
+
+  try {
+    // Create directories if they don't exist
+    if (!existsSync(claudeDir)) {
+      mkdirSync(claudeDir, { recursive: true });
+      console.log("📁 Created .claude/ directory");
+    }
+
+    if (!existsSync(skillsDir)) {
+      mkdirSync(skillsDir, { recursive: true });
+      console.log("📁 Created .claude/skills/ directory");
+    }
+
+    if (!existsSync(claudishSkillDir)) {
+      mkdirSync(claudishSkillDir, { recursive: true });
+      console.log("📁 Created .claude/skills/claudish-usage/ directory");
+    }
+
+    // Copy skill file
+    copyFileSync(sourceSkillPath, skillFile);
+    console.log("✅ Installed Claudish skill at:");
+    console.log(`   ${skillFile}\n`);
+
+    // Print success message with next steps
+    console.log("━".repeat(60));
+    console.log("\n🎉 Claudish skill installed successfully!\n");
+    console.log("📋 Next steps:\n");
+    console.log("1. Reload Claude Code to discover the skill");
+    console.log("   - Restart Claude Code, or");
+    console.log("   - Re-open your project\n");
+    console.log("2. Use Claudish with external models:");
+    console.log("   - User: \"use Grok to implement feature X\"");
+    console.log("   - Claude will automatically use the skill\n");
+    console.log("💡 The skill enforces best practices:");
+    console.log("   ✅ Mandatory sub-agent delegation");
+    console.log("   ✅ File-based instruction patterns");
+    console.log("   ✅ Context window protection\n");
+    console.log("📖 For more info: claudish --help-ai\n");
+    console.log("━".repeat(60));
+
+  } catch (error) {
+    console.error("\n❌ Error installing Claudish skill:");
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error("\n💡 Make sure you have write permissions in the current directory.");
     process.exit(1);
   }
 }

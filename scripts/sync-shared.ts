@@ -3,21 +3,21 @@
 /**
  * Sync Shared Resources to Plugins
  *
- * This script copies shared resources (like recommended-models.md) from the
- * central `shared/` directory to all plugin directories.
+ * This script copies shared resources (like recommended-models.md and skills)
+ * from the central `shared/` directory to all plugin directories.
  *
  * Usage:
  *   bun run sync-shared
  *
  * What it does:
- * 1. Reads all files from shared/ directory
- * 2. Copies each file to all plugin directories
- * 3. Creates directories if they don't exist
+ * 1. Recursively reads all files from shared/ directory
+ * 2. Copies each file to all plugin directories (preserving structure)
+ * 3. Creates subdirectories if they don't exist
  * 4. Reports what was synced and any errors
  */
 
-import { readdir, copyFile, mkdir } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { readdir, copyFile, mkdir, stat } from 'node:fs/promises';
+import { join, resolve, relative } from 'node:path';
 import { existsSync } from 'node:fs';
 
 // Configuration
@@ -37,32 +37,63 @@ async function ensureDirectoryExists(dir: string): Promise<void> {
   }
 }
 
-async function syncFileToPlugins(fileName: string): Promise<SyncResult> {
+/**
+ * Recursively find all files in a directory
+ * Returns paths relative to the base directory
+ */
+async function findAllFiles(dir: string, baseDir: string = dir): Promise<string[]> {
+  const files: string[] = [];
+  const entries = await readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+
+    // Skip hidden files and directories
+    if (entry.name.startsWith('.')) {
+      continue;
+    }
+
+    if (entry.isDirectory()) {
+      // Recursively search subdirectories
+      const subFiles = await findAllFiles(fullPath, baseDir);
+      files.push(...subFiles);
+    } else if (entry.isFile()) {
+      // Add relative path from base directory
+      const relativePath = relative(baseDir, fullPath);
+      files.push(relativePath);
+    }
+  }
+
+  return files;
+}
+
+async function syncFileToPlugins(relativePath: string): Promise<SyncResult> {
   const result: SyncResult = {
-    file: fileName,
+    file: relativePath,
     destinations: [],
     errors: [],
   };
 
-  const sourcePath = join(SHARED_DIR, fileName);
+  const sourcePath = join(SHARED_DIR, relativePath);
 
   for (const pluginName of PLUGIN_NAMES) {
     const pluginDir = join(PLUGINS_DIR, pluginName);
-    const destPath = join(pluginDir, fileName);
+    const destPath = join(pluginDir, relativePath);
 
     try {
-      // Ensure plugin directory exists
-      await ensureDirectoryExists(pluginDir);
+      // Ensure parent directory exists (handles subdirectories)
+      const destDir = join(destPath, '..');
+      await ensureDirectoryExists(destDir);
 
       // Copy file
       await copyFile(sourcePath, destPath);
 
       result.destinations.push(destPath);
-      console.log(`  ✓ ${pluginName}/${fileName}`);
+      console.log(`  ✓ ${pluginName}/${relativePath}`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       result.errors.push({ plugin: pluginName, error: errorMessage });
-      console.error(`  ✗ ${pluginName}/${fileName} - ${errorMessage}`);
+      console.error(`  ✗ ${pluginName}/${relativePath} - ${errorMessage}`);
     }
   }
 
@@ -78,11 +109,8 @@ async function syncAllSharedFiles(): Promise<void> {
     process.exit(1);
   }
 
-  // Read all files from shared directory
-  const files = await readdir(SHARED_DIR, { withFileTypes: true });
-  const sharedFiles = files
-    .filter((dirent) => dirent.isFile() && !dirent.name.startsWith('.'))
-    .map((dirent) => dirent.name);
+  // Recursively find all files in shared directory
+  const sharedFiles = await findAllFiles(SHARED_DIR);
 
   if (sharedFiles.length === 0) {
     console.log('⚠️  No files found in shared/ directory');

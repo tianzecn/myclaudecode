@@ -66,6 +66,29 @@ bun link           # or: npm link
 
 ## Quick Start
 
+### Step 0: Initialize Claudish Skill (First Time Only)
+
+```bash
+# Navigate to your project directory
+cd /path/to/your/project
+
+# Install Claudish skill for automatic best practices
+claudish --init
+
+# Reload Claude Code to discover the skill
+```
+
+**What this does:**
+- ✅ Installs Claudish usage skill in `.claude/skills/claudish-usage/`
+- ✅ Enables automatic sub-agent delegation
+- ✅ Enforces file-based instruction patterns
+- ✅ Prevents context window pollution
+
+**After running --init**, Claude will automatically:
+- Use sub-agents when you mention external models (Grok, GPT-5, etc.)
+- Follow best practices for Claudish usage
+- Suggest specialized agents for different tasks
+
 ### Option 1: Interactive Mode (Easiest)
 
 ```bash
@@ -93,6 +116,83 @@ claudish --model openai/gpt-5-codex "add tests"
 
 **Note:** In interactive mode, if `OPENROUTER_API_KEY` is not set, you'll be prompted to enter it. This makes first-time usage super simple!
 
+## AI Agent Usage
+
+**For AI agents running within Claude Code:** Use the dedicated AI agent guide for comprehensive instructions on file-based patterns and sub-agent delegation.
+
+```bash
+# Print complete AI agent usage guide
+claudish --help-ai
+
+# Save guide to file for reference
+claudish --help-ai > claudish-agent-guide.md
+```
+
+**Quick Reference for AI Agents:**
+
+### Main Workflow for AI Agents
+
+1. **Get available models:**
+   ```bash
+   claudish --list-models --json
+   ```
+
+2. **Run Claudish through sub-agent** (recommended pattern):
+   ```typescript
+   // Don't run Claudish directly in main conversation
+   // Use Task tool to delegate to sub-agent
+   const result = await Task({
+     subagent_type: "general-purpose",
+     description: "Implement feature with Grok",
+     prompt: `
+   Use Claudish to implement feature with Grok model.
+
+   STEPS:
+   1. Create instruction file: /tmp/claudish-task-${Date.now()}.md
+   2. Write feature requirements to file
+   3. Run: claudish --model x-ai/grok-code-fast-1 --stdin < /tmp/claudish-task-*.md
+   4. Read result and return ONLY summary (2-3 sentences)
+
+   DO NOT return full implementation. Keep response under 300 tokens.
+     `
+   });
+   ```
+
+3. **File-based instruction pattern** (avoids context pollution):
+   ```typescript
+   // Write instructions to file
+   const instructionFile = `/tmp/claudish-task-${Date.now()}.md`;
+   const resultFile = `/tmp/claudish-result-${Date.now()}.md`;
+
+   await Write({ file_path: instructionFile, content: `
+   # Task
+   Your task description here
+
+   # Output
+   Write results to: ${resultFile}
+   ` });
+
+   // Run Claudish with stdin
+   await Bash(`claudish --model x-ai/grok-code-fast-1 --stdin < ${instructionFile}`);
+
+   // Read result
+   const result = await Read({ file_path: resultFile });
+
+   // Return summary only
+   return extractSummary(result);
+   ```
+
+**Key Principles:**
+- ✅ Use file-based patterns to avoid context window pollution
+- ✅ Delegate to sub-agents instead of running directly
+- ✅ Return summaries only (not full conversation transcripts)
+- ✅ Choose appropriate model for task (see `--list-models`)
+
+**Resources:**
+- Full AI agent guide: `claudish --help-ai`
+- Skill document: `/Users/jack/mag/claude-code/skills/claudish-usage/SKILL.md`
+- Model integration: `/Users/jack/mag/claude-code/skills/claudish-integration/SKILL.md`
+
 ## Usage
 
 ### Basic Syntax
@@ -115,6 +215,8 @@ claudish [OPTIONS] <claude-args...>
 | `--no-auto-approve` | Disable auto-approve (require prompts) | Auto-approve **enabled** |
 | `--dangerous` | Pass `--dangerouslyDisableSandbox` | `false` |
 | `--list-models` | List available models | - |
+| `--init` | Install Claudish skill in current project | - |
+| `--help-ai` | Show AI agent usage guide | - |
 | `-h, --help` | Show help message | - |
 
 ### Environment Variables

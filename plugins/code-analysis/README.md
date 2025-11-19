@@ -9,19 +9,39 @@ Centralized management of common resources to ensure consistency and reduce dupl
 ## Architecture
 
 ```
-shared/                          ← SOURCE OF TRUTH (edit here)
-└── recommended-models.md        ← Model recommendations
+shared/                                    ← SOURCE OF TRUTH (edit here)
+├── recommended-models.md                  ← Model recommendations
+├── QUICK_REFERENCE_SPEC.md                ← Quick reference spec
+├── README.md                              ← This file
+└── skills/                                ← Shared skills
+    └── claudish-usage/                    ← Claudish usage skill
+        └── SKILL.md                       ← AUTO-DISTRIBUTED
 
 scripts/
-└── sync-shared.ts               ← Distribution script
+└── sync-shared.ts                         ← Distribution script (recursive)
 
 plugins/
 ├── frontend/
-│   └── recommended-models.md    ← AUTO-COPIED
+│   ├── recommended-models.md              ← AUTO-COPIED
+│   ├── QUICK_REFERENCE_SPEC.md            ← AUTO-COPIED
+│   ├── README.md                          ← AUTO-COPIED
+│   └── skills/                            ← AUTO-CREATED
+│       └── claudish-usage/                ← AUTO-CREATED
+│           └── SKILL.md                   ← AUTO-COPIED
 ├── bun/
-│   └── recommended-models.md    ← AUTO-COPIED
+│   ├── recommended-models.md              ← AUTO-COPIED
+│   ├── QUICK_REFERENCE_SPEC.md            ← AUTO-COPIED
+│   ├── README.md                          ← AUTO-COPIED
+│   └── skills/                            ← AUTO-CREATED
+│       └── claudish-usage/                ← AUTO-CREATED
+│           └── SKILL.md                   ← AUTO-COPIED
 └── code-analysis/
-    └── recommended-models.md    ← AUTO-COPIED
+    ├── recommended-models.md              ← AUTO-COPIED
+    ├── QUICK_REFERENCE_SPEC.md            ← AUTO-COPIED
+    ├── README.md                          ← AUTO-COPIED
+    └── skills/                            ← AUTO-CREATED
+        └── claudish-usage/                ← AUTO-CREATED
+            └── SKILL.md                   ← AUTO-COPIED
 ```
 
 ## How It Works
@@ -60,19 +80,94 @@ The sync script copies each file from `shared/` to all plugin directories:
 
 Commands and agents read the synced files using plugin-relative paths:
 
+**For flat files:**
 ```markdown
 Read file: ${CLAUDE_PLUGIN_ROOT}/recommended-models.md
 ```
 
-This ensures each plugin always has access to the latest recommendations.
+**For skills:**
+```markdown
+Read file: ${CLAUDE_PLUGIN_ROOT}/skills/claudish-usage/SKILL.md
+```
+
+This ensures each plugin always has access to the latest recommendations and shared skills.
+
+## Shared Skills
+
+### What are Shared Skills?
+
+Shared skills are reusable knowledge modules that are distributed across all plugins. They provide:
+- ✅ Consistent guidance across plugins
+- ✅ Centralized knowledge management
+- ✅ Automatic updates when skills are improved
+- ✅ Reduced duplication
+
+### Current Shared Skills
+
+1. **claudish-usage** (`skills/claudish-usage/SKILL.md`)
+   - How to use Claudish CLI with OpenRouter models
+   - File-based sub-agent patterns
+   - Model selection and cost tracking
+   - Best practices for AI agents
+
+### Adding New Shared Skills
+
+1. Create skill directory: `shared/skills/skill-name/`
+2. Add `SKILL.md` file with YAML frontmatter:
+   ```yaml
+   ---
+   name: skill-name
+   description: Clear description of what the skill does and when to use it
+   ---
+   ```
+3. Write skill content (instructions, examples, best practices)
+4. Run `bun run sync-shared`
+5. Skill is automatically distributed to all plugins and discovered by Claude
+
+### Using Shared Skills in Commands/Agents
+
+**Skills are automatically discovered** - Claude loads them based on the task at hand.
+
+Skills must have YAML frontmatter with `name` and `description`:
+```yaml
+---
+name: claudish-usage
+description: Guide for using Claudish CLI to run Claude Code with OpenRouter models. Use when working with external AI models, multi-model workflows, or cost optimization.
+---
+```
+
+**How it works:**
+1. **Startup**: Skill metadata (name + description) loaded into system prompt (~100 tokens/skill)
+2. **Task matching**: When user request matches description, Claude automatically reads SKILL.md via bash
+3. **Progressive loading**: Claude only loads relevant skills, avoiding context pollution
+
+**You do NOT need to:**
+- ❌ Manually read skill files with `Read` tool
+- ❌ Reference skills in agent/command prompts
+- ❌ Load skills into context explicitly
+
+**Claude automatically uses skills when:**
+- ✅ Task matches the skill's description
+- ✅ User mentions keywords from description (e.g., "Claudish", "OpenRouter", "Grok")
+- ✅ Workflow requires skill's capabilities
+
+**Example**: User asks "use Grok to implement feature X"
+1. Claude recognizes "Grok" matches `claudish-usage` skill description
+2. Automatically reads `skills/claudish-usage/SKILL.md` via bash
+3. Uses skill guidance to complete the task
+
+**Only reference skills explicitly if:**
+- You need to pass skill content to a sub-agent that doesn't have skill access
+- You're building a tool that needs to extract skill metadata
+- You're debugging or testing skill content
 
 ## Maintaining Shared Resources
 
 ### Adding New Shared Files
 
-1. Create the file in `shared/` directory
+1. Create the file in `shared/` directory (or subdirectory)
 2. Run `bun run sync-shared`
-3. File is automatically copied to all plugins
+3. File is automatically copied to all plugins (preserving directory structure)
 4. Update plugin commands/agents to use the new file
 
 ### Updating Existing Files
@@ -126,16 +221,22 @@ Shared markdown files should be:
 
 This pattern can be extended to other shared resources:
 
-- **API Schema Templates** - Standard OpenAPI schemas
-- **Best Practices Snippets** - Common code patterns
-- **Configuration Templates** - Standard configs (tsconfig, biome, etc.)
-- **Testing Patterns** - Standard test structures
-- **Documentation Templates** - Standard doc formats
+**Current Shared Resources:**
+- ✅ **Skills** - Reusable knowledge modules (skills/claudish-usage/)
+- ✅ **Model Recommendations** - OpenRouter model data (recommended-models.md)
+- ✅ **Quick Reference** - Spec templates (QUICK_REFERENCE_SPEC.md)
+
+**Future Shared Resources:**
+- **API Schema Templates** - Standard OpenAPI schemas (schemas/)
+- **Best Practices Snippets** - Common code patterns (snippets/)
+- **Configuration Templates** - Standard configs (templates/)
+- **Testing Patterns** - Standard test structures (patterns/)
+- **Documentation Templates** - Standard doc formats (docs/)
 
 To add a new shared resource:
-1. Create file in `shared/`
-2. Run `bun run sync-shared`
-3. Update plugin files to reference it
+1. Create file/directory in `shared/`
+2. Run `bun run sync-shared` (handles subdirectories automatically)
+3. Update plugin files to reference it using `${CLAUDE_PLUGIN_ROOT}/path/to/file`
 4. Document in this README
 
 ## Troubleshooting
