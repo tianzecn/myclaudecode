@@ -1,7 +1,7 @@
 import { ENV } from "./config.js";
 import type { ClaudishConfig } from "./types.js";
 import { loadModelInfo, getAvailableModels } from "./model-loader.js";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -16,7 +16,7 @@ const VERSION = packageJson.version;
 /**
  * Parse CLI arguments and environment variables
  */
-export function parseArgs(args: string[]): ClaudishConfig {
+export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
   const config: Partial<ClaudishConfig> = {
     model: undefined, // Will prompt interactively if not provided
     autoApprove: true, // Skip permissions by default (--dangerously-skip-permissions)
@@ -121,8 +121,13 @@ export function parseArgs(args: string[]): ClaudishConfig {
       printHelp();
       process.exit(0);
     } else if (arg === "--list-models") {
-      // Check if --json flag is present anywhere in the args
+      // Check for --json and --force-update flags
       const hasJsonFlag = args.includes("--json");
+      const forceUpdate = args.includes("--force-update");
+
+      // Auto-update if cache is stale (>2 days) or if --force-update is specified
+      await checkAndUpdateModelsCache(forceUpdate);
+
       if (hasJsonFlag) {
         printAvailableModelsJSON();
       } else {
@@ -203,6 +208,198 @@ export function parseArgs(args: string[]): ClaudishConfig {
 }
 
 /**
+ * Cache Management Constants
+ */
+const CACHE_MAX_AGE_DAYS = 2;
+const MODELS_JSON_PATH = join(__dirname, "../recommended-models.json");
+
+/**
+ * Check if models cache is stale (older than CACHE_MAX_AGE_DAYS)
+ */
+function isCacheStale(): boolean {
+  if (!existsSync(MODELS_JSON_PATH)) {
+    return true; // No cache file = stale
+  }
+
+  try {
+    const jsonContent = readFileSync(MODELS_JSON_PATH, "utf-8");
+    const data = JSON.parse(jsonContent);
+
+    if (!data.lastUpdated) {
+      return true; // No timestamp = stale
+    }
+
+    const lastUpdated = new Date(data.lastUpdated);
+    const now = new Date();
+    const ageInDays = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24);
+
+    return ageInDays > CACHE_MAX_AGE_DAYS;
+  } catch (error) {
+    // If we can't read/parse, consider it stale
+    return true;
+  }
+}
+
+/**
+ * Fetch models from OpenRouter API and update recommended-models.json
+ */
+async function updateModelsFromOpenRouter(): Promise<void> {
+  console.error("🔄 Updating model recommendations from OpenRouter...");
+
+  try {
+    // Fetch from OpenRouter API
+    const response = await fetch("https://openrouter.ai/api/v1/models");
+
+    if (!response.ok) {
+      throw new Error(`OpenRouter API returned ${response.status}`);
+    }
+
+    const openrouterData = await response.json();
+
+    // Filter and categorize models
+    const trendingModels = openrouterData.data
+      .filter((m: any) => {
+        // Exclude Anthropic models (Claude available natively)
+        if (m.id.startsWith("anthropic/")) return false;
+
+        // Only include generally available models with pricing
+        if (!m.pricing) return false;
+
+        return true;
+      })
+      .sort((a: any, b: any) => {
+        // Sort by context window descending (prefer larger context)
+        return (b.context_length || 0) - (a.context_length || 0);
+      })
+      .slice(0, 30); // Get top 30 models
+
+    // Categorize and select recommendations
+    const recommendations: any[] = [];
+    const categories = {
+      coding: 0,
+      reasoning: 0,
+      vision: 0,
+      budget: 0
+    };
+    const providers = new Set<string>();
+
+    for (const model of trendingModels) {
+      const id = model.id;
+      const provider = id.split("/")[0];
+      const name = model.name || id;
+      const description = model.description || "";
+
+      // Determine category based on keywords
+      let category = "reasoning"; // default
+      const lowerDesc = description.toLowerCase() + " " + name.toLowerCase();
+
+      if (lowerDesc.includes("code") || lowerDesc.includes("coding")) {
+        category = "coding";
+      } else if (lowerDesc.includes("vision") || lowerDesc.includes("vl-") || lowerDesc.includes("multimodal")) {
+        category = "vision";
+      } else if (model.pricing.prompt === "0" && model.pricing.completion === "0") {
+        category = "budget";
+      }
+
+      // Balance: max 2 per provider, min 1 per category
+      const providerCount = Array.from(providers).filter(p => p === provider).length;
+      if (providerCount >= 2 && categories[category as keyof typeof categories] >= 1) {
+        continue;
+      }
+
+      // Calculate pricing
+      const inputPrice = model.pricing.prompt ? `$${(parseFloat(model.pricing.prompt) * 1000000).toFixed(2)}/1M` : "N/A";
+      const outputPrice = model.pricing.completion ? `$${(parseFloat(model.pricing.completion) * 1000000).toFixed(2)}/1M` : "N/A";
+      const avgPrice = model.pricing.prompt && model.pricing.completion
+        ? `$${((parseFloat(model.pricing.prompt) + parseFloat(model.pricing.completion)) / 2 * 1000000).toFixed(2)}/1M`
+        : "N/A";
+
+      recommendations.push({
+        id,
+        name,
+        description: description || `${name} model`,
+        provider: provider.charAt(0).toUpperCase() + provider.slice(1),
+        category,
+        priority: recommendations.length + 1,
+        pricing: {
+          input: inputPrice,
+          output: outputPrice,
+          average: avgPrice === "N/A" && category === "budget" ? "FREE" : avgPrice
+        },
+        context: model.context_length ? `${Math.floor(model.context_length / 1000)}K` : "N/A",
+        recommended: true
+      });
+
+      categories[category as keyof typeof categories]++;
+      providers.add(provider);
+
+      // Stop when we have 7-10 models with good balance
+      if (recommendations.length >= 7 &&
+          categories.coding >= 1 &&
+          categories.reasoning >= 1 &&
+          categories.vision >= 1) {
+        break;
+      }
+
+      if (recommendations.length >= 10) {
+        break;
+      }
+    }
+
+    // Read existing version if available
+    let version = "1.1.5"; // default
+    if (existsSync(MODELS_JSON_PATH)) {
+      try {
+        const existing = JSON.parse(readFileSync(MODELS_JSON_PATH, "utf-8"));
+        version = existing.version || version;
+      } catch {
+        // Use default version
+      }
+    }
+
+    // Create new JSON structure
+    const updatedData = {
+      version,
+      lastUpdated: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
+      source: "https://openrouter.ai/api/v1/models",
+      models: recommendations
+    };
+
+    // Write to file
+    writeFileSync(MODELS_JSON_PATH, JSON.stringify(updatedData, null, 2), "utf-8");
+
+    console.error(`✅ Updated ${recommendations.length} models (last updated: ${updatedData.lastUpdated})`);
+  } catch (error) {
+    console.error(`❌ Failed to update models: ${error instanceof Error ? error.message : String(error)}`);
+    console.error("   Using cached models (if available)");
+  }
+}
+
+/**
+ * Check cache staleness and update if needed
+ */
+async function checkAndUpdateModelsCache(forceUpdate: boolean = false): Promise<void> {
+  if (forceUpdate) {
+    console.error("🔄 Force update requested...");
+    await updateModelsFromOpenRouter();
+    return;
+  }
+
+  if (isCacheStale()) {
+    console.error("⚠️  Model cache is stale (>2 days old), updating...");
+    await updateModelsFromOpenRouter();
+  } else {
+    // Cache is fresh, show timestamp in stderr (won't affect JSON output)
+    try {
+      const data = JSON.parse(readFileSync(MODELS_JSON_PATH, "utf-8"));
+      console.error(`✓ Using cached models (last updated: ${data.lastUpdated})`);
+    } catch {
+      // Silently fallthrough if can't read
+    }
+  }
+}
+
+/**
  * Print version information
  */
 function printVersion(): void {
@@ -236,8 +433,9 @@ OPTIONS:
   --cost-tracker           Enable cost tracking for API usage (NB!)
   --audit-costs            Show cost analysis report
   --reset-costs            Reset accumulated cost statistics
-  --list-models            List available OpenRouter models
+  --list-models            List available OpenRouter models (auto-updates if stale >2 days)
   --list-models --json     Output model list in JSON format
+  --force-update           Force refresh model cache from OpenRouter API
   --version                Show version information
   -h, --help               Show this help message
 
@@ -300,8 +498,10 @@ EXAMPLES:
   claudish --verbose "analyze code structure"
 
 AVAILABLE MODELS:
-  Run: claudish --list-models
+  List models: claudish --list-models
   JSON output: claudish --list-models --json
+  Force update: claudish --list-models --force-update
+  (Cache auto-updates every 2 days)
 
 MORE INFO:
   GitHub: https://github.com/MadAppGang/claude-code
@@ -313,7 +513,18 @@ MORE INFO:
  * Print available models
  */
 function printAvailableModels(): void {
-  console.log("\nAvailable OpenRouter Models (in priority order):\n");
+  // Try to read lastUpdated from JSON file
+  let lastUpdated = "unknown";
+  try {
+    if (existsSync(MODELS_JSON_PATH)) {
+      const data = JSON.parse(readFileSync(MODELS_JSON_PATH, "utf-8"));
+      lastUpdated = data.lastUpdated || "unknown";
+    }
+  } catch {
+    // Use default if can't read
+  }
+
+  console.log(`\nAvailable OpenRouter Models (last updated: ${lastUpdated}):\n`);
 
   const models = getAvailableModels();
   const modelInfo = loadModelInfo();
@@ -327,7 +538,8 @@ function printAvailableModels(): void {
 
   console.log("Set default with: export CLAUDISH_MODEL=<model>");
   console.log("               or: export ANTHROPIC_MODEL=<model>");
-  console.log("Or use: claudish --model <model> ...\n");
+  console.log("Or use: claudish --model <model> ...");
+  console.log("\nForce update: claudish --list-models --force-update\n");
 }
 
 /**

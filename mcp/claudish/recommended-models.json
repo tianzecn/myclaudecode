@@ -1,111 +1,111 @@
 {
   "version": "1.1.5",
-  "lastUpdated": "2025-11-16",
-  "source": "shared/recommended-models.md",
+  "lastUpdated": "2025-11-19",
+  "source": "https://openrouter.ai/api/v1/models",
   "models": [
     {
-      "id": "x-ai/grok-code-fast-1",
-      "name": "Grok Code Fast 1",
-      "description": "Ultra-fast agentic coding with visible reasoning traces",
-      "provider": "xAI",
-      "category": "coding",
+      "id": "x-ai/grok-4-fast",
+      "name": "xAI: Grok 4 Fast",
+      "description": "Grok 4 Fast is xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window. It comes in two flavors: non-reasoning and reasoning. Read more about the model on xAI's [news post](http://x.ai/news/grok-4-fast). Reasoning can be enabled using the `reasoning` `enabled` parameter in the API. [Learn more in our docs](https://openrouter.ai/docs/use-cases/reasoning-tokens#controlling-reasoning-tokens)",
+      "provider": "X-ai",
+      "category": "vision",
       "priority": 1,
       "pricing": {
         "input": "$0.20/1M",
-        "output": "$1.50/1M",
-        "average": "$0.85/1M"
+        "output": "$0.50/1M",
+        "average": "$0.35/1M"
       },
-      "context": "256K",
+      "context": "2000K",
       "recommended": true
     },
     {
-      "id": "minimax/minimax-m2",
-      "name": "MiniMax M2",
-      "description": "Compact high-efficiency model (10B activated, 230B total) for end-to-end coding",
-      "provider": "MiniMax",
-      "category": "coding",
+      "id": "openrouter/auto",
+      "name": "Auto Router",
+      "description": "Your prompt will be processed by a meta-model and routed to one of dozens of models (see below), optimizing for the best possible output.\n\nTo see which model was used, visit [Activity](/activity), or read the `model` attribute of the response. Your response will be priced at the same rate as the routed model.\n\nThe meta-model is powered by [Not Diamond](https://docs.notdiamond.ai/docs/how-not-diamond-works). Learn more in our [docs](/docs/model-routing).\n\nRequests will be routed to the following models:\n- [openai/gpt-5](/openai/gpt-5)\n- [openai/gpt-5-mini](/openai/gpt-5-mini)\n- [openai/gpt-5-nano](/openai/gpt-5-nano)\n- [openai/gpt-4.1-nano](/openai/gpt-4.1-nano)\n- [openai/gpt-4.1](/openai/gpt-4.1)\n- [openai/gpt-4.1-mini](/openai/gpt-4.1-mini)\n- [openai/gpt-4.1](/openai/gpt-4.1)\n- [openai/gpt-4o-mini](/openai/gpt-4o-mini)\n- [openai/chatgpt-4o-latest](/openai/chatgpt-4o-latest)\n- [anthropic/claude-3.5-haiku](/anthropic/claude-3.5-haiku)\n- [anthropic/claude-opus-4-1](/anthropic/claude-opus-4-1)\n- [anthropic/claude-sonnet-4-0](/anthropic/claude-sonnet-4-0)\n- [anthropic/claude-3-7-sonnet-latest](/anthropic/claude-3-7-sonnet-latest)\n- [google/gemini-2.5-pro](/google/gemini-2.5-pro)\n- [google/gemini-2.5-flash](/google/gemini-2.5-flash)\n- [mistral/mistral-large-latest](/mistral/mistral-large-latest)\n- [mistral/mistral-medium-latest](/mistral/mistral-medium-latest)\n- [mistral/mistral-small-latest](/mistral/mistral-small-latest)\n- [mistralai/mistral-nemo](/mistralai/mistral-nemo)\n- [x-ai/grok-3](/x-ai/grok-3)\n- [x-ai/grok-3-mini](/x-ai/grok-3-mini)\n- [x-ai/grok-4](/x-ai/grok-4)\n- [deepseek/deepseek-r1](/deepseek/deepseek-r1)\n- [meta-llama/llama-3.1-70b-instruct](/meta-llama/llama-3.1-70b-instruct)\n- [meta-llama/llama-3.1-405b-instruct](/meta-llama/llama-3.1-405b-instruct)\n- [mistralai/mixtral-8x22b-instruct](/mistralai/mixtral-8x22b-instruct)\n- [perplexity/sonar](/perplexity/sonar)\n- [cohere/command-r-plus](/cohere/command-r-plus)\n- [cohere/command-r](/cohere/command-r)",
+      "provider": "Openrouter",
+      "category": "reasoning",
       "priority": 2,
       "pricing": {
-        "input": "$0.255/1M",
-        "output": "$1.02/1M",
-        "average": "$0.64/1M"
+        "input": "$-1000000.00/1M",
+        "output": "$-1000000.00/1M",
+        "average": "$-1000000.00/1M"
       },
-      "context": "205K",
+      "context": "2000K",
       "recommended": true
     },
     {
-      "id": "google/gemini-2.5-flash",
-      "name": "Gemini 2.5 Flash",
-      "description": "State-of-the-art workhorse for advanced reasoning, coding, and vision with built-in thinking",
-      "provider": "Google",
-      "category": "reasoning",
+      "id": "openrouter/sherlock-dash-alpha",
+      "name": "Sherlock Dash Alpha",
+      "description": "This is a cloaked model provided to the community to gather feedback. A frontier non-reasoning model that excels at tool calling, with a 1.8M context window and multimodal support.\n\n**Note:** All prompts and completions for this model are logged by the provider and may be used to improve the model.",
+      "provider": "Openrouter",
+      "category": "vision",
       "priority": 3,
+      "pricing": {
+        "input": "$0.00/1M",
+        "output": "$0.00/1M",
+        "average": "$0.00/1M"
+      },
+      "context": "1840K",
+      "recommended": true
+    },
+    {
+      "id": "openrouter/sherlock-think-alpha",
+      "name": "Sherlock Think Alpha",
+      "description": "This is a cloaked model provided to the community to gather feedback. A frontier reasoning model that excels at tool calling, with a 1.8M context window and multimodal support.\n\n**Note:** All prompts and completions for this model are logged by the provider and may be used to improve the model.",
+      "provider": "Openrouter",
+      "category": "vision",
+      "priority": 4,
+      "pricing": {
+        "input": "$0.00/1M",
+        "output": "$0.00/1M",
+        "average": "$0.00/1M"
+      },
+      "context": "1840K",
+      "recommended": true
+    },
+    {
+      "id": "google/gemini-3-pro-preview",
+      "name": "Google: Gemini 3 Pro Preview",
+      "description": "Gemini 3 Pro is Google’s flagship frontier model for high-precision multimodal reasoning, combining strong performance across text, image, video, audio, and code with a 1M-token context window. Reasoning Details must be preserved when using multi-turn tool calling, see our docs here: https://openrouter.ai/docs/use-cases/reasoning-tokens#preserving-reasoning-blocks. It delivers state-of-the-art benchmark results in general reasoning, STEM problem solving, factual QA, and multimodal understanding, including leading scores on LMArena, GPQA Diamond, MathArena Apex, MMMU-Pro, and Video-MMMU. Interactions emphasize depth and interpretability: the model is designed to infer intent with minimal prompting and produce direct, insight-focused responses.\n\nBuilt for advanced development and agentic workflows, Gemini 3 Pro provides robust tool-calling, long-horizon planning stability, and strong zero-shot generation for complex UI, visualization, and coding tasks. It excels at agentic coding (SWE-Bench Verified, Terminal-Bench 2.0), multimodal analysis, and structured long-form tasks such as research synthesis, planning, and interactive learning experiences. Suitable applications include autonomous agents, coding assistants, multimodal analytics, scientific reasoning, and high-context information processing.",
+      "provider": "Google",
+      "category": "coding",
+      "priority": 5,
+      "pricing": {
+        "input": "$2.00/1M",
+        "output": "$12.00/1M",
+        "average": "$7.00/1M"
+      },
+      "context": "1048K",
+      "recommended": true
+    },
+    {
+      "id": "moonshotai/kimi-linear-48b-a3b-instruct",
+      "name": "MoonshotAI: Kimi Linear 48B A3B Instruct",
+      "description": "Kimi Linear is a hybrid linear attention architecture that outperforms traditional full attention methods across various contexts, including short, long, and reinforcement learning (RL) scaling regimes. At its core is Kimi Delta Attention (KDA)—a refined version of Gated DeltaNet that introduces a more efficient gating mechanism to optimize the use of finite-state RNN memory.\n\nKimi Linear achieves superior performance and hardware efficiency, especially for long-context tasks. It reduces the need for large KV caches by up to 75% and boosts decoding throughput by up to 6x for contexts as long as 1M tokens.",
+      "provider": "Moonshotai",
+      "category": "coding",
+      "priority": 6,
+      "pricing": {
+        "input": "$0.50/1M",
+        "output": "$0.60/1M",
+        "average": "$0.55/1M"
+      },
+      "context": "1048K",
+      "recommended": true
+    },
+    {
+      "id": "google/gemini-2.5-flash-preview-09-2025",
+      "name": "Google: Gemini 2.5 Flash Preview 09-2025",
+      "description": "Gemini 2.5 Flash Preview September 2025 Checkpoint is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in \"thinking\" capabilities, enabling it to provide responses with greater accuracy and nuanced context handling. \n\nAdditionally, Gemini 2.5 Flash is configurable through the \"max tokens for reasoning\" parameter, as described in the documentation (https://openrouter.ai/docs/use-cases/reasoning-tokens#max-tokens-for-reasoning).",
+      "provider": "Google",
+      "category": "coding",
+      "priority": 7,
       "pricing": {
         "input": "$0.30/1M",
         "output": "$2.50/1M",
         "average": "$1.40/1M"
       },
-      "context": "1M",
-      "recommended": true
-    },
-    {
-      "id": "openrouter/polaris-alpha",
-      "name": "Polaris Alpha",
-      "description": "FREE experimental cloaked model (early GPT-5.1 snapshot). Excels at coding. Logs all usage",
-      "provider": "OpenRouter",
-      "category": "budget",
-      "priority": 4,
-      "pricing": {
-        "input": "FREE",
-        "output": "FREE",
-        "average": "FREE"
-      },
-      "context": "256K",
-      "recommended": true
-    },
-    {
-      "id": "openai/gpt-5",
-      "name": "GPT-5",
-      "description": "OpenAI's most advanced model with major improvements in reasoning and reduced hallucination",
-      "provider": "OpenAI",
-      "category": "reasoning",
-      "priority": 5,
-      "pricing": {
-        "input": "$1.25/1M",
-        "output": "$10.00/1M",
-        "average": "$5.63/1M"
-      },
-      "context": "400K",
-      "recommended": true
-    },
-    {
-      "id": "openai/gpt-5.1-codex",
-      "name": "GPT-5.1 Codex",
-      "description": "Specialized GPT-5.1 optimized for software engineering and coding workflows",
-      "provider": "OpenAI",
-      "category": "reasoning",
-      "priority": 6,
-      "pricing": {
-        "input": "$1.25/1M",
-        "output": "$10.00/1M",
-        "average": "$5.63/1M"
-      },
-      "context": "400K",
-      "recommended": true
-    },
-    {
-      "id": "qwen/qwen3-vl-235b-a22b-instruct",
-      "name": "Qwen3 VL 235B A22B Instruct",
-      "description": "Open-weight multimodal with strong text and visual understanding, multilingual OCR",
-      "provider": "Qwen",
-      "category": "vision",
-      "priority": 7,
-      "pricing": {
-        "input": "$0.22/1M",
-        "output": "$0.88/1M",
-        "average": "$0.55/1M"
-      },
-      "context": "262K",
+      "context": "1048K",
       "recommended": true
     }
   ]

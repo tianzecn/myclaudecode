@@ -24,7 +24,7 @@ async function readStdin(): Promise<string> {
 async function main() {
   try {
     // Parse CLI arguments
-    const config = parseArgs(process.argv.slice(2));
+    const config = await parseArgs(process.argv.slice(2));
 
     // Initialize logger if debug mode with specified log level
     initLogger(config.debug, config.logLevel);
