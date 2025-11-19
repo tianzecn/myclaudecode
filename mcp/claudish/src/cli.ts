@@ -523,32 +523,68 @@ MORE INFO:
 }
 
 /**
- * Print available models
+ * Print available models in enhanced table format
  */
 function printAvailableModels(): void {
-  // Try to read lastUpdated from JSON file
+  // Try to read enhanced model data from JSON file
   let lastUpdated = "unknown";
+  let models: any[] = [];
+
   try {
     if (existsSync(MODELS_JSON_PATH)) {
       const data = JSON.parse(readFileSync(MODELS_JSON_PATH, "utf-8"));
       lastUpdated = data.lastUpdated || "unknown";
+      models = data.models || [];
     }
   } catch {
-    // Use default if can't read
+    // Fallback to basic model list
+    const basicModels = getAvailableModels();
+    const modelInfo = loadModelInfo();
+    for (const model of basicModels) {
+      const info = modelInfo[model];
+      console.log(`  ${model}`);
+      console.log(`    ${info.name} - ${info.description}`);
+      console.log("");
+    }
+    return;
   }
 
   console.log(`\nAvailable OpenRouter Models (last updated: ${lastUpdated}):\n`);
 
-  const models = getAvailableModels();
-  const modelInfo = loadModelInfo();
+  // Table header
+  console.log("  Model                          Provider    Pricing         Context  Capabilities");
+  console.log("  " + "─".repeat(90));
 
+  // Table rows
   for (const model of models) {
-    const info = modelInfo[model];
-    console.log(`  ${model}`);
-    console.log(`    ${info.name} - ${info.description}`);
-    console.log("");
+    // Format model ID (truncate if too long)
+    const modelId = model.id.length > 30 ? model.id.substring(0, 27) + "..." : model.id;
+    const modelIdPadded = modelId.padEnd(30);
+
+    // Format provider (max 10 chars)
+    const provider = model.provider.length > 10 ? model.provider.substring(0, 7) + "..." : model.provider;
+    const providerPadded = provider.padEnd(10);
+
+    // Format pricing (average)
+    const pricing = model.pricing?.average || "N/A";
+    const pricingPadded = pricing.padEnd(14);
+
+    // Format context
+    const context = model.context || "N/A";
+    const contextPadded = context.padEnd(7);
+
+    // Capabilities emojis
+    const tools = model.supportsTools ? "🔧" : "  ";
+    const reasoning = model.supportsReasoning ? "🧠" : "  ";
+    const vision = model.supportsVision ? "👁️ " : "  ";
+    const capabilities = `${tools} ${reasoning} ${vision}`;
+
+    console.log(`  ${modelIdPadded} ${providerPadded} ${pricingPadded} ${contextPadded} ${capabilities}`);
   }
 
+  console.log("");
+  console.log("  Capabilities: 🔧 Tools  🧠 Reasoning  👁️  Vision");
+  console.log("");
   console.log("Set default with: export CLAUDISH_MODEL=<model>");
   console.log("               or: export ANTHROPIC_MODEL=<model>");
   console.log("Or use: claudish --model <model> ...");
