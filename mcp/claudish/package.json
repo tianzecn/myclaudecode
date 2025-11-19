@@ -1,6 +1,6 @@
 {
   "name": "claudish",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "CLI tool to run Claude Code with any OpenRouter model (Grok, GPT-5, MiniMax, etc.) via local Anthropic API-compatible proxy",
   "type": "module",
   "main": "./dist/index.js",
@@ -35,7 +35,9 @@
   },
   "files": [
     "dist/",
-    "scripts/"
+    "scripts/",
+    "AI_AGENT_GUIDE.md",
+    "recommended-models.json"
   ],
   "engines": {
     "node": ">=18.0.0",

@@ -120,6 +120,9 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
     } else if (arg === "--help" || arg === "-h") {
       printHelp();
       process.exit(0);
+    } else if (arg === "--help-ai") {
+      printAIAgentGuide();
+      process.exit(0);
     } else if (arg === "--list-models") {
       // Check for --json and --force-update flags
       const hasJsonFlag = args.includes("--json");
@@ -241,96 +244,156 @@ function isCacheStale(): boolean {
 }
 
 /**
- * Fetch models from OpenRouter API and update recommended-models.json
+ * Fetch models from OpenRouter and update recommended-models.json
+ *
+ * IMPORTANT: This function matches the exact models shown on OpenRouter's programming page:
+ * https://openrouter.ai/models?categories=programming&fmt=cards&order=top-weekly
+ *
+ * **Why hardcoded list?**
+ * The OpenRouter website uses client-side rendering (React/Next.js), making it impossible
+ * to scrape the HTML with simple HTTP requests. The API doesn't expose the "top-weekly"
+ * ranking either. Therefore, we maintain a manually curated list based on the website.
+ *
+ * **Filtering rules:**
+ * 1. Match the top 10 models from the "Top Weekly" programming category (verified manually)
+ * 2. Take only ONE model per provider (the top-ranked one)
+ *
+ * **Maintenance:** Update this list when the OpenRouter website rankings change.
+ * Last verified: 2025-11-19
  */
 async function updateModelsFromOpenRouter(): Promise<void> {
   console.error("🔄 Updating model recommendations from OpenRouter...");
 
   try {
-    // Fetch from OpenRouter API
-    const response = await fetch("https://openrouter.ai/api/v1/models");
+    // Top Weekly Programming Models (manually verified from the website)
+    // Source: https://openrouter.ai/models?categories=programming&fmt=cards&order=top-weekly
+    // Last verified: 2025-11-19
+    //
+    // This list represents the EXACT ranking shown on OpenRouter's website.
+    // The website is client-side rendered (React), so we can't scrape it with HTTP.
+    // The API doesn't expose the "top-weekly" ranking, so we maintain this manually.
+    const topWeeklyProgrammingModels = [
+      "x-ai/grok-code-fast-1",            // #1: xAI Grok Code Fast 1
+      "anthropic/claude-sonnet-4.5",      // #2: Anthropic Claude Sonnet 4.5
+      "google/gemini-2.5-flash",          // #3: Google Gemini 2.5 Flash
+      "minimax/minimax-m2",               // #4: MiniMax M2
+      "anthropic/claude-sonnet-4",        // #5: Anthropic Claude Sonnet 4
+      "z-ai/glm-4.6",                     // #6: Z.AI GLM 4.6
+      "anthropic/claude-haiku-4.5",       // #7: Anthropic Claude Haiku 4.5
+      "openai/gpt-5",                     // #8: OpenAI GPT-5
+      "qwen/qwen3-vl-235b-a22b-instruct", // #9: Qwen3 VL 235B
+      "openrouter/polaris-alpha",         // #10: Polaris Alpha (OpenRouter experimental)
+    ];
 
-    if (!response.ok) {
-      throw new Error(`OpenRouter API returned ${response.status}`);
+    // Fetch model metadata from OpenRouter API
+    const apiResponse = await fetch("https://openrouter.ai/api/v1/models");
+    if (!apiResponse.ok) {
+      throw new Error(`OpenRouter API returned ${apiResponse.status}`);
     }
 
-    const openrouterData = await response.json();
+    const openrouterData = await apiResponse.json();
+    const allModels = openrouterData.data;
 
-    // Filter and categorize models
-    const trendingModels = openrouterData.data
-      .filter((m: any) => {
-        // Exclude Anthropic models (Claude available natively in Claude Code)
-        if (m.id.startsWith("anthropic/")) return false;
+    // Build a map for quick lookup
+    const modelMap = new Map();
+    for (const model of allModels) {
+      modelMap.set(model.id, model);
+    }
 
-        // Only include generally available models with pricing
-        if (!m.pricing) return false;
-
-        return true;
-      })
-      .sort((a: any, b: any) => {
-        // Sort by context window descending (prefer larger context)
-        return (b.context_length || 0) - (a.context_length || 0);
-      })
-      .slice(0, 50); // Get top 50 models for better selection
-
-    // Categorize and select recommendations
+    // Build recommendations list following the exact website ranking
     const recommendations: any[] = [];
-    const categories = {
-      coding: 0,
-      reasoning: 0,
-      vision: 0,
-      budget: 0
-    };
     const providers = new Set<string>();
 
-    for (const model of trendingModels) {
-      const id = model.id;
-      const provider = id.split("/")[0];
-      const name = model.name || id;
-      const description = model.description || "";
+    for (const modelId of topWeeklyProgrammingModels) {
+      const provider = modelId.split("/")[0];
 
-      // Determine category based on keywords
-      let category = "reasoning"; // default
-      const lowerDesc = description.toLowerCase() + " " + name.toLowerCase();
-
-      if (lowerDesc.includes("code") || lowerDesc.includes("coding")) {
-        category = "coding";
-      } else if (lowerDesc.includes("vision") || lowerDesc.includes("vl-") || lowerDesc.includes("multimodal")) {
-        category = "vision";
-      } else if (model.pricing.prompt === "0" && model.pricing.completion === "0") {
-        category = "budget";
+      // Filter 1: Skip Anthropic models (not needed in Claudish)
+      if (provider === "anthropic") {
+        continue;
       }
 
-      // Provider diversity: max 1 per provider
+      // Filter 2: Only ONE model per provider (take the first/top-ranked)
       if (providers.has(provider)) {
-        continue; // Skip if we already have a model from this provider
+        continue;
       }
 
-      // Calculate pricing
-      const inputPrice = model.pricing.prompt ? `$${(parseFloat(model.pricing.prompt) * 1000000).toFixed(2)}/1M` : "N/A";
-      const outputPrice = model.pricing.completion ? `$${(parseFloat(model.pricing.completion) * 1000000).toFixed(2)}/1M` : "N/A";
-      const avgPrice = model.pricing.prompt && model.pricing.completion
-        ? `$${((parseFloat(model.pricing.prompt) + parseFloat(model.pricing.completion)) / 2 * 1000000).toFixed(2)}/1M`
-        : "N/A";
+      const model = modelMap.get(modelId);
+      if (!model) {
+        // Model not in API yet (e.g., upcoming model like polaris-alpha)
+        // Still include it in the list with minimal metadata
+        console.error(`⚠️  Model ${modelId} not found in OpenRouter API (including with limited metadata)`);
 
-      // Extract useful metadata for decision-making
+        recommendations.push({
+          id: modelId,
+          name: modelId.split("/")[1].replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()),
+          description: `${modelId} (metadata pending - not yet available in API)`,
+          provider: provider.charAt(0).toUpperCase() + provider.slice(1),
+          category: "programming",
+          priority: recommendations.length + 1,
+          pricing: {
+            input: "N/A",
+            output: "N/A",
+            average: "N/A"
+          },
+          context: "N/A",
+          maxOutputTokens: null,
+          modality: "text->text",
+          supportsTools: false,
+          supportsReasoning: false,
+          supportsVision: false,
+          isModerated: false,
+          recommended: true
+        });
+
+        providers.add(provider);
+        continue;
+      }
+
+      const name = model.name || modelId;
+      const description = model.description || `${name} model`;
       const architecture = model.architecture || {};
       const topProvider = model.top_provider || {};
       const supportedParams = model.supported_parameters || [];
 
+      // Calculate pricing (handle both per-token and per-million formats)
+      const promptPrice = parseFloat(model.pricing?.prompt || "0");
+      const completionPrice = parseFloat(model.pricing?.completion || "0");
+
+      const inputPrice = promptPrice > 0
+        ? `$${(promptPrice * 1000000).toFixed(2)}/1M`
+        : "FREE";
+      const outputPrice = completionPrice > 0
+        ? `$${(completionPrice * 1000000).toFixed(2)}/1M`
+        : "FREE";
+      const avgPrice = (promptPrice > 0 || completionPrice > 0)
+        ? `$${((promptPrice + completionPrice) / 2 * 1000000).toFixed(2)}/1M`
+        : "FREE";
+
+      // Determine category based on description and capabilities
+      let category = "programming"; // default since we're filtering programming models
+      const lowerDesc = description.toLowerCase() + " " + name.toLowerCase();
+
+      if (lowerDesc.includes("vision") || lowerDesc.includes("vl-") || lowerDesc.includes("multimodal")) {
+        category = "vision";
+      } else if (lowerDesc.includes("reason")) {
+        category = "reasoning";
+      }
+
       recommendations.push({
-        id,
+        id: modelId,
         name,
-        description: description || `${name} model`,
+        description,
         provider: provider.charAt(0).toUpperCase() + provider.slice(1),
         category,
         priority: recommendations.length + 1,
         pricing: {
           input: inputPrice,
           output: outputPrice,
-          average: avgPrice === "N/A" && category === "budget" ? "FREE" : avgPrice
+          average: avgPrice
         },
-        context: model.context_length ? `${Math.floor(model.context_length / 1000)}K` : "N/A",
+        context: topProvider.context_length
+          ? `${Math.floor(topProvider.context_length / 1000)}K`
+          : "N/A",
         maxOutputTokens: topProvider.max_completion_tokens || null,
         modality: architecture.modality || "text->text",
         supportsTools: supportedParams.includes("tools") || supportedParams.includes("tool_choice"),
@@ -341,20 +404,7 @@ async function updateModelsFromOpenRouter(): Promise<void> {
         recommended: true
       });
 
-      categories[category as keyof typeof categories]++;
       providers.add(provider);
-
-      // Stop when we have 10-12 models with good balance
-      if (recommendations.length >= 10 &&
-          categories.coding >= 2 &&
-          categories.reasoning >= 2 &&
-          categories.vision >= 1) {
-        break;
-      }
-
-      if (recommendations.length >= 12) {
-        break;
-      }
     }
 
     // Read existing version if available
@@ -372,7 +422,7 @@ async function updateModelsFromOpenRouter(): Promise<void> {
     const updatedData = {
       version,
       lastUpdated: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
-      source: "https://openrouter.ai/api/v1/models",
+      source: "https://openrouter.ai/models?categories=programming&fmt=cards&order=top-weekly",
       models: recommendations
     };
 
@@ -449,6 +499,7 @@ OPTIONS:
   --force-update           Force refresh model cache from OpenRouter API
   --version                Show version information
   -h, --help               Show this help message
+  --help-ai                Show AI agent usage guide (file-based patterns, sub-agents)
 
 MODES:
   • Interactive mode (default): Shows model selector, starts persistent session
@@ -518,6 +569,24 @@ MORE INFO:
   GitHub: https://github.com/MadAppGang/claude-code
   OpenRouter: https://openrouter.ai
 `);
+}
+
+/**
+ * Print AI agent usage guide
+ */
+function printAIAgentGuide(): void {
+  try {
+    const guidePath = join(__dirname, "../AI_AGENT_GUIDE.md");
+    const guideContent = readFileSync(guidePath, "utf-8");
+    console.log(guideContent);
+  } catch (error) {
+    console.error("Error reading AI Agent Guide:");
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error("\nThe guide should be located at: AI_AGENT_GUIDE.md");
+    console.error("You can also view it online at:");
+    console.error("https://github.com/MadAppGang/claude-code/blob/main/mcp/claudish/AI_AGENT_GUIDE.md");
+    process.exit(1);
+  }
 }
 
 /**
