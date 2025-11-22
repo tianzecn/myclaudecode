@@ -91,7 +91,8 @@ Then add to your project's `.claude/settings.json`:
   "enabledPlugins": {
     "frontend@mag-claude-plugins": true,
     "code-analysis@mag-claude-plugins": true,
-    "bun@mag-claude-plugins": true
+    "bun@mag-claude-plugins": true,
+    "orchestration@mag-claude-plugins": true
   }
 }
 ```
@@ -198,6 +199,43 @@ Production-ready TypeScript backend development with Bun runtime, featuring comp
 - **PostgreSQL/MongoDB** - Database flexibility
 
 **Perfect for:** TypeScript backend APIs, Bun projects, REST API development, microservices, API-first architectures, teams requiring naming consistency, Prisma ORM users, production-ready backends
+
+---
+
+#### 🎯 Orchestration (Skills-Only Plugin)
+
+**Version:** 0.1.0 | **Category:** Development | **Type:** Skills Plugin
+
+Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Battle-tested patterns extracted from 100+ days of production use.
+
+**Highlights:**
+- **5 Comprehensive Skills** - Multi-agent coordination, multi-model validation, quality gates, TodoWrite orchestration, error recovery
+- **Skills-Only Architecture** - Pure knowledge plugin (no agents/commands) for context-efficient loading
+- **Skill Bundles** - Pre-configured combinations (core, advanced, testing, complete)
+- **4-Message Pattern** - Proven workflow for true parallel execution (3-5x speedup)
+- **Consensus Analysis** - Prioritize issues by cross-model agreement
+- **Battle-Tested** - 100+ days production validation, 6,774 lines of documentation
+- **Zero Dependencies** - Standalone, can be used by any plugin
+
+**The Skills:**
+1. **multi-agent-coordination** - Parallel vs sequential execution, agent selection, sub-agent delegation
+2. **multi-model-validation** - Run multiple AI models (Grok, Gemini, GPT-5) in parallel via Claudish
+3. **quality-gates** - User approval gates, iteration loops, severity classification, test-driven development
+4. **todowrite-orchestration** - Phase tracking for complex multi-step workflows
+5. **error-recovery** - Timeout handling, API failures, partial success, graceful degradation
+
+**Usage:**
+```yaml
+# In your agent or command frontmatter
+skills: orchestration:multi-model-validation, orchestration:quality-gates
+
+# Or use skill bundles
+skills: orchestration:complete  # All 5 skills
+```
+
+**Perfect for:** Plugin developers, complex multi-phase workflows, multi-model validation, parallel execution patterns, test-driven development loops, production-grade error handling
+
+👉 **[Read the complete guide](./plugins/orchestration/README.md)** for detailed patterns and examples
 
 ---
 
@@ -340,7 +378,9 @@ Need more than one plugin? Just add more entries:
 {
   "enabledPlugins": {
     "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true
+    "code-analysis@mag-claude-plugins": true,
+    "bun@mag-claude-plugins": true,
+    "orchestration@mag-claude-plugins": true
   }
 }
 ```

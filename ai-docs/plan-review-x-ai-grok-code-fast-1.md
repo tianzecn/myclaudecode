@@ -1,190 +1,212 @@
-# Model Scraper Agent Improvement Plan Review
+# Orchestration Plugin Design Review
+**Reviewer Model:** x-ai/grok-code-fast-1
+**Review Date:** November 22, 2025
+**Design Document:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration.md`
+
+---
 
 ## Executive Summary
 
-**Approval Status**: APPROVE
-**Date**: 2025-11-16
-**Reviewer**: xAI/Grok-code-fast-1 (per my model header)
-**Total Issues Classified**: 1 Critical, 2 High, 3 Medium, 1 Low
+The orchestration plugin design has **excellent core concepts** (skills-focused, dependency-driven architecture) but contains **5 critical issues** and **4 high-priority problems** that must be addressed before implementation. The design is ~70% complete but rushes to 1.0.0 versioning, misses key orchestration patterns, and lacks working examples to validate patterns.
 
-**Overall Assessment**: The design plan successfully addresses the critical DOM extraction bug with a validated search-based approach, adds meaningful performance optimization through Anthropic pre-filtering, and includes comprehensive error handling. The approach is technically sound, maintainable, and ready for implementation with minor improvements.
-
-**Key Strengths**:
-- ✅ **Validated Solution**: User testing confirms search-based extraction works end-to-end
-- ✅ **Performance Optimization**: Phase 2.5 saves 6-8 seconds by eliminating unnecessary Anthropic navigation
-- ✅ **Comprehensive Error Handling**: 7 recovery strategies ensure graceful degradation
-- ✅ **Clear Technical Rationale**: Well-documented root cause analysis and solution validation
+**Issue Breakdown:**
+- **CRITICAL:** 5 issues (architecture validation, skill discovery, interdependencies, missing patterns)
+- **HIGH:** 4 issues (skill granularity, extraction completeness, version coupling, integration complexity)
+- **MEDIUM:** 5 issues (versioning strategy, progressive disclosure, cost optimization)
+- **LOW:** 1 issue (well-handled backward compatibility)
 
 ---
 
-## Technical Correctness - APPROVED ✅
+## 1. Plugin Architecture: CRITICAL Issues
 
-**Status**: APPROVE
-**Assessment**: The search-based extraction approach is robust and well-documented. The fundamental problem (DOM link extraction failing in React SPAs) is correctly identified, and the solution (searching by model name) is both logical and validated by user testing.
+### CRITICAL - Skills-Only Without Working Examples
 
-**Evidence of Success**:
-- User testing confirmed full workflow: rankings → names → search → slugs → details ✅
-- Search returns correct model (first result = most relevant) ✅
-- Fuzzy matching prevents mismatched results ✅
+**Issue:** The skills-only approach (no agents or commands) creates a validation gap. Without actual working orchestrators, patterns aren't tested in practice.
 
-**CRITICAL**: The 0.6 confidence threshold is appropriate for filtering mismatches, but consider edge case where legitimate model names have slight variations (recommend reducing to 0.5 for broader compatibility).
+**Problem:** If an agent loads multi-model-validation and conflicts with /review implementation, there's no fallback. Document references existing commands as mitigation (lines 114-117, 183-187), but this is weak validation.
 
----
-
-## Performance Optimization (Phase 2.5) - APPROVED ✅
-
-**Status**: APPROVE
-**Assessment**: The Anthropic pre-filtering optimization is excellent. It saves 6-8 seconds (3-4 models × 2s navigation) and ensures 100% efficiency by only processing models that will actually be used.
-
-**Technical Implementation**:
-- Provider field extraction in Phase 2 enables early filtering ✅
-- Case-insensitive Anthropic detection properly handles provider variations ✅
-- Logging distinguishes intentional filtering from errors ✅
-
-**Recommendations**:
-**HIGH**: Monitor OpenRouter's model composition over time. If Anthropic models drop below 3 in top 12, consider reducing extraction from 12 to 10 models and adjust filtering accordingly.
+**Recommendation (MUST FIX):**
+1. Add example orchestrator command to plugin (demonstrates 4-Message Pattern)
+2. Test skill loading integration
+3. Document conflict resolution strategies
 
 ---
 
-## Error Handling - APPROVED ✅
+### HIGH - Skill Granularity Too Fine-Grained
 
-**Status**: APPROVE
-**Assessment**: The 7 error recovery strategies are comprehensive and provide excellent resilience through graceful degradation.
+**Issue:** 4 skills create confusing interdependency (lines 369-382, 442-449). Loading multi-model-validation requires loading 3 other skills.
 
-**Coverage Analysis**:
-
-| Strategy | Scope | Recovery Level | Status |
-|----------|-------|----------------|--------|
-| 1. Search No Results | Complete | Skip + Log | ✅ Excellent |
-| 2. Search Mismatch | Complete | Skip + Log | ✅ Excellent |
-| 3. Detail Missing Data | Complete | Skip + Log | ✅ Excellent |
-| 4. Network/Navigation | Complete | Retry once + Skip | ✅ Excellent |
-| 5. Partial Success | Complete | Warn + Proceed | ✅ Excellent |
-| 6. Critical Failure | Complete | Stop + Report | ✅ Excellent |
-| 7. Search Timeout | Complete | Retry + Skip | ✅ Excellent |
-
-**Strengths**:
-- ✅ Never crashes entire workflow due to single model issues
-- ✅ Clear screenshot-based debugging for failures
-- ✅ Adjustable success thresholds (≥6 non-Anthropic models)
+**Recommendation (SHOULD FIX):**
+Merge `todowrite-orchestration` into `quality-gates`:
+- Reduces 4 skills to 3
+- Simplifies loading decisions
+- Reduces maintenance overhead
 
 ---
 
-## Fuzzy Matching Logic - REVIEW RECOMMENDED 🔍
+## 2. Skill Descriptions: CRITICAL Discovery Issue
 
-**Status**: REVIEW
-**Severity**: MEDIUM
-**Current**: 0.6 confidence threshold
-**Assessment**: The normalization algorithm (lowercase, remove special chars) is sound, but the 0.6 threshold may be too strict in practice.
+**Issue:** Descriptions too technical, lack user-centric keywords for discovery (line 132).
 
-**Specific Recommendations**:
-**MEDIUM**: Reduce threshold to 0.5 for better compatibility with model name variations.
-**Example Cases**:
-- expected: "Grok Code Fast 1"
-- found: "Grok Code Fast 1 (latest)" → confidence: 0.62 ✅ (close call)
-- expected: "GPT-5 Codex"
-- found: "gpt-5-codex-openai" → confidence: 0.47 ❌ (too low)
+**Current Problem:**
+```yaml
+"CRITICAL - Patterns for parallel multi-model validation via Claudish CLI..."
+# Missing: "parallel reviews", "consensus", "multiple experts"
+```
 
-**Actionable Change**: Update confidence calculation to use partial matches for abbreviations/brands.
-
----
-
-## Workflow Design - APPROVED ✅
-
-**Status**: APPROVE
-**Assessment**: The updated 4-phase workflow (with Phase 2.5) is logical and includes all necessary transitions.
-
-**Phase Assessment**:
-- **Phase 2**: Extract 12 models + provider field → ✅ Correct for Anthropic filtering
-- **Phase 2.5**: Anthropic pre-filter → ✅ Performance optimization well-placed
-- **Phase 3**: Search-based extraction for non-Anthropic only → ✅ Fixes core bug
-- **Success Criteria**: 6+ non-Anthropic models → ✅ Appropriate threshold
-
-**Only Minor Enhancement**:
-**LOW**: Add explicit quality gates between phases (e.g., "Phase 2 must complete before Phase 2.5 starts").
+**Recommendation (MUST FIX):**
+1. Rewrite with user-centric language
+2. Add keywords: "parallel", "consensus", "validation", "speed"
+3. Add frontmatter: `version`, `tags`, `keywords`
+4. Avoid jargon: "4-Message Pattern" → "parallel execution"
 
 ---
 
-## Scalability Concerns - APPROVED ✅
+## 3. Content Extraction: Incomplete
 
-**Status**: APPROVE
-**Assessment**: The search-based approach is highly resilient to OpenRouter UI changes.
+**Issue:** Extraction mapping (lines 301-349) misses important patterns:
 
-**Analysis**:
-- **DOM Dependency**: Minimized to basic page structure (search functionality itself is core feature)
-- **Search API Stability**: Unlikely to change (equivalent to Google search with `q` parameter)
-- **Performance Scaling**: Navigation count reduced from 9 to 8-9 (pre-filtering)
-- **Rate Limiting**: Single search is lightweight vs multiple navigation calls
+**Missing:**
+1. **Test-Driven Development Loop** (lines 856-866) - Not extracted
+2. **Progressive Result Disclosure** - Not mentioned
+3. **Cost Optimization** - Incomplete
+4. **Interruptible Workflows** - No patterns
 
-**Risk Assessment - LOW**: No significant scalability issues identified. The design works with any ranking sorted display.
-
----
-
-## Detailed Recommendations
-
-### CRITICAL (Must Fix - 1 issue)
-1. **Confidence Threshold Calibration**: Test 0.6 vs 0.5 threshold with real OpenRouter search results to ensure legitimate matches aren't rejected. Do not proceed to implementation without this validation.
-
-### HIGH Priority (Should Fix - 2 issues)
-2. **Navigation Timeout Increase**: Increase from 2s to 3s for better resilience on slower connections or pages with dynamic content loading.
-
-3. **Provider Field Validation**: Add validation that Phase 2 provider extraction works correctly. Test with known Anthropic models to ensure provider field is properly populated.
-
-### MEDIUM Priority (Recommended - 3 issues)
-4. **Anthropic Model Trends Monitoring**: If Anthropic models drop below 20-25% of top rankings, reduce extraction count from 12 to avoid over-extraction.
-
-5. **Search Query Optimization**: Consider URL-encoding model names more robustly. Test edge cases like "Claude Sonnet 4.5" or "GPT-5 Codex".
-
-6. **Success Criteria Documentation**: Explicitly document the math: "12 extracted → 3-4 Anthropic filtered → 9 for extraction → 6+ required for success".
-
-### LOW Priority (Nice-to-have - 1 issue)
-7. **Progress Indicators**: Add timing estimates during Phase 3 processing (e.g., "Processing model 3/9 - Estimated 4 minutes remaining").
+**Recommendation (MUST FIX):**
+Extract test-iteration pattern to quality-gates. Add advanced patterns skill or defer to v0.2.0.
 
 ---
 
-## Implementation Readiness Checklist
+## 4. Integration Strategy: CRITICAL Interdependency Issue
 
-**Technical Validation** ✅ COMPLETE
-- [x] Search-based extraction validated by user testing
-- [x] Anthropic pre-filtering logic sound (provider field extraction)
-- [x] Error recovery strategies comprehensive (7 strategies)
-- [x] Fuzzy matching thresholds tested
-- [x] Workflow phase dependencies clear
+**Issue:** Multi-skill interdependencies create version coupling (lines 369-382, 625-644).
 
-**Performance Assessment** ✅ COMPLETE
-- [x] Time savings from pre-filtering quantified (~6-8s)
-- [x] Navigation count optimized (9 vs previous 9)
-- [x] Resource usage improved (100% efficiency)
+**Problem:** If v1.1.0 updates quality-gates but not todowrite-orchestration, frontend gets inconsistent skill evolution.
 
-**Production Readiness** ✅ COMPLETE
-- [x] Backward compatibility maintained (Phases 1,4,5 unchanged)
-- [x] Error handling prevents silent failures
-- [x] Debug capabilities built-in (screenshots)
-- [x] Success criteria measurable (6+ models)
+**Recommendation (MUST FIX):**
+Option A: Reduce skill count (merge as above)
+Option B: Document skill requirements in frontmatter
+Option C: Create skill bundles in plugin.json
 
-**Documentation Quality** ✅ COMPLETE
-- [x] Examples include concrete values (search URLs, confidence scores)
-- [x] Error scenarios well-documented with specific examples
-- [x] Migration notes include validation steps
+---
+
+## 5. Backward Compatibility: Well-Handled
+
+**Positive:** Lines 587-604 show excellent judgment. Skills purely additive, no breaking changes.
+
+**Status:** No action needed - this section is solid.
+
+---
+
+## 6. Missing Patterns: CRITICAL Gaps
+
+**Pattern Gap 1: Test-Driven Development Loops**
+- Mentioned (lines 860-866) but NOT extracted
+- Primary pattern in `/implement`
+- Missing: parse failures, developer feedback, max iterations
+
+**Pattern Gap 2: Progressive Result Disclosure**
+- Not mentioned at all
+- Pattern: summary → ask "Want details?" → full report
+- Reduces tokens, improves UX
+
+**Pattern Gap 3: Cost Optimization**
+- Current: calculate + ask approval
+- Missing: cheap filter first, expensive only if needed, 60-80% reduction
+
+**Pattern Gap 4: Interruptible Workflows**
+- No patterns for: pausing, resuming, state preservation
+- Important for 15+ minute reviews
+
+**Recommendation (MUST FIX):** Add 5th skill or v1.1.0 roadmap
+
+---
+
+## 7. Versioning: Premature 1.0.0
+
+**Issue:** Starting at 1.0.0 signals production-ready, but this is first implementation.
+
+**Problems:**
+1. No real-world validation
+2. Patterns need refinement after use
+3. Document plans v1.1.0, v1.2.0 (lines 1055-1095) = design incomplete for 1.0.0
+
+**Recommendation (SHOULD FIX):**
+1. Start at 0.1.0, not 1.0.0
+2. Move to 1.0.0 after 2-3 months production use
+3. Design rule: 0.x releases work alongside existing patterns
+
+---
+
+## 8. What Works Well
+
+✅ **Dependency Model** - Auto-installs, clear version control
+✅ **Content Extraction Map** - Thorough, easy to trace
+✅ **Integration Patterns** - 3 concrete workflows
+✅ **Backward Compatibility** - Additive, no breaking changes
+✅ **Migration Strategy** - 4-phase rollout, realistic
+
+---
+
+## 9. Severity Summary
+
+**CRITICAL (5 issues - MUST FIX):**
+1. Skills-only without working examples = validation gap
+2. Technical descriptions prevent discovery
+3. Interdependencies create version coupling
+4. Test-driven loops not extracted
+5. Missing progressive disclosure, cost optimization patterns
+
+**HIGH (4 issues - SHOULD FIX):**
+1. 4 skills too granular (merge to 3)
+2. Extraction incomplete
+3. Version coupling with `^1.0.0`
+4. Pattern refinement phase missing
+
+**MEDIUM (5 issues):**
+1. Premature 1.0.0 (use 0.1.0)
+2. Progressive disclosure missing
+3. Cost optimization incomplete
+4. Interruptible workflows absent
+5. Missing human-AI collaboration
+
+**LOW (1 issue):**
+1. Backward compatibility (well-handled)
+
+---
+
+## 10. Implementation Roadmap
+
+**Before Implementation (Required):**
+1. Add example orchestrator command
+2. Merge skills: 4 → 3
+3. Rewrite descriptions with keywords
+4. Extract test-loops and advanced patterns
+5. Change version to 0.1.0
+6. Add skill requirements/bundling
+
+**After Implementation (Testing):**
+7. Validate in experimental frontend agent
+8. Check for conflicts with /review, /validate-ui
 
 ---
 
 ## Final Recommendation
 
-**APPROVE for implementation** with the 1 critical and 2 high-priority recommendations addressed. This design fixes the critical model extraction bug with a validated, maintainable solution and adds meaningful performance improvements. The approach is technically sound and includes excellent error resilience.
+**Do NOT release at 1.0.0.** Architecture is fundamentally sound. But execution needs refinement:
 
-The agent improvement plan is production-ready and will resolve the reported issues with wrong model navigation while improving overall efficiency.
+- Currently ~70% complete
+- Can reach 95% in 1-2 days of work
+- After fixes: valuable shared resource for all plugins
+- After 2-3 months real use: promote to 1.0.0
+
+**Grade: 7/10**
+- Excellent dependency model and migration strategy
+- Critical gaps in pattern coverage and skill discovery
+- Fixable with focused refinement work
 
 ---
 
-**Review Author**: xAI Grok Code Fast 1
-**Review Date**: 2025-11-16
-**Review Focus**: Model scraper agent bug fixes and performance optimization</content>
-</xai:function_call/>
-**Technical Implementation**:
-- Navigation to search pages works correctly
-- Script execution successfully extracts first results
-- Detail page extraction succeeds for correct models
-
-**Only Minor Improvement**:
-**LOW**: The documentation could benefit from 1-2 concrete examples showing actual search successes vs failures in the "Examples" section.
+*Review conducted by x-ai/grok-code-fast-1*
+*Date: November 22, 2025*
+*Methodology: Line-by-line analysis with architectural pattern evaluation*

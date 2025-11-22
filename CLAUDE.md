@@ -50,6 +50,17 @@ A complete Claude Code plugin marketplace with enterprise-level architecture:
   - Apidog integration for API documentation synchronization
   - Clean architecture (routes → controllers → services → repositories)
   - Full-stack TypeScript consistency
+- **Orchestration Plugin** (v0.1.0) - Shared multi-agent coordination patterns
+  - **5 Specialized Skills** (shared orchestration knowledge):
+    - **multi-agent-coordination** - Parallel vs sequential execution, agent selection, sub-agent delegation
+    - **multi-model-validation** - 4-Message Pattern, Claudish proxy, consensus analysis, 3-5x speedup
+    - **quality-gates** - User approval, iteration loops, TDD pattern, severity classification
+    - **todowrite-orchestration** - Phase tracking, real-time progress, workflow management
+    - **error-recovery** - Timeout, API failures, partial success, retry strategies, graceful degradation
+  - **Skills-only architecture** - Pure knowledge plugin (no agents/commands)
+  - **Skill bundles** - core, advanced, testing, complete
+  - **Context-efficient** - Load only needed skills (vs monolithic)
+  - **Dependency model** - Auto-installs with plugins that need orchestration
 - **Claudish** (v1.0.0) - Run Claude Code with OpenRouter models
   - CLI tool (standalone, not a plugin)
   - Local Anthropic API proxy
@@ -114,6 +125,11 @@ claude-code/
 ├── .claude-plugin/
 │   └── marketplace.json
 └── plugins/
+    ├── orchestration/               # Shared orchestration patterns plugin
+    │   ├── plugin.json
+    │   ├── README.md
+    │   ├── skills/                  (5 skills)
+    │   └── examples/                (3 workflow examples)
     ├── frontend/                     # Full-featured frontend plugin
     │   ├── plugin.json
     │   ├── DEPENDENCIES.md
@@ -228,6 +244,54 @@ claude-code/
   - Security best practices
   - Prisma ORM patterns
   - Testing strategies
+
+### Orchestration Plugin (Skills-Only)
+
+**Purpose:** Centralized multi-agent coordination and workflow orchestration patterns
+
+**Skills (5):**
+- `multi-agent-coordination` - Parallel vs sequential execution, agent selection patterns
+- `multi-model-validation` - 4-Message Pattern for parallel AI model execution via Claudish
+- `quality-gates` - Approval gates, iteration loops, TDD pattern, severity classification
+- `todowrite-orchestration` - Phase tracking in complex multi-step workflows
+- `error-recovery` - Production error handling (timeout, failures, cancellation, retries)
+
+**Skill Bundles:**
+- `core` - multi-agent-coordination, quality-gates
+- `advanced` - multi-model-validation, error-recovery
+- `testing` - quality-gates, todowrite-orchestration
+- `complete` - All 5 skills
+
+**Usage:**
+Plugins declare orchestration as a dependency:
+```json
+{
+  "dependencies": {
+    "orchestration@mag-claude-plugins": "^0.1.0"
+  }
+}
+```
+
+Commands/agents reference skills in frontmatter:
+```yaml
+---
+skills: orchestration:multi-model-validation, orchestration:quality-gates
+---
+```
+
+**Key Innovation:** Transforms hardcoded orchestration knowledge from command prompts into modular, context-efficient skills that load on-demand.
+
+### Orchestration Skills (Shared Across All Plugins)
+
+**Skills:**
+- `multi-agent-coordination` - Coordinate multiple agents (parallel/sequential)
+- `multi-model-validation` - Run multiple AI models in parallel via Claudish
+- `quality-gates` - Implement approval gates and iteration loops
+- `todowrite-orchestration` - Track progress in complex workflows
+- `error-recovery` - Handle production failures gracefully
+
+**How to Use:**
+Skills auto-load when commands/agents reference them in frontmatter. Plugins that depend on orchestration get automatic access to all orchestration skills.
 
 ## MCP Error Handling
 
@@ -557,6 +621,24 @@ Commit this file and team members get automatic setup!
 **Plugin Guide:**
 - Use **frontend** for production code, complex features, comprehensive testing, UI development
 - Use **code-analysis** for investigating bugs, understanding legacy code, semantic code search
+- Use **orchestration** (auto-installed) for multi-agent coordination patterns
+
+### Installation Options
+
+**Option 1: Automatic (Recommended)**
+When you install a plugin that depends on orchestration (like frontend), orchestration installs automatically.
+
+**Option 2: Standalone**
+Install orchestration plugin independently:
+```bash
+/plugin install orchestration@mag-claude-plugins
+```
+
+**Option 3: Global**
+Install globally (available to all projects):
+```bash
+/plugin install orchestration@mag-claude-plugins --global
+```
 
 ### Alternative: Global Plugin Installation
 
@@ -602,13 +684,22 @@ Include marketplace in project settings (requires folder trust):
 
 ✅ **Production Ready**
 
-**3 Complete Plugins:**
-1. **Frontend** (v2.9.0) - 13 agents, 6 commands, **11 modular skills** - Context-efficient best practices system
-2. **Code Analysis** (v1.1.0) - 1 agent, 1 command, 2 skills - Deep investigation with semantic search
-3. **Bun Backend** (v1.2.0) - 3 agents, 3 commands, 1 skill - Production TypeScript backend with Bun
+**4 Complete Plugins:**
+1. **Orchestration** (v0.1.0) - 5 skills - Shared multi-agent coordination patterns (skills-only)
+2. **Frontend** (v3.7.0) - 13 agents, 6 commands, 11 skills - Full-featured Sonnet-powered
+3. **Code Analysis** (v1.1.0) - 1 agent, 1 command, 2 skills - Deep investigation with semantic search
+4. **Bun Backend** (v1.2.0) - 3 agents, 3 commands, 1 skill - Production TypeScript backend with Bun
 
 **Features:**
+- **Skills-First Architecture** - Orchestration plugin demonstrates pure skills pattern
+- **Shared Orchestration Knowledge** - 5 skills available across all plugins
+- **Context-Efficient Design** - Load only needed skills (4-5 focused skills vs monolithic)
 - 13+ specialized agents
+- 7+ slash commands
+- 18+ focused skills
+- MCP server integrations
+- Multi-model validation with consensus analysis
+- 6,774+ lines of orchestration documentation
 - **Modular Best Practices System (v2.9.0)** - Context-efficient skill architecture
   - 8 focused best practice skills (vs 1 monolithic 1200-line file)
   - Load only what you need: tooling, React, Router, Query, API, performance, security
@@ -628,13 +719,10 @@ Include marketplace in project settings (requires folder trust):
   - UI-focused workflows: Design validation and 3-reviewer quality gates
   - Mixed workflows: Combine test-driven API development with UI validation
 - **Designer + UI Developer ecosystem** (3 agents for pixel-perfect implementation)
-- 7 slash commands (including /implement with adaptive workflow detection)
-- 5 workflow skills (including semantic-code-search for claude-context MCP)
 - **Design Fidelity Validation** in /implement command (PHASE 2.5 - adaptive)
 - Modern UI development with **Tailwind CSS 4 & React 19 best practices (2025)**
 - **Semantic code search** with 40% token reduction
 - **Smart agent switching** - adaptively uses UI Developer or UI Developer Codex
-- 5000+ lines of documentation
 - Team architecture implemented
 - Smart validation system
 - Security best practices
@@ -647,28 +735,35 @@ Include marketplace in project settings (requires folder trust):
 **Detailed Release Notes:** See [RELEASES.md](./RELEASES.md) for comprehensive release documentation
 
 **Current Versions:**
-- Frontend Plugin: **v3.6.0** (2025-11-14)
+- Orchestration Plugin: **v0.1.0** (2025-11-22)
+- Frontend Plugin: **v3.7.0** (2025-11-14)
 - Code Analysis Plugin: **v1.1.0**
 - Bun Backend Plugin: **v1.2.0**
 - Claudish CLI: **v1.1.2** (2025-11-11)
 
-**Latest Changes (v3.6.0):**
-- ✅ **NEW**: `/review` Command - Multi-model code review orchestrator with parallel execution
+**Latest Changes (Orchestration v0.1.0):**
+- ✅ **NEW**: Orchestration plugin with 5 shared skills
+- ✅ **Skills-only architecture** - Pure knowledge, no agents/commands
+- ✅ **Skill bundles** - core, advanced, testing, complete
+- ✅ **Multi-model validation patterns** - 4-Message Pattern, parallel execution, consensus analysis
+- ✅ **Error recovery patterns** - 7 failure scenarios with retry strategies
+- ✅ **TDD loop pattern** - Extracted from /implement command
+- ✅ **Context-efficient** - Load only what you need
+- ✅ **6,774 lines** of comprehensive orchestration knowledge
+
+**Previous Changes (Frontend v3.6.0):**
+- ✅ `/review` Command - Multi-model code review orchestrator with parallel execution
 - ✅ **Parallel Execution** - 3-5x speedup (15 min → 5 min) by running multiple AI models simultaneously
 - ✅ **Consensus Analysis** - Prioritize issues by cross-model agreement (unanimous/strong/majority/divergent)
 - ✅ **Cost Transparency** - Input/output token separation with range-based estimates
-- ✅ **Real-Time Progress** - Visual indicators during 5-10 minute parallel execution
-- ✅ **Graceful Degradation** - Works with embedded Claude Sonnet if external models unavailable
-- ✅ **7 Error Recovery Strategies** - Comprehensive error handling for all failure scenarios
-- ✅ **5-Phase Workflow** - Review target selection → Model selection → Parallel review → Consolidation → Results
-- ✅ Multi-model validation: 100% approval from all reviewers (Local + Grok + Gemini Flash)
 
 **Git Tags:**
-- Frontend: `plugins/frontend/v3.6.0`
+- Orchestration: `plugins/orchestration/v0.1.0`
+- Frontend: `plugins/frontend/v3.7.0`
 - Use correct tag format when releasing: `plugins/{plugin-name}/vX.Y.Z`
 
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Last Updated:** November 14, 2025
-**Version:** 3.6.0
+**Last Updated:** November 22, 2025
+**Version:** 4 plugins (Orchestration v0.1.0, Frontend v3.7.0, Code Analysis v1.1.0, Bun Backend v1.2.0)
