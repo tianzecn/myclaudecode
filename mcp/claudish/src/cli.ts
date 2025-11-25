@@ -318,11 +318,18 @@ async function searchAndPrintModels(query: string, forceUpdate: boolean): Promis
       const provider = providerName.length > 10 ? providerName.substring(0, 7) + "..." : providerName;
       const providerPadded = provider.padEnd(10);
 
-      // Format pricing
+      // Format pricing (handle special cases: negative = varies, 0 = free)
       const promptPrice = parseFloat(model.pricing?.prompt || "0") * 1000000;
       const completionPrice = parseFloat(model.pricing?.completion || "0") * 1000000;
       const avg = (promptPrice + completionPrice) / 2;
-      const pricing = avg === 0 ? "FREE" : `$${avg.toFixed(2)}/1M`;
+      let pricing: string;
+      if (avg < 0) {
+        pricing = "varies";  // Auto-router or dynamic pricing
+      } else if (avg === 0) {
+        pricing = "FREE";
+      } else {
+        pricing = `$${avg.toFixed(2)}/1M`;
+      }
       const pricingPadded = pricing.padEnd(10);
 
       // Context
@@ -425,11 +432,18 @@ async function printAllModels(jsonOutput: boolean, forceUpdate: boolean): Promis
       const modelId = shortId.length > 40 ? shortId.substring(0, 37) + "..." : shortId;
       const modelIdPadded = modelId.padEnd(42);
 
-      // Format pricing
+      // Format pricing (handle special cases: negative = varies, 0 = free)
       const promptPrice = parseFloat(model.pricing?.prompt || "0") * 1000000;
       const completionPrice = parseFloat(model.pricing?.completion || "0") * 1000000;
       const avg = (promptPrice + completionPrice) / 2;
-      const pricing = avg === 0 ? "FREE" : `$${avg.toFixed(2)}/1M`;
+      let pricing: string;
+      if (avg < 0) {
+        pricing = "varies";  // Auto-router or dynamic pricing
+      } else if (avg === 0) {
+        pricing = "FREE";
+      } else {
+        pricing = `$${avg.toFixed(2)}/1M`;
+      }
       const pricingPadded = pricing.padEnd(12);
 
       // Context
