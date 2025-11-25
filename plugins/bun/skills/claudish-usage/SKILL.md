@@ -5,7 +5,7 @@ description: CRITICAL - Guide for using Claudish CLI ONLY through sub-agents to 
 
 # Claudish Usage Skill
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Purpose:** Guide AI agents on how to use Claudish CLI to run Claude Code with OpenRouter models
 **Status:** Production Ready
 
@@ -214,14 +214,22 @@ claudish --version
 ### Step 2: Get Available Models
 
 ```bash
-# List all available models (auto-updates if cache >2 days old)
-claudish --list-models
+# List ALL OpenRouter models grouped by provider
+claudish --models
+
+# Fuzzy search models by name, ID, or description
+claudish --models gemini
+claudish --models "grok code"
+
+# Show top recommended programming models (curated list)
+claudish --top-models
 
 # JSON output for parsing
-claudish --list-models --json
+claudish --models --json
+claudish --top-models --json
 
 # Force update from OpenRouter API
-claudish --list-models --force-update
+claudish --models --force-update
 ```
 
 ### Step 3: Run Claudish
@@ -275,11 +283,18 @@ git diff | claudish --stdin --model openai/gpt-5-codex "Review these changes"
 
 **Get Latest Models:**
 ```bash
-# Auto-updates every 2 days
-claudish --list-models
+# List all models (auto-updates every 2 days)
+claudish --models
+
+# Search for specific models
+claudish --models grok
+claudish --models "gemini flash"
+
+# Show curated top models
+claudish --top-models
 
 # Force immediate update
-claudish --list-models --force-update
+claudish --models --force-update
 ```
 
 ## NEW: Direct Agent Selection (v2.1.0)
@@ -503,8 +518,8 @@ Use Claudish CLI to implement this feature with Grok model:
 ${featureDescription}
 
 INSTRUCTIONS:
-1. First, get list of available models:
-   claudish --list-models
+1. Search for available models:
+   claudish --models grok
 
 2. Run implementation with Grok:
    claudish --model x-ai/grok-code-fast-1 "${featureDescription}"
@@ -682,7 +697,8 @@ done
 |------|-------------|---------|
 | `--model <model>` | OpenRouter model to use | `--model x-ai/grok-code-fast-1` |
 | `--stdin` | Read prompt from stdin | `git diff \| claudish --stdin --model grok` |
-| `--list-models` | List available models | `claudish --list-models` |
+| `--models` | List all models or search | `claudish --models` or `claudish --models gemini` |
+| `--top-models` | Show top recommended models | `claudish --top-models` |
 | `--json` | JSON output (implies --quiet) | `claudish --json "task"` |
 | `--help-ai` | Print AI agent usage guide | `claudish --help-ai` |
 
@@ -781,7 +797,7 @@ Model 'invalid/model' not found
 **Fix:**
 ```bash
 # List available models
-claudish --list-models
+claudish --models
 
 # Use valid model ID
 claudish --model x-ai/grok-code-fast-1 "task"
@@ -869,10 +885,13 @@ await Task({
 **How:**
 ```bash
 # Auto-updates every 2 days
-claudish --list-models
+claudish --models
+
+# Search for specific models
+claudish --models deepseek
 
 # Force update now
-claudish --list-models --force-update
+claudish --models --force-update
 ```
 
 ### 6. ✅ Use --stdin for Large Prompts
@@ -982,13 +1001,13 @@ const MODELS = ["x-ai/grok-code-fast-1", "openai/gpt-5"];
 **Right:**
 ```typescript
 // Query dynamically
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --models --json");
 const models = JSON.parse(stdout).models.map(m => m.id);
 ```
 
 ### ✅ Do Accept Custom Models From Users
 
-**Problem:** User provides a custom model ID that's not in --list-models
+**Problem:** User provides a custom model ID that's not in --top-models
 
 **Wrong (rejecting custom models):**
 ```typescript
@@ -1002,7 +1021,7 @@ if (!availableModels.includes(userModel)) {
 
 **Right (accept any valid model ID):**
 ```typescript
-// Claudish accepts ANY valid OpenRouter model ID, even if not in --list-models
+// Claudish accepts ANY valid OpenRouter model ID, even if not in --top-models
 const userModel = "custom/provider/model-123";
 
 // Validate it's a non-empty string with provider format
@@ -1056,7 +1075,7 @@ const model = prefs.preferredModel || defaultModel;
 ```typescript
 // In a multi-step workflow, ask once
 if (!process.env.CLAUDISH_MODEL) {
-  const { stdout } = await Bash("claudish --list-models --json");
+  const { stdout } = await Bash("claudish --models --json");
   const models = JSON.parse(stdout).models;
 
   const response = await AskUserQuestion({
@@ -1086,7 +1105,7 @@ await Bash(`claudish --model ${model} "task 2"`);
 1. ✅ **Accept any model ID** user provides (unless obviously malformed)
 2. ✅ **Don't filter** based on your "shortlist" - let Claudish handle validation
 3. ✅ **Offer to set CLAUDISH_MODEL** environment variable for session persistence
-4. ✅ **Explain** that --list-models shows curated recommendations, not all possibilities
+4. ✅ **Explain** that --top-models shows curated recommendations, --models shows all
 5. ✅ **Validate format** (should contain "/") but not restrict to known models
 6. ❌ **Never reject** a user's custom model with "not in my shortlist"
 
@@ -1163,7 +1182,7 @@ async function reviewCodeWithMultipleModels(files: string[]) {
  */
 async function implementWithModel(featureDescription: string) {
   // Step 1: Get available models
-  const { stdout } = await Bash("claudish --list-models --json");
+  const { stdout } = await Bash("claudish --models --json");
   const models = JSON.parse(stdout).models;
 
   // Step 2: Let user select model
@@ -1226,7 +1245,7 @@ Include:
 **Symptoms:** Unexpected API costs
 
 **Solutions:**
-1. Use budget-friendly models (check pricing with `--list-models`)
+1. Use budget-friendly models (check pricing with `--models` or `--top-models`)
 2. Enable cost tracking: `--cost-tracker`
 3. Use --json to monitor costs: `claudish --json "task" | jq '.total_cost_usd'`
 
@@ -1244,7 +1263,7 @@ Include:
 **Symptoms:** "Model not found" error
 
 **Solutions:**
-1. Update model cache: `claudish --list-models --force-update`
+1. Update model cache: `claudish --models --force-update`
 2. Check OpenRouter website for model availability
 3. Use alternative model from same category
 
@@ -1275,5 +1294,5 @@ claudish --help-ai     # AI agent usage guide
 ---
 
 **Maintained by:** MadAppGang
-**Last Updated:** November 19, 2025
-**Skill Version:** 1.0.0
+**Last Updated:** November 25, 2025
+**Skill Version:** 1.1.0

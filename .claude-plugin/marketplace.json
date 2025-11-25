@@ -7,7 +7,7 @@
 	},
 	"metadata": {
 		"description": "MAG team's curated collection of Claude Code plugins for modern full-stack development",
-		"version": "4.0.0",
+		"version": "4.0.1",
 		"pluginRoot": "./plugins"
 	},
 	"plugins": [
@@ -15,7 +15,7 @@
 			"name": "frontend",
 			"source": "./plugins/frontend",
 			"description": "Comprehensive frontend development toolkit with TypeScript, React 19, Vite, TanStack Router & Query v5. Features ultra-efficient agent orchestration with user validation loops, multi-model plan review (catch issues before coding), issue-specific debug flows (UI/Functional/Mixed), multi-model code review with /review command (parallel execution, consensus analysis, 3-5x speedup), modular best practices (11 focused skills), intelligent workflow detection, and Chrome DevTools MCP debugging.",
-			"version": "3.7.0",
+			"version": "3.7.1",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",
@@ -39,7 +39,7 @@
 			"name": "code-analysis",
 			"source": "./plugins/code-analysis",
 			"description": "Deep code investigation and analysis toolkit. Features the codebase-detective agent for understanding code patterns, relationships, and architecture across complex codebases.",
-			"version": "1.3.0",
+			"version": "1.3.1",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",
@@ -62,7 +62,7 @@
 			"name": "bun",
 			"source": "./plugins/bun",
 			"description": "Production-ready TypeScript backend development with Bun runtime. Includes specialized agents for backend development, API design, and DevOps. Features comprehensive best practices, tools integration (Biome, Prisma, Hono, Docker), testing workflows, and AWS ECS deployment guidance (2025).",
-			"version": "1.4.0",
+			"version": "1.4.1",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",

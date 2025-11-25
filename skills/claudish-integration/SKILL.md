@@ -32,7 +32,7 @@ Do NOT use this skill when:
 **Implementation:**
 ```typescript
 // Execute Claudish to get model list
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 
 // Parse JSON output
 const modelData = JSON.parse(stdout);
@@ -86,7 +86,7 @@ const modelIds = models.map(m => m.id);
 **Implementation:**
 ```typescript
 // Get coding models only
-const { stdout } = await Bash("claudish --list-models --category=coding --json");
+const { stdout } = await Bash("claudish --models coding --json");
 const modelData = JSON.parse(stdout);
 
 // Models are pre-filtered by Claudish
@@ -96,7 +96,7 @@ const codingModels = modelData.models;
 
 **Example: Get Best Coding Model**
 ```typescript
-const { stdout } = await Bash("claudish --list-models --category=coding --json");
+const { stdout } = await Bash("claudish --models coding --json");
 const modelData = JSON.parse(stdout);
 
 // First model is highest priority (sorted by priority field)
@@ -134,7 +134,7 @@ async function getRecommendedModels() {
   }
 
   // 2. Query Claudish for defaults
-  const { stdout } = await Bash("claudish --list-models --category=coding --json");
+  const { stdout } = await Bash("claudish --models coding --json");
   const modelData = JSON.parse(stdout);
   return modelData.models;
 }
@@ -156,7 +156,7 @@ async function readUserOverrideFromClaudeMd(): Promise<Model[] | null> {
     if (modelIds.length === 0) return null;
 
     // Query Claudish for details on these specific models
-    const { stdout } = await Bash("claudish --list-models --json");
+    const { stdout } = await Bash("claudish --top-models --json");
     const modelData = JSON.parse(stdout);
 
     // Filter to user-specified models
@@ -206,7 +206,7 @@ async function getRecommendedModels() {
 
   // 2. Try querying Claudish
   try {
-    const { stdout } = await Bash("claudish --list-models --json");
+    const { stdout } = await Bash("claudish --top-models --json");
     const modelData = JSON.parse(stdout);
     return modelData.models;
   } catch (error) {
@@ -269,7 +269,7 @@ async function getRecommendedModels() {
   }
 
   // Proceed with JSON query
-  const { stdout } = await Bash("claudish --list-models --json");
+  const { stdout } = await Bash("claudish --top-models --json");
   return JSON.parse(stdout).models;
 }
 ```
@@ -313,7 +313,7 @@ async function getRecommendedModels() {
   const jsonSupported = await isClaudishJsonSupported();
   if (jsonSupported) {
     try {
-      const { stdout } = await Bash("claudish --list-models --json");
+      const { stdout } = await Bash("claudish --top-models --json");
       return JSON.parse(stdout).models;
     } catch (error) {
       console.warn("Claudish query failed:", error.message);
@@ -377,7 +377,7 @@ try {
 **Fallback:**
 ```typescript
 console.error("Could not parse Claudish output");
-console.error("Expected JSON format from: claudish --list-models --json");
+console.error("Expected JSON format from: claudish --top-models --json");
 console.warn("Falling back to embedded defaults");
 return EMBEDDED_DEFAULT_MODELS;
 ```
@@ -395,7 +395,7 @@ if (!data.models || data.models.length === 0) {
 **Fallback:**
 ```typescript
 console.warn("Claudish returned empty model list");
-console.warn("Try: claudish --update-models (if available)");
+console.warn("Try: claudish --models --force-update");
 console.warn("Falling back to embedded defaults");
 return EMBEDDED_DEFAULT_MODELS;
 ```
@@ -405,7 +405,7 @@ return EMBEDDED_DEFAULT_MODELS;
 **Detection:**
 ```typescript
 try {
-  const { stdout } = await Bash("claudish --list-models --json");
+  const { stdout } = await Bash("claudish --top-models --json");
 } catch (error) {
   console.error("Failed to execute Claudish:", error.message);
 }
@@ -413,7 +413,7 @@ try {
 
 **Fallback:**
 ```typescript
-console.error("Could not execute: claudish --list-models --json");
+console.error("Could not execute: claudish --top-models --json");
 console.error(`Error: ${error.message}`);
 console.warn("Falling back to embedded defaults");
 return EMBEDDED_DEFAULT_MODELS;
@@ -496,7 +496,7 @@ async function getRecommendedModels() {
 **How:**
 ```typescript
 // Get coding models only (don't filter manually)
-const { stdout } = await Bash("claudish --list-models --category=coding --json");
+const { stdout } = await Bash("claudish --models coding --json");
 const models = JSON.parse(stdout).models;
 // All models are already filtered to category === "coding"
 ```
@@ -508,7 +508,7 @@ const models = JSON.parse(stdout).models;
 **Wrong:**
 ```typescript
 // Parsing text output is fragile and error-prone
-const { stdout } = await Bash("claudish --list-models");
+const { stdout } = await Bash("claudish --top-models");
 const lines = stdout.split("\n");
 // ... complex parsing logic ...
 ```
@@ -516,7 +516,7 @@ const lines = stdout.split("\n");
 **Right:**
 ```typescript
 // Use JSON output instead
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 const models = JSON.parse(stdout).models;
 ```
 
@@ -525,7 +525,7 @@ const models = JSON.parse(stdout).models;
 **Wrong:**
 ```typescript
 // No error handling - will crash if Claudish not found
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 const models = JSON.parse(stdout).models;
 ```
 
@@ -533,7 +533,7 @@ const models = JSON.parse(stdout).models;
 ```typescript
 // Graceful fallback
 try {
-  const { stdout } = await Bash("claudish --list-models --json");
+  const { stdout } = await Bash("claudish --top-models --json");
   return JSON.parse(stdout).models;
 } catch {
   return EMBEDDED_DEFAULT_MODELS;
@@ -565,7 +565,7 @@ const models = await getRecommendedModels(); // Queries Claudish
 **Wrong:**
 ```typescript
 // Assumes --json flag exists (added in v1.2.0)
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 ```
 
 **Right:**
@@ -575,7 +575,7 @@ const jsonSupported = await isClaudishJsonSupported();
 if (!jsonSupported) {
   return EMBEDDED_DEFAULT_MODELS;
 }
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 ```
 
 ### ❌ Don't Filter After Fetching
@@ -583,7 +583,7 @@ const { stdout } = await Bash("claudish --list-models --json");
 **Wrong:**
 ```typescript
 // Get all models, then filter manually (inefficient)
-const { stdout } = await Bash("claudish --list-models --json");
+const { stdout } = await Bash("claudish --top-models --json");
 const allModels = JSON.parse(stdout).models;
 const codingModels = allModels.filter(m => m.category === "coding");
 ```
@@ -591,7 +591,7 @@ const codingModels = allModels.filter(m => m.category === "coding");
 **Right:**
 ```typescript
 // Let Claudish filter (more efficient)
-const { stdout } = await Bash("claudish --list-models --category=coding --json");
+const { stdout } = await Bash("claudish --models coding --json");
 const codingModels = JSON.parse(stdout).models;
 ```
 
@@ -647,8 +647,8 @@ import { promisify } from "util";
 const execAsync = promisify(exec);
 
 describe("Claudish CLI Integration", () => {
-  it("should execute claudish --list-models --json", async () => {
-    const { stdout } = await execAsync("claudish --list-models --json");
+  it("should execute claudish --top-models --json", async () => {
+    const { stdout } = await execAsync("claudish --top-models --json");
     const data = JSON.parse(stdout);
 
     expect(data).toHaveProperty("models");
@@ -656,7 +656,7 @@ describe("Claudish CLI Integration", () => {
   });
 
   it("should filter by category via CLI", async () => {
-    const { stdout } = await execAsync("claudish --list-models --category=coding --json");
+    const { stdout } = await execAsync("claudish --models coding --json");
     const data = JSON.parse(stdout);
 
     expect(data.models.every(m => m.category === "coding")).toBe(true);
@@ -697,7 +697,7 @@ async function getModelsForReview() {
 
   // 2. Claudish query
   try {
-    const { stdout } = await Bash("claudish --list-models --category=coding --json");
+    const { stdout } = await Bash("claudish --models coding --json");
     return JSON.parse(stdout).models;
   } catch {
     // 3. Fallback

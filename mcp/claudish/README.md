@@ -135,7 +135,12 @@ claudish --help-ai > claudish-agent-guide.md
 
 1. **Get available models:**
    ```bash
-   claudish --list-models --json
+   # List all models or search
+   claudish --models
+   claudish --models gemini
+
+   # Get top recommended models (JSON)
+   claudish --top-models --json
    ```
 
 2. **Run Claudish through sub-agent** (recommended pattern):
@@ -187,7 +192,7 @@ claudish --help-ai > claudish-agent-guide.md
 - ✅ Use file-based patterns to avoid context window pollution
 - ✅ Delegate to sub-agents instead of running directly
 - ✅ Return summaries only (not full conversation transcripts)
-- ✅ Choose appropriate model for task (see `--list-models`)
+- ✅ Choose appropriate model for task (see `--models` or `--top-models`)
 
 **Resources:**
 - Full AI agent guide: `claudish --help-ai`
@@ -216,7 +221,8 @@ claudish [OPTIONS] <claude-args...>
 | `--no-auto-approve` | Disable auto-approve (require prompts) | Auto-approve **enabled** |
 | `--dangerous` | Pass `--dangerouslyDisableSandbox` | `false` |
 | `--agent <agent>` | Use specific agent (e.g., `frontend:developer`) | - |
-| `--list-models` | List available OpenRouter models | - |
+| `--models` | List all models or search (e.g., `--models gemini`) | - |
+| `--top-models` | Show top recommended programming models | - |
 | `--list-agents` | List available agents in current project | - |
 | `--force-update` | Force refresh model cache | - |
 | `--init` | Install Claudish skill in current project | - |
@@ -264,7 +270,7 @@ Claudish supports 5 OpenRouter models in priority order:
 List models anytime with:
 
 ```bash
-claudish --list-models
+claudish --models
 ```
 
 ## Agent Support (NEW in v2.1.0)
