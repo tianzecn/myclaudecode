@@ -22,7 +22,6 @@ user: "Update the Apidog documentation with our latest API changes"
 assistant: "Let me use the apidog agent to sync the changes to Apidog"
 <task tool invocation with apidog>
 </example>
-model: sonnet
 color: purple
 ---
 

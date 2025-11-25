@@ -1,7 +1,6 @@
 ---
 name: developer
 description: Use this agent when you need to implement TypeScript frontend features, components, or refactorings in a Vite-based project. Examples: (1) User says 'Create a user profile card component with avatar, name, and bio fields' - Use this agent to implement the component following project patterns and best practices. (2) User says 'Add form validation to the login page' - Use this agent to implement validation logic while reusing existing form components. (3) User says 'I've finished the authentication flow, can you review the implementation?' - While a code-review agent might be better, this agent can also provide implementation feedback and suggestions. (4) After user describes a new feature from documentation or planning docs - Proactively use this agent to scaffold and implement the feature using existing patterns. (5) User says 'The dashboard needs a new analytics widget' - Use this agent to create the widget while maintaining consistency with existing dashboard components.
-model: sonnet
 color: green
 tools: TodoWrite, Write, Edit, Read, Bash, Glob, Grep
 ---

@@ -5,6 +5,30 @@ All notable changes to the MAG Claude Plugins project will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Frontend 3.8.1] - 2025-11-25
+
+### Changed
+
+#### Default Model Inheritance
+- **Removed hardcoded model settings** from 7 agents (`developer`, `ui-developer`, `css-developer`, `designer`, `tester`, `cleaner`, `api-analyst`).
+- These agents now inherit the user's configured default model instead of being locked to Sonnet or Haiku.
+
+## [Bun 1.5.1] - 2025-11-25
+
+### Changed
+
+#### Default Model Inheritance
+- **Removed hardcoded model settings** from `backend-developer` and `apidog`.
+- Agents now respect user's model preference.
+
+## [Code Analysis 1.3.2] - 2025-11-25
+
+### Changed
+
+#### Default Model Inheritance
+- **Removed hardcoded model settings** from `codebase-detective`.
+- Agent now respects user's model preference.
+
 ## [Frontend 3.8.0] - 2025-11-25
 
 ### Changed

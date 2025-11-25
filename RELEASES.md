@@ -6,6 +6,49 @@ See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
+## Frontend Plugin v3.8.1 (2025-11-25)
+
+**Tag:** `plugins/frontend/v3.8.1`
+
+### 🎯 Overview
+
+**User Choice for Implementation Agents** - We've unlocked the model selection for implementation agents. Previously hardcoded to `sonnet` (or `haiku`), these agents will now respect your project's default model setting. This allows you to use new models as they become available without waiting for a plugin update.
+
+### ✨ What's New
+
+- Removed `model: sonnet` from: `developer`, `ui-developer`, `css-developer`, `designer`, `api-analyst`
+- Removed `model: haiku` from: `tester`, `cleaner`
+
+---
+
+## Bun Backend Plugin v1.5.1 (2025-11-25)
+
+**Tag:** `plugins/bun/v1.5.1`
+
+### 🎯 Overview
+
+**User Choice for Implementation Agents** - Similar to frontend implementation agents, backend implementation agents now respect your default model setting.
+
+### ✨ What's New
+
+- Removed `model: sonnet` from: `backend-developer`, `apidog`
+
+---
+
+## Code Analysis Plugin v1.3.2 (2025-11-25)
+
+**Tag:** `plugins/code-analysis/v1.3.2`
+
+### 🎯 Overview
+
+**User Choice for Analysis Agents** - The detective agent now respects your default model setting.
+
+### ✨ What's New
+
+- Removed `model: sonnet` from: `codebase-detective`
+
+---
+
 ## Frontend Plugin v3.8.0 (2025-11-25)
 
 **Tag:** `plugins/frontend/v3.8.0`

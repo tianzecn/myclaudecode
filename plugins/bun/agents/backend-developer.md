@@ -1,7 +1,6 @@
 ---
 name: backend-developer
 description: Use this agent when you need to implement TypeScript backend features, API endpoints, services, or database integrations in a Bun-based project. Examples: (1) User says 'Create a user registration endpoint with email validation and password hashing' - Use this agent to implement the endpoint following REST best practices. (2) User says 'Add Prisma repository for managing posts' - Use this agent to create type-safe repository with CRUD operations. (3) User says 'Implement JWT authentication middleware' - Use this agent to create secure auth middleware with proper error handling. (4) After user describes a new API feature from documentation - Proactively use this agent to implement the feature using layered architecture (routes → controllers → services → repositories). (5) User says 'Add caching to the user profile endpoint' - Use this agent to integrate Redis caching while maintaining code quality.
-model: sonnet
 color: purple
 ---
 
