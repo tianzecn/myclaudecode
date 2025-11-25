@@ -1,6 +1,6 @@
 {
   "name": "claudish",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "CLI tool to run Claude Code with any OpenRouter model (Grok, GPT-5, MiniMax, etc.) via local Anthropic API-compatible proxy",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
+    "dotenv": "^17.2.3",
     "hono": "^4.10.6"
   },
   "devDependencies": {

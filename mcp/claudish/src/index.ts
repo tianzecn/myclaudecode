@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// Load .env file before anything else
+import { config } from "dotenv";
+config(); // Loads .env from current working directory
+
 import { checkClaudeInstalled, runClaudeWithProxy } from "./claude-runner.js";
 import { parseArgs } from "./cli.js";
 import { DEFAULT_PORT_RANGE } from "./config.js";
@@ -52,7 +56,7 @@ async function main() {
 
     // Show interactive model selector ONLY in interactive mode when model not specified
     if (config.interactive && !config.monitor && !config.model) {
-      config.model = await selectModelInteractively();
+      config.model = await selectModelInteractively({ freeOnly: config.freeOnly });
       console.log(""); // Empty line after selection
     }
 
@@ -81,9 +85,15 @@ async function main() {
     const proxy = await createProxyServer(
       port,
       config.monitor ? undefined : config.openrouterApiKey!,
-      config.monitor ? undefined : config.model!,
+      config.monitor ? undefined : (typeof config.model === 'string' ? config.model : undefined),
       config.monitor,
-      config.anthropicApiKey
+      config.anthropicApiKey,
+      {
+        opus: config.modelOpus,
+        sonnet: config.modelSonnet,
+        haiku: config.modelHaiku,
+        subagent: config.modelSubagent
+      }
     );
 
     // Run Claude Code with proxy

@@ -29,6 +29,7 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
     jsonOutput: false, // No JSON output by default
     monitor: false, // Monitor mode disabled by default
     stdin: false, // Read prompt from stdin instead of args
+    freeOnly: false, // Show all models by default
     claudeArgs: [],
   };
 
@@ -43,6 +44,13 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
   } else if (anthropicModel) {
     config.model = anthropicModel; // Fall back to Claude Code standard
   }
+
+  // Parse model mappings from env vars
+  // Priority: CLAUDISH_MODEL_* (highest) > ANTHROPIC_DEFAULT_* / CLAUDE_CODE_SUBAGENT_MODEL (fallback)
+  config.modelOpus = process.env[ENV.CLAUDISH_MODEL_OPUS] || process.env[ENV.ANTHROPIC_DEFAULT_OPUS_MODEL];
+  config.modelSonnet = process.env[ENV.CLAUDISH_MODEL_SONNET] || process.env[ENV.ANTHROPIC_DEFAULT_SONNET_MODEL];
+  config.modelHaiku = process.env[ENV.CLAUDISH_MODEL_HAIKU] || process.env[ENV.ANTHROPIC_DEFAULT_HAIKU_MODEL];
+  config.modelSubagent = process.env[ENV.CLAUDISH_MODEL_SUBAGENT] || process.env[ENV.CLAUDE_CODE_SUBAGENT_MODEL];
 
   const envPort = process.env[ENV.CLAUDISH_PORT];
   if (envPort) {
@@ -65,6 +73,18 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
         process.exit(1);
       }
       config.model = modelArg; // Accept any model ID
+    } else if (arg === "--model-opus") { // Model mapping flags
+      const val = args[++i];
+      if (val) config.modelOpus = val;
+    } else if (arg === "--model-sonnet") {
+      const val = args[++i];
+      if (val) config.modelSonnet = val;
+    } else if (arg === "--model-haiku") {
+      const val = args[++i];
+      if (val) config.modelHaiku = val;
+    } else if (arg === "--model-subagent") {
+      const val = args[++i];
+      if (val) config.modelSubagent = val;
     } else if (arg === "--port" || arg === "-p") {
       const portArg = args[++i];
       if (!portArg) {
@@ -102,6 +122,8 @@ export async function parseArgs(args: string[]): Promise<ClaudishConfig> {
       config.monitor = true;
     } else if (arg === "--stdin") {
       config.stdin = true;
+    } else if (arg === "--free") {
+      config.freeOnly = true;
     } else if (arg === "--cost-tracker") {
       // Enable cost tracking for this session
       config.costTracking = true;
@@ -711,6 +733,7 @@ OPTIONS:
   -v, --verbose            Show [claudish] log messages (default in interactive mode)
   --json                   Output in JSON format for tool integration (implies --quiet)
   --stdin                  Read prompt from stdin (useful for large prompts or piping)
+  --free                   Show only FREE models in the interactive selector
   --monitor                Monitor mode - proxy to REAL Anthropic API and log all traffic
   --no-auto-approve        Disable auto permission skip (prompts enabled)
   --dangerous              Pass --dangerouslyDisableSandbox to Claude Code
@@ -727,6 +750,12 @@ OPTIONS:
   --help-ai                Show AI agent usage guide (file-based patterns, sub-agents)
   --init                   Install Claudish skill in current project (.claude/skills/)
 
+MODEL MAPPING (per-role override):
+  --model-opus <model>     Model for Opus role (planning, complex tasks)
+  --model-sonnet <model>   Model for Sonnet role (default coding)
+  --model-haiku <model>    Model for Haiku role (fast tasks, background)
+  --model-subagent <model> Model for sub-agents (Task tool)
+
 CUSTOM MODELS:
   Claudish accepts ANY valid OpenRouter model ID, even if not in --list-models
   Example: claudish --model your_provider/custom-model-123 "task"
@@ -742,17 +771,31 @@ NOTES:
   • Use --dangerous to disable sandbox (use with extreme caution!)
 
 ENVIRONMENT VARIABLES:
+  Claudish automatically loads .env file from current directory.
+
   OPENROUTER_API_KEY              Required: Your OpenRouter API key
   CLAUDISH_MODEL                  Default model to use (takes priority)
-  ANTHROPIC_MODEL                 Claude Code standard: model to use (fallback if CLAUDISH_MODEL not set)
-  ANTHROPIC_SMALL_FAST_MODEL      Claude Code standard: fast model (auto-set by claudish)
+  ANTHROPIC_MODEL                 Claude Code standard: model to use (fallback)
   CLAUDISH_PORT                   Default port for proxy
-  CLAUDISH_ACTIVE_MODEL_NAME      Auto-set by claudish (read-only) - shows active model in status line
+  CLAUDISH_ACTIVE_MODEL_NAME      Auto-set by claudish (read-only) - shows active model
+
+  Model mapping (CLAUDISH_* takes priority over ANTHROPIC_DEFAULT_*):
+  CLAUDISH_MODEL_OPUS             Override model for Opus role
+  CLAUDISH_MODEL_SONNET           Override model for Sonnet role
+  CLAUDISH_MODEL_HAIKU            Override model for Haiku role
+  CLAUDISH_MODEL_SUBAGENT         Override model for sub-agents
+  ANTHROPIC_DEFAULT_OPUS_MODEL    Claude Code standard: Opus model (fallback)
+  ANTHROPIC_DEFAULT_SONNET_MODEL  Claude Code standard: Sonnet model (fallback)
+  ANTHROPIC_DEFAULT_HAIKU_MODEL   Claude Code standard: Haiku model (fallback)
+  CLAUDE_CODE_SUBAGENT_MODEL      Claude Code standard: sub-agent model (fallback)
 
 EXAMPLES:
   # Interactive mode (default) - shows model selector
   claudish
   claudish --interactive
+
+  # Interactive mode with only FREE models
+  claudish --free
 
   # Interactive mode with pre-selected model
   claudish --model x-ai/grok-code-fast-1
@@ -760,6 +803,12 @@ EXAMPLES:
   # Single-shot mode - one task and exit (requires --model or CLAUDISH_MODEL env var)
   claudish --model openai/gpt-5-codex "implement user authentication"
   claudish --model x-ai/grok-code-fast-1 "add tests for login"
+
+  # Per-role model mapping (use different models for different Claude Code roles)
+  claudish --model-opus openai/gpt-5 --model-sonnet x-ai/grok-code-fast-1 --model-haiku minimax/minimax-m2
+
+  # Hybrid: Native Anthropic for Opus, OpenRouter for Sonnet/Haiku
+  claudish --model-opus claude-3-opus-20240229 --model-sonnet x-ai/grok-code-fast-1
 
   # Use stdin for large prompts (e.g., git diffs, code review)
   echo "Review this code..." | claudish --stdin --model x-ai/grok-code-fast-1

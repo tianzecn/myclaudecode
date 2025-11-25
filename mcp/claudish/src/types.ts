@@ -31,7 +31,14 @@ export interface ClaudishConfig {
   openrouterApiKey?: string; // Optional in monitor mode
   anthropicApiKey?: string; // Required in monitor mode
   agent?: string; // Agent to use for execution (e.g., "frontend:developer")
+  freeOnly?: boolean; // Show only free models in selector
   claudeArgs: string[];
+
+  // Model Mapping
+  modelOpus?: string;
+  modelSonnet?: string;
+  modelHaiku?: string;
+  modelSubagent?: string;
 }
 
 // Anthropic API Types
