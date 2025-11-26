@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-19
 **Reviewer**: Google Gemini 3 Pro Preview (via Claudish CLI)
-**File**: /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
+**File**: `shared/skills/claudish-usage/SKILL.md`
 **Section**: Multi-Model Orchestration Pattern (lines 285-1149)
 **Type**: Skill Documentation
 

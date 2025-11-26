@@ -2,7 +2,7 @@
 
 ## 🎉 Repository Complete and Production-Ready!
 
-**Repository:** `/Users/jack/mag/claude-code`
+**Repository:** `mag-claude-plugins` (local development path: project root)
 **Marketplace:** mag-claude-plugins
 **Owner:** Jack Rudenko (i@madappgang.com) @ MadAppGang
 **License:** MIT
@@ -202,8 +202,7 @@ claude-code/ (27 files)
 ### Option 1: GitHub Distribution (Recommended)
 
 ```bash
-# Push to GitHub
-cd /Users/jack/mag/claude-code
+# Push to GitHub (from repo root)
 git remote add origin https://github.com/MadAppGang/claude-code.git
 git add .
 git commit -m "Complete plugin marketplace with team architecture"
@@ -217,8 +216,8 @@ git push -u origin main
 ### Option 2: Local Testing
 
 ```bash
-# Add locally for testing
-/plugin marketplace add /Users/jack/mag/claude-code
+# Add locally for testing (from repo root)
+/plugin marketplace add /path/to/claude-code
 /plugin install frontend@mag-claude-plugins
 ```
 
@@ -440,9 +439,8 @@ Extracted from real project (caremaster-tenant-frontend) with proven workflows.
 
 **Next Steps:**
 
-1. **Push to GitHub:**
+1. **Push to GitHub (from repo root):**
    ```bash
-   cd /Users/jack/mag/claude-code
    git add .
    git commit -m "Complete MAG Claude Plugins marketplace"
    git push origin main

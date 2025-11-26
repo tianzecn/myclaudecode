@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-14 23:34:14
 **Reviewer**: Claude Sonnet 4.5 (Local Review)
-**File**: /Users/jack/mag/claude-code/plugins/frontend/commands/review.md
+**File**: `plugins/frontend/commands/review.md`
 **Type**: Orchestrator Command
 
 ---

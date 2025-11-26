@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Successfully explored the Claudish tool codebase at `/Users/jack/mag/claude-code/mcp/claudish/`. The tool is a well-structured TypeScript/Bun CLI that proxies Claude Code requests to OpenRouter models via a local Anthropic API-compatible server.
+Successfully explored the Claudish tool codebase at `mcp/claudish/`. The tool is a well-structured TypeScript/Bun CLI that proxies Claude Code requests to OpenRouter models via a local Anthropic API-compatible server.
 
 **Key Finding:** Claudish already has an environment variable system for model communication, but does NOT currently support `ANTHROPIC_MODEL` or `ANTHROPIC_SMALL_FAST_MODEL`.
 
@@ -136,7 +136,7 @@ env[ENV.ANTHROPIC_MODEL] = modelId;
 
 ### Directory Structure
 ```
-/Users/jack/mag/claude-code/mcp/claudish/
+mcp/claudish/
 ├── src/
 │   ├── index.ts              # Main entry, orchestration
 │   ├── cli.ts                # Argument parsing (env vars on lines 22-34)
@@ -195,17 +195,17 @@ Claude Code process with modified environment
 
 For implementation, focus on these files in order:
 
-1. **`/Users/jack/mag/claude-code/mcp/claudish/src/config.ts`** (69 lines)
+1. **`src/config.ts`** (69 lines)
    - Where to define `ANTHROPIC_MODEL` constant
 
-2. **`/Users/jack/mag/claude-code/mcp/claudish/src/cli.ts`** (300 lines)
+2. **`src/cli.ts`** (300 lines)
    - Where to add environment variable parsing logic
 
-3. **`/Users/jack/mag/claude-code/mcp/claudish/src/claude-runner.ts`** (224 lines)
+3. **`src/claude-runner.ts`** (224 lines)
    - Where model is communicated to Claude Code
    - Where token file is read for status line
 
-4. **`/Users/jack/mag/claude-code/mcp/claudish/src/proxy-server.ts`** (58KB)
+4. **`src/proxy-server.ts`** (58KB)
    - Where tokens are written to file
    - Good reference for token tracking mechanism
 
@@ -214,8 +214,8 @@ For implementation, focus on these files in order:
 To verify environment variable support works:
 
 ```bash
-# Build claudish
-cd /Users/jack/mag/claude-code/mcp/claudish
+# Build claudish (from mcp/claudish directory)
+cd mcp/claudish
 bun run build
 
 # Test with ANTHROPIC_MODEL
@@ -241,13 +241,13 @@ export OPENROUTER_API_KEY=sk-or-v1-...
 
 Two comprehensive analysis documents created:
 
-1. **`/Users/jack/mag/claude-code/mcp/claudish/CODEBASE_ANALYSIS.md`** (14KB)
+1. **`ai_docs/claudish-CODEBASE_ANALYSIS.md`** (14KB)
    - Complete architecture overview
    - All components explained
    - Environment variable flow diagram
    - Implementation recommendations
 
-2. **`/Users/jack/mag/claude-code/mcp/claudish/KEY_CODE_LOCATIONS.md`** (7.8KB)
+2. **`ai_docs/claudish-KEY_CODE_LOCATIONS.md`** (7.8KB)
    - Line-by-line code references
    - Variable scope table
    - Implementation steps for adding ANTHROPIC_MODEL

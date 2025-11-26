@@ -1,6 +1,6 @@
 # Multi-Model Implementation Review - Consolidated Report
 
-**File Reviewed:** `/Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md`
+**File Reviewed:** `shared/skills/claudish-usage/SKILL.md`
 **Section:** Multi-Model Orchestration Pattern (lines 285-1150)
 **Reviewers:** 5 (1 local + 4 external via Claudish)
 **Review Date:** November 19, 2025
@@ -107,20 +107,20 @@ Check the actual implementation for:
 
 1. **Promise.allSettled usage** - Search for `.data` vs `.value/.reason`
    ```bash
-   grep -n "result\.data" /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
-   grep -n "result\.value" /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
+   grep -n "result\.data" shared/skills/claudish-usage/SKILL.md
+   grep -n "result\.value" shared/skills/claudish-usage/SKILL.md
    ```
 
 2. **Regex escaping** - Search for `/\\//g` vs `/\//g`
    ```bash
-   grep -n '/\\\\//g' /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
-   grep -n '/\//g' /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
+   grep -n '/\\\\//g' shared/skills/claudish-usage/SKILL.md
+   grep -n '/\//g' shared/skills/claudish-usage/SKILL.md
    ```
 
 3. **Token estimation** - Search for "chars/4" vs code-aware logic
    ```bash
-   grep -n 'chars.*4' /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
-   grep -n 'isCode' /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
+   grep -n 'chars.*4' shared/skills/claudish-usage/SKILL.md
+   grep -n 'isCode' shared/skills/claudish-usage/SKILL.md
    ```
 
 ### DECISION TREE:

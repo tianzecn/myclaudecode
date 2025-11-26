@@ -126,7 +126,7 @@
           "index": 1,
           "delta": {
             "type": "input_json_delta",
-            "partial_json": "_path\":\"/Users/jack/mag"
+            "partial_json": "_path\":\"/path/to/project"
           }
         }
       },
@@ -203,5 +203,5 @@
     "minInputTokens": 100,
     "minOutputTokens": 30
   },
-  "notes": "Example fixture demonstrating fine-grained tool input streaming. Note how JSON is streamed in chunks: '{\"file' + '_path\":\"/Users/jack/mag' + '/claude-code/mcp/claudish/package.json\"}'"
+  "notes": "Example fixture demonstrating fine-grained tool input streaming. Note how JSON is streamed in chunks: '{\"file' + '_path\":\"/path/to/project' + '/package.json\"}'"
 }

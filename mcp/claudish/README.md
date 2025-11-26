@@ -196,8 +196,8 @@ claudish --help-ai > claudish-agent-guide.md
 
 **Resources:**
 - Full AI agent guide: `claudish --help-ai`
-- Skill document: `/Users/jack/mag/claude-code/skills/claudish-usage/SKILL.md`
-- Model integration: `/Users/jack/mag/claude-code/skills/claudish-integration/SKILL.md`
+- Skill document: `skills/claudish-usage/SKILL.md` (in repository root)
+- Model integration: `skills/claudish-integration/SKILL.md` (in repository root)
 
 ## Usage
 

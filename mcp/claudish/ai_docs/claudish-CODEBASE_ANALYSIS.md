@@ -2,14 +2,14 @@
 
 ## Overview
 
-**Claudish** is a CLI tool that runs Claude Code with OpenRouter models via a local Anthropic API-compatible proxy server. It's located at `/Users/jack/mag/claude-code/mcp/claudish/` and consists of a TypeScript/Bun project.
+**Claudish** is a CLI tool that runs Claude Code with OpenRouter models via a local Anthropic API-compatible proxy server. It's located at `mcp/claudish/` in the repository root and consists of a TypeScript/Bun project.
 
 **Current Version:** v1.3.1
 
 ## Directory Structure
 
 ```
-/Users/jack/mag/claude-code/mcp/claudish/
+mcp/claudish/
 ├── src/
 │   ├── index.ts                  # Main entry point
 │   ├── cli.ts                    # CLI argument parser

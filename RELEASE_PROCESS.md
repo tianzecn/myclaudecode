@@ -244,7 +244,7 @@ git push origin plugins/{plugin}/v{X.Y.Z}
 
 A: Use local marketplace:
 ```bash
-/plugin marketplace add /Users/jack/mag/claude-code
+/plugin marketplace add /path/to/claude-code
 /plugin install {plugin}@mag-claude-plugins
 ```
 

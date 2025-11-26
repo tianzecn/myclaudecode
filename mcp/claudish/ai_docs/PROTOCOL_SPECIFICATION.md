@@ -619,7 +619,7 @@ event: content_block_delta
 data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file"}}
 
 event: content_block_delta
-data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"_path\":\"/Users/jack/"}}
+data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"_path\":\"/path/to/"}}
 
 event: content_block_delta
 data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"test.ts\"}"}}
@@ -754,7 +754,7 @@ Claude Code provides **16 core tools**:
   "id": "toolu_01ABC123XYZ",
   "name": "Read",
   "input": {
-    "file_path": "/Users/jack/test.ts"
+    "file_path": "/path/to/test.ts"
   }
 }
 ```
@@ -806,7 +806,7 @@ event: content_block_delta
 data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"_path\":\""}}
 
 event: content_block_delta
-data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"/Users/jack/test.ts\"}"}}
+data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"/path/to/test.ts\"}"}}
 
 event: content_block_stop
 data: {"type":"content_block_stop","index":1}
@@ -817,7 +817,7 @@ data: {"type":"content_block_stop","index":1}
 let input = "";
 // For each delta event:
 input += delta.partial_json;
-// Final: input = "{\"file_path\":\"/Users/jack/test.ts\"}"
+// Final: input = "{\"file_path\":\"/path/to/test.ts\"}"
 const params = JSON.parse(input);
 ```
 
@@ -1068,7 +1068,7 @@ event: content_block_start
 data: {"type":"content_block_start","index":1,"content_block":{"type":"tool_use","id":"toolu_01ABC123","name":"Read","input":{}}}
 
 event: content_block_delta
-data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file_path\":\"/Users/jack/mag/claude-code/mcp/claudish/package.json\"}"}}
+data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file_path\":\"/path/to/project/package.json\"}"}}
 
 event: content_block_stop
 data: {"type":"content_block_stop","index":1}
@@ -1094,7 +1094,7 @@ POST /v1/messages
       "type": "tool_use",
       "id": "toolu_01ABC123",
       "name": "Read",
-      "input": {"file_path": "/Users/jack/mag/claude-code/mcp/claudish/package.json"}
+      "input": {"file_path": "/path/to/project/package.json"}
     }]
   }, {
     "role": "user",

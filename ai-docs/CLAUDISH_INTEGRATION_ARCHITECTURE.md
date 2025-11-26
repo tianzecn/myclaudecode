@@ -327,7 +327,7 @@ async function updateModelsFromOpenRouter(): Promise<void> {
 
 ### Integration Skill
 
-**Location:** `/Users/jack/mag/claude-code/skills/claudish-integration/SKILL.md`
+**Location:** `skills/claudish-integration/SKILL.md`
 
 **Purpose:** Guide agents on how to query Claudish for model recommendations
 

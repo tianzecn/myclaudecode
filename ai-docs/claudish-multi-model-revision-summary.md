@@ -1,6 +1,6 @@
 # Multi-Model Orchestration Pattern - Revision Summary
 
-**Design Document:** `/Users/jack/mag/claude-code/ai-docs/skill-design-claudish-multi-model.md`
+**Design Document:** `ai-docs/skill-design-claudish-multi-model.md`
 **Version:** 1.0.0 → 1.1.0
 **Revision Date:** November 19, 2025
 **Based on:** 4-model external review feedback (Grok, DeepSeek, Gemini 3 Pro, GPT-5.1)
@@ -122,7 +122,7 @@
 
 ## Files Modified
 
-1. `/Users/jack/mag/claude-code/ai-docs/skill-design-claudish-multi-model.md`
+1. `ai-docs/skill-design-claudish-multi-model.md`
    - 50+ edits across 1700+ line document
    - 200+ lines new content
    - Version 1.0.0 → 1.1.0

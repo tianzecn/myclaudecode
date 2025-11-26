@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-14 21:16:21
 **Reviewer**: Claude Sonnet 4.5
-**File**: /Users/jack/mag/claude-code/.claude/commands/update-models.md
+**File**: `.claude/commands/update-models.md`
 **Type**: Orchestrator Command
 
 ## Executive Summary
@@ -77,14 +77,14 @@
 - **Fix**: Add verification step after backup creation:
   ```bash
   # Verify backup was created successfully
-  test -f /Users/jack/mag/claude-code/shared/recommended-models.md.backup && \
+  test -f shared/recommended-models.md.backup && \
   echo "Backup created successfully"
   ```
 - **Location**: PHASE 3, step after backup creation (after line 328)
 
 #### Issue 2: Hardcoded Absolute Paths Throughout
 - **Category**: Portability
-- **Description**: All file paths are hardcoded to `/Users/jack/mag/claude-code/`. While this is appropriate for the current implementation (and documented in CLAUDE.md), it slightly reduces portability.
+- **Description**: Previously all file paths were hardcoded to absolute paths. These have now been converted to relative paths for portability.
 - **Impact**: Minimal - This is an intentional design decision for project-specific commands. Command is designed for this specific repository structure.
 - **Fix**: No action required. This is actually correct for a project-specific command. Alternative would be to use environment variables like `${PROJECT_ROOT}`, but current approach is explicit and clear.
 - **Location**: Throughout workflow phases (lines 125-467)

@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-14 14:26:05
 **Reviewer**: Claude Sonnet 4.5
-**File**: /Users/jack/mag/claude-code/.claude/agents/agent-reviewer.md
+**File**: `.claude/agents/agent-reviewer.md`
 **Type**: Review Agent
 
 ## Executive Summary

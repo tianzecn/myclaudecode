@@ -390,7 +390,7 @@ Keep AI model recommendations fresh and accurate by fetching from OpenRouter API
 3. **Write cache file with file locking (CRITICAL FIX #4):**
    ```bash
    # Create directory if needed
-   mkdir -p /Users/jack/mag/claude-code/mcp/claudish
+   mkdir -p mcp/claudish
 
    # Write cache with exclusive file locking to prevent concurrent access corruption
    (
@@ -400,7 +400,7 @@ Keep AI model recommendations fresh and accurate by fetching from OpenRouter API
        echo "Lock acquired, writing cache..."
 
        # Write cache (use Write tool)
-       cat /tmp/model-cache.json > /Users/jack/mag/claude-code/mcp/claudish/.model-cache.json
+       cat /tmp/model-cache.json > mcp/claudish/.model-cache.json
 
        echo "✅ Cache written successfully"
      else
@@ -414,10 +414,10 @@ Keep AI model recommendations fresh and accurate by fetching from OpenRouter API
 4. **Verify cache written:**
    ```bash
    # Check file exists and is valid JSON
-   jq -e '.version' /Users/jack/mag/claude-code/mcp/claudish/.model-cache.json
+   jq -e '.version' mcp/claudish/.model-cache.json
 
    # Verify checksum was written
-   cached_checksum=$(jq -r '.integrity.checksum' /Users/jack/mag/claude-code/mcp/claudish/.model-cache.json)
+   cached_checksum=$(jq -r '.integrity.checksum' mcp/claudish/.model-cache.json)
    echo "Cached checksum: $cached_checksum"
    ```
 
@@ -443,7 +443,7 @@ Keep AI model recommendations fresh and accurate by fetching from OpenRouter API
 
 1. **Read existing documentation:**
    ```bash
-   Read: /Users/jack/mag/claude-code/shared/recommended-models.md
+   Read: shared/recommended-models.md
    ```
 
 2. **Update Quick Reference section:**
@@ -470,7 +470,7 @@ Keep AI model recommendations fresh and accurate by fetching from OpenRouter API
 
 5. **Write updated documentation:**
    ```bash
-   Write: /Users/jack/mag/claude-code/shared/recommended-models.md
+   Write: shared/recommended-models.md
    Content: (updated markdown)
    ```
 

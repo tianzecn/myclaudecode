@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-14 13:55:01
 **Reviewer**: Claude Sonnet 4.5
-**File**: /Users/jack/mag/claude-code/.claude/agents/agent-architect.md
+**File**: `.claude/agents/agent-architect.md`
 **Type**: Planning Agent (Meta-Agent for designing other agents)
 
 ## Executive Summary

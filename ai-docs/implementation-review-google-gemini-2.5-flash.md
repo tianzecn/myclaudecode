@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-16 20:52:03
 **Reviewer**: Claude Sonnet 4.5 (Local Review - Gemini Proxy Unavailable)
-**File**: /Users/jack/mag/claude-code/.claude/agents/model-scraper.md
+**File**: `.claude/agents/model-scraper.md`
 **Type**: Implementation Agent (Web Scraper)
 
 ## Executive Summary

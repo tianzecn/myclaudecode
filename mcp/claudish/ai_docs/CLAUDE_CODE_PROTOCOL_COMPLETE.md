@@ -370,7 +370,7 @@ data: {
   "index": 1,
   "delta": {
     "type": "input_json_delta",
-    "partial_json": "_path\":\"/Users/jack/mag/claude-code/mcp/claudish/package.json\"}"
+    "partial_json": "_path\":\"/path/to/project/package.json\"}"
   }
 }
 
@@ -382,8 +382,8 @@ data: {"type":"content_block_stop","index":1}
 ```javascript
 let input = "";
 input += "{\"file";
-input += "_path\":\"/Users/jack/mag/claude-code/mcp/claudish/package.json\"}";
-// Final: {"file_path":"/Users/jack/mag/claude-code/mcp/claudish/package.json"}
+input += "_path\":\"/path/to/project/package.json\"}";
+// Final: {"file_path":"/path/to/project/package.json"}
 ```
 
 #### Claude Code Executes Tool
@@ -410,7 +410,7 @@ Claude Code reads the file and gets result.
           "id": "toolu_01ABC123",
           "name": "Read",
           "input": {
-            "file_path": "/Users/jack/mag/claude-code/mcp/claudish/package.json"
+            "file_path": "/path/to/project/package.json"
           }
         }
       ]
@@ -656,7 +656,7 @@ event: content_block_start
 data: {"type":"content_block_start","index":1,"content_block":{"type":"tool_use","id":"toolu_01XYZ","name":"Read","input":{}}}
 
 event: content_block_delta
-data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file_path\":\"/Users/jack/package.json\"}"}}
+data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file_path\":\"/path/to/package.json\"}"}}
 
 event: content_block_stop
 data: {"type":"content_block_stop","index":1}

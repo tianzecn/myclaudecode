@@ -2,7 +2,7 @@
 
 ## ✅ Repository Status: PRODUCTION READY
 
-**Repository:** `/Users/jack/mag/claude-code`
+**Repository:** `mag-claude-plugins` (local development path: project root)
 **Marketplace:** mag-claude-plugins
 **Owner:** Jack Rudenko (i@madappgang.com) @ MadAppGang
 **License:** MIT
@@ -276,8 +276,8 @@ claude-code/
 ### Option 1: Local Testing
 
 ```bash
-# Add marketplace locally
-/plugin marketplace add /Users/jack/mag/claude-code
+# Add marketplace locally (from repo root)
+/plugin marketplace add /path/to/claude-code
 
 # Install plugin
 /plugin install frontend@mag-claude-plugins
@@ -286,8 +286,7 @@ claude-code/
 ### Option 2: GitHub Distribution
 
 ```bash
-# Push to GitHub
-cd /Users/jack/mag/claude-code
+# Push to GitHub (from repo root)
 git add .
 git commit -m "Complete plugin marketplace with all agents, skills, and MCP support"
 git push origin main

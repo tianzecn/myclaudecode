@@ -1,7 +1,7 @@
 # Multi-Model Orchestration Pattern - Design Review
 
 **Reviewer:** DeepSeek Chat (via OpenRouter)
-**Document:** `/Users/jack/mag/claude-code/ai-docs/skill-design-claudish-multi-model.md`
+**Document:** `ai-docs/skill-design-claudish-multi-model.md`
 **Review Date:** November 19, 2025
 
 ---

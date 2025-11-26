@@ -34,7 +34,7 @@ None identified.
 
 #### Issue 1: Tiered Pricing Implementation Incomplete
 - **Category**: Completeness
-- **Description**: The agent references `/Users/jack/mag/claude-code/shared/TIERED_PRICING_SPEC.md` but doesn't include the actual implementation logic for handling tiered pricing. Only mentions detection but no selection logic.
+- **Description**: The agent references `shared/TIERED_PRICING_SPEC.md` but doesn't include the actual implementation logic for handling tiered pricing. Only mentions detection but no selection logic.
 - **Impact**: Could lead to incorrect pricing recommendations (critical for user cost decisions).
 - **Fix**: Add complete tiered pricing selection implementation with code examples showing how to calculate cheapest tier and extract correct context window.
 

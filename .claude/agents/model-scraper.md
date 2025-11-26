@@ -88,7 +88,7 @@ tools: TodoWrite, Read, Write, Bash, mcp__chrome-devtools__navigate_page, mcp__c
       **CRITICAL: Some models have tiered/conditional pricing where cost increases
       dramatically at higher context windows. Always select the CHEAPEST tier.**
 
-      See /Users/jack/mag/claude-code/shared/TIERED_PRICING_SPEC.md for full specification.
+      See `shared/TIERED_PRICING_SPEC.md` (in repository root) for full specification.
 
       **Detection:**
       When extracting pricing, check if model has multiple pricing tiers:
@@ -1325,7 +1325,7 @@ for (const model of detailExtractionQueue) {
       - Budget-Friendly: 1 model
 
       **Output File:**
-      - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+      - Location: `shared/recommended-models.md` (in repository root)
       - Size: ~1000 lines (9 non-Anthropic models)
       - Version: 1.1.0 (updated from 1.0.2)
       - Last Updated: 2025-11-14
@@ -1388,7 +1388,7 @@ for (const model of detailExtractionQueue) {
       - See: error-search-8.png, error-search-9-provider-mismatch.png
 
       **Output File:**
-      - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+      - Location: `shared/recommended-models.md` (in repository root)
       - Size: ~850 lines (7 non-Anthropic models)
 
       **Recommendation:**

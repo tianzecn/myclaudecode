@@ -172,11 +172,11 @@ Task prompt with:
    ```
 3. Check if sync script exists:
    ```bash
-   test -f /Users/jack/mag/claude-code/scripts/sync-shared.ts
+   test -f scripts/sync-shared.ts
    ```
 4. Check if shared models file exists:
    ```bash
-   test -f /Users/jack/mag/claude-code/shared/recommended-models.md
+   test -f shared/recommended-models.md
    ```
 5. Read existing shared/recommended-models.md to cache current state
 6. Mark PHASE 0 complete, PHASE 1 in_progress
@@ -392,10 +392,10 @@ function parseUserModification(input: string): Modification {
 1. Mark PHASE 3 as in_progress in TodoWrite
 2. Create backup of current file:
    ```bash
-   cp /Users/jack/mag/claude-code/shared/recommended-models.md \
-      /Users/jack/mag/claude-code/shared/recommended-models.md.backup
+   cp shared/recommended-models.md \
+      shared/recommended-models.md.backup
    ```
-   (Note: Use absolute paths for backup consistency)
+   (Note: Use paths relative to repository root)
 3. Launch model-scraper agent to update file:
    ```
    Prompt: "Update shared/recommended-models.md with these approved models:
@@ -422,10 +422,10 @@ function parseUserModification(input: string): Modification {
 5. Read updated file to verify changes:
    ```bash
    # Verify version incremented
-   grep "Version:" /Users/jack/mag/claude-code/shared/recommended-models.md
+   grep "Version:" shared/recommended-models.md
 
    # Verify date updated
-   grep "Last Updated:" /Users/jack/mag/claude-code/shared/recommended-models.md
+   grep "Last Updated:" shared/recommended-models.md
 
    # Verify file is valid markdown
    # (No automated check - visual inspection during read)
@@ -433,8 +433,8 @@ function parseUserModification(input: string): Modification {
 6. If verification fails:
    - Restore from backup:
      ```bash
-     cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-        /Users/jack/mag/claude-code/shared/recommended-models.md
+     cp shared/recommended-models.md.backup \
+        shared/recommended-models.md
      ```
    - Report error and stop
    - Preserve backup for debugging
@@ -457,19 +457,19 @@ function parseUserModification(input: string): Modification {
 1. Mark PHASE 4 as in_progress in TodoWrite
 2. Run sync script via Bash:
    ```bash
-   cd /Users/jack/mag/claude-code && bun run scripts/sync-shared.ts
+   bun run scripts/sync-shared.ts
    ```
 3. Wait for script completion
 4. Verify sync results:
    ```bash
    # Check that files were updated
-   ls -l /Users/jack/mag/claude-code/plugins/*/recommended-models.md
+   ls -l plugins/*/recommended-models.md
 
    # Verify content matches source (md5 hash comparison)
-   md5 /Users/jack/mag/claude-code/shared/recommended-models.md \
-       /Users/jack/mag/claude-code/plugins/frontend/recommended-models.md \
-       /Users/jack/mag/claude-code/plugins/bun/recommended-models.md \
-       /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+   md5 shared/recommended-models.md \
+       plugins/frontend/recommended-models.md \
+       plugins/bun/recommended-models.md \
+       plugins/code-analysis/recommended-models.md
    ```
 5. **Partial Sync Recovery Strategy:**
    - If ALL syncs fail:
@@ -489,8 +489,8 @@ function parseUserModification(input: string): Modification {
        * **Retry:** Run sync script again (max 2 retry attempts)
 6. Show git status to user:
    ```bash
-   cd /Users/jack/mag/claude-code && git status
-   cd /Users/jack/mag/claude-code && git diff --stat
+   git status
+   git diff --stat
    ```
 7. Present summary:
    ```
@@ -517,7 +517,7 @@ function parseUserModification(input: string): Modification {
    ```
 8. Remove backup file:
    ```bash
-   rm /Users/jack/mag/claude-code/shared/recommended-models.md.backup
+   rm shared/recommended-models.md.backup
    ```
 9. Mark PHASE 4 complete
 10. Mark ALL TodoWrite tasks complete
@@ -655,23 +655,6 @@ The model-scraper agent can:
    - Summary of changes (models added/removed/updated)
    - Old version → New version
    - File path updated
-
-### Sync Script Behavior
-
-The `scripts/sync-shared.ts` script:
-1. Reads `/Users/jack/mag/claude-code/shared/recommended-models.md`
-2. Writes identical copy to each plugin directory:
-   - `plugins/frontend/recommended-models.md`
-   - `plugins/bun/recommended-models.md`
-   - `plugins/code-analysis/recommended-models.md`
-3. Reports success/failure per file with exit codes
-4. Exits with code 0 on complete success, non-zero on any failure
-5. **Does NOT commit changes** - User must commit manually
-
-**Partial Failure Behavior:**
-- Script may succeed for some files and fail for others
-- Check md5 hashes to identify which files synced successfully
-- Use git status to see which files were modified
 
 ### Diversity Principle Thresholds
 
@@ -915,17 +898,17 @@ M  plugins/bun/recommended-models.md
 **Manual Recovery Steps for code-analysis plugin:**
 1. Check permissions:
    ```bash
-   ls -la /Users/jack/mag/claude-code/plugins/code-analysis/
+   ls -la plugins/code-analysis/
    ```
 2. Manually copy file:
    ```bash
-   cp /Users/jack/mag/claude-code/shared/recommended-models.md \
-      /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+   cp shared/recommended-models.md \
+      plugins/code-analysis/recommended-models.md
    ```
 3. Verify sync:
    ```bash
-   md5 /Users/jack/mag/claude-code/shared/recommended-models.md \
-       /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+   md5 shared/recommended-models.md \
+       plugins/code-analysis/recommended-models.md
    ```
 
 **Next Steps:**
@@ -966,8 +949,8 @@ M  plugins/bun/recommended-models.md
 **Recovery:**
 1. Restore from backup immediately:
    ```bash
-   cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-      /Users/jack/mag/claude-code/shared/recommended-models.md
+   cp shared/recommended-models.md.backup \
+      shared/recommended-models.md
    ```
 2. Verify backup restoration (read file)
 3. Report specific error to user
@@ -982,8 +965,8 @@ M  plugins/bun/recommended-models.md
 #### Complete Failure (0/3 plugins synced)
 1. Restore backup:
    ```bash
-   cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-      /Users/jack/mag/claude-code/shared/recommended-models.md
+   cp shared/recommended-models.md.backup \
+      shared/recommended-models.md
    ```
 2. Verify restoration with md5sum
 3. Report error and script output

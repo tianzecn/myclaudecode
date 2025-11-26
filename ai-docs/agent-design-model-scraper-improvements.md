@@ -844,7 +844,7 @@ if (searchResult.found) {
 2. Rank 8: "Model Name" - Detail page missing pricing data
 
 **Output File:**
-- Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+- Location: shared/recommended-models.md
 - Size: ~850 lines (7 models)
 
 **Recommendation:**
@@ -1197,7 +1197,7 @@ Add new example comparing old vs new approach:
     - Efficiency: 100% of processed models are usable
 
     **Output File:**
-    - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+    - Location: shared/recommended-models.md
     - Size: ~1000 lines (8 non-Anthropic models)
     - Version: 1.1.0 (updated from 1.0.2)
 
@@ -1503,7 +1503,7 @@ for (const model of extractedModels) {
     - See: error-search-5.png, error-search-8-mismatch.png
 
     **Output File:**
-    - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+    - Location: shared/recommended-models.md
     - Size: ~850 lines (7 models)
     - Version: 1.0.2
 

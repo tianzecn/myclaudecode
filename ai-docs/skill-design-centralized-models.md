@@ -401,7 +401,7 @@ This skill provides access to a curated list of recommended AI models for variou
 ```typescript
 // Read the centralized knowledge base
 const knowledgeBase = await Read({
-  file_path: "/Users/jack/mag/claude-code/knowledge/recommended-models.json"
+  file_path: "knowledge/recommended-models.json"
 });
 
 const models = JSON.parse(knowledgeBase);
@@ -527,7 +527,7 @@ Would you like me to launch the plan-reviewer agent with one of these models?
 
 ### 3. Agent Design: `model-advisor`
 
-**Location:** `/Users/jack/mag/claude-code/plugins/frontend/agents/model-advisor.md`
+**Location:** `plugins/frontend/agents/model-advisor.md`
 
 **Purpose:** Help users select the right AI model for their task
 
@@ -564,7 +564,7 @@ tools: Read
   <critical_constraints>
     <knowledge_base_requirement>
       You MUST read the centralized model knowledge base from:
-      `/Users/jack/mag/claude-code/knowledge/recommended-models.json`
+      `knowledge/recommended-models.json`
 
       This is your authoritative source for model recommendations.
       DO NOT make up model information or use outdated data.
@@ -838,7 +838,7 @@ tools: Read
 
 ### 4. Optional Update Script: `scripts/update-models.ts`
 
-**Location:** `/Users/jack/mag/claude-code/scripts/update-models.ts`
+**Location:** `scripts/update-models.ts`
 
 **Purpose:** Maintainers can update model data from external source (optional)
 
@@ -1067,7 +1067,7 @@ In PHASE 1.5 of `/implement` command (multi-model plan review):
 ## File Structure
 
 ```
-/Users/jack/mag/claude-code/
+project-root/
 ├── knowledge/
 │   └── recommended-models.json          # Single source of truth (NEW)
 ├── skills/

@@ -102,7 +102,7 @@ The system prompt includes:
 
 4. **Environment Information**
    ```
-   Working directory: /Users/jack/mag/claude-code/mcp/claudish
+   Working directory: /path/to/claude-code/mcp/claudish
    Platform: darwin
    OS Version: Darwin 25.1.0
    Today's date: 2025-11-11

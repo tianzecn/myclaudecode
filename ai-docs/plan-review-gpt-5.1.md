@@ -2,8 +2,8 @@
 
 Reviewer: agent-architect (Claude Code agent)
 Date: 2025-11-19
-Target file: `/Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md`
-Design doc: `/Users/jack/mag/claude-code/ai-docs/skill-design-claudish-multi-model.md`
+Target file: `shared/skills/claudish-usage/SKILL.md`
+Design doc: `ai-docs/skill-design-claudish-multi-model.md`
 
 ---
 

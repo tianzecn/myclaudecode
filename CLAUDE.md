@@ -12,7 +12,7 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v3.8.0) - Full-featured Opus-powered
+- **Frontend Development Plugin** (v3.8.2) - Full-featured Opus-powered
   - 11 Specialized Agents (Plan Reviewer + CSS Developer + Designer + UI Developer ecosystem with multi-model review)
   - **Opus 4.5 Upgrades** (NEW in v3.8.0) - Critical architecture and review agents now use Opus 4.5 for superior reasoning
   - **Multi-Model Code Review** (NEW in v3.6.0) - `/review` command with parallel execution (3-5x speedup), consensus analysis, and cost transparency
@@ -37,12 +37,12 @@ A complete Claude Code plugin marketplace with enterprise-level architecture:
   - CSS architecture management with knowledge files
   - Pixel-perfect UI implementation with parallel design validation
   - Task decomposition for isolated, parallel implementation
-- **Code Analysis Plugin** (v1.1.0) - Deep codebase investigation
+- **Code Analysis Plugin** (v1.3.3) - Deep codebase investigation
   - 1 Specialized Agent (codebase-detective)
   - 2 Skills (deep-analysis + semantic-code-search)
   - Pattern discovery and bug investigation
   - Semantic code search with claude-context MCP
-- **Bun Backend Plugin** (v1.5.0) - Production-ready TypeScript backend with Bun
+- **Bun Backend Plugin** (v1.5.2) - Production-ready TypeScript backend with Bun
   - 3 Specialized Agents (backend-developer + api-architect + apidog)
   - **Opus 4.5 Architecture** (NEW in v1.5.0) - API Architect now uses Opus 4.5 for superior system design
   - 3 Slash Commands (/implement-api + /setup-project + /apidog)
@@ -52,7 +52,7 @@ A complete Claude Code plugin marketplace with enterprise-level architecture:
   - Apidog integration for API documentation synchronization
   - Clean architecture (routes → controllers → services → repositories)
   - Full-stack TypeScript consistency
-- **Orchestration Plugin** (v0.1.0) - Shared multi-agent coordination patterns
+- **Orchestration Plugin** (v0.1.1) - Shared multi-agent coordination patterns
   - **5 Specialized Skills** (shared orchestration knowledge):
     - **multi-agent-coordination** - Parallel vs sequential execution, agent selection, sub-agent delegation
     - **multi-model-validation** - 4-Message Pattern, Claudish proxy, consensus analysis, 3-5x speedup
@@ -336,7 +336,7 @@ mcp__claude-context__search_code(path: "/path", query: "...")
 
 // Step 1: Try search first
 result = mcp__claude-context__search_code({
-  path: "/Users/jack/project",
+  path: "/path/to/project",
   query: "user authentication login flow"
 })
 
@@ -346,14 +346,14 @@ if (result.error && result.error.includes("not indexed")) {
 
   // Index the codebase
   mcp__claude-context__index_codebase({
-    path: "/Users/jack/project",
+    path: "/path/to/project",
     splitter: "ast",
     force: false  // Don't overwrite existing index
   })
 
   // Retry the search
   result = mcp__claude-context__search_code({
-    path: "/Users/jack/project",
+    path: "/path/to/project",
     query: "user authentication login flow"
   })
 }
@@ -654,7 +654,7 @@ Install plugin globally (not recommended for teams):
 
 Test local changes:
 ```bash
-/plugin marketplace add /Users/jack/mag/claude-code
+/plugin marketplace add /path/to/claude-code
 /plugin install frontend@mag-claude-plugins
 ```
 
@@ -687,10 +687,10 @@ Include marketplace in project settings (requires folder trust):
 ✅ **Production Ready**
 
 **4 Complete Plugins:**
-1. **Orchestration** (v0.1.0) - 5 skills - Shared multi-agent coordination patterns (skills-only)
-2. **Frontend** (v3.7.0) - 13 agents, 6 commands, 11 skills - Full-featured Sonnet-powered
-3. **Code Analysis** (v1.1.0) - 1 agent, 1 command, 2 skills - Deep investigation with semantic search
-4. **Bun Backend** (v1.2.0) - 3 agents, 3 commands, 1 skill - Production TypeScript backend with Bun
+1. **Orchestration** (v0.1.1) - 5 skills - Shared multi-agent coordination patterns (skills-only)
+2. **Frontend** (v3.8.2) - 11 agents, 7 commands, 11 skills - Full-featured Opus-powered
+3. **Code Analysis** (v1.3.3) - 1 agent, 1 command, 2 skills - Deep investigation with semantic search
+4. **Bun Backend** (v1.5.2) - 3 agents, 3 commands, 1 skill - Production TypeScript backend with Bun
 
 **Features:**
 - **Skills-First Architecture** - Orchestration plugin demonstrates pure skills pattern
@@ -737,17 +737,21 @@ Include marketplace in project settings (requires folder trust):
 **Detailed Release Notes:** See [RELEASES.md](./RELEASES.md) for comprehensive release documentation
 
 **Current Versions:**
-- Orchestration Plugin: **v0.1.0** (2025-11-22)
-- Frontend Plugin: **v3.8.0** (2025-11-25)
-- Code Analysis Plugin: **v1.1.0**
-- Bun Backend Plugin: **v1.5.0** (2025-11-25)
+- Orchestration Plugin: **v0.1.1** (2025-11-26)
+- Frontend Plugin: **v3.8.2** (2025-11-26)
+- Code Analysis Plugin: **v1.3.3** (2025-11-26)
+- Bun Backend Plugin: **v1.5.2** (2025-11-26)
 - Claudish CLI: **v1.1.2** (2025-11-11)
 
-**Latest Changes (Frontend v3.8.0 & Bun v1.5.0):**
+**Latest Changes (All Plugins v*.*.2/v0.1.1):**
+- ✅ **Path Cleanup** - Eliminated all hardcoded `/Users/jack` paths across entire codebase
+- ✅ **Documentation Portability** - All docs now use relative paths for better portability
+- ✅ **Marketplace**: v4.1.2 release
+
+**Previous Changes (Frontend v3.8.0 & Bun v1.5.0):**
 - ✅ **Opus 4.5 Upgrades** - Critical agents upgraded to Claude Opus 4.5 for superior reasoning
 - ✅ **Frontend**: `architect`, `reviewer`, `test-architect`, `plan-reviewer` updated
 - ✅ **Bun**: `api-architect` updated
-- ✅ **Marketplace**: v4.1.0 release
 
 **Previous Changes (Orchestration v0.1.0):**
 - ✅ **NEW**: Orchestration plugin with 5 shared skills
@@ -760,13 +764,15 @@ Include marketplace in project settings (requires folder trust):
 - ✅ **6,774 lines** of comprehensive orchestration knowledge
 
 **Git Tags:**
-- Orchestration: `plugins/orchestration/v0.1.0`
-- Frontend: `plugins/frontend/v3.8.0`
-- Bun: `plugins/bun/v1.5.0`
+- Orchestration: `plugins/orchestration/v0.1.1`
+- Frontend: `plugins/frontend/v3.8.2`
+- Bun: `plugins/bun/v1.5.2`
+- Code Analysis: `plugins/code-analysis/v1.3.3`
 - Use correct tag format when releasing: `plugins/{plugin-name}/vX.Y.Z`
 
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Last Updated:** November 25, 2025
-**Version:** 4 plugins (Orchestration v0.1.0, Frontend v3.8.0, Code Analysis v1.1.0, Bun Backend v1.5.0)
+**Last Updated:** November 26, 2025
+**Version:** 4 plugins (Orchestration v0.1.1, Frontend v3.8.2, Code Analysis v1.3.3, Bun Backend v1.5.2)
+- do not use hardcoded path in code, docs, comments or any other files

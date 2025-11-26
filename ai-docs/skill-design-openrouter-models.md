@@ -31,7 +31,7 @@ Create a shareable skill with an executable Bun script that:
 
 ### 1. Skill Location: Project-Level Shared
 
-**Decision:** Place in `/Users/jack/mag/claude-code/skills/openrouter-models/`
+**Decision:** Place in `skills/openrouter-models/`
 
 **Rationale:**
 - **Cross-plugin utility** - Useful for frontend, bun, and future plugins
@@ -397,7 +397,7 @@ description: Fetch trending programming models from OpenRouter rankings. Use whe
 ### Phase 1: Core Script (Priority: High)
 
 **Files to Create:**
-1. `/Users/jack/mag/claude-code/skills/openrouter-models/fetch-models.ts`
+1. `skills/openrouter-models/fetch-models.ts`
    - Fetch rankings from OpenRouter
    - Parse RSC format
    - Extract top 9 models
@@ -415,7 +415,7 @@ description: Fetch trending programming models from OpenRouter rankings. Use whe
 ### Phase 2: SKILL.md Documentation (Priority: High)
 
 **File to Create:**
-2. `/Users/jack/mag/claude-code/skills/openrouter-models/SKILL.md`
+2. `skills/openrouter-models/SKILL.md`
    - Clear frontmatter with use cases
    - Instructions for when to invoke this skill
    - Output format documentation

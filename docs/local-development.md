@@ -70,8 +70,8 @@ claude-code/
 Add the local marketplace globally to test across all projects:
 
 ```bash
-# Add local marketplace (use absolute path)
-/plugin marketplace add /Users/jack/mag/claude-code
+# Add local marketplace (use absolute path to your local clone)
+/plugin marketplace add /path/to/claude-code
 
 # Install plugin from local marketplace
 /plugin install frontend@mag-claude-plugins
@@ -98,7 +98,7 @@ Add local marketplace to a specific test project:
     "mag-claude-plugins": {
       "source": {
         "source": "local",
-        "path": "/Users/jack/mag/claude-code"
+        "path": "/path/to/claude-code"
       }
     }
   },
@@ -177,7 +177,7 @@ Check that plugin is loaded correctly:
 /plugin list
 
 # Should show:
-# frontend@mag-claude-plugins (global) - from /Users/jack/mag/claude-code
+# frontend@mag-claude-plugins (global) - from /path/to/claude-code
 ```
 
 ---
@@ -368,7 +368,7 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 
 # Should show local path:
 # frontend@mag-claude-plugins (global)
-#   from /Users/jack/mag/claude-code
+#   from /path/to/claude-code
 ```
 
 ### Validate JSON Files
@@ -427,7 +427,7 @@ Ensure all paths in `plugin.json` are relative and correct:
 # In your MCP server code, log the variable:
 console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 
-# Should output: /Users/jack/mag/claude-code/plugins/frontend
+# Should output: /path/to/claude-code/plugins/frontend
 ```
 
 ---
@@ -452,7 +452,7 @@ cat > .claude/settings.json << 'EOF'
     "mag-claude-plugins": {
       "source": {
         "source": "local",
-        "path": "/Users/jack/mag/claude-code"
+        "path": "/path/to/claude-code"
       }
     }
   },
@@ -531,7 +531,7 @@ Compare behavior to ensure changes work as expected.
    ```bash
    /plugin remove frontend@mag-claude-plugins
    /plugin marketplace remove mag-claude-plugins
-   /plugin marketplace add /Users/jack/mag/claude-code
+   /plugin marketplace add /path/to/claude-code
    /plugin install frontend@mag-claude-plugins
    ```
 
@@ -610,7 +610,7 @@ Once you've tested changes locally, publish to GitHub:
 ### 1. Commit Changes
 
 ```bash
-cd /Users/jack/mag/claude-code
+cd /path/to/claude-code
 
 # Stage changes
 git add .
@@ -738,7 +738,7 @@ git push --tags
 
 ```bash
 # Marketplace management
-/plugin marketplace add /Users/jack/mag/claude-code
+/plugin marketplace add /path/to/claude-code
 /plugin marketplace remove mag-claude-plugins
 /plugin marketplace list
 
@@ -761,17 +761,17 @@ git push origin main
 ### Important Paths
 
 ```bash
-# Marketplace root
-/Users/jack/mag/claude-code
+# Marketplace root (replace with your local path)
+/path/to/claude-code
 
 # Marketplace config
-/Users/jack/mag/claude-code/.claude-plugin/marketplace.json
+/path/to/claude-code/.claude-plugin/marketplace.json
 
 # Plugin root
-/Users/jack/mag/claude-code/plugins/frontend
+/path/to/claude-code/plugins/frontend
 
 # Plugin manifest
-/Users/jack/mag/claude-code/plugins/frontend/plugin.json
+/path/to/claude-code/plugins/frontend/plugin.json
 ```
 
 ---

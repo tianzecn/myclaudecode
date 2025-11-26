@@ -5,8 +5,8 @@
 **Review Date:** 2025-11-19
 **Method:** External AI agent design review via OpenRouter
 **Documents Reviewed:**
-- `/Users/jack/mag/claude-code/ai-docs/command-design-update-models-v2.md`
-- `/Users/jack/mag/claude-code/ai-docs/agent-design-model-api-manager.md`
+- `ai-docs/command-design-update-models-v2.md`
+- `ai-docs/agent-design-model-api-manager.md`
 
 ---
 

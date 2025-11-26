@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-19
 **Reviewer**: OpenAI GPT-5.1
-**File**: /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md (lines 285-1150)
+**File**: `shared/skills/claudish-usage/SKILL.md` (lines 285-1150)
 **Type**: Skill Documentation - Orchestration Pattern
 
 ## Executive Summary

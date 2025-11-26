@@ -148,7 +148,7 @@ node dist/index.js
 ### Step 5: Commit Claudish Changes
 
 ```bash
-cd /Users/jack/mag/claude-code
+cd /path/to/claude-code
 
 # Stage Claudish files only
 git add mcp/claudish/package.json \
@@ -174,7 +174,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 If plugins need version bumps (e.g., when recommended models change):
 
 ```bash
-cd /Users/jack/mag/claude-code
+cd /path/to/claude-code
 
 # Edit plugin.json files
 vim plugins/frontend/plugin.json     # 3.7.0 → 3.8.0
@@ -244,7 +244,7 @@ npm notice Publishing to https://registry.npmjs.org/
 ### Step 9: Create Git Tags
 
 ```bash
-cd /Users/jack/mag/claude-code
+cd /path/to/claude-code
 
 # Tag Claudish
 git tag mcp/claudish/v1.8.0 -m "Release Claudish v1.8.0
@@ -361,7 +361,7 @@ npm publish
 
 **Fix:**
 ```bash
-cd /Users/jack/mag/claude-code
+cd /path/to/claude-code
 bun run scripts/sync-shared.ts
 
 # Verify sync

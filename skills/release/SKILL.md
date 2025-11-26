@@ -172,7 +172,7 @@ git push origin plugins/frontend/v3.3.0
 **A:** `git tag -d {tag}` then `git push origin :{tag}` then recreate
 
 **Q: How to test locally?**
-**A:** `/plugin marketplace add /Users/jack/mag/claude-code`
+**A:** `/plugin marketplace add /path/to/claude-code`
 
 ---
 

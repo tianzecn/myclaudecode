@@ -1270,9 +1270,9 @@ Include:
 ## Additional Resources
 
 **Documentation:**
-- Full README: `/Users/jack/mag/claude-code/mcp/claudish/README.md`
+- Full README: `mcp/claudish/README.md` (in repository root)
 - AI Agent Guide: Print with `claudish --help-ai`
-- Model Integration: `/Users/jack/mag/claude-code/skills/claudish-integration/SKILL.md`
+- Model Integration: `skills/claudish-integration/SKILL.md` (in repository root)
 
 **External Links:**
 - Claudish GitHub: https://github.com/MadAppGang/claude-code

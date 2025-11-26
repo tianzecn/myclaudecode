@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-16
 **Reviewer**: Claude Sonnet 4.5
-**File**: /Users/jack/mag/claude-code/.claude/agents/model-scraper.md
+**File**: `.claude/agents/model-scraper.md`
 **Type**: Specialized Scraper Agent
 
 ## Executive Summary

@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-14-142240
 **Reviewer**: claude-sonnet-4-5-20250929
-**File**: /Users/jack/mag/claude-code/.claude/agents/agent-architect.md
+**File**: `.claude/agents/agent-architect.md`
 **Type**: Planning Agent
 
 ## Executive Summary

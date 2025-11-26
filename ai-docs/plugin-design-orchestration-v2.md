@@ -1889,7 +1889,7 @@ User Project
 - Phase 4: Extend to other plugins - Weeks 5-8
 - Phase 5: Graduate to v1.0.0 - Month 3 (with go/no-go gates)
 
-**File Location:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration-v2.md`
+**File Location:** `ai-docs/plugin-design-orchestration-v2.md`
 
 **Next Steps:**
 1. Review this revised design document

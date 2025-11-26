@@ -3,7 +3,7 @@
 ## Critical File Locations
 
 ### 1. Configuration Constants
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/src/config.ts`
+**File:** `src/config.ts`
 
 **Key Content:**
 - `ENV` object defining all environment variable names
@@ -23,7 +23,7 @@ export const ENV = {
 ```
 
 ### 2. CLI Argument Parsing
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/src/cli.ts`
+**File:** `src/cli.ts`
 
 **Key Content:**
 - `parseArgs()` function that handles:
@@ -39,7 +39,7 @@ export const ENV = {
 - Line 143: Checking for `OPENROUTER_API_KEY`
 
 ### 3. Model Communication to Claude Code
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/src/claude-runner.ts`
+**File:** `src/claude-runner.ts`
 
 **Key Content:**
 - `createTempSettingsFile()` function (lines 14-67)
@@ -61,7 +61,7 @@ printf "... ${YELLOW}%s${RESET} ..." "$CLAUDISH_ACTIVE_MODEL_NAME"
 ```
 
 ### 4. Proxy Server Token Tracking
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/src/proxy-server.ts`
+**File:** `src/proxy-server.ts`
 
 **Key Content:**
 - Token file path definition (line 805)
@@ -119,7 +119,7 @@ printf "... ${YELLOW}%s${RESET} ..." "$CLAUDISH_ACTIVE_MODEL_NAME"
 
 ## Type Definitions Reference
 
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/src/types.ts`
+**File:** `src/types.ts`
 
 ```typescript
 // Lines 2-9: Available models
@@ -206,16 +206,16 @@ This would allow Claude Code or other tools to read the active model from `ANTHR
 
 ## Testing Locations
 
-**File:** `/Users/jack/mag/claude-code/mcp/claudish/tests/`
+**File:** `tests/`
 
 - `comprehensive-model-test.ts` - Main test file
 - Run with: `bun test ./tests/comprehensive-model-test.ts`
 
 ## Build & Distribution
 
-**Build Output:** `/Users/jack/mag/claude-code/mcp/claudish/dist/`
+**Build Output:** `dist/`
 
-**Package Info:** `/Users/jack/mag/claude-code/mcp/claudish/package.json`
+**Package Info:** `package.json`
 - Name: `claudish`
 - Version: 1.3.1
 - Main entry: `dist/index.js`
@@ -255,7 +255,7 @@ const env: Record<string, string> = {
 ### 1. Enable Debug Logging
 ```bash
 claudish --debug --model x-ai/grok-code-fast-1 "test"
-# Logs to: /Users/jack/mag/claude-code/mcp/claudish/logs/claudish_*.log
+# Logs to: logs/claudish_*.log
 ```
 
 ### 2. Monitor Mode for API Traffic

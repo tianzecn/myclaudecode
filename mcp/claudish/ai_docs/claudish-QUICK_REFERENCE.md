@@ -5,8 +5,8 @@
 ### What is Claudish?
 A CLI tool that runs Claude Code with any OpenRouter model via a local Anthropic API-compatible proxy.
 
-**Version:** 1.3.1  
-**Location:** `/Users/jack/mag/claude-code/mcp/claudish/`  
+**Version:** 1.3.1
+**Location:** `mcp/claudish/` (in repository root)
 **Language:** TypeScript (Bun runtime)
 
 ### Current Environment Variables
@@ -176,8 +176,8 @@ Custom/Unknown:                        100,000 (fallback)
 ### Testing Environment Variable Support
 
 ```bash
-# Build
-cd /Users/jack/mag/claude-code/mcp/claudish
+# Build (from mcp/claudish directory)
+cd mcp/claudish
 bun run build
 
 # Test with ANTHROPIC_MODEL

@@ -202,9 +202,9 @@ Benefits:
 
 ## Files Changed
 
-1. **Created:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration-v2.md` (2,050 lines)
-2. **Created:** `/Users/jack/mag/claude-code/ai-docs/orchestration-plan-revision-summary.md` (THIS FILE)
-3. **Original:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration.md` (UNCHANGED, kept for reference)
+1. **Created:** `ai-docs/plugin-design-orchestration-v2.md` (2,050 lines)
+2. **Created:** `ai-docs/orchestration-plan-revision-summary.md` (THIS FILE)
+3. **Original:** `ai-docs/plugin-design-orchestration.md` (UNCHANGED, kept for reference)
 
 ---
 

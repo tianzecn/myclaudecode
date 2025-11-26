@@ -1953,4 +1953,4 @@ This design provides a complete, production-ready system for managing AI model r
 8. Document in CHANGELOG and release
 
 **Files Created:**
-- `/Users/jack/mag/claude-code/ai-docs/design-shared-models.md` ← This document
+- `ai-docs/design-shared-models.md` ← This document

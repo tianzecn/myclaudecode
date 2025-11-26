@@ -3,7 +3,7 @@
 
 **Reviewed**: 2025-11-19
 **Reviewer**: x-ai/grok-code-fast-1 (via Claudish CLI)
-**File**: `/Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md`
+**File**: `shared/skills/claudish-usage/SKILL.md`
 **Section**: Multi-Model Orchestration Pattern
 
 ## Executive Summary

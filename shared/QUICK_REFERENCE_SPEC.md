@@ -165,7 +165,7 @@ The **Quick Reference** section provides a concise, scannable list of recommende
 *Tiered pricing - price shown is for 0-200K tokens. Beyond 200K costs $90/1M (10x more).
 ```
 
-**Reference:** See `/Users/jack/mag/claude-code/shared/TIERED_PRICING_SPEC.md` for complete handling rules.
+**Reference:** See `shared/TIERED_PRICING_SPEC.md` (in repository root) for complete handling rules.
 
 ### Recommended Marker
 

@@ -5,6 +5,35 @@ All notable changes to the MAG Claude Plugins project will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Marketplace 4.1.2] - 2025-11-26
+
+### Fixed
+- **Path Cleanup Release** - Eliminated all hardcoded `/Users/jack` paths across entire codebase
+- Documentation now uses relative paths for better portability and team collaboration
+
+## [Frontend 3.8.2] - 2025-11-26
+
+### Fixed
+- **Path Cleanup** - Removed all hardcoded absolute paths from:
+  - Agent files, command files, skill documentation
+  - Example code blocks and bash commands
+  - Design documents and review files
+
+## [Bun 1.5.2] - 2025-11-26
+
+### Fixed
+- **Path Cleanup** - Removed all hardcoded absolute paths from agent and skill documentation
+
+## [Code Analysis 1.3.3] - 2025-11-26
+
+### Fixed
+- **Path Cleanup** - Removed all hardcoded absolute paths from skill documentation
+
+## [Orchestration 0.1.1] - 2025-11-26
+
+### Fixed
+- **Path Cleanup** - Removed all hardcoded absolute paths from skill documentation and examples
+
 ## [Frontend 3.8.1] - 2025-11-25
 
 ### Changed

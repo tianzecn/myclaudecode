@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-19
 **Reviewer**: DeepSeek Chat (via proxy)
-**File**: `/Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md`
+**File**: `shared/skills/claudish-usage/SKILL.md`
 **Section**: Lines 285-1150 (Multi-Model Orchestration Pattern)
 
 ## Executive Summary

@@ -373,7 +373,7 @@ event: content_block_delta
 data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"file"}}
 
 event: content_block_delta
-data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"_path\":\"/Users/jack/package.json\"}"}}
+data: {"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"_path\":\"/path/to/package.json\"}"}}
 
 event: content_block_stop
 data: {"type":"content_block_stop","index":1}
@@ -392,11 +392,11 @@ let toolInput = "";
 
 // Receive deltas
 toolInput += "{\"file";              // Delta 1
-toolInput += "_path\":\"/Users/jack/package.json\"}";  // Delta 2
+toolInput += "_path\":\"/path/to/package.json\"}";  // Delta 2
 
 // Parse complete JSON
 const params = JSON.parse(toolInput);
-// Result: {file_path: "/Users/jack/package.json"}
+// Result: {file_path: "/path/to/package.json"}
 
 // Execute tool
 const result = await readFile(params.file_path);

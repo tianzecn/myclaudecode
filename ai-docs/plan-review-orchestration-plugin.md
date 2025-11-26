@@ -2,7 +2,7 @@
 
 **Reviewer:** External AI (OpenAI GPT-4o-mini via OpenRouter)
 **Review Date:** November 22, 2025
-**Design Document:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration.md`
+**Design Document:** `ai-docs/plugin-design-orchestration.md`
 **Design Status:** Ready for Implementation (with critical fixes required)
 
 ---

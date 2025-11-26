@@ -135,7 +135,7 @@ This directory contains comprehensive analysis of the Claudish codebase, created
 
 ## File Locations
 
-All analysis documents are in: `/Users/jack/mag/claude-code/mcp/claudish/`
+All analysis documents are in the `mcp/claudish/` directory.
 
 ```
 mcp/claudish/

@@ -1,6 +1,6 @@
 # Multi-Model Orchestration Pattern - Design Document
 
-**Target Skill:** `/Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md`
+**Target Skill:** `shared/skills/claudish-usage/SKILL.md`
 **Section Name:** Multi-Model Orchestration Pattern
 **Insertion Point:** After line 200 (after Quick Start Guide, before Best Practice: File-Based Sub-Agent Pattern)
 **Estimated Length:** 500-600 lines
@@ -729,9 +729,9 @@ Proceed with multi-model architecture review?`,
   const instruction = `# API Architecture Review
 
 ## Files to Review
-- /Users/jack/project/src/api/users.ts
-- /Users/jack/project/src/api/posts.ts
-- /Users/jack/project/src/api/auth.ts
+- src/api/users.ts
+- src/api/posts.ts
+- src/api/auth.ts
 
 ## Review Criteria
 1. **Architecture Quality**

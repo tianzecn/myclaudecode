@@ -2,7 +2,7 @@
 
 **Reviewed**: 2025-11-19
 **Reviewer**: Claude Opus 4.1 (Local)
-**File**: /Users/jack/mag/claude-code/shared/skills/claudish-usage/SKILL.md
+**File**: `shared/skills/claudish-usage/SKILL.md`
 **Section**: Multi-Model Orchestration Pattern (lines 285-1150)
 **Type**: Skill Documentation Enhancement
 

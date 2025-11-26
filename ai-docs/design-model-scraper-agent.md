@@ -706,7 +706,7 @@ for (const model of extractedModels) {
     - Budget-Friendly: 1 model
 
     **Output File:**
-    - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+    - Location: shared/recommended-models.md
     - Size: ~900 lines
     - Version: 1.0.2 (updated from 1.0.1)
     - Last Updated: 2025-11-14
@@ -736,7 +736,7 @@ for (const model of extractedModels) {
     - See: model-8-error.png, model-9-error.png
 
     **Output File:**
-    - Location: /Users/jack/mag/claude-code/shared/recommended-models.md
+    - Location: shared/recommended-models.md
     - Size: ~850 lines (7 models vs 9 expected)
 
     **Recommendation:**

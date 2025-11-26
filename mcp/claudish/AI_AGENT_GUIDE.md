@@ -512,8 +512,8 @@ ${resultFile}
 ## Additional Resources
 
 - **Full Documentation:** `<claudish-install-path>/README.md`
-- **Skill Document:** `/Users/jack/mag/claude-code/skills/claudish-usage/SKILL.md`
-- **Model Integration:** `/Users/jack/mag/claude-code/skills/claudish-integration/SKILL.md`
+- **Skill Document:** `skills/claudish-usage/SKILL.md` (in repository root)
+- **Model Integration:** `skills/claudish-integration/SKILL.md` (in repository root)
 - **OpenRouter Docs:** https://openrouter.ai/docs
 - **Claudish GitHub:** https://github.com/MadAppGang/claude-code
 

@@ -2,7 +2,7 @@
 
 **Reviewed**: Fri 14 Nov 2025 14:19:38 AEDT
 **Reviewer**: Claude Sonnet 4.5
-**File**: /Users/jack/mag/claude-code/.claude/agents/agent-developer.md
+**File**: `.claude/agents/agent-developer.md`
 **Type**: Implementation agent
 
 ## Executive Summary

@@ -1231,7 +1231,7 @@ User Project
 - Phase 3: Gradual skill references (v3.8.0+)
 - Phase 4: Extend to other plugins
 
-**File Location:** `/Users/jack/mag/claude-code/ai-docs/plugin-design-orchestration.md`
+**File Location:** `ai-docs/plugin-design-orchestration.md`
 
 **Next Steps:**
 1. Review this design document

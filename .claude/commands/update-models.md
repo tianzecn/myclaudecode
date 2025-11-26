@@ -122,17 +122,17 @@ $ARGUMENTS
         <step>Mark PHASE 0 as in_progress</step>
         <step>Check if model-scraper agent available:
           ```bash
-          test -f /Users/jack/mag/claude-code/.claude/agents/model-scraper.md
+          test -f .claude/agents/model-scraper.md
           ```
         </step>
         <step>Check if sync script exists:
           ```bash
-          test -f /Users/jack/mag/claude-code/scripts/sync-shared.ts
+          test -f scripts/sync-shared.ts
           ```
         </step>
         <step>Check if shared models file exists:
           ```bash
-          test -f /Users/jack/mag/claude-code/shared/recommended-models.md
+          test -f shared/recommended-models.md
           ```
         </step>
         <step>Read existing shared/recommended-models.md to cache current state</step>
@@ -333,8 +333,8 @@ $ARGUMENTS
       <steps>
         <step>Create backup of current file:
           ```bash
-          cp /Users/jack/mag/claude-code/shared/recommended-models.md \
-             /Users/jack/mag/claude-code/shared/recommended-models.md.backup
+          cp shared/recommended-models.md \
+             shared/recommended-models.md.backup
           ```
         </step>
         <step>Launch model-scraper agent to update files:
@@ -355,7 +355,7 @@ $ARGUMENTS
           - DO NOT modify maintenance instructions section
 
           **ALSO Generate JSON file (mcp/claudish/recommended-models.json):**
-          - Create/overwrite: /Users/jack/mag/claude-code/mcp/claudish/recommended-models.json
+          - Create/overwrite: mcp/claudish/recommended-models.json
           - Format: Array of model objects with metadata
           - Schema:
             ```json
@@ -396,30 +396,30 @@ $ARGUMENTS
         <step>Read updated files to verify changes:
           ```bash
           # Verify version incremented in MD
-          grep "Version:" /Users/jack/mag/claude-code/shared/recommended-models.md
+          grep "Version:" shared/recommended-models.md
 
           # Verify date updated in MD
-          grep "Last Updated:" /Users/jack/mag/claude-code/shared/recommended-models.md
+          grep "Last Updated:" shared/recommended-models.md
 
           # Verify JSON file created
-          test -f /Users/jack/mag/claude-code/mcp/claudish/recommended-models.json
+          test -f mcp/claudish/recommended-models.json
 
           # Verify JSON is valid
-          cat /Users/jack/mag/claude-code/mcp/claudish/recommended-models.json | jq .version
+          cat mcp/claudish/recommended-models.json | jq .version
 
           # Verify JSON has models array
-          cat /Users/jack/mag/claude-code/mcp/claudish/recommended-models.json | jq '.models | length'
+          cat mcp/claudish/recommended-models.json | jq '.models | length'
           ```
         </step>
         <step>If verification fails:
           - Restore from backup:
             ```bash
-            cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-               /Users/jack/mag/claude-code/shared/recommended-models.md
+            cp shared/recommended-models.md.backup \
+               shared/recommended-models.md
             ```
           - Remove invalid JSON if created:
             ```bash
-            rm -f /Users/jack/mag/claude-code/mcp/claudish/recommended-models.json
+            rm -f mcp/claudish/recommended-models.json
             ```
           - Report error and stop
           - Preserve backup for debugging
@@ -456,20 +456,20 @@ $ARGUMENTS
       <steps>
         <step>Run sync script via Bash:
           ```bash
-          cd /Users/jack/mag/claude-code && bun run scripts/sync-shared.ts
+          bun run scripts/sync-shared.ts
           ```
         </step>
         <step>Wait for script completion</step>
         <step>Verify sync results:
           ```bash
           # Check that files were updated
-          ls -l /Users/jack/mag/claude-code/plugins/*/recommended-models.md
+          ls -l plugins/*/recommended-models.md
 
           # Verify content matches source (md5 hash comparison)
-          md5 /Users/jack/mag/claude-code/shared/recommended-models.md \
-              /Users/jack/mag/claude-code/plugins/frontend/recommended-models.md \
-              /Users/jack/mag/claude-code/plugins/bun/recommended-models.md \
-              /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+          md5 shared/recommended-models.md \
+              plugins/frontend/recommended-models.md \
+              plugins/bun/recommended-models.md \
+              plugins/code-analysis/recommended-models.md
           ```
         </step>
         <step>**Partial Sync Recovery Strategy:**
@@ -491,8 +491,8 @@ $ARGUMENTS
         </step>
         <step>Show git status to user:
           ```bash
-          cd /Users/jack/mag/claude-code && git status
-          cd /Users/jack/mag/claude-code && git diff --stat
+          git status
+          git diff --stat
           ```
         </step>
         <step>Present summary:
@@ -521,7 +521,7 @@ $ARGUMENTS
         </step>
         <step>Remove backup file:
           ```bash
-          rm /Users/jack/mag/claude-code/shared/recommended-models.md.backup
+          rm shared/recommended-models.md.backup
           ```
         </step>
         <step>Mark PHASE 4 as completed</step>
@@ -789,7 +789,7 @@ $ARGUMENTS
   <sync_script_behavior>
     The `scripts/sync-shared.ts` script:
 
-    1. Reads `/Users/jack/mag/claude-code/shared/recommended-models.md`
+    1. Reads `shared/recommended-models.md`
     2. Writes identical copy to each plugin directory:
        - `plugins/frontend/recommended-models.md`
        - `plugins/bun/recommended-models.md`
@@ -1060,17 +1060,17 @@ M  plugins/bun/recommended-models.md
 **Manual Recovery Steps for code-analysis plugin:**
 1. Check permissions:
    ```bash
-   ls -la /Users/jack/mag/claude-code/plugins/code-analysis/
+   ls -la plugins/code-analysis/
    ```
 2. Manually copy file:
    ```bash
-   cp /Users/jack/mag/claude-code/shared/recommended-models.md \
-      /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+   cp shared/recommended-models.md \
+      plugins/code-analysis/recommended-models.md
    ```
 3. Verify sync:
    ```bash
-   md5 /Users/jack/mag/claude-code/shared/recommended-models.md \
-       /Users/jack/mag/claude-code/plugins/code-analysis/recommended-models.md
+   md5 shared/recommended-models.md \
+       plugins/code-analysis/recommended-models.md
    ```
 
 **Next Steps:**
@@ -1115,8 +1115,8 @@ M  plugins/bun/recommended-models.md
     **Recovery:**
     1. Restore from backup immediately:
        ```bash
-       cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-          /Users/jack/mag/claude-code/shared/recommended-models.md
+       cp shared/recommended-models.md.backup \
+          shared/recommended-models.md
        ```
     2. Verify backup restoration (read file)
     3. Report specific error to user
@@ -1132,8 +1132,8 @@ M  plugins/bun/recommended-models.md
     ### Complete Failure (0/3 plugins synced)
     1. Restore backup:
        ```bash
-       cp /Users/jack/mag/claude-code/shared/recommended-models.md.backup \
-          /Users/jack/mag/claude-code/shared/recommended-models.md
+       cp shared/recommended-models.md.backup \
+          shared/recommended-models.md
        ```
     2. Verify restoration with md5sum
     3. Report error and script output
