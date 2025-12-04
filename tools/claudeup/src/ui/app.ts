@@ -5,6 +5,9 @@ import { createMcpScreen } from './screens/mcp-setup.js';
 import { createPluginsScreen } from './screens/plugins.js';
 import { createStatusLineScreen } from './screens/statusline.js';
 
+// Version from package.json
+export const VERSION = '0.2.1';
+
 export interface AppState {
   screen: blessed.Screen;
   currentScreen: Screen;
@@ -442,7 +445,7 @@ export function createHeader(state: AppState, _title: string): blessed.BoxElemen
     left: 0,
     width: '100%',
     height: 3,
-    content: `{bold}{cyan-fg}◆ claudeup{/cyan-fg}{/bold}  ${tabContent}\n{gray-fg}${'─'.repeat(80)}{/gray-fg}`,
+    content: `{bold}{cyan-fg}◆ claudeup{/cyan-fg}{/bold} {gray-fg}v${VERSION}{/gray-fg}  ${tabContent}\n{gray-fg}${'─'.repeat(80)}{/gray-fg}`,
     tags: true,
     style: {
       fg: 'white',

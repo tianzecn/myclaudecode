@@ -12,6 +12,17 @@ export interface CliTool {
 
 export const cliTools: CliTool[] = [
   {
+    name: 'claudeup',
+    displayName: 'claudeup',
+    description: 'TUI tool for managing Claude Code plugins, MCPs, and configuration',
+    installCommand: 'npm install -g claudeup',
+    checkCommand: 'claudeup --version',
+    website: 'https://github.com/MadAppGang/claude-code/tree/main/tools/claudeup',
+    category: 'ai-coding',
+    packageManager: 'npm',
+    packageName: 'claudeup',
+  },
+  {
     name: 'claude',
     displayName: 'Claude Code',
     description: 'Anthropic official agentic coding tool',
