@@ -2,7 +2,7 @@ import type { Marketplace } from '../types/index.js';
 
 export const defaultMarketplaces: Marketplace[] = [
   {
-    name: 'anthropic-plugins',
+    name: 'claude-code-plugins',
     displayName: 'Anthropic Official',
     source: {
       source: 'github',

@@ -6,10 +6,10 @@
         "repo": "MadAppGang/claude-code"
       }
     },
-    "anthropic-plugins": {
+    "claude-code-plugins": {
       "source": {
         "source": "github",
-        "repo": "anthropics/claude-code-plugins"
+        "repo": "anthropics/claude-code"
       }
     }
   },
