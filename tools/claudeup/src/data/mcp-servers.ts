@@ -8,7 +8,7 @@ export const curatedMcpServers: McpServer[] = [
     name: 'chrome-devtools',
     description: 'Control Chrome browser, inspect DOM, debug JavaScript, capture screenshots',
     command: 'npx',
-    args: ['chrome-devtools-mcp@latest'],
+    args: ['-y', 'chrome-devtools-mcp@latest'],
     category: 'browser',
     requiresConfig: false,
   },
@@ -28,7 +28,7 @@ export const curatedMcpServers: McpServer[] = [
     name: 'claude-context',
     description: 'Semantic code search with vector embeddings (Zilliz/Milvus)',
     command: 'npx',
-    args: ['@zilliz/claude-context-mcp@latest'],
+    args: ['-y', '@zilliz/claude-context-mcp@latest'],
     env: {
       OPENAI_API_KEY: '${OPENAI_API_KEY}',
       MILVUS_ADDRESS: '${MILVUS_ADDRESS}',

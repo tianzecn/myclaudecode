@@ -12,6 +12,12 @@ import type {
 const CLAUDE_DIR = '.claude';
 const SETTINGS_FILE = 'settings.json';
 const LOCAL_SETTINGS_FILE = 'settings.local.json';
+const MCP_CONFIG_FILE = '.mcp.json';
+
+// MCP config file types
+interface McpConfigFile {
+  mcpServers?: Record<string, McpServerConfig>;
+}
 
 export function getClaudeDir(projectPath?: string): string {
   const base = projectPath || process.cwd();
@@ -70,6 +76,32 @@ export async function writeLocalSettings(
   await fs.writeJson(localPath, settings, { spaces: 2 });
 }
 
+// MCP config file management (.mcp.json at project root)
+export function getMcpConfigPath(projectPath?: string): string {
+  const base = projectPath || process.cwd();
+  return path.join(base, MCP_CONFIG_FILE);
+}
+
+export async function readMcpConfig(projectPath?: string): Promise<McpConfigFile> {
+  const mcpPath = getMcpConfigPath(projectPath);
+  try {
+    if (await fs.pathExists(mcpPath)) {
+      return await fs.readJson(mcpPath);
+    }
+  } catch {
+    // Return empty config on error
+  }
+  return {};
+}
+
+export async function writeMcpConfig(
+  config: McpConfigFile,
+  projectPath?: string
+): Promise<void> {
+  const mcpPath = getMcpConfigPath(projectPath);
+  await fs.writeJson(mcpPath, config, { spaces: 2 });
+}
+
 export async function readGlobalSettings(): Promise<ClaudeSettings> {
   const settingsPath = path.join(getGlobalClaudeDir(), SETTINGS_FILE);
   try {
@@ -88,30 +120,24 @@ export async function writeGlobalSettings(settings: ClaudeSettings): Promise<voi
   await fs.writeJson(settingsPath, settings, { spaces: 2 });
 }
 
-// MCP Server management
+// MCP Server management (writes to .mcp.json at project root)
 export async function addMcpServer(
   name: string,
   config: McpServerConfig,
   projectPath?: string
 ): Promise<void> {
-  const settings = await readLocalSettings(projectPath);
-  settings.mcpServers = settings.mcpServers || {};
-  settings.mcpServers[name] = config;
-  settings.enabledMcpServers = settings.enabledMcpServers || {};
-  settings.enabledMcpServers[name] = true;
-  settings.allowMcp = true;
-  await writeLocalSettings(settings, projectPath);
+  const mcpConfig = await readMcpConfig(projectPath);
+  mcpConfig.mcpServers = mcpConfig.mcpServers || {};
+  mcpConfig.mcpServers[name] = config;
+  await writeMcpConfig(mcpConfig, projectPath);
 }
 
 export async function removeMcpServer(name: string, projectPath?: string): Promise<void> {
-  const settings = await readLocalSettings(projectPath);
-  if (settings.mcpServers) {
-    delete settings.mcpServers[name];
+  const mcpConfig = await readMcpConfig(projectPath);
+  if (mcpConfig.mcpServers) {
+    delete mcpConfig.mcpServers[name];
   }
-  if (settings.enabledMcpServers) {
-    delete settings.enabledMcpServers[name];
-  }
-  await writeLocalSettings(settings, projectPath);
+  await writeMcpConfig(mcpConfig, projectPath);
 }
 
 export async function toggleMcpServer(
@@ -119,16 +145,17 @@ export async function toggleMcpServer(
   enabled: boolean,
   projectPath?: string
 ): Promise<void> {
-  const settings = await readLocalSettings(projectPath);
-  settings.enabledMcpServers = settings.enabledMcpServers || {};
-  settings.enabledMcpServers[name] = enabled;
-  await writeLocalSettings(settings, projectPath);
+  // Toggle is now a remove operation since .mcp.json doesn't have enabled/disabled state
+  // If disabled, remove from config; if enabled, the server should already be in config
+  if (!enabled) {
+    await removeMcpServer(name, projectPath);
+  }
+  // If enabling, the server should already exist in the config
 }
 
-export async function setAllowMcp(allow: boolean, projectPath?: string): Promise<void> {
-  const settings = await readLocalSettings(projectPath);
-  settings.allowMcp = allow;
-  await writeLocalSettings(settings, projectPath);
+export async function setAllowMcp(_allow: boolean, _projectPath?: string): Promise<void> {
+  // .mcp.json doesn't have an allowMcp setting - servers are either in the file or not
+  // This function is kept for API compatibility but is now a no-op
 }
 
 // Marketplace management
@@ -214,20 +241,25 @@ export async function hasClaudeDir(projectPath?: string): Promise<boolean> {
   return fs.pathExists(getClaudeDir(projectPath));
 }
 
-// Get installed MCP servers
+// Get installed MCP servers (from .mcp.json)
 export async function getInstalledMcpServers(
   projectPath?: string
 ): Promise<Record<string, McpServerConfig>> {
-  const localSettings = await readLocalSettings(projectPath);
-  return localSettings.mcpServers || {};
+  const mcpConfig = await readMcpConfig(projectPath);
+  return mcpConfig.mcpServers || {};
 }
 
-// Get enabled MCP servers
+// Get enabled MCP servers (all servers in .mcp.json are considered enabled)
 export async function getEnabledMcpServers(
   projectPath?: string
 ): Promise<Record<string, boolean>> {
-  const localSettings = await readLocalSettings(projectPath);
-  return localSettings.enabledMcpServers || {};
+  const mcpConfig = await readMcpConfig(projectPath);
+  const servers = mcpConfig.mcpServers || {};
+  const enabled: Record<string, boolean> = {};
+  for (const name of Object.keys(servers)) {
+    enabled[name] = true;
+  }
+  return enabled;
 }
 
 // Get all configured marketplaces

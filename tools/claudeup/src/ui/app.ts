@@ -6,7 +6,7 @@ import { createPluginsScreen } from './screens/plugins.js';
 import { createStatusLineScreen } from './screens/statusline.js';
 
 // Version from package.json
-export const VERSION = '0.2.1';
+export const VERSION = '0.3.0';
 
 export interface AppState {
   screen: blessed.Screen;
@@ -192,6 +192,52 @@ export function showHelp(state: AppState): void {
   state.screen.render();
 }
 
+export function showLoading(
+  state: AppState,
+  message: string
+): { stop: () => void } {
+  const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  let frameIndex = 0;
+  let stopped = false;
+
+  const loadingBox = blessed.box({
+    parent: state.screen,
+    top: 'center',
+    left: 'center',
+    width: 'shrink',
+    height: 'shrink',
+    padding: { left: 2, right: 2, top: 1, bottom: 1 },
+    content: `{cyan-fg}${spinnerFrames[0]}{/cyan-fg} ${message}`,
+    tags: true,
+    border: {
+      type: 'line',
+    },
+    style: {
+      border: {
+        fg: 'cyan',
+      },
+    },
+  });
+
+  state.screen.render();
+
+  const interval = setInterval(() => {
+    if (stopped) return;
+    frameIndex = (frameIndex + 1) % spinnerFrames.length;
+    loadingBox.setContent(`{cyan-fg}${spinnerFrames[frameIndex]}{/cyan-fg} ${message}`);
+    state.screen.render();
+  }, 80);
+
+  return {
+    stop: () => {
+      stopped = true;
+      clearInterval(interval);
+      loadingBox.destroy();
+      state.screen.render();
+    },
+  };
+}
+
 export function showMessage(
   state: AppState,
   title: string,
@@ -218,7 +264,7 @@ export function showMessage(
       width: 'shrink',
       height: 'shrink',
       padding: { left: 2, right: 2, top: 1, bottom: 1 },
-      content: `{center}{bold}${icons[type]} ${title}{/bold}{/center}\n\n${message}\n\n{center}{gray-fg}Enter to continue{/gray-fg}{/center}`,
+      content: `{center}{bold}${icons[type]} ${title}{/bold}{/center}\n\n${message}\n\n{center}{gray-fg}Press any key to continue{/gray-fg}{/center}`,
       tags: true,
       border: {
         type: 'line',
@@ -230,7 +276,9 @@ export function showMessage(
       },
     });
 
-    msgBox.key(['escape', 'q', 'enter'], () => {
+    // Accept any key to dismiss
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (msgBox as any).on('keypress', () => {
       msgBox.destroy();
       state.screen.render();
       resolve();
@@ -400,6 +448,129 @@ export function showInput(
     });
 
     form.focus();
+    state.screen.render();
+  });
+}
+
+export interface SelectOption {
+  label: string;
+  value: string;
+  description?: string;
+}
+
+export function showSelect(
+  state: AppState,
+  title: string,
+  message: string,
+  options: SelectOption[]
+): Promise<string | null> {
+  return new Promise((resolve) => {
+    let selectedIndex = 0;
+    let resolved = false;
+
+    state.isSearching = true;
+
+    const boxHeight = Math.min(options.length + 8, 20);
+
+    const selectBox = blessed.box({
+      parent: state.screen,
+      top: 'center',
+      left: 'center',
+      width: 60,
+      height: boxHeight,
+      border: {
+        type: 'line',
+      },
+      style: {
+        border: {
+          fg: 'cyan',
+        },
+      },
+    });
+
+    blessed.text({
+      parent: selectBox,
+      top: 0,
+      left: 1,
+      content: `{bold}${title}{/bold}`,
+      tags: true,
+    });
+
+    blessed.text({
+      parent: selectBox,
+      top: 2,
+      left: 1,
+      content: message,
+      tags: true,
+    });
+
+    const listBox = blessed.box({
+      parent: selectBox,
+      top: 4,
+      left: 1,
+      width: 56,
+      height: options.length + 2,
+      border: {
+        type: 'line',
+      },
+      style: {
+        border: {
+          fg: 'gray',
+        },
+      },
+    });
+
+    const updateList = (): void => {
+      const content = options
+        .map((opt, idx) => {
+          const prefix = idx === selectedIndex ? '{cyan-fg}>{/cyan-fg}' : ' ';
+          const highlight = idx === selectedIndex ? '{bold}' : '';
+          const endHighlight = idx === selectedIndex ? '{/bold}' : '';
+          return `${prefix} ${highlight}${opt.label}${endHighlight}`;
+        })
+        .join('\n');
+      listBox.setContent(content);
+      state.screen.render();
+    };
+
+    blessed.text({
+      parent: selectBox,
+      top: boxHeight - 2,
+      left: 1,
+      content: '{gray-fg}↑↓ Select • Enter Confirm • Esc Cancel{/gray-fg}',
+      tags: true,
+    });
+
+    updateList();
+
+    const cleanup = (): void => {
+      state.isSearching = false;
+      selectBox.destroy();
+      state.screen.render();
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (selectBox as any).on('keypress', (_ch: string, key: { name: string }) => {
+      if (resolved) return;
+
+      if (key.name === 'escape' || key.name === 'q') {
+        resolved = true;
+        cleanup();
+        resolve(null);
+      } else if (key.name === 'enter' || key.name === 'return') {
+        resolved = true;
+        cleanup();
+        resolve(options[selectedIndex].value);
+      } else if (key.name === 'up' || key.name === 'k') {
+        selectedIndex = Math.max(0, selectedIndex - 1);
+        updateList();
+      } else if (key.name === 'down' || key.name === 'j') {
+        selectedIndex = Math.min(options.length - 1, selectedIndex + 1);
+        updateList();
+      }
+    });
+
+    selectBox.focus();
     state.screen.render();
   });
 }
