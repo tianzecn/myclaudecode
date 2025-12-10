@@ -89,6 +89,18 @@ Present the following help information to the user in a clear, organized format:
 
 ---
 
+## Installation
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add MadAppGang/claude-code
+
+# Install plugin
+/plugin install frontend@mag-claude-plugins
+```
+
+---
+
 ## Dependencies
 
 **Required**: Chrome DevTools MCP

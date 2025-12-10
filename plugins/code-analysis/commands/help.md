@@ -85,12 +85,22 @@ For large codebases, use claude-context MCP:
 
 ## Integration with Frontend Plugin
 
-The code-analysis plugin is recommended alongside frontend:
-```
+The code-analysis plugin is recommended alongside frontend.
+The `/implement` command will suggest it for better codebase understanding.
+
+---
+
+## Installation
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add MadAppGang/claude-code
+
+# Install plugin
 /plugin install code-analysis@mag-claude-plugins
 ```
 
-The `/implement` command will suggest it for better codebase understanding.
+**Optional**: For semantic code search, install claude-context MCP.
 
 ---
 

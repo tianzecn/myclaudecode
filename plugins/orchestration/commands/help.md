@@ -73,7 +73,21 @@ skills: orchestration:multi-model-validation
 
 ---
 
+## Installation
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add MadAppGang/claude-code
+
+# Install plugin
+/plugin install orchestration@mag-claude-plugins
+```
+
+**Note**: Usually auto-installed as dependency of frontend/agentdev plugins.
+
+---
+
 ## More Info
 
 - **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: MadAppGang
+- **Author**: Jack Rudenko @ MadAppGang

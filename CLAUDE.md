@@ -12,7 +12,7 @@
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
 - **Plugin Marketplace** (`mag-claude-plugins`)
-- **Frontend Development Plugin** (v3.11.0) - Full-featured Opus-powered
+- **Frontend Development Plugin** (v3.12.0) - Full-featured Opus-powered
   - 11 Specialized Agents (Plan Reviewer + CSS Developer + Designer + UI Developer ecosystem with multi-model review)
   - **LLM Performance Tracking** (NEW in v3.11.0) - Track external model execution times, quality scores, and recommendations to `ai-docs/llm-performance.json`
   - **Opus 4.5 Upgrades** (NEW in v3.8.0) - Critical architecture and review agents now use Opus 4.5 for superior reasoning

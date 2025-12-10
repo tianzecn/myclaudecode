@@ -113,6 +113,20 @@ src/
 
 ---
 
+## Installation
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add MadAppGang/claude-code
+
+# Install plugin
+/plugin install bun@mag-claude-plugins
+```
+
+**Optional**: Configure Apidog integration for API documentation sync.
+
+---
+
 ## More Info
 
 - **Repo**: https://github.com/MadAppGang/claude-code

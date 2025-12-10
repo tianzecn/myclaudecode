@@ -128,7 +128,21 @@ Requires orchestration plugin:
 
 ---
 
+## Installation
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add MadAppGang/claude-code
+
+# Install plugin
+/plugin install agentdev@mag-claude-plugins
+```
+
+**Note**: Automatically installs orchestration plugin as dependency.
+
+---
+
 ## More Info
 
 - **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: MadAppGang
+- **Author**: Jack Rudenko @ MadAppGang
