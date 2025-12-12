@@ -1,6 +1,6 @@
 {
   "name": "claudeup",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "TUI tool for managing Claude Code plugins, MCPs, and configuration",
   "type": "module",
   "main": "dist/index.js",
@@ -41,7 +41,7 @@
   },
   "files": [
     "bin/",
-    "lib/"
+    "dist/"
   ],
   "dependencies": {
     "chalk": "^5.3.0",
