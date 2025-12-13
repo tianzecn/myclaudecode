@@ -447,5 +447,5 @@ Before completing a claudemem workflow, ensure:
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Plugin:** code-analysis v1.5.0
+**Plugin:** code-analysis v2.0.0
 **Last Updated:** December 2025

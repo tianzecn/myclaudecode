@@ -9,9 +9,9 @@ Present the following help information to the user:
 
 ---
 
-## Code Analysis Plugin v1.5.0
+## Code Analysis Plugin v2.0.0
 
-**Deep code investigation and analysis toolkit for understanding complex codebases.**
+**Deep code investigation using INDEXED MEMORY (claudemem). GREP/FIND FORBIDDEN.**
 
 ### Quick Start
 
@@ -55,12 +55,19 @@ Present the following help information to the user:
 
 ---
 
-## Skills (2)
+## Skills (9)
 
 | Skill | Description |
 |-------|-------------|
 | **deep-analysis** | Automatic code investigation patterns - proactively analyzes code |
 | **claudemem-search** | Expert guidance on claudemem CLI for local semantic code search |
+| **claudish-usage** | Guide for using Claudish CLI through sub-agents |
+| **architect-detective** | Architecture-focused investigation (patterns, boundaries, layers) |
+| **developer-detective** | Implementation-focused investigation (data flow, side effects) |
+| **tester-detective** | Testing-focused investigation (coverage, edge cases) |
+| **debugger-detective** | Bug investigation (root cause, error tracing) |
+| **ultrathink-detective** | Comprehensive deep analysis with Opus model |
+| **cross-plugin-detective** | Agent-to-skill mapping for any plugin |
 
 ### Semantic Code Search with claudemem
 
