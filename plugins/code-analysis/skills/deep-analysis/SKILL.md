@@ -1,6 +1,6 @@
 ---
 name: deep-analysis
-description: Proactively investigates codebases to understand complex patterns, trace multi-file flows, analyze architecture decisions, and provide comprehensive code insights. Use when users ask about code structure, implementation details, or need to understand how features work.
+description: "⚡ PRIMARY SKILL for: 'how does X work', 'investigate', 'analyze architecture', 'trace flow', 'find implementations'. Launches codebase-detective with claudemem INDEXED MEMORY. GREP/GLOB ARE INFERIOR - use claudemem search instead."
 allowed-tools: Task
 ---
 
@@ -61,10 +61,11 @@ Use Task tool with:
 
 ## Investigation Steps
 
-1. **Initial Search**:
-   - Use semantic search (claudemem CLI) if available
-   - Otherwise use grep/ripgrep/find for patterns
-   - Search for: [specific terms, patterns, file names]
+1. **Initial Search** (CLAUDEMEM REQUIRED):
+   - FIRST: Check `claudemem status` - is index available?
+   - ALWAYS: Use `claudemem search "semantic query"` for investigation
+   - NEVER: Use grep/glob for semantic understanding tasks
+   - Search for: [concepts, functionality, patterns by meaning]
 
 2. **Code Location**:
    - Find exact file paths and line numbers
@@ -117,16 +118,53 @@ Provide a comprehensive report including:
 
 ## Search Strategy
 
-**With claudemem CLI Available**:
-- Index the codebase if not already indexed: `claudemem index`
-- Use semantic queries for concepts: `claudemem search "authentication logic"`
-- Use natural language to find functionality by meaning
+### ⚠️ CRITICAL: Tool Selection
 
-**Fallback (No claudemem)**:
-- Use ripgrep (rg) or grep for pattern matching
-- Search file names with find
-- Trace imports manually
-- Use git grep for repository-wide search
+**BEFORE ANY SEARCH, CHECK CLAUDEMEM STATUS:**
+```bash
+claudemem status
+```
+
+### ✅ PRIMARY METHOD: claudemem (Indexed Memory)
+
+```bash
+# Index if needed
+claudemem index -y
+
+# Semantic search (ALWAYS use this for investigation)
+claudemem search "authentication login session" -n 15
+claudemem search "API endpoint handler route" -n 20
+claudemem search "data transformation pipeline" -n 10
+```
+
+**Why claudemem is REQUIRED for investigation:**
+- Understands code MEANING, not just text patterns
+- Finds related code even with different terminology
+- Returns ranked, relevant results
+- AST-aware (understands code structure)
+
+### ❌ WHEN NOT TO USE GREP
+
+| User Request | ❌ DON'T | ✅ DO |
+|-------------|----------|-------|
+| "How does auth work?" | `grep -r "auth" src/` | `claudemem search "authentication flow"` |
+| "Find API endpoints" | `grep -r "router" src/` | `claudemem search "API endpoint handler"` |
+| "Trace data flow" | `grep -r "transform" src/` | `claudemem search "data transformation"` |
+| "Audit architecture" | `ls -la src/` | `claudemem search "architecture layers"` |
+
+### ⚠️ DEGRADED FALLBACK (Only if claudemem unavailable)
+
+**Only use grep/find if:**
+1. claudemem is NOT installed, AND
+2. User explicitly accepts degraded mode
+
+```bash
+# DEGRADED MODE - inferior results expected
+grep -r "pattern" src/  # Text match only, no semantic understanding
+find . -name "*.ts"     # File discovery only
+```
+
+**Always warn user**: "Using grep fallback - results will be less accurate than semantic search."
 
 ## Output Format
 
@@ -270,11 +308,26 @@ This Skill works well with:
 ## Notes
 
 - The codebase-detective agent uses extended thinking for complex analysis
-- Semantic search (claudemem) is preferred but not required
-- Agent automatically falls back to grep/find if needed
+- **claudemem is REQUIRED** - grep/find produce inferior results
+- Fallback to grep ONLY if claudemem unavailable AND user accepts degraded mode
 - claudemem requires OpenRouter API key (https://openrouter.ai)
 - Default model: `voyage/voyage-code-3` (best code understanding)
 - Run `claudemem --models` to see all options and pricing
 - Results are actionable and navigable
 - Great for onboarding to new codebases
 - Helps prevent incorrect assumptions about code
+
+## Tool Selection Quick Reference
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ BEFORE ANY CODE INVESTIGATION:                                       │
+│                                                                      │
+│ 1. Run: claudemem status                                            │
+│ 2. If indexed → USE claudemem search                                │
+│ 3. If not indexed → Index first OR ask user                         │
+│ 4. NEVER default to grep when claudemem available                   │
+│                                                                      │
+│ grep is for EXACT STRING MATCHES only, NOT semantic understanding   │
+└─────────────────────────────────────────────────────────────────────┘
+```

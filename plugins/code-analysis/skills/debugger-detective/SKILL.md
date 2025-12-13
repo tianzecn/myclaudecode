@@ -1,6 +1,6 @@
 ---
 name: debugger-detective
-description: Bug investigation-focused codebase analysis using INDEXED MEMORY (claudemem). GREP/FIND ARE FORBIDDEN. Traces error origins, finds root causes, identifies failure paths, and analyzes state mutations. Use when debugging issues, investigating errors, or performing root cause analysis.
+description: "⚡ PRIMARY TOOL for: 'why is X broken', 'find bug source', 'root cause analysis', 'trace error', 'debug issue', 'find where X fails'. REPLACES grep/glob for bug investigation. Uses claudemem INDEXED MEMORY exclusively. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 

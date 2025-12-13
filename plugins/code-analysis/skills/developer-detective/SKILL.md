@@ -1,6 +1,6 @@
 ---
 name: developer-detective
-description: Implementation-focused codebase investigation using INDEXED MEMORY (claudemem). GREP/FIND ARE FORBIDDEN. Traces code flow, finds implementations, understands data transformations, and locates where functionality lives. Use when you need to understand how something works or find where to make changes.
+description: "⚡ PRIMARY TOOL for: 'how does X work', 'find implementation of', 'trace data flow', 'where is X defined', 'audit integrations', 'find all usages'. REPLACES grep/glob for code understanding. Uses claudemem INDEXED MEMORY exclusively. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 

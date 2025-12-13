@@ -355,6 +355,41 @@ claudemem status
 - **Hybrid search** - BM25 keyword + dense vector similarity
 - **MCP server mode** - Run with `claudemem --mcp`
 
+### ⚠️ TOOL SELECTION RULES FOR CODE INVESTIGATION
+
+**CRITICAL**: When investigating code, ALWAYS prefer claudemem over grep/glob.
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    CODE INVESTIGATION TOOL SELECTION                 │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  BEFORE ANY CODE SEARCH:                                            │
+│  1. Run: claudemem status                                           │
+│  2. If indexed → USE claudemem search (semantic)                    │
+│  3. If not indexed → Index first: claudemem index -y                │
+│                                                                      │
+│  ❌ NEVER use grep/glob for:                                        │
+│     - "How does X work?"                                            │
+│     - "Find implementations of"                                     │
+│     - "Audit architecture"                                          │
+│     - "Trace data flow"                                             │
+│                                                                      │
+│  ✅ ONLY use grep for:                                              │
+│     - Exact string matches: grep -r "SPECIFIC_CONSTANT"             │
+│     - Symbol lookup: grep -r "class ExactName"                      │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Quick Reference:**
+
+| User Request | ❌ DON'T | ✅ DO |
+|-------------|----------|-------|
+| "How does auth work?" | `grep -r "auth"` | `claudemem search "authentication flow"` |
+| "Find API endpoints" | `grep -r "router"` | `claudemem search "API endpoint handler"` |
+| "Audit integrations" | `grep -r "import"` | `claudemem search "external integration API"` |
+
 ## Environment Variables
 
 ### Required (Per Developer)
@@ -732,7 +767,7 @@ Include marketplace in project settings (requires folder trust):
 **Current Versions:**
 - Orchestration Plugin: **v0.3.0** (2025-12-12)
 - Frontend Plugin: **v3.11.0** (2025-12-09)
-- Code Analysis Plugin: **v2.0.0** (2025-12-13)
+- Code Analysis Plugin: **v2.1.0** (2025-12-14)
 - Bun Backend Plugin: **v1.5.2** (2025-11-26)
 - Agent Development Plugin: **v1.1.0** (2025-12-09)
 - Claudish CLI: See https://github.com/MadAppGang/claudish (separate repository)
@@ -800,7 +835,7 @@ Include marketplace in project settings (requires folder trust):
 - Orchestration: `plugins/orchestration/v0.3.0`
 - Frontend: `plugins/frontend/v3.11.0`
 - Bun: `plugins/bun/v1.5.2`
-- Code Analysis: `plugins/code-analysis/v2.0.0`
+- Code Analysis: `plugins/code-analysis/v2.1.0`
 - Agent Development: `plugins/agentdev/v1.1.0`
 - Use correct tag format when releasing: `plugins/{plugin-name}/vX.Y.Z`
 
@@ -816,5 +851,5 @@ Missing any of these will cause claudeup to not see the update!
 
 **Maintained by:** Jack Rudenko @ MadAppGang
 **Last Updated:** December 13, 2025
-**Version:** 5 plugins (Orchestration v0.3.0, Frontend v3.11.0, Code Analysis v2.0.0, Bun Backend v1.5.2, Agent Development v1.1.0)
+**Version:** 5 plugins (Orchestration v0.3.0, Frontend v3.13.0, Code Analysis v2.1.0, Bun Backend v1.5.2, Agent Development v1.1.0)
 - do not use hardcoded path in code, docs, comments or any other files

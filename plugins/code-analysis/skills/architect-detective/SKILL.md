@@ -1,6 +1,6 @@
 ---
 name: architect-detective
-description: Architecture-focused codebase investigation using INDEXED MEMORY (claudemem). GREP/FIND ARE FORBIDDEN. Discovers design patterns, architectural decisions, system boundaries, and structural relationships. Use when analyzing system design, understanding architectural layers, or evaluating design decisions.
+description: "⚡ PRIMARY TOOL for: 'what's the architecture', 'system design', 'how are layers organized', 'find design patterns', 'audit structure', 'map dependencies'. REPLACES grep/glob for architecture analysis. Uses claudemem INDEXED MEMORY exclusively. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 

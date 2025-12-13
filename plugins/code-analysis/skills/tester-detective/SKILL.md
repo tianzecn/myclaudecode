@@ -1,6 +1,6 @@
 ---
 name: tester-detective
-description: Testing-focused codebase investigation using INDEXED MEMORY (claudemem). GREP/FIND ARE FORBIDDEN. Analyzes test coverage, finds edge cases, discovers testing patterns, and identifies untested paths. Use when auditing test quality, planning test strategies, or finding gaps in coverage.
+description: "⚡ PRIMARY TOOL for: 'what's tested', 'find test coverage', 'audit test quality', 'missing tests', 'edge cases', 'test patterns'. REPLACES grep/glob for test analysis. Uses claudemem INDEXED MEMORY exclusively. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 

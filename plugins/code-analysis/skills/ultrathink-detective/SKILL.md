@@ -1,6 +1,6 @@
 ---
 name: ultrathink-detective
-description: Deep comprehensive codebase investigation using INDEXED MEMORY (claudemem). Combines architect, developer, tester, and debugger perspectives. GREP/FIND ARE FORBIDDEN. Use only claudemem semantic search. For complex investigations requiring multi-dimensional analysis.
+description: "⚡ PRIMARY TOOL for: 'comprehensive audit', 'deep analysis', 'full codebase review', 'multi-perspective investigation', 'complex questions'. Combines ALL detective perspectives (architect+developer+tester+debugger). Uses Opus model. REPLACES grep/glob entirely. Uses claudemem INDEXED MEMORY exclusively. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 model: opus
 ---

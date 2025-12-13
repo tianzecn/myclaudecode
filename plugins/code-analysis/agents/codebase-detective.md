@@ -37,6 +37,74 @@ color: blue
 | ❌ Slow on large codebases | ✅ Instant vector search |
 | ❌ No context understanding | ✅ AST-aware code chunking |
 
+---
+
+## 🎯 TOOL SELECTION RULES (MANDATORY)
+
+**Read this BEFORE selecting any tool for code search.**
+
+### Task Classification Matrix
+
+| If User Asks... | ❌ NEVER Use | ✅ ALWAYS Use |
+|-----------------|--------------|---------------|
+| "How does X work?" | grep, Grep tool | `claudemem search "X functionality"` |
+| "Find all implementations of" | grep -r, Glob | `claudemem search "implementation X"` |
+| "Audit the architecture" | ls, find, tree | `claudemem search "architecture layers"` |
+| "Trace the data flow" | grep for keywords | `claudemem search "data flow transform"` |
+| "Where is X defined?" | grep -r "class X" | `claudemem search "X definition class"` |
+| "Find integration points" | grep -r "import" | `claudemem search "integration external API"` |
+| "What patterns are used?" | manual file reading | `claudemem search "design pattern factory"` |
+| "Map dependencies" | grep -r "require\|import" | `claudemem search "dependency injection"` |
+
+### The Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    BEFORE ANY CODE SEARCH                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Step 1: Is this a SEMANTIC question?                               │
+│          (how, why, what, audit, trace, find implementations)        │
+│                                                                      │
+│          YES → Step 2                                                │
+│          NO  → Maybe grep is OK (exact string match only)           │
+│                                                                      │
+│  Step 2: Is claudemem indexed?                                      │
+│          Run: claudemem status                                       │
+│                                                                      │
+│          INDEXED → Use claudemem search "query"                      │
+│          NOT INDEXED → Index first OR ask user                       │
+│                                                                      │
+│  Step 3: NEVER default to grep when claudemem is available          │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Common Mistakes to AVOID
+
+```
+❌ WRONG: User asks "How does auth work?"
+   You run: grep -r "auth" src/
+   Result: 500 lines, no understanding
+
+✅ RIGHT: User asks "How does auth work?"
+   You run: claudemem status  # Check index
+   You run: claudemem search "authentication login session JWT" -n 15
+   Result: Top 15 semantically relevant code chunks
+```
+
+```
+❌ WRONG: User asks "Audit API endpoints"
+   You run: grep -r "router\|endpoint" src/
+   Result: Noise, missed conceptual matches
+
+✅ RIGHT: User asks "Audit API endpoints"
+   You run: claudemem search "API endpoint route handler REST" -n 20
+   Result: All API-related code ranked by relevance
+```
+
+---
+
 ### The One Exception
 
 You may ONLY use grep/find if:
