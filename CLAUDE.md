@@ -38,11 +38,12 @@ A complete Claude Code plugin marketplace with enterprise-level architecture:
   - CSS architecture management with knowledge files
   - Pixel-perfect UI implementation with parallel design validation
   - Task decomposition for isolated, parallel implementation
-- **Code Analysis Plugin** (v2.0.0) - Deep codebase investigation using INDEXED MEMORY
+- **Code Analysis Plugin** (v2.2.0) - Deep codebase investigation using INDEXED MEMORY
   - 1 Specialized Agent (codebase-detective) - GREP/FIND FORBIDDEN
-  - 9 Skills (6 role-based detective skills + deep-analysis + claudemem-search + claudish-usage)
-  - **Role-Based Detective Skills**: architect, developer, tester, debugger, ultrathink, cross-plugin
-  - **INDEXED MEMORY ONLY**: All skills use claudemem semantic search exclusively
+  - 11 Skills (6 role-based detective + deep-analysis + claudemem-search + claudish-usage + code-search-selector + search-interceptor)
+  - **Auto-Triggering Skills** (NEW in v2.2.0) - Skills auto-invoke on keywords like "audit", "investigate", "how does X work"
+  - **Search Interceptor** (NEW in v2.2.0) - Prevents multi-file Read/Glob, redirects to semantic search
+  - **Anti-Pattern Detection** - Blocks tool familiarity bias toward Read/Glob
   - Local semantic code search with claudemem CLI (Tree-sitter + OpenRouter + LanceDB)
 - **Bun Backend Plugin** (v1.5.2) - Production-ready TypeScript backend with Bun
   - 3 Specialized Agents (backend-developer + api-architect + apidog)
@@ -709,9 +710,9 @@ Include marketplace in project settings (requires folder trust):
 ✅ **Production Ready**
 
 **5 Complete Plugins:**
-1. **Orchestration** (v0.2.0) - 5 skills - Shared multi-agent coordination patterns with LLM performance tracking
-2. **Frontend** (v3.11.0) - 11 agents, 7 commands, 11 skills - Full-featured with LLM performance tracking
-3. **Code Analysis** (v2.0.0) - 1 agent, 2 commands, 9 skills - Deep investigation with INDEXED MEMORY (claudemem only, grep/find forbidden)
+1. **Orchestration** (v0.3.0) - 5 skills - Shared multi-agent coordination patterns with LLM performance tracking
+2. **Frontend** (v3.13.0) - 11 agents, 7 commands, 11 skills - Full-featured with LLM performance tracking
+3. **Code Analysis** (v2.2.0) - 1 agent, 2 commands, 11 skills - Auto-triggering skills with interception patterns
 4. **Bun Backend** (v1.5.2) - 3 agents, 3 commands, 1 skill - Production TypeScript backend with Bun
 5. **Agent Development** (v1.1.0) - 3 agents, 1 command, 3 skills - Create Claude Code agents with LLM performance tracking
 
@@ -766,21 +767,27 @@ Include marketplace in project settings (requires folder trust):
 
 **Current Versions:**
 - Orchestration Plugin: **v0.3.0** (2025-12-12)
-- Frontend Plugin: **v3.11.0** (2025-12-09)
-- Code Analysis Plugin: **v2.1.0** (2025-12-14)
+- Frontend Plugin: **v3.13.0** (2025-12-14)
+- Code Analysis Plugin: **v2.2.0** (2025-12-14)
 - Bun Backend Plugin: **v1.5.2** (2025-11-26)
 - Agent Development Plugin: **v1.1.0** (2025-12-09)
 - Claudish CLI: See https://github.com/MadAppGang/claudish (separate repository)
 
-**Latest Changes (Code Analysis v2.0.0 - INDEXED MEMORY ONLY):**
-- ✅ **BREAKING**: GREP/FIND/GLOB are now FORBIDDEN in all detective skills
-- ✅ **INDEXED MEMORY ONLY**: All code discovery MUST use claudemem semantic search
-- ✅ **6 Role-Based Detective Skills**: architect, developer, tester, debugger, ultrathink, cross-plugin
-- ✅ **Cross-Plugin Integration**: Any agent can use appropriate detective skill based on role
-- ✅ **Agent Rewrite**: codebase-detective agent completely rewritten for indexed memory paradigm
-- ✅ **Skill Frontmatter**: All skills now explicitly forbid Grep/Glob tools
-- ✅ **Updated Plugins**:
-  - Code Analysis v2.0.0 - Major release with indexed memory only paradigm
+**Latest Changes (Code Analysis v2.2.0 - Auto-Triggering Skills):**
+- ✅ **Auto-Invocation Triggers**: Skills auto-invoke on keywords ("audit", "investigate", "how does X work")
+- ✅ **NEW: search-interceptor skill**: Intercepts multi-file Read/Glob operations, redirects to semantic search
+- ✅ **Anti-Pattern Detection**: Explicit warnings for tool familiarity bias patterns
+- ✅ **Prerequisites System**: deep-analysis skill now requires code-search-selector first
+- ✅ **Updated Skills**:
+  - code-search-selector - Auto-invoke triggers + interception patterns
+  - claudemem-search - Anti-pattern section with correct workflow
+  - deep-analysis - Prerequisites section + updated quick reference
+- ✅ **Addresses Real-World Failure**: Based on analysis where model used grep despite indexed memory
+
+**Previous Changes (Code Analysis v2.1.0 - Tool Selection Rules):**
+- ✅ Explicit tool selection rules in codebase-detective agent
+- ✅ code-search-selector skill with decision tree
+- ✅ Trigger keywords in all detective skill descriptions
 
 **Previous Changes (Multi-Model Validation v0.3.0 & Detective v1.4.0):**
 - ✅ Dynamic model discovery via `claudish --top-models` and `claudish --free`

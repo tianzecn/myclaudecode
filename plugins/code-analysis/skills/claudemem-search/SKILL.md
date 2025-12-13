@@ -1,6 +1,6 @@
 ---
 name: claudemem-search
-description: Expert guidance on using the claudemem CLI for local semantic code search. Provides installation validation, best practices for indexing with Tree-sitter, formulating effective search queries, and MCP server integration. Use when working with large codebases requiring semantic search without cloud dependencies. Alternative to claude-context MCP.
+description: "⚡ PRIMARY TOOL for semantic code understanding. Expert guidance on claudemem CLI. ANTI-PATTERNS: Reading 5+ files sequentially, Glob then read all, Grep for 'how does X work'. CORRECT: claudemem search first, Read specific lines after."
 allowed-tools: Bash, Task, AskUserQuestion
 ---
 
@@ -446,6 +446,64 @@ Before completing a claudemem workflow, ensure:
 
 ---
 
+## 🔴 ANTI-PATTERNS (DO NOT DO)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                           COMMON MISTAKES TO AVOID                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  ❌ Reading 5+ files sequentially when investigating a feature              ║
+║     → WHY WRONG: Token waste, no ranking, no context                        ║
+║     → DO INSTEAD: claudemem search "feature concept" -n 15                  ║
+║                                                                              ║
+║  ❌ Using Glob to find all files, then reading them one-by-one              ║
+║     → WHY WRONG: Gets ALL files, not RELEVANT files                         ║
+║     → DO INSTEAD: claudemem search "what you're looking for"                ║
+║                                                                              ║
+║  ❌ Using Grep for architectural questions like "how does X work"           ║
+║     → WHY WRONG: Text match ≠ semantic understanding                        ║
+║     → DO INSTEAD: claudemem search "X functionality flow"                   ║
+║                                                                              ║
+║  ❌ "Files mentioned in prompt, let me Read them directly"                  ║
+║     → WHY WRONG: Misses context and related code                            ║
+║     → DO INSTEAD: Search semantically first, then Read specific lines       ║
+║                                                                              ║
+║  ❌ "Let me Read files while the detective agent works"                     ║
+║     → WHY WRONG: Duplicate inferior work, tool familiarity bias             ║
+║     → DO INSTEAD: Trust the agent to use claudemem properly                 ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Anti-Pattern vs Correct Pattern
+
+| Anti-Pattern | Why It's Wrong | Correct Pattern |
+|--------------|----------------|-----------------|
+| `Read auth/login.ts` then `Read auth/session.ts` then... | 5 files = ~5000 tokens, no ranking | `claudemem search "auth login session"` = ~500 tokens, ranked |
+| `Glob("**/*.controller.ts")` then read all | Gets 15 files, only 3 relevant | `claudemem search "HTTP controller routing"` = top 10 ranked |
+| `Grep -r "auth" src/` | 500 lines of noise | `claudemem search "authentication flow"` = 10 relevant chunks |
+| Prompt says `client.ts`, so `Read client.ts` | Misses integration context | `claudemem search "client API integration"` first |
+
+### The Correct Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CORRECT INVESTIGATION FLOW                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. claudemem status        → Check if indexed                  │
+│  2. claudemem search "..."  → Semantic query first              │
+│  3. Review results          → See ranked, relevant chunks       │
+│  4. Read specific lines     → ONLY from search results          │
+│                                                                  │
+│  ⚠️ NEVER: Start with Read/Glob for semantic questions          │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Plugin:** code-analysis v2.0.0
+**Plugin:** code-analysis v2.2.0
 **Last Updated:** December 2025

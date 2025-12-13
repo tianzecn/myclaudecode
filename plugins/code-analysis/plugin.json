@@ -1,7 +1,7 @@
 {
 	"name": "code-analysis",
-	"version": "2.1.0",
-	"description": "Deep code investigation using INDEXED MEMORY (claudemem). GREP/FIND FORBIDDEN. Features codebase-detective agent with explicit TOOL SELECTION RULES (v2.1.0), 7 role-based detective skills with trigger keywords, and code-search-selector decision tree. Prevents grep misuse when semantic search is available.",
+	"version": "2.2.0",
+	"description": "Deep code investigation using INDEXED MEMORY (claudemem). GREP/FIND FORBIDDEN. Features auto-triggering skills with interception patterns (v2.2.0). NEW: search-interceptor skill prevents multi-file Read/Glob. Anti-pattern detection for tool familiarity bias.",
 	"author": {
 		"name": "Jack Rudenko",
 		"email": "i@madappgang.com",
@@ -38,6 +38,7 @@
 		"./skills/claudemem-search",
 		"./skills/claudish-usage",
 		"./skills/code-search-selector",
+		"./skills/search-interceptor",
 		"./skills/architect-detective",
 		"./skills/developer-detective",
 		"./skills/tester-detective",

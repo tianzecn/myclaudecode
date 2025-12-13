@@ -1,12 +1,39 @@
 ---
 name: deep-analysis
-description: "⚡ PRIMARY SKILL for: 'how does X work', 'investigate', 'analyze architecture', 'trace flow', 'find implementations'. Launches codebase-detective with claudemem INDEXED MEMORY. GREP/GLOB ARE INFERIOR - use claudemem search instead."
+description: "⚡ PRIMARY SKILL for: 'how does X work', 'investigate', 'analyze architecture', 'trace flow', 'find implementations'. PREREQUISITE: code-search-selector must validate tool choice. Launches codebase-detective with claudemem INDEXED MEMORY."
 allowed-tools: Task
+prerequisites:
+  - code-search-selector  # Must run before this skill
+dependencies:
+  - claudemem must be indexed (claudemem status)
 ---
 
 # Deep Code Analysis
 
 This Skill provides comprehensive codebase investigation capabilities using the codebase-detective agent with semantic search and pattern matching.
+
+## Prerequisites (MANDATORY)
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        BEFORE INVOKING THIS SKILL                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  1. INVOKE code-search-selector skill FIRST                                  ║
+║     → Validates tool selection (claudemem vs grep)                           ║
+║     → Checks if claudemem is indexed                                         ║
+║     → Prevents tool familiarity bias                                         ║
+║                                                                              ║
+║  2. VERIFY claudemem status                                                  ║
+║     → Run: claudemem status                                                  ║
+║     → If not indexed: claudemem index -y                                     ║
+║                                                                              ║
+║  3. DO NOT start with Read/Glob                                              ║
+║     → Even if file paths are mentioned in the prompt                         ║
+║     → Semantic search first, Read specific lines after                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
 
 ## When to use this Skill
 
@@ -323,11 +350,19 @@ This Skill works well with:
 ┌─────────────────────────────────────────────────────────────────────┐
 │ BEFORE ANY CODE INVESTIGATION:                                       │
 │                                                                      │
-│ 1. Run: claudemem status                                            │
-│ 2. If indexed → USE claudemem search                                │
-│ 3. If not indexed → Index first OR ask user                         │
-│ 4. NEVER default to grep when claudemem available                   │
+│ 1. INVOKE code-search-selector skill                                │
+│ 2. Run: claudemem status                                            │
+│ 3. If indexed → USE claudemem search                                │
+│ 4. If not indexed → Index first OR ask user                         │
+│ 5. NEVER default to grep when claudemem available                   │
+│ 6. NEVER start with Read/Glob for semantic questions                │
 │                                                                      │
 │ grep is for EXACT STRING MATCHES only, NOT semantic understanding   │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+**Maintained by:** MadAppGang
+**Plugin:** code-analysis v2.2.0
+**Last Updated:** December 2025

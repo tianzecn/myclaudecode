@@ -1,12 +1,38 @@
 ---
 name: code-search-selector
-description: "⚡ MANDATORY PRE-CHECK before any code search. Decision tree for selecting the RIGHT tool: claudemem vs Grep vs Detective agent. INVOKE THIS SKILL FIRST when user asks about code architecture, implementations, patterns, or 'how does X work'. Prevents grep misuse when semantic search is available."
-allowed-tools: Bash, Read
+description: "⚡ AUTO-INVOKE when user asks: 'audit', 'investigate', 'how does X work', 'find all', 'where is', 'trace', 'understand', 'map the codebase', 'comprehensive'. MUST run BEFORE Read/Glob when planning to read 3+ files. Prevents tool familiarity bias toward native tools."
+allowed-tools: Bash, Read, AskUserQuestion
 ---
 
-# ⚠️ CODE SEARCH TOOL SELECTOR ⚠️
+# ⛔ MANDATORY CODE SEARCH GATE ⛔
 
-**INVOKE THIS SKILL BEFORE ANY CODE INVESTIGATION**
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║   ⚡ THIS SKILL AUTO-TRIGGERS ON THESE KEYWORDS:                             ║
+║                                                                              ║
+║   "audit" | "investigate" | "how does X work" | "find all" | "where is"     ║
+║   "trace" | "understand" | "map the codebase" | "comprehensive"              ║
+║   "all integration points" | "find implementations" | "architecture"         ║
+║                                                                              ║
+║   🚫 INTERCEPTION: Triggers when about to Read 3+ files OR Glob broadly     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+## Why This Gate Exists
+
+**The Tool Familiarity Bias Problem:**
+
+You have "native" tools (Read, Glob, Grep) that are always available with predictable output. These feel safe. But they produce INFERIOR results for semantic queries.
+
+**The "Known File Path" Trap:**
+
+When a prompt mentions specific file paths, your instinct is to Read directly. RESIST THIS. Semantic search provides CONTEXT around those files that direct reads miss.
+
+**The Parallelization Excuse:**
+
+"Let me Read files while agents work" is inefficient. Claudemem's indexed data is FASTER and provides better context.
 
 This skill ensures you use the RIGHT tool for code search tasks. Using Grep when claudemem is indexed is a critical mistake that produces inferior results.
 
@@ -192,6 +218,109 @@ Before ANY code investigation task, verify:
 
 ---
 
+## 🚫 MULTI-FILE READ INTERCEPTION
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        STOP BEFORE BULK FILE OPERATIONS                       ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  INTERCEPT TRIGGER: Before executing any of these:                           ║
+║                                                                              ║
+║  • Read 3+ files in same directory                                          ║
+║  • Glob with broad patterns (**/*.ts, **/*.py)                              ║
+║  • Sequential reads to "understand" a feature                               ║
+║  • "Let me read files while agents work"                                    ║
+║                                                                              ║
+║  ASK YOURSELF:                                                               ║
+║  1. Is claudemem indexed? (claudemem status)                                │
+║  2. Can this be ONE semantic query instead of N file reads?                 ║
+║  3. Am I falling into tool familiarity bias?                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+### Interception Examples
+
+**❌ About to do:**
+```
+Read src/services/auth/login.ts
+Read src/services/auth/session.ts
+Read src/services/auth/jwt.ts
+Read src/services/auth/middleware.ts
+Read src/services/auth/types.ts
+Read src/services/auth/utils.ts
+```
+
+**✅ Do instead:**
+```bash
+claudemem search "authentication login session JWT middleware" -n 15
+```
+
+**❌ About to do:**
+```
+Glob pattern: src/services/prime/**/*.ts
+Then read all 12 matches sequentially
+```
+
+**✅ Do instead:**
+```bash
+claudemem search "Prime API integration service endpoints" -n 20
+```
+
+**❌ Parallelization trap:**
+```
+"Let me Read these 5 files while the detective agent works..."
+```
+
+**✅ Do instead:**
+```
+Trust the detective agent to use claudemem.
+Don't duplicate work with inferior Read/Glob.
+```
+
+---
+
+## 🔴 ANTI-PATTERNS TO AVOID
+
+| Anti-Pattern | Why It's Wrong | Correct Alternative |
+|--------------|----------------|---------------------|
+| Reading 5+ files sequentially | Token waste, no ranking | `claudemem search` once |
+| Glob → Read all matches | No semantic understanding | `claudemem search` with concept |
+| "Files mentioned, let me Read" | Misses context around files | Search semantically first |
+| Grep for "how does X work" | Text match ≠ meaning | `claudemem search` |
+| Read while agents work | Duplicate inferior work | Trust agent's claudemem usage |
+
+---
+
+## ✅ CORRECT WORKFLOW
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CORRECT INVESTIGATION FLOW                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. TASK ARRIVES with keywords:                                 │
+│     "audit", "investigate", "how does", "find all", etc.        │
+│                                                                  │
+│  2. AUTO-TRIGGER this skill (code-search-selector)              │
+│                                                                  │
+│  3. CHECK: claudemem status                                     │
+│     • If indexed → Use claudemem search                         │
+│     • If not → Index first OR launch detective agent            │
+│                                                                  │
+│  4. SEARCH SEMANTICALLY:                                        │
+│     claudemem search "concept query" -n 15                      │
+│                                                                  │
+│  5. ONLY THEN Read specific files/lines from results            │
+│                                                                  │
+│  ⚠️ NEVER start with Read/Glob for semantic tasks               │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 **Maintained by:** MadAppGang
-**Plugin:** code-analysis v2.1.0
-**Purpose:** Prevent grep misuse, enforce semantic search when available
+**Plugin:** code-analysis v2.2.0
+**Purpose:** Prevent tool familiarity bias, intercept multi-file reads, enforce semantic search
