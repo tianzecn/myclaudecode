@@ -1,717 +1,1193 @@
 ---
 name: claudemem-search
-description: "⚡ PRIMARY TOOL for semantic code understanding with LLM enrichment. ANTI-PATTERNS: Reading 5+ files sequentially, Glob then read all, Grep for 'how does X work'. CORRECT: claudemem search first (use --use-case navigation for agents), Read specific lines after."
+description: "⚡ PRIMARY TOOL for semantic code search AND structural analysis. NEW: AST tree navigation with map, symbol, callers, callees, context commands. PageRank ranking. ANTI-PATTERNS: Reading files without mapping, Grep for 'how does X work', Modifying without caller analysis."
 allowed-tools: Bash, Task, AskUserQuestion
 ---
 
-# Claudemem Semantic Code Search Expert (v0.2.0)
+# Claudemem Semantic Code Search Expert (v0.4.0)
 
-This Skill provides comprehensive guidance on leveraging **claudemem** v0.2.0 with **LLM enrichment** for intelligent, context-aware semantic code search.
+This Skill provides comprehensive guidance on leveraging **claudemem** v0.4.0 with **AST-based structural analysis** and **code analysis commands** for intelligent codebase understanding.
 
-## What's New in v0.2.0
+## What's New in v0.3.0
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   CLAUDEMEM v0.2.0 ARCHITECTURE              │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ┌─────────────────────────────────────────────────────────┐│
-│  │                    SEARCH LAYER                          ││
-│  │  Query → Embed → Vector Search + BM25 → Ranked Results   ││
-│  └─────────────────────────────────────────────────────────┘│
-│                              ↓                               │
-│  ┌─────────────────────────────────────────────────────────┐│
-│  │              ENRICHMENT LAYER (LLM) ⭐NEW                ││
-│  │  file_summary │ symbol_summary │ idiom │ usage_example   ││
-│  │  (1 call/file)│ (batched/file) │       │                 ││
-│  └─────────────────────────────────────────────────────────┘│
-│                              ↓                               │
-│  ┌─────────────────────────────────────────────────────────┐│
-│  │                     INDEX LAYER                          ││
-│  │  AST Parse → Chunk (functions/classes) → Embed → LanceDB ││
-│  └─────────────────────────────────────────────────────────┘│
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                  CLAUDEMEM v0.3.0 ARCHITECTURE                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                 AST STRUCTURAL LAYER ⭐NEW                  │  │
+│  │  Tree-sitter Parse → Symbol Graph → PageRank Ranking       │  │
+│  │  map | symbol | callers | callees | context                │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                              ↓                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    SEARCH LAYER                             │  │
+│  │  Query → Embed → Vector Search + BM25 → Ranked Results     │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                              ↓                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                     INDEX LAYER                             │  │
+│  │  AST Parse → Chunk → Embed → LanceDB + Symbol Graph        │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Key Innovation: Dual Matching
+### Key Innovation: Structural Understanding
 
-Search queries now match **BOTH**:
-- **Raw code chunks** (exact implementation, syntax)
-- **LLM-enriched summaries** (semantic meaning, purpose, behavior)
-
-This dramatically improves semantic understanding over v0.1.x.
+v0.3.0 adds **AST tree navigation** with symbol graph analysis:
+- **PageRank ranking** - Symbols ranked by importance (how connected they are)
+- **Call graph analysis** - Track callers/callees for impact assessment
+- **Structural overview** - Map the codebase before reading code
 
 ---
 
-## Document Types (NEW in v0.2.0)
-
-### 1. code_chunk (Raw AST Code)
-
-**Source:** Tree-sitter AST parsing
-**Content:** Actual code blocks (functions, classes, methods)
-**Best for:** Implementation details, signatures, exact syntax
-
-| Field | Description |
-|-------|-------------|
-| `id` | SHA256 hash |
-| `content` | Raw code |
-| `filePath` | File location |
-| `startLine` / `endLine` | Line numbers (1-indexed) |
-| `chunkType` | function, class, method, module, block |
-| `name` | Function/class name |
-| `signature` | Extracted signature |
-
-**When to prioritize:**
-- Finding exact implementations
-- Looking up function signatures
-- Code completion (FIM)
-- Syntax-level understanding
-
-### 2. file_summary (LLM-Enriched) ⭐NEW
-
-**Source:** LLM analysis (1 call per file)
-**Content:** File purpose, exports, dependencies, patterns
-**Best for:** Architecture discovery, understanding file roles
-
-**Example enriched content:**
-```
-File: src/core/indexer.ts
-Purpose: Core indexing orchestrator for claudemem
-Responsibilities:
-- Coordinates file scanning, parsing, and embedding
-- Manages incremental updates via content hashing
-- Integrates with enrichment pipeline for LLM summaries
-Exports: CodebaseIndexer, IndexStatus
-Dependencies: VectorStore, FileTracker, Enricher
-Patterns: Factory pattern, progress callbacks
-```
-
-**When to prioritize:**
-- Understanding codebase structure
-- Finding entry points
-- Mapping dependencies
-- Architecture analysis
-
-### 3. symbol_summary (LLM-Enriched, Batched) ⭐NEW
-
-**Source:** LLM analysis (1 call for ALL symbols in file)
-**Content:** Function/class documentation
-**Best for:** API understanding, finding by behavior
-
-**Example enriched content:**
-```
-function: enrichFiles
-Summary: Enriches multiple files using batched LLM calls for efficiency
-Parameters:
-- files: Array of files with content and code chunks
-- options: Concurrency and progress callback settings
-Returns: EnrichmentResult with document counts and errors
-Side effects: Stores documents in vector store, updates tracker
-Usage: Called during index --enrich or standalone enrich command
-```
-
-**When to prioritize:**
-- Finding functions by behavior (not name)
-- Understanding parameters and returns
-- Identifying side effects
-- API exploration
-
----
-
-## Search Use Cases & Weight Presets ⭐NEW
-
-claudemem v0.2.0 provides three optimized search modes:
-
-### 1. FIM (Fill-in-Middle) Completion
-
-**Use case:** Code completion, autocomplete
-**Optimizes for:** Exact code patterns
+## Quick Reference
 
 ```bash
-claudemem search "async function handle" --use-case fim
-```
+# Always run with --nologo for clean output
+claudemem --nologo <command>
 
-**Weight distribution:**
-| Document Type | Weight |
-|---------------|--------|
-| code_chunk | 50% |
-| usage_example | 25% |
-| idiom | 15% |
-| symbol_summary | 10% |
-
-### 2. Search (Human Queries) - DEFAULT
-
-**Use case:** Developer searching codebase
-**Optimizes for:** Balanced understanding
-
-```bash
-claudemem search "authentication flow" # default mode
-```
-
-**Weight distribution:**
-| Document Type | Weight |
-|---------------|--------|
-| file_summary | 25% |
-| symbol_summary | 25% |
-| code_chunk | 20% |
-| idiom | 15% |
-| usage_example | 10% |
-
-### 3. Navigation (Agent Discovery) ⭐RECOMMENDED FOR AGENTS
-
-**Use case:** AI agent exploring codebase
-**Optimizes for:** Understanding structure
-
-```bash
-claudemem search "authentication middleware" --use-case navigation
-```
-
-**Weight distribution:**
-| Document Type | Weight |
-|---------------|--------|
-| symbol_summary | 35% |
-| file_summary | 30% |
-| code_chunk | 20% |
-| idiom | 10% |
-| project_doc | 5% |
-
-**⚠️ IMPORTANT:** When using claudemem in detective agents, ALWAYS use `--use-case navigation` for optimal results.
-
----
-
-## CLI Commands Reference (Updated for v0.2.0)
-
-### Index Codebase
-
-```bash
-# Basic indexing (AST + embeddings only)
-claudemem index [path]
-
-# Force full re-index
-claudemem index -f
-
-# Index with LLM enrichment ⭐NEW
-claudemem index --enrich
-
-# Force re-index with enrichment
-claudemem index -f --enrich
-```
-
-### Enrich Indexed Files ⭐NEW
-
-```bash
-# Run enrichment on indexed files
-claudemem enrich [path]
-
-# Control parallelism (default: 10)
-claudemem enrich --concurrency 5
-
-# Enrich specific path
-claudemem enrich ./src/core
-```
-
-### Search
-
-```bash
-# Semantic search (default: search use case)
-claudemem search "authentication middleware"
-
-# Limit results
-claudemem search "error handling" -n 20
-
-# Filter by language
-claudemem search "class definition" -l typescript
-
-# Specific use case ⭐NEW
-claudemem search "validate input" --use-case navigation
-claudemem search "async handler" --use-case fim
-```
-
-### Status
-
-```bash
-# Show index and enrichment status
-claudemem status
-
-# Output includes:
-# - Total files/chunks indexed
-# - Document type counts (code_chunk, file_summary, symbol_summary) ⭐NEW
-# - Enrichment progress (pending/complete) ⭐NEW
-# - Embedding model used
-```
-
-### AI Instructions
-
-```bash
-# Get role-specific instructions
-claudemem ai architect    # System design focus
-claudemem ai developer    # Implementation focus
-claudemem ai tester       # Test coverage focus
-claudemem ai debugger     # Error tracing focus
-
-# Raw output for clipboard
-claudemem ai developer --raw | pbcopy
+# Core commands for agents
+claudemem map [query]              # Get structural overview (repo map)
+claudemem symbol <name>            # Find symbol definition
+claudemem callers <name>           # What calls this symbol?
+claudemem callees <name>           # What does this symbol call?
+claudemem context <name>           # Full context (symbol + dependencies)
+claudemem search <query>           # Semantic search with --raw for parsing
+claudemem search <query> --map     # Search + include repo map context
 ```
 
 ---
 
-## When to Use This Skill
+## Version Compatibility
 
-Claude should invoke this Skill when:
-
-- User mentions: "claudemem", "tree-sitter search", "local semantic search"
-- User wants semantic search WITHOUT cloud dependencies
-- User asks: "install claudemem", "set up local code search"
-- User has OpenRouter API key but not OpenAI/Zilliz
-- Before launching codebase-detective when claudemem is preferred
-- User asks about alternatives to claude-context
-- User asks about enrichment, document types, or search modes
-
----
-
-## Phase 1: Installation Validation (REQUIRED)
-
-### Step 1: Check if claudemem is Installed
+Claudemem has evolved significantly. **Check your version** before using commands:
 
 ```bash
-# Check if claudemem CLI is available
-which claudemem || command -v claudemem
-
-# Check version (must be 0.2.0+)
 claudemem --version
 ```
 
-**If NOT installed**, present installation options:
+### Command Availability by Version
 
-```typescript
-AskUserQuestion({
-  questions: [{
-    question: "claudemem CLI not found. How would you like to install it?",
-    header: "Install",
-    multiSelect: false,
-    options: [
-      { label: "npm (Recommended)", description: "npm install -g claude-codemem" },
-      { label: "Homebrew (macOS)", description: "brew tap MadAppGang/claude-mem && brew install --cask claudemem" },
-      { label: "Shell script", description: "curl -fsSL https://raw.githubusercontent.com/MadAppGang/claudemem/main/install.sh | bash" },
-      { label: "Skip installation", description: "I'll install it manually later" }
-    ]
-  }]
-})
-```
+| Command | Minimum Version | Status | Purpose |
+|---------|-----------------|--------|---------|
+| `map` | v0.3.0 | ✅ Available | Architecture overview with PageRank |
+| `symbol` | v0.3.0 | ✅ Available | Find exact file:line location |
+| `callers` | v0.3.0 | ✅ Available | What calls this symbol? |
+| `callees` | v0.3.0 | ✅ Available | What does this symbol call? |
+| `context` | v0.3.0 | ✅ Available | Full call chain (callers + callees) |
+| `search` | v0.3.0 | ✅ Available | Semantic vector search |
+| `dead-code` | v0.4.0+ | ⚠️ Check version | Find unused symbols |
+| `test-gaps` | v0.4.0+ | ⚠️ Check version | Find high-importance untested code |
+| `impact` | v0.4.0+ | ⚠️ Check version | BFS transitive caller analysis |
 
-### Step 2: Check Configuration and Enrichment Status ⭐UPDATED
+### Version Detection in Scripts
 
 ```bash
-# Check if initialized (looks for config)
-ls ~/.claudemem/config.json 2>/dev/null || echo "Not configured"
+# Get version number
+VERSION=$(claudemem --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
 
-# Check for project-local index
-ls .claudemem/ 2>/dev/null || echo "No local index"
-
-# Check full status including enrichment
-claudemem status
+# Check if v0.4.0+ features available
+if [ -n "$VERSION" ] && printf '%s\n' "0.4.0" "$VERSION" | sort -V -C; then
+  # v0.4.0+ available
+  claudemem --nologo dead-code --raw
+  claudemem --nologo test-gaps --raw
+  claudemem --nologo impact SymbolName --raw
+else
+  echo "Code analysis commands require claudemem v0.4.0+"
+  echo "Current version: $VERSION"
+  echo "Fallback to v0.3.0 commands (map, symbol, callers, callees)"
+fi
 ```
 
-**Status output now includes:**
-- Total files/chunks indexed
-- Document type breakdown (code_chunk, file_summary, symbol_summary)
-- Enrichment status (complete, pending, not run)
+### Graceful Degradation
 
-### Step 3: Index with Enrichment (Recommended)
+When using v0.4.0+ commands, always provide fallback:
 
 ```bash
-# Full index with LLM enrichment (recommended)
+# Try impact analysis (v0.4.0+), fallback to callers (v0.3.0)
+IMPACT=$(claudemem --nologo impact SymbolName --raw 2>/dev/null)
+if [ -n "$IMPACT" ] && [ "$IMPACT" != "command not found" ]; then
+  echo "$IMPACT"
+else
+  echo "Using fallback (direct callers only):"
+  claudemem --nologo callers SymbolName --raw
+fi
+```
+
+**Why This Matters:**
+- v0.3.0 commands work for 90% of use cases (navigation, modification)
+- v0.4.0+ commands are specialized (code analysis, cleanup planning)
+- Scripts should work across versions with appropriate fallbacks
+
+---
+
+## The Correct Workflow ⭐CRITICAL
+
+### Phase 1: Understand Structure First (ALWAYS DO THIS)
+
+Before reading any code files, get the structural overview:
+
+```bash
+# For a specific task, get focused repo map
+claudemem --nologo map "authentication flow" --raw
+
+# Output shows relevant symbols ranked by importance (PageRank):
+# file: src/auth/AuthService.ts
+# line: 15-89
+# kind: class
+# name: AuthService
+# pagerank: 0.0921
+# signature: class AuthService
+# ---
+# file: src/middleware/auth.ts
+# ...
+```
+
+This tells you:
+- Which files contain relevant code
+- Which symbols are most important (high PageRank = heavily used)
+- The structure before you read actual code
+
+### Phase 2: Locate Specific Symbols
+
+Once you know what to look for:
+
+```bash
+# Find exact location of a symbol
+claudemem --nologo symbol AuthService --raw
+
+# Output:
+# file: src/auth/AuthService.ts
+# line: 15-89
+# kind: class
+# name: AuthService
+# signature: class AuthService implements IAuthProvider
+# exported: true
+# pagerank: 0.0921
+# docstring: Handles user authentication and session management
+```
+
+### Phase 3: Understand Dependencies
+
+Before modifying code, understand what depends on it:
+
+```bash
+# What calls AuthService? (impact of changes)
+claudemem --nologo callers AuthService --raw
+
+# Output:
+# caller: LoginController.authenticate
+# file: src/controllers/login.ts
+# line: 34
+# kind: call
+# ---
+# caller: SessionMiddleware.validate
+# file: src/middleware/session.ts
+# line: 12
+# kind: call
+```
+
+```bash
+# What does AuthService call? (its dependencies)
+claudemem --nologo callees AuthService --raw
+
+# Output:
+# callee: Database.query
+# file: src/db/database.ts
+# line: 45
+# kind: call
+# ---
+# callee: TokenManager.generate
+# file: src/auth/tokens.ts
+# line: 23
+# kind: call
+```
+
+### Phase 4: Get Full Context
+
+For complex modifications, get everything at once:
+
+```bash
+claudemem --nologo context AuthService --raw
+
+# Output includes:
+# [symbol]
+# file: src/auth/AuthService.ts
+# line: 15-89
+# kind: class
+# name: AuthService
+# ...
+# [callers]
+# caller: LoginController.authenticate
+# ...
+# [callees]
+# callee: Database.query
+# ...
+```
+
+### Phase 5: Search for Code (Only If Needed)
+
+When you need actual code snippets:
+
+```bash
+# Semantic search
+claudemem --nologo search "password hashing" --raw
+
+# Search with repo map context (recommended for complex tasks)
+claudemem --nologo search "password hashing" --map --raw
+```
+
+---
+
+## Output Format
+
+All commands support `--raw` flag for machine-readable output:
+
+```
+# Raw output format (line-based, easy to parse)
+file: src/core/indexer.ts
+line: 45-120
+kind: class
+name: Indexer
+signature: class Indexer
+pagerank: 0.0842
+exported: true
+---
+file: src/core/store.ts
+line: 12-89
+kind: class
+name: VectorStore
+...
+```
+
+Records are separated by `---`. Each field is `key: value` on its own line.
+
+---
+
+## Command Reference
+
+### claudemem map [query]
+
+Get structural overview of the codebase. Optionally focused on a query.
+
+```bash
+# Full repo map (top symbols by PageRank)
+claudemem --nologo map --raw
+
+# Focused on specific task
+claudemem --nologo map "authentication" --raw
+
+# Limit tokens
+claudemem --nologo map "auth" --tokens 500 --raw
+```
+
+**Output fields**: file, line, kind, name, signature, pagerank, exported
+
+**When to use**: Always first - understand structure before reading code
+
+### claudemem symbol <name>
+
+Find a symbol by name. Disambiguates using PageRank and export status.
+
+```bash
+claudemem --nologo symbol Indexer --raw
+claudemem --nologo symbol "search" --file retriever --raw  # hint which file
+```
+
+**Output fields**: file, line, kind, name, signature, pagerank, exported, docstring
+
+**When to use**: When you know the symbol name and need exact location
+
+### claudemem callers <name>
+
+Find all symbols that call/reference the given symbol.
+
+```bash
+claudemem --nologo callers AuthService --raw
+```
+
+**Output fields**: caller (name), file, line, kind (call/import/extends/etc)
+
+**When to use**: Before modifying anything - know the impact radius
+
+### claudemem callees <name>
+
+Find all symbols that the given symbol calls/references.
+
+```bash
+claudemem --nologo callees AuthService --raw
+```
+
+**Output fields**: callee (name), file, line, kind
+
+**When to use**: To understand dependencies and trace data flow
+
+### claudemem context <name>
+
+Get full context: the symbol plus its callers and callees.
+
+```bash
+claudemem --nologo context Indexer --raw
+claudemem --nologo context Indexer --callers 10 --callees 20 --raw
+```
+
+**Output sections**: [symbol], [callers], [callees]
+
+**When to use**: For complex modifications requiring full awareness
+
+### claudemem search <query>
+
+Semantic search across the codebase.
+
+```bash
+claudemem --nologo search "error handling" --raw
+claudemem --nologo search "error handling" --map --raw  # include repo map
+claudemem --nologo search "auth" -n 5 --raw  # limit results
+```
+
+**Output fields**: file, line, kind, name, score, content (truncated)
+
+**When to use**: When you need actual code snippets (after mapping)
+
+---
+
+## Code Analysis Commands (v0.4.0+ Required)
+
+### claudemem dead-code
+
+Find unused symbols in the codebase.
+
+```bash
+# Find all unused symbols
+claudemem --nologo dead-code --raw
+
+# Stricter threshold (only very low PageRank)
+claudemem --nologo dead-code --max-pagerank 0.005 --raw
+
+# Include exported symbols (usually excluded)
+claudemem --nologo dead-code --include-exported --raw
+```
+
+**Algorithm:**
+- Zero callers (nothing references the symbol)
+- Low PageRank (< 0.001 default)
+- Not exported (by default, exports may be used externally)
+
+**Output fields**: file, line, kind, name, pagerank, last_caller_removed
+
+**When to use**: Architecture cleanup, tech debt assessment, before major refactoring
+
+**Empty Result Handling:**
+```bash
+RESULT=$(claudemem --nologo dead-code --raw)
+if [ -z "$RESULT" ] || [ "$RESULT" = "No dead code found" ]; then
+  echo "Codebase is clean - no dead code detected!"
+  echo "This indicates good code hygiene."
+else
+  echo "$RESULT"
+fi
+```
+
+**Static Analysis Limitations:**
+- Dynamic imports (`import()`) may hide real callers
+- Reflection-based access not captured
+- External callers (other repos, CLI usage) not visible
+- Exported symbols excluded by default for this reason
+
+### claudemem test-gaps
+
+Find high-importance code without test coverage.
+
+```bash
+# Find all test coverage gaps
+claudemem --nologo test-gaps --raw
+
+# Only critical gaps (high PageRank)
+claudemem --nologo test-gaps --min-pagerank 0.05 --raw
+```
+
+**Algorithm:**
+- High PageRank (> 0.01 default) - Important code
+- Zero callers from test files (*.test.ts, *.spec.ts, *_test.go)
+
+**Output fields**: file, line, kind, name, pagerank, production_callers, test_callers
+
+**When to use**: Test coverage analysis, QA planning, identifying critical gaps
+
+**Empty Result Handling:**
+```bash
+RESULT=$(claudemem --nologo test-gaps --raw)
+if [ -z "$RESULT" ] || [ "$RESULT" = "No test gaps found" ]; then
+  echo "Excellent! All high-importance code has test coverage."
+  echo "Consider lowering --min-pagerank threshold for additional coverage."
+else
+  echo "$RESULT"
+fi
+```
+
+**Static Analysis Limitations:**
+- Test file detection based on naming patterns only
+- Integration tests calling code indirectly may not be detected
+- Mocked dependencies may show false positives
+
+### claudemem impact <symbol>
+
+Analyze the impact of changing a symbol using BFS traversal.
+
+```bash
+# Get all transitive callers
+claudemem --nologo impact UserService --raw
+
+# Limit depth for large codebases
+claudemem --nologo impact UserService --max-depth 5 --raw
+```
+
+**Algorithm:**
+- BFS traversal from symbol to all transitive callers
+- Groups results by depth level
+- Shows file:line for each caller
+
+**Output sections**: direct_callers, transitive_callers (with depth), grouped_by_file
+
+**When to use**: Before ANY modification, refactoring planning, risk assessment
+
+**Empty Result Handling:**
+```bash
+RESULT=$(claudemem --nologo impact FunctionName --raw)
+if [ -z "$RESULT" ] || echo "$RESULT" | grep -q "No callers found"; then
+  echo "No callers found - this symbol appears unused or is an entry point."
+  echo "If unused, consider running: claudemem --nologo dead-code --raw"
+  echo "If entry point (API handler, main), this is expected."
+else
+  echo "$RESULT"
+fi
+```
+
+**Static Analysis Limitations:**
+- Callback/event-based calls may not be detected
+- Dependency injection containers hide static call relationships
+- External service callers not visible
+
+---
+
+## LLM Enrichment Document Types (v0.2.0+)
+
+Claudemem v0.2.0+ supports **LLM-enriched semantic search** with specialized document types.
+
+### Document Types
+
+| Type | Purpose | Generated By |
+|------|---------|--------------|
+| `symbol_summary` | Function behavior, params, returns, side effects | LLM analysis |
+| `file_summary` | File purpose, exports, architectural patterns | LLM analysis |
+| `idiom` | Common patterns in codebase | Pattern detection |
+| `usage_example` | How to use APIs | Documentation extraction |
+| `anti_pattern` | What NOT to do | Static analysis + LLM |
+| `project_doc` | Project-level documentation | README, CLAUDE.md |
+
+### Navigation Mode
+
+For agent-optimized search with document type weighting:
+
+```bash
+# Navigation-focused search (prioritizes summaries)
+claudemem --nologo search "authentication" --use-case navigation --raw
+
+# Default search (balanced)
+claudemem --nologo search "authentication" --raw
+```
+
+**Navigation mode search weights:**
+- `symbol_summary`: 1.5x (higher priority)
+- `file_summary`: 1.3x (higher priority)
+- `code_chunk`: 1.0x (normal)
+- `idiom`: 1.2x (higher for pattern discovery)
+
+### Symbol Summary Fields
+
+```yaml
+symbol: AuthService.authenticate
+file: src/services/auth.ts
+line: 45-89
+behavior: "Validates user credentials and generates JWT token"
+params:
+  - name: credentials
+    type: LoginCredentials
+    description: "Email and password from login form"
+returns:
+  type: AuthResult
+  description: "JWT token and user profile on success, error on failure"
+side_effects:
+  - "Updates user.lastLogin timestamp"
+  - "Logs authentication attempt"
+  - "May trigger rate limiting"
+```
+
+### File Summary Fields
+
+```yaml
+file: src/services/auth.ts
+purpose: "Core authentication service handling login, logout, and session management"
+exports:
+  - AuthService (class)
+  - authenticate (function)
+  - validateToken (function)
+patterns:
+  - "Dependency Injection (constructor takes IUserRepository)"
+  - "Factory Pattern (createSession)"
+  - "Strategy Pattern (IAuthProvider interface)"
+dependencies:
+  - bcrypt (password hashing)
+  - jsonwebtoken (JWT generation)
+  - UserRepository (user data access)
+```
+
+### Using Document Types in Investigation
+
+```bash
+# Find function behavior without reading code
+claudemem --nologo search "processPayment behavior" --use-case navigation --raw
+
+# Output includes symbol_summary:
+# symbol: PaymentService.processPayment
+# behavior: "Charges customer card via Stripe and saves transaction"
+# side_effects: ["Updates balance", "Sends receipt email", "Logs to audit"]
+
+# Find file purposes for architecture understanding
+claudemem --nologo search "file:services purpose" --use-case navigation --raw
+
+# Find anti-patterns to avoid
+claudemem --nologo search "anti_pattern SQL" --raw
+```
+
+### Regenerating Enrichments
+
+If codebase changes significantly:
+
+```bash
+# Re-index with LLM enrichment
 claudemem index --enrich
 
-# Or index first, then enrich separately
-claudemem index
-claudemem enrich
-```
-
-**⚠️ Without enrichment**, you only get code_chunk results (v0.1.x behavior).
-**✅ With enrichment**, you get file_summary + symbol_summary for much better semantic understanding.
-
----
-
-## Phase 2: Indexing Best Practices (Updated)
-
-### 2.1 Initial Indexing with Enrichment
-
-```bash
-# Index with enrichment (recommended for semantic search)
-claudemem index --enrich
-
-# Or index in stages
-claudemem index           # Fast: AST + embeddings
-claudemem enrich          # Slower: LLM enrichment
-```
-
-**What happens during enrichment:**
-1. LLM analyzes each file (1 call/file)
-2. Generates file_summary with purpose, exports, patterns
-3. Batches symbol analysis (1 call for all symbols in file)
-4. Stores enriched documents in LanceDB
-
-### 2.2 Check Enrichment Status
-
-```bash
-claudemem status
-```
-
-Look for:
-```
-Document Types:
-  code_chunk: 1,234
-  file_summary: 567   ← Should match file count
-  symbol_summary: 890 ← Functions/classes documented
-Enrichment: complete  ← Ready for semantic search
-```
-
-### 2.3 Embedding Models
-
-```bash
-claudemem --models
-```
-
-**Curated Picks:**
-
-| Model | Best For | Price | Context |
-|-------|----------|-------|---------|
-| `voyage/voyage-code-3` | **Best Quality** (default) | $0.180/1M | 32K |
-| `qwen/qwen3-embedding-8b` | Best Balanced | $0.010/1M | 33K |
-| `qwen/qwen3-embedding-0.6b` | Best Value | $0.002/1M | 33K |
-
-**Recommendation**: Use `voyage/voyage-code-3` for best code understanding (default).
-
----
-
-## Phase 3: Search Query Formulation (Updated)
-
-### 3.1 Use Case Selection ⭐NEW
-
-**Choose the right use case for your task:**
-
-| Task | Use Case | Command |
-|------|----------|---------|
-| Developer searching | `search` (default) | `claudemem search "query"` |
-| AI agent exploring | `navigation` | `claudemem search "query" --use-case navigation` |
-| Code completion | `fim` | `claudemem search "query" --use-case fim` |
-
-### 3.2 Effective Query Patterns
-
-**Concept-Based Queries (Best for enriched search):**
-```bash
-claudemem search "user authentication login flow with JWT tokens"
-claudemem search "database connection pooling initialization"
-claudemem search "error handling middleware for HTTP requests"
-```
-
-**Why These Work Better with Enrichment:**
-- Matches file_summary (file purpose, patterns)
-- Matches symbol_summary (function behavior, side effects)
-- Matches code_chunk (exact implementation)
-- Triple-layer matching = much higher relevance
-
-### 3.3 Query Templates by Use Case
-
-**Architecture Discovery (use file_summary):**
-```bash
-claudemem search "main entry point application bootstrap" --use-case navigation
-claudemem search "service layer business logic orchestration" --use-case navigation
-claudemem search "repository data access pattern" --use-case navigation
-```
-
-**API Exploration (use symbol_summary):**
-```bash
-claudemem search "create user account function parameters" --use-case navigation
-claudemem search "validate input before save" --use-case navigation
-claudemem search "error response formatting" --use-case navigation
-```
-
-**Implementation Details (use code_chunk):**
-```bash
-claudemem search "JWT token generation implementation"
-claudemem search "password hashing bcrypt"
-claudemem search "database transaction commit"
+# Or enrich specific files
+claudemem enrich src/services/payment.ts
 ```
 
 ---
 
-## Phase 4: Integration Patterns for Agents
+## Workflow Templates
 
-### 4.1 Pattern: Semantic-First Discovery
+Standardized investigation patterns for common scenarios. All templates include error handling for empty results and version compatibility checks.
 
-**Anti-pattern:** Sequential file reads, grep for keywords
-**Best practice:** Semantic search → targeted file reads
+### Template 1: Bug Investigation
 
+**Trigger:** "Why is X broken?", "Find bug", "Root cause"
+
+```bash
+# Step 1: Locate the symptom
+SYMBOL=$(claudemem --nologo symbol FunctionFromStackTrace --raw)
+if [ -z "$SYMBOL" ]; then
+  echo "Symbol not found - check spelling or run: claudemem --nologo map 'related keywords' --raw"
+  exit 1
+fi
+
+# Step 2: Get full context (callers + callees)
+claudemem --nologo context FunctionFromStackTrace --raw
+
+# Step 3: Trace backwards to find root cause
+claudemem --nologo callers suspectedSource --raw
+
+# Step 4: Check full impact of the bug (v0.4.0+)
+IMPACT=$(claudemem --nologo impact BuggyFunction --raw 2>/dev/null)
+if [ -n "$IMPACT" ]; then
+  echo "$IMPACT"
+else
+  echo "Impact analysis requires claudemem v0.4.0+ or no callers found"
+  echo "Fallback: claudemem --nologo callers BuggyFunction --raw"
+fi
+
+# Step 5: Read identified file:line ranges
+# Fix bug, verify callers still work
+
+# Step 6: Document impacted code for testing
+```
+
+**Output Template:**
+
+```markdown
+## Bug Investigation Report
+
+**Symptom:** [Description]
+**Root Cause:** [Location and explanation]
+**Call Chain:** [How we got here]
+**Impact Radius:** [What else is affected]
+**Fix Applied:** [What was changed]
+**Verification:** [Tests run, callers checked]
+```
+
+### Template 2: New Feature Implementation
+
+**Trigger:** "Add feature", "Implement X", "Extend functionality"
+
+```bash
+# Step 1: Map the feature area
+MAP=$(claudemem --nologo map "feature area keywords" --raw)
+if [ -z "$MAP" ]; then
+  echo "No matches found - try broader keywords"
+fi
+
+# Step 2: Identify extension points
+claudemem --nologo callees ExistingFeature --raw
+
+# Step 3: Get full context for modification point
+claudemem --nologo context ModificationPoint --raw
+
+# Step 4: Check existing patterns to follow
+claudemem --nologo search "similar pattern" --use-case navigation --raw
+
+# Step 5: Implement following existing patterns
+
+# Step 6: Check test coverage gaps (v0.4.0+)
+GAPS=$(claudemem --nologo test-gaps --raw 2>/dev/null)
+if [ -n "$GAPS" ]; then
+  echo "Test gaps to address:"
+  echo "$GAPS"
+else
+  echo "test-gaps requires v0.4.0+ or no gaps found"
+fi
+```
+
+**Output Template:**
+
+```markdown
+## Feature Implementation Plan
+
+**Feature:** [Description]
+**Extension Point:** [Where to add]
+**Dependencies:** [What it needs]
+**Pattern to Follow:** [Existing similar code]
+**Test Requirements:** [Coverage needs]
+```
+
+### Template 3: Refactoring
+
+**Trigger:** "Rename X", "Extract function", "Move code", "Refactor"
+
+```bash
+# Step 1: Find the symbol to refactor
+SYMBOL=$(claudemem --nologo symbol SymbolToRename --raw)
+if [ -z "$SYMBOL" ]; then
+  echo "Symbol not found - check exact name"
+  exit 1
+fi
+
+# Step 2: Get FULL impact (all transitive callers) (v0.4.0+)
+IMPACT=$(claudemem --nologo impact SymbolToRename --raw 2>/dev/null)
+if [ -n "$IMPACT" ]; then
+  echo "$IMPACT"
+  # (impact output includes grouped_by_file)
+else
+  echo "Using fallback (direct callers only):"
+  claudemem --nologo callers SymbolToRename --raw
+fi
+
+# Step 3: Group by file for systematic updates
+
+# Step 4: Update each caller location systematically
+
+# Step 5: Verify all callers updated
+claudemem --nologo callers NewSymbolName --raw
+
+# Step 6: Run affected tests
+```
+
+**Output Template:**
+
+```markdown
+## Refactoring Report
+
+**Original:** [Old name/location]
+**Target:** [New name/location]
+**Direct Callers:** [Count]
+**Transitive Callers:** [Count]
+**Files Modified:** [List]
+**Verification:** [All callers updated, tests pass]
+```
+
+### Template 4: Architecture Understanding
+
+**Trigger:** "How does X work?", "Explain architecture", "Onboarding"
+
+```bash
+# Step 1: Get full structural map
+MAP=$(claudemem --nologo map --raw)
+if [ -z "$MAP" ]; then
+  echo "Index may be empty - run: claudemem index"
+  exit 1
+fi
+echo "$MAP"
+
+# Step 2: Identify architectural pillars (PageRank > 0.05)
+# Document top 5 by PageRank
+
+# Step 3: For each pillar, get full context
+claudemem --nologo context PillarSymbol --raw
+
+# Step 4: Trace major flows via callees
+claudemem --nologo callees EntryPoint --raw
+
+# Step 5: Identify dead code (cleanup opportunities) (v0.4.0+)
+DEAD=$(claudemem --nologo dead-code --raw 2>/dev/null)
+if [ -n "$DEAD" ]; then
+  echo "Dead code found:"
+  echo "$DEAD"
+else
+  echo "No dead code found (or v0.4.0+ required)"
+fi
+
+# Step 6: Identify test gaps (risk areas) (v0.4.0+)
+GAPS=$(claudemem --nologo test-gaps --raw 2>/dev/null)
+if [ -n "$GAPS" ]; then
+  echo "Test gaps:"
+  echo "$GAPS"
+else
+  echo "No test gaps found (or v0.4.0+ required)"
+fi
+```
+
+**Output Template:**
+
+```markdown
+## Architecture Report
+
+**Core Abstractions (PageRank > 0.05):**
+1. [Symbol] - [Role in system]
+2. [Symbol] - [Role in system]
+3. [Symbol] - [Role in system]
+
+**Layer Structure:**
+```
+[Presentation Layer]
+      |
+[Business Layer]
+      |
+[Data Layer]
+```
+
+**Major Flows:**
+- [Flow 1: Entry -> Processing -> Output]
+- [Flow 2: Entry -> Processing -> Output]
+
+**Health Indicators:**
+- Dead Code: [Count] symbols
+- Test Gaps: [Count] high-importance untested
+- Tech Debt: [Summary]
+```
+
+### Template 5: Security Audit
+
+**Trigger:** "Security review", "Audit authentication", "Check permissions"
+
+```bash
+# Step 1: Map security-related code
+claudemem --nologo map "auth permission security token" --raw
+
+# Step 2: Find authentication entry points
+SYMBOL=$(claudemem --nologo symbol authenticate --raw)
+if [ -z "$SYMBOL" ]; then
+  echo "No 'authenticate' symbol - try: login, verify, validate"
+fi
+claudemem --nologo callers authenticate --raw
+
+# Step 3: Trace authentication flow
+claudemem --nologo callees authenticate --raw
+
+# Step 4: Check authorization patterns
+claudemem --nologo map "authorize permission check guard" --raw
+
+# Step 5: Find sensitive data handlers
+claudemem --nologo map "password hash token secret key" --raw
+
+# Step 6: Check for test coverage on security code (v0.4.0+)
+GAPS=$(claudemem --nologo test-gaps --min-pagerank 0.01 --raw 2>/dev/null)
+if [ -n "$GAPS" ]; then
+  # Filter for security-related symbols
+  echo "$GAPS" | grep -E "(auth|login|password|token|permission|secret)"
+fi
+```
+
+**Output Template:**
+
+```markdown
+## Security Audit Report
+
+**Authentication:**
+- Entry Points: [List]
+- Flow: [Description]
+- Gaps: [Issues found]
+
+**Authorization:**
+- Permission Checks: [Where implemented]
+- Coverage: [All routes covered?]
+
+**Sensitive Data:**
+- Password Handling: [How stored/compared]
+- Token Management: [Generation/validation]
+- Secrets: [How managed]
+
+**Test Coverage:**
+- Security Code Coverage: [X%]
+- Critical Gaps: [List]
+
+**Recommendations:**
+1. [Priority 1 fix]
+2. [Priority 2 fix]
+```
+
+---
+
+## Static Analysis Limitations
+
+Claudemem uses static AST analysis. Some patterns are not captured:
+
+### Dynamic Imports
+```javascript
+// NOT visible to static analysis
+const module = await import(`./modules/${name}`);
+```
+**Result:** May show as "dead code" but is actually used dynamically.
+**Action:** Mark as "Potentially Dead - Manual Review"
+
+### External Callers
+```javascript
+// Exported for external use
+export function publicAPI() { ... }
+```
+**Result:** May show 0 callers but used by other repositories.
+**Action:** Use `--include-exported` carefully, or mark as "Externally Called - Manual Review Required"
+
+### Reflection/Eval
+```javascript
+// NOT visible to static analysis
+const fn = obj[methodName]();
+eval("functionName()");
+```
+**Result:** Callers not detected.
+**Action:** Search codebase for `eval`, `Object.keys`, bracket notation.
+
+### Event-Driven Code
+```javascript
+// NOT visible as direct callers
+emitter.on('event', handler);
+document.addEventListener('click', onClick);
+```
+**Result:** `handler` and `onClick` may show 0 callers.
+**Action:** Check for event registration patterns.
+
+### Dependency Injection
 ```typescript
-// WRONG: Read all files
-const files = await glob("src/**/*.ts");
-for (const file of files) {
-  const content = await read(file);
-  if (content.includes("auth")) { /* ... */ }
-}
-
-// RIGHT: Semantic search first
-// 1. Check enrichment status
-claudemem status  // Verify enrichment complete
-
-// 2. Search with navigation use case
-claudemem search "authentication flow user login" --use-case navigation -n 10
-
-// 3. Only read high-scoring matches
-// Results are ranked by combined code_chunk + file_summary + symbol_summary
+// Container registration hides relationships
+container.register(IService, ServiceImpl);
 ```
+**Result:** `ServiceImpl` may show 0 callers.
+**Action:** Check DI container configuration.
 
-### 4.2 Pattern: Document Type Selection
+---
 
-Match document type to your needs:
+## Scenarios
 
-| Task | Primary Types | Why |
-|------|---------------|-----|
-| Architecture discovery | `file_summary` | Understands file purposes |
-| API exploration | `symbol_summary` | Has params, returns, side effects |
-| Code completion | `code_chunk` | Exact syntax needed |
-| Understanding behavior | `symbol_summary` | LLM-analyzed purpose |
-| Finding patterns | `file_summary` | Contains detected patterns |
+### Scenario 1: Bug Fix
 
-### 4.3 Pattern: Progressive Discovery
-
-Start broad with file_summary, narrow down to symbol_summary, then code_chunk:
+**Task**: "Fix the null pointer exception in user authentication"
 
 ```bash
-# Step 1: Broad architecture search (file_summary weighted)
-claudemem search "authentication" --use-case navigation -n 5
+# Step 1: Get overview of auth-related code
+claudemem --nologo map "authentication null pointer" --raw
 
-# Step 2: Specific function search (symbol_summary weighted)
-claudemem search "validate JWT token function" --use-case navigation -n 10
+# Step 2: Locate the specific symbol mentioned in error
+claudemem --nologo symbol authenticate --raw
 
-# Step 3: Implementation details (code_chunk weighted)
-claudemem search "JWT verification implementation" -n 3
+# Step 3: Check what calls it (to understand how it's used)
+claudemem --nologo callers authenticate --raw
+
+# Step 4: Read the actual code at the identified location
+# Now you know exactly which file:line to read
 ```
 
-### 4.4 Pattern: Check Enrichment Before Relying on It
+### Scenario 2: Add New Feature
+
+**Task**: "Add rate limiting to the API endpoints"
 
 ```bash
-# ALWAYS check status first
-claudemem status
+# Step 1: Understand API structure
+claudemem --nologo map "API endpoints rate" --raw
 
-# If enrichment not complete, run it
-claudemem enrich
+# Step 2: Find the main API handler
+claudemem --nologo symbol APIController --raw
 
-# Then search with confidence
-claudemem search "auth flow" --use-case navigation
+# Step 3: See what the API controller depends on
+claudemem --nologo callees APIController --raw
+
+# Step 4: Check if rate limiting already exists somewhere
+claudemem --nologo search "rate limit" --raw
+
+# Step 5: Get full context for the modification point
+claudemem --nologo context APIController --raw
+```
+
+### Scenario 3: Refactoring
+
+**Task**: "Rename DatabaseConnection to DatabasePool"
+
+```bash
+# Step 1: Find the symbol
+claudemem --nologo symbol DatabaseConnection --raw
+
+# Step 2: Find ALL callers (these all need updating)
+claudemem --nologo callers DatabaseConnection --raw
+
+# Step 3: The output shows every file:line that references it
+# Update each location systematically
+```
+
+### Scenario 4: Understanding Unfamiliar Codebase
+
+**Task**: "How does the indexing pipeline work?"
+
+```bash
+# Step 1: Get high-level structure
+claudemem --nologo map "indexing pipeline" --raw
+
+# Step 2: Find the main entry point (highest PageRank)
+claudemem --nologo symbol Indexer --raw
+
+# Step 3: Trace the flow - what does Indexer call?
+claudemem --nologo callees Indexer --raw
+
+# Step 4: For each major callee, get its callees
+claudemem --nologo callees VectorStore --raw
+claudemem --nologo callees FileTracker --raw
+
+# Now you have the full pipeline traced
 ```
 
 ---
 
-## Phase 5: MCP Server Integration
+## Token Efficiency Guide
 
-### 5.1 Available Tools
+| Action | Token Cost | When to Use |
+|--------|------------|-------------|
+| `map` (focused) | ~500 | Always first - understand structure |
+| `symbol` | ~50 | When you know the name |
+| `callers` | ~100-500 | Before modifying anything |
+| `callees` | ~100-500 | To understand dependencies |
+| `context` | ~200-800 | For complex modifications |
+| `search` | ~1000-3000 | When you need actual code |
+| `search --map` | ~1500-4000 | For unfamiliar codebases |
 
-```typescript
-// Semantic search
-search_code(
-  query: string,
-  limit?: number,        // Default: 10
-  language?: string,     // Filter by language
-  autoIndex?: boolean    // Auto-index changes (default: true)
-)
+**Optimal order**: map → symbol → callers/callees → search (only if needed)
 
-// Index codebase
-index_codebase(
-  path?: string,         // Default: current directory
-  force?: boolean,       // Force re-index
-  model?: string         // Override embedding model
-)
+This pattern typically uses **80% fewer tokens** than blind exploration.
 
-// Get status
-get_status(path?: string)
+---
 
-// Clear index
-clear_index(path?: string)
+## Integration Pattern for Agents
 
-// List models
-list_embedding_models(freeOnly?: boolean)
+For maximum efficiency, follow this pattern:
+
 ```
-
-### 5.2 MCP Configuration
-
-Add to `.mcp.json`:
-```json
-{
-  "mcpServers": {
-    "claudemem": {
-      "command": "claudemem",
-      "args": ["--mcp"]
-    }
-  }
-}
+1. RECEIVE TASK
+   ↓
+2. claudemem --nologo map "<task keywords>" --raw
+   → Understand structure, identify key symbols
+   ↓
+3. claudemem --nologo symbol <high-pagerank-symbol> --raw
+   → Get exact location
+   ↓
+4. claudemem --nologo callers <symbol> --raw  (if modifying)
+   → Know the impact radius
+   ↓
+5. claudemem --nologo callees <symbol> --raw  (if needed)
+   → Understand dependencies
+   ↓
+6. READ specific file:line ranges (not whole files)
+   ↓
+7. MAKE CHANGES with full awareness
+   ↓
+8. CHECK callers still work
 ```
 
 ---
 
-## Phase 6: Score Interpretation
+## PageRank: Understanding Symbol Importance
 
-### Understanding Search Scores
+PageRank measures how "central" a symbol is in the codebase:
 
-| Score | Meaning | Action |
-|-------|---------|--------|
-| > 0.85 | Strong match | Use directly |
-| 0.70-0.85 | Good match | Review briefly |
-| 0.50-0.70 | Partial match | Verify manually |
-| < 0.50 | Weak match | Refine query |
+| PageRank | Meaning | Action |
+|----------|---------|--------|
+| > 0.05 | Core abstraction | Understand this first - everything depends on it |
+| 0.01-0.05 | Important symbol | Key functionality, worth understanding |
+| 0.001-0.01 | Standard symbol | Normal code, read as needed |
+| < 0.001 | Utility/leaf | Helper functions, read only if directly relevant |
 
-**With enrichment**, scores are generally higher because:
-- file_summary matches purpose/intent
-- symbol_summary matches behavior description
-- code_chunk matches implementation
-
----
-
-## Phase 7: Troubleshooting
-
-### Problem: No enriched results
-
-```bash
-# Check enrichment status
-claudemem status
-
-# Look for:
-# Enrichment: not run OR incomplete
-
-# Run enrichment if needed
-claudemem enrich
-```
-
-### Problem: Slow enrichment
-
-```bash
-# Reduce concurrency
-claudemem enrich --concurrency 3
-
-# Or enrich specific directories
-claudemem enrich ./src/core
-claudemem enrich ./src/services
-```
-
-### Problem: Low search scores
-
-- Use more descriptive queries
-- Check if files are indexed AND enriched: `claudemem status`
-- Try `--use-case navigation` for agent tasks
-- Use language filter: `-l typescript`
-
-### Problem: Missing file_summary or symbol_summary
-
-```bash
-# Check document type counts
-claudemem status
-
-# If file_summary count is 0, enrichment hasn't run
-claudemem enrich
-
-# Force re-enrichment
-claudemem index -f --enrich
-```
+**Why PageRank matters**:
+- High-PageRank symbols are heavily used → understand them first
+- Low-PageRank symbols are utilities → read later if needed
+- Focus on high-PageRank symbols to understand architecture quickly
 
 ---
 
-## Quality Checklist (Updated for v0.2.0)
-
-Before completing a claudemem workflow, ensure:
-
-- [ ] claudemem CLI is installed (v0.2.0+)
-- [ ] OpenRouter API key is configured
-- [ ] Codebase is indexed (check with `claudemem status`)
-- [ ] **Enrichment is complete** (file_summary + symbol_summary counts > 0) ⭐NEW
-- [ ] Search queries use natural language concepts
-- [ ] Using appropriate use case (`--use-case navigation` for agents) ⭐NEW
-- [ ] Results are relevant and actionable
-- [ ] File locations are documented for follow-up
-
----
-
-## 🔴 ANTI-PATTERNS (DO NOT DO)
+## 🔴 ANTI-PATTERNS (DO NOT DO THESE)
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                           COMMON MISTAKES TO AVOID                            ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
-║  ❌ Reading 5+ files sequentially when investigating a feature              ║
-║     → WHY WRONG: Token waste, no ranking, no context                        ║
-║     → DO INSTEAD: claudemem search "feature concept" --use-case navigation  ║
+║  ❌ Anti-Pattern 1: Blind File Reading                                       ║
+║     → BAD: cat src/core/*.ts | head -1000                                   ║
+║     → GOOD: claudemem --nologo map "your task" --raw                        ║
+║     → WHY: Wastes tokens on irrelevant code, misses important files         ║
 ║                                                                              ║
-║  ❌ Using Glob to find all files, then reading them one-by-one              ║
-║     → WHY WRONG: Gets ALL files, not RELEVANT files                         ║
-║     → DO INSTEAD: claudemem search "what you're looking for"                ║
+║  ❌ Anti-Pattern 2: Grep Without Context                                     ║
+║     → BAD: grep -r "Database" src/                                          ║
+║     → GOOD: claudemem --nologo symbol Database --raw                        ║
+║     → WHY: Grep returns string matches, not semantic relationships          ║
 ║                                                                              ║
-║  ❌ Using Grep for architectural questions like "how does X work"           ║
-║     → WHY WRONG: Text match ≠ semantic understanding                        ║
-║     → DO INSTEAD: claudemem search "X functionality flow" --use-case nav    ║
+║  ❌ Anti-Pattern 3: Modifying Without Impact Analysis                        ║
+║     → BAD: Edit src/auth/tokens.ts without knowing callers                  ║
+║     → GOOD: claudemem --nologo callers generateToken --raw FIRST            ║
+║     → WHY: Changes may break callers you don't know about                   ║
 ║                                                                              ║
-║  ❌ Searching without checking enrichment status                            ║
-║     → WHY WRONG: Missing file_summary and symbol_summary matches            ║
-║     → DO INSTEAD: claudemem status first, enrich if needed                  ║
+║  ❌ Anti-Pattern 4: Searching Before Mapping                                 ║
+║     → BAD: claudemem search "fix the bug" --raw                             ║
+║     → GOOD: claudemem --nologo map "feature" --raw THEN search              ║
+║     → WHY: Search results lack context without structural understanding     ║
 ║                                                                              ║
-║  ❌ Using default search mode for agent exploration                         ║
-║     → WHY WRONG: Default weights optimized for humans, not agents           ║
-║     → DO INSTEAD: --use-case navigation for agent tasks                     ║
+║  ❌ Anti-Pattern 5: Ignoring PageRank                                        ║
+║     → BAD: Read every file that matches "Database"                          ║
+║     → GOOD: Focus on high-PageRank symbols first                            ║
+║     → WHY: Low-PageRank = utilities, High-PageRank = core abstractions      ║
+║                                                                              ║
+║  ❌ Anti-Pattern 6: Not Using --nologo                                       ║
+║     → BAD: claudemem search "query" (includes ASCII art)                    ║
+║     → GOOD: claudemem --nologo search "query" --raw                         ║
+║     → WHY: Logo and decorations make parsing unreliable                     ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Anti-Pattern vs Correct Pattern
+### Anti-Pattern vs Correct Pattern Summary
 
 | Anti-Pattern | Why It's Wrong | Correct Pattern |
 |--------------|----------------|-----------------|
-| `claudemem search "auth"` (no enrichment) | Missing LLM summaries | `claudemem status` → `enrich` → search |
-| `claudemem search "auth flow"` (agent) | Wrong use case | `claudemem search "auth flow" --use-case navigation` |
-| `Read auth/login.ts` then `Read auth/session.ts`... | No ranking, token waste | `claudemem search "auth login session"` |
-| `grep -r "auth" src/` | No semantic understanding | `claudemem search "authentication flow"` |
-| Assume enrichment is done | May miss summaries | Check `claudemem status` first |
+| Read files blindly | No ranking, token waste | `map` first, then read specific lines |
+| `grep -r "auth"` | No semantic understanding | `claudemem --nologo symbol auth --raw` |
+| Modify without callers | Breaking changes | `callers` before any modification |
+| Search immediately | No structural context | `map` → `symbol` → `callers` → search |
+| Treat all symbols equal | Miss core abstractions | Focus on high-PageRank first |
 
-### The Correct Workflow (v0.2.0)
+---
+
+## The Correct Workflow Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│               CORRECT INVESTIGATION FLOW (v0.2.0)                │
+│                 CORRECT INVESTIGATION FLOW (v0.3.0)              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  1. claudemem status        → Check index AND enrichment        │
-│  2. claudemem enrich        → Run if enrichment incomplete      │
-│  3. claudemem search "..."  → Use --use-case navigation         │
-│     --use-case navigation                                        │
-│  4. Review results          → See ranked file/symbol/code       │
-│  5. Read specific lines     → ONLY from search results          │
+│  1. claudemem --nologo map "task" --raw                         │
+│     → Understand structure, find high-PageRank symbols          │
+│                                                                  │
+│  2. claudemem --nologo symbol <name> --raw                      │
+│     → Get exact file:line location                              │
+│                                                                  │
+│  3. claudemem --nologo callers <name> --raw                     │
+│     → Know impact radius BEFORE modifying                       │
+│                                                                  │
+│  4. claudemem --nologo callees <name> --raw                     │
+│     → Understand dependencies                                    │
+│                                                                  │
+│  5. Read specific file:line ranges (NOT whole files)            │
+│                                                                  │
+│  6. Make changes with full awareness                            │
 │                                                                  │
 │  ⚠️ NEVER: Start with Read/Glob for semantic questions          │
-│  ⚠️ NEVER: Search without verifying enrichment                  │
+│  ⚠️ NEVER: Modify without checking callers                      │
+│  ⚠️ NEVER: Search without mapping first                         │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
+## Installation & Setup
+
+### Check Installation
+
+```bash
+# Check if claudemem CLI is available
+which claudemem || command -v claudemem
+
+# Check version (must be 0.3.0+)
+claudemem --version
+```
+
+### Installation Options
+
+```bash
+# npm (recommended)
+npm install -g claude-codemem
+
+# Homebrew (macOS)
+brew tap MadAppGang/claude-mem && brew install --cask claudemem
+```
+
+### Index Codebase
+
+```bash
+# Index current project
+claudemem index
+
+# Check status
+claudemem status
+```
+
+---
+
+## Quality Checklist
+
+Before completing a claudemem workflow, ensure:
+
+- [ ] claudemem CLI is installed (v0.3.0+)
+- [ ] Codebase is indexed (check with `claudemem status`)
+- [ ] **Started with `map`** to understand structure ⭐CRITICAL
+- [ ] Used `--nologo --raw` for all commands
+- [ ] Checked `callers` before modifying any symbol
+- [ ] Focused on high-PageRank symbols first
+- [ ] Read only specific file:line ranges (not whole files)
+
+---
+
 ## Notes
 
-- Requires OpenRouter API key (https://openrouter.ai) - all embedding models are paid
-- **NEW:** Enrichment requires additional LLM calls (1 per file + 1 batch per file for symbols)
-- Default model: `voyage/voyage-code-3` (best code understanding, $0.180/1M tokens)
-- Run `claudemem --models` to see all available models and choose based on budget/quality
-- All data stored locally in `.claudemem/` directory (no cloud storage)
-- Tree-sitter provides excellent parsing for TypeScript, Go, Python, Rust
-- Hybrid search combines keyword (BM25) + semantic (embeddings)
+- Requires OpenRouter API key for embeddings (https://openrouter.ai)
+- Default model: `voyage/voyage-code-3` (best code understanding)
+- All data stored locally in `.claudemem/` directory
+- Tree-sitter provides AST parsing for TypeScript, Go, Python, Rust
+- PageRank based on symbol call graph analysis
 - Can run as MCP server with `--mcp` flag
 - Initial indexing takes ~1-2 minutes for typical projects
-- **NEW:** Enrichment adds ~5-10 minutes depending on codebase size
-- Automatic change detection re-indexes modified files on search
-- **NEW:** Use `--use-case navigation` for AI agent exploration
+- **NEW in v0.3.0**: `map`, `symbol`, `callers`, `callees`, `context` commands
+- **NEW in v0.3.0**: PageRank ranking for symbol importance
+- **NEW in v0.3.0**: `--raw` output format for machine parsing
+- **NEW in v0.4.0**: `dead-code`, `test-gaps`, `impact` commands for code analysis
+- **NEW in v0.4.0**: BFS traversal for transitive caller analysis
 
 ---
 
 **Maintained by:** Jack Rudenko @ MadAppGang
-**Plugin:** code-analysis v2.4.0
-**Last Updated:** December 2025
+**Plugin:** code-analysis v2.6.0
+**Last Updated:** December 2025 (v0.4.0 features)

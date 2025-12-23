@@ -7,7 +7,7 @@
 	},
 	"metadata": {
 		"description": "MAG team's curated collection of Claude Code plugins for modern full-stack development with LLM performance tracking",
-		"version": "5.2.0",
+		"version": "5.3.0",
 		"pluginRoot": "./plugins"
 	},
 	"plugins": [
@@ -38,8 +38,8 @@
 		{
 			"name": "code-analysis",
 			"source": "./plugins/code-analysis",
-			"description": "Deep code investigation with ENFORCED claudemem v0.2.0 semantic search. LLM-enriched symbol_summary and file_summary for understanding code behavior. PreToolUse hooks intercept tools and replace with claudemem using --use-case navigation.",
-			"version": "2.4.0",
+			"description": "Deep code investigation with claudemem v0.4.0 AST structural analysis. NEW: Code Analysis Commands (dead-code, test-gaps, impact), Multi-Agent Orchestration patterns, 5 Workflow Templates. PageRank-based symbol importance, callers/callees dependency tracing, version compatibility with graceful degradation.",
+			"version": "2.6.0",
 			"author": {
 				"name": "Jack Rudenko",
 				"email": "i@madappgang.com",

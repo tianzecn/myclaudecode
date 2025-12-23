@@ -1,34 +1,33 @@
 ---
 name: architect-detective
-description: "⚡ PRIMARY TOOL for: 'what's the architecture', 'system design', 'how are layers organized', 'find design patterns', 'audit structure', 'map dependencies'. REPLACES grep/glob for architecture analysis. Uses claudemem v0.2.0 INDEXED MEMORY with LLM enrichment. GREP/FIND/GLOB ARE FORBIDDEN."
+description: "⚡ PRIMARY TOOL for: 'what's the architecture', 'system design', 'how are layers organized', 'find design patterns', 'audit structure', 'map dependencies'. Uses claudemem v0.3.0 AST structural analysis with PageRank. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 
-# ⛔⛔⛔ CRITICAL: INDEXED MEMORY ONLY ⛔⛔⛔
+# ⛔⛔⛔ CRITICAL: AST STRUCTURAL ANALYSIS ONLY ⛔⛔⛔
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                              ║
-║   🧠 THIS SKILL USES INDEXED MEMORY (claudemem v0.2.0) EXCLUSIVELY           ║
+║   🧠 THIS SKILL USES claudemem v0.3.0 AST ANALYSIS EXCLUSIVELY               ║
 ║                                                                              ║
 ║   ❌ GREP IS FORBIDDEN                                                       ║
 ║   ❌ FIND IS FORBIDDEN                                                       ║
 ║   ❌ GLOB IS FORBIDDEN                                                       ║
-║   ❌ Grep tool IS FORBIDDEN                                                  ║
-║   ❌ Glob tool IS FORBIDDEN                                                  ║
 ║                                                                              ║
-║   ✅ claudemem search "query" --use-case navigation IS THE ONLY WAY         ║
+║   ✅ claudemem --nologo map "query" --raw IS THE PRIMARY COMMAND             ║
+║   ✅ claudemem --nologo symbol <name> --raw FOR EXACT LOCATIONS              ║
 ║                                                                              ║
-║   ⭐ v0.2.0: Leverages file_summary for architecture discovery              ║
+║   ⭐ v0.3.0: PageRank shows which symbols are architectural pillars         ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 # Architect Detective Skill
 
-**Version:** 2.0.0
+**Version:** 3.1.0
 **Role:** Software Architect
-**Purpose:** Deep architectural investigation using INDEXED MEMORY with LLM enrichment
+**Purpose:** Deep architectural investigation using AST structural analysis with PageRank and dead-code detection
 
 ## Role Context
 
@@ -37,314 +36,252 @@ You are investigating this codebase as a **Software Architect**. Your focus is o
 - **Design patterns** - Architectural patterns used (MVC, Clean Architecture, DDD, etc.)
 - **Dependency flow** - How components depend on each other
 - **Abstraction layers** - Interfaces, contracts, and abstractions
-- **Scalability patterns** - Caching, queuing, microservices boundaries
+- **Core abstractions** - High-PageRank symbols that everything depends on
 
-## Claudemem v0.2.0 Integration
+## Why `map` is Perfect for Architecture
 
-<skill name="claudemem" version="0.2.0">
-<purpose>
-Semantic code search using vector embeddings WITH LLM enrichment.
-Finds code by MEANING AND PURPOSE, not just text matching.
-Use INSTEAD of grep/find for: architecture discovery, pattern matching, understanding codebases.
-</purpose>
+The `map` command with PageRank shows you:
+- **High-PageRank symbols** = Core abstractions everything depends on
+- **Symbol kinds** = classes, interfaces, functions organized by type
+- **File distribution** = Where architectural layers live
+- **Dependency centrality** = Which code is most connected
 
-<document_types>
-- **code_chunk**: Raw AST code (functions, classes, methods)
-- **file_summary** ⭐NEW: LLM-generated file purpose, exports, patterns
-- **symbol_summary** ⭐NEW: LLM-generated function docs with params, returns, side effects
-</document_types>
+## Architect-Focused Commands (v0.3.0)
 
-<search_mode>
-ALWAYS use --use-case navigation for agent tasks.
-Weights: symbol_summary (35%) + file_summary (30%) + code_chunk (20%)
-This prioritizes UNDERSTANDING over raw code.
-</search_mode>
+### Architecture Discovery (use `map`)
 
-<tools>
-CLI:
-  claudemem index --enrich            # Index with LLM enrichment
-  claudemem enrich                     # Run enrichment on existing index
-  claudemem search "query" --use-case navigation  # Agent-optimized search
-  claudemem status                     # Check index AND enrichment status
-  claudemem ai architect               # Get architecture-focused instructions
-
-MCP (Claude Code integration):
-  search_code        query, limit?, language?, autoIndex?
-  index_codebase     path?, force?, model?
-  get_status         path?
-</tools>
-</skill>
-
-## Architecture-Focused Search Patterns (v0.2.0)
-
-### Why file_summary is Perfect for Architecture
-
-The `file_summary` document type contains:
-- **File purpose**: "Core authentication middleware"
-- **Exports**: "AuthMiddleware, validateToken, refreshSession"
-- **Dependencies**: "JWT, Redis, UserService"
-- **Patterns**: "Middleware chain, session management"
-
-This is exactly what architects need to understand system structure.
-
-### Layer Discovery (Leveraging file_summary)
 ```bash
-# Find service layer implementations
-claudemem search "service layer business logic domain operations" --use-case navigation
+# Get high-level architecture overview
+claudemem --nologo map "architecture layers" --raw
 
-# Find repository/data access layer
-claudemem search "repository pattern data access database query" --use-case navigation
+# Find core abstractions (highest PageRank)
+claudemem --nologo map --raw  # Full map, sorted by importance
 
-# Find controller/handler layer
-claudemem search "controller handler endpoint request response" --use-case navigation
-
-# Find presentation layer
-claudemem search "view component template rendering UI display" --use-case navigation
+# Map specific architectural concerns
+claudemem --nologo map "service layer business logic" --raw
+claudemem --nologo map "repository data access" --raw
+claudemem --nologo map "controller API endpoints" --raw
+claudemem --nologo map "middleware request handling" --raw
 ```
 
-### Pattern Detection (Leveraging file_summary patterns)
-```bash
-# Find dependency injection setup
-claudemem search "dependency injection container provider factory" --use-case navigation
+### Layer Boundary Discovery
 
+```bash
+# Find interfaces/contracts (architectural boundaries)
+claudemem --nologo map "interface contract abstract" --raw
+
+# Find dependency injection points
+claudemem --nologo map "inject provider module" --raw
+
+# Find configuration/bootstrap
+claudemem --nologo map "config bootstrap initialize" --raw
+```
+
+### Pattern Discovery
+
+```bash
 # Find factory patterns
-claudemem search "factory creation pattern object instantiation" --use-case navigation
+claudemem --nologo map "factory create builder" --raw
 
-# Find observer/event patterns
-claudemem search "event emitter observer pattern publish subscribe" --use-case navigation
+# Find repository patterns
+claudemem --nologo map "repository persist query" --raw
 
-# Find strategy patterns
-claudemem search "strategy pattern algorithm selection behavior" --use-case navigation
-
-# Find adapter patterns
-claudemem search "adapter wrapper converter external integration" --use-case navigation
+# Find event-driven patterns
+claudemem --nologo map "event emit subscribe handler" --raw
 ```
 
-### Boundary Analysis (Leveraging file_summary exports)
+### Dependency Analysis
+
 ```bash
-# Find module boundaries
-claudemem search "module export public interface boundary" --use-case navigation
+# For a core abstraction, see what depends on it
+claudemem --nologo callers CoreService --raw
 
-# Find API boundaries
-claudemem search "API endpoint contract interface external" --use-case navigation
+# See what the abstraction depends on
+claudemem --nologo callees CoreService --raw
 
-# Find domain boundaries
-claudemem search "domain model entity aggregate bounded context" --use-case navigation
+# Get full dependency context
+claudemem --nologo context CoreService --raw
 ```
 
-### Configuration Architecture
+### Dead Code Detection (v0.4.0+ Required)
+
 ```bash
-# Find configuration loading
-claudemem search "configuration environment variables settings initialization" --use-case navigation
+# Find unused symbols for cleanup
+claudemem --nologo dead-code --raw
 
-# Find feature flags
-claudemem search "feature flag toggle conditional enablement" --use-case navigation
-
-# Find plugin/extension points
-claudemem search "plugin extension hook customization point" --use-case navigation
+# Only truly dead code (very low PageRank)
+claudemem --nologo dead-code --max-pagerank 0.005 --raw
 ```
 
-## Workflow: Architecture Discovery (v0.2.0)
+**Architectural insight**: Dead code indicates:
+- Failed features that were never removed
+- Over-engineering (abstractions nobody uses)
+- Potential tech debt cleanup opportunities
 
-### Phase 0: Verify Enrichment Status ⭐CRITICAL
+High PageRank + dead = Something broke recently (investigate!)
+Low PageRank + dead = Safe to remove
 
+**Handling Results:**
 ```bash
-# Check if enriched (must have file_summary > 0)
-claudemem status
+DEAD_CODE=$(claudemem --nologo dead-code --raw)
+if [ -z "$DEAD_CODE" ]; then
+  echo "No dead code found - architecture is well-maintained"
+else
+  # Categorize by risk
+  HIGH_PAGERANK=$(echo "$DEAD_CODE" | awk '$5 > 0.01')
+  LOW_PAGERANK=$(echo "$DEAD_CODE" | awk '$5 <= 0.01')
 
-# If file_summary = 0, run enrichment first
-claudemem enrich
+  if [ -n "$HIGH_PAGERANK" ]; then
+    echo "WARNING: High-PageRank dead code found (possible broken references)"
+    echo "$HIGH_PAGERANK"
+  fi
+
+  if [ -n "$LOW_PAGERANK" ]; then
+    echo "Cleanup candidates (low PageRank):"
+    echo "$LOW_PAGERANK"
+  fi
+fi
 ```
 
-**Architecture discovery relies heavily on file_summary. Without enrichment, results are degraded.**
+**Limitations Note:**
+Results labeled "Potentially Dead" require manual verification for:
+- Dynamically imported modules
+- Reflection-accessed code
+- External API consumers
 
-### Phase 1: Index and Overview
+## Workflow: Architecture Analysis (v0.3.0)
+
+### Phase 1: Map the Landscape
 
 ```bash
-# 1. Check/create enriched index
-claudemem status || claudemem index --enrich
+# Get structural overview with PageRank
+claudemem --nologo map --raw
 
-# 2. Find entry points (file_summary shows purpose)
-claudemem search "main entry point application bootstrap initialization" -n 10 --use-case navigation
-
-# 3. Map high-level structure (file_summary shows exports)
-claudemem search "module definition export public interface" -n 15 --use-case navigation
+# Focus on high-PageRank symbols (> 0.01) - these are architectural pillars
 ```
 
-### Phase 2: Layer Mapping (file_summary driven)
+### Phase 2: Identify Layers
 
 ```bash
-# Map each architectural layer
-claudemem search "controller handler route endpoint" -n 10 --use-case navigation    # Presentation
-claudemem search "service business logic domain" -n 10 --use-case navigation         # Business
-claudemem search "repository database query persistence" -n 10 --use-case navigation # Data
-claudemem search "entity model schema type definition" -n 10 --use-case navigation   # Domain
+# Map each layer
+claudemem --nologo map "controller handler endpoint" --raw  # Presentation
+claudemem --nologo map "service business logic" --raw       # Business
+claudemem --nologo map "repository database query" --raw    # Data
 ```
 
-### Phase 3: Dependency Analysis
+### Phase 3: Trace Dependencies
 
 ```bash
-# Find dependency injection
-claudemem search "inject dependency container provider" -n 10 --use-case navigation
-
-# Find imports between layers (file_summary shows dependencies)
-claudemem search "import from service repository controller" -n 15 --use-case navigation
-
-# Find circular dependency risks
-claudemem search "circular import bidirectional dependency" -n 5 --use-case navigation
+# For each high-PageRank symbol, understand its role
+claudemem --nologo symbol UserService --raw
+claudemem --nologo callers UserService --raw  # Who depends on it?
+claudemem --nologo callees UserService --raw  # What does it depend on?
 ```
 
-### Phase 4: Design Pattern Identification
+### Phase 4: Identify Boundaries
 
 ```bash
-# Search for common patterns
-claudemem search "singleton instance global state" -n 5 --use-case navigation
-claudemem search "factory create new instance builder" -n 5 --use-case navigation
-claudemem search "strategy algorithm policy selection" -n 5 --use-case navigation
-claudemem search "decorator wrapper middleware enhance" -n 5 --use-case navigation
-claudemem search "observer listener event subscriber" -n 5 --use-case navigation
+# Find interfaces (architectural contracts)
+claudemem --nologo map "interface abstract" --raw
+
+# Check how implementations connect
+claudemem --nologo callers IUserRepository --raw
+```
+
+### Phase 5: Cleanup Opportunities (v0.4.0+ Required)
+
+```bash
+# Find dead code
+DEAD_CODE=$(claudemem --nologo dead-code --raw)
+
+if [ -z "$DEAD_CODE" ]; then
+  echo "No cleanup needed - codebase is well-maintained"
+else
+  # For each dead symbol:
+  # - Check PageRank (low = utility, high = broken)
+  # - Verify not used externally (see limitations)
+  # - Add to cleanup backlog
+
+  echo "Review each item for static analysis limitations:"
+  echo "- Dynamic imports may hide real usage"
+  echo "- External callers not visible to static analysis"
+fi
 ```
 
 ## Output Format: Architecture Report
 
-### 1. System Overview
+### 1. Architecture Overview
+
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    SYSTEM ARCHITECTURE                   │
+│                 ARCHITECTURE ANALYSIS                    │
 ├─────────────────────────────────────────────────────────┤
-│  Entry Point: src/index.ts                              │
-│  Architecture Style: Clean Architecture / Hexagonal    │
-│  Primary Patterns: Repository, Factory, Strategy       │
-│  Search Method: claudemem v0.2.0 (enriched)            │
-│  Enrichment: ✅ file_summary + symbol_summary          │
+│  Pattern: Clean Architecture / Layered                  │
+│  Core Abstractions (PageRank > 0.05):                   │
+│    - UserService (0.092) - Central business logic       │
+│    - Database (0.078) - Data access foundation          │
+│    - AuthMiddleware (0.056) - Security boundary         │
+│  Search Method: claudemem v0.3.0 (AST + PageRank)       │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 2. Layer Map (from file_summary data)
+### 2. Layer Map
+
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ PRESENTATION LAYER (src/controllers/, src/handlers/)   │
-│   └── HTTP Controllers, GraphQL Resolvers, CLI         │
-│   └── file_summary: "HTTP request handling, routing"   │
+│                    LAYER STRUCTURE                       │
 ├─────────────────────────────────────────────────────────┤
-│ APPLICATION LAYER (src/services/, src/use-cases/)      │
-│   └── Business Logic, Orchestration, Commands          │
-│   └── file_summary: "Business logic orchestration"     │
-├─────────────────────────────────────────────────────────┤
-│ DOMAIN LAYER (src/domain/, src/entities/)              │
-│   └── Entities, Value Objects, Domain Services         │
-│   └── file_summary: "Core domain models"               │
-├─────────────────────────────────────────────────────────┤
-│ INFRASTRUCTURE LAYER (src/repositories/, src/adapters/)│
-│   └── Database, External APIs, File System             │
-│   └── file_summary: "Data persistence, external APIs"  │
+│                                                          │
+│  PRESENTATION (src/controllers/, src/routes/)            │
+│    └── UserController (0.034)                           │
+│    └── AuthController (0.028)                           │
+│            ↓                                             │
+│  BUSINESS (src/services/)                               │
+│    └── UserService (0.092) ⭐HIGH PAGERANK              │
+│    └── AuthService (0.067)                              │
+│            ↓                                             │
+│  DATA (src/repositories/)                               │
+│    └── UserRepository (0.045)                           │
+│    └── Database (0.078) ⭐HIGH PAGERANK                 │
+│                                                          │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ### 3. Dependency Flow
+
 ```
-Controller → Service → Repository → Database
-     ↓           ↓           ↓
-  Validator   Domain     External API
-                ↓
-            Events → Queue
+Entry → Controller → Service → Repository → Database
+                  ↘ Middleware (cross-cutting)
 ```
 
-### 4. Design Patterns Detected (from file_summary patterns)
-```
-| Pattern      | Location                    | Purpose               |
-|--------------|-----------------------------|-----------------------|
-| Repository   | src/repositories/*.ts       | Data access abstraction|
-| Factory      | src/factories/*.ts          | Object creation       |
-| Strategy     | src/strategies/*.ts         | Algorithm selection   |
-| Middleware   | src/middleware/*.ts         | Request processing    |
-| Observer     | src/events/*.ts             | Event-driven decoupling|
-```
+## PageRank for Architecture
 
-### 5. Recommendations
-```
-[Architecture Observations]
-✓ Good: Clear separation between layers
-✓ Good: Repository pattern for data access
-⚠ Consider: Some controllers contain business logic
-⚠ Consider: Missing explicit domain events
-✗ Issue: Circular dependency between auth and user services
-```
+| PageRank | Architectural Role | Action |
+|----------|-------------------|--------|
+| > 0.05 | Core abstraction | This IS the architecture - understand first |
+| 0.01-0.05 | Important component | Key building block, affects many things |
+| 0.001-0.01 | Standard component | Normal code, not architecturally significant |
+| < 0.001 | Leaf/utility | Implementation detail, skip for arch analysis |
 
-## Integration with Detective Agent
+## Anti-Patterns
 
-When using the codebase-detective agent with this skill:
-
-```typescript
-Task({
-  subagent_type: "code-analysis:detective",
-  description: "Architecture investigation",
-  prompt: `
-## Architect Investigation (v0.2.0)
-
-Use claudemem with architecture-focused queries:
-1. First run: claudemem status (verify enrichment)
-2. If file_summary = 0, run: claudemem enrich
-3. Search with: --use-case navigation
-
-Focus on:
-1. Map system layers and boundaries (use file_summary)
-2. Identify design patterns in use
-3. Analyze dependency flow
-4. Find abstraction points and interfaces
-
-Focus on STRUCTURE and DESIGN, not implementation details.
-
-Generate an Architecture Report with:
-- System overview diagram
-- Layer map (with file_summary context)
-- Dependency flow
-- Pattern catalog
-- Architecture recommendations
-  `
-})
-```
-
-## Best Practices for Architecture Discovery (v0.2.0)
-
-1. **Verify enrichment first**
-   - Run `claudemem status`
-   - file_summary count should match file count
-   - Without enrichment, architecture discovery is degraded
-
-2. **Leverage file_summary for structure**
-   - file_summary contains purpose, exports, patterns
-   - Perfect for understanding file roles in architecture
-   - Use `--use-case navigation` to prioritize summaries
-
-3. **Start broad, then narrow**
-   - Begin with entry points and main modules
-   - Drill into specific layers and patterns
-
-4. **Follow the dependencies**
-   - file_summary shows imports/dependencies
-   - Trace imports to understand coupling
-   - Map dependency direction (always down the layers)
-
-5. **Look for abstractions**
-   - Interfaces and abstract classes define contracts
-   - Find where behavior varies (strategy/factory patterns)
-
-6. **Identify boundaries**
-   - Clear boundaries = good architecture
-   - Fuzzy boundaries = potential refactoring targets
+| Anti-Pattern | Why Wrong | Correct Approach |
+|--------------|-----------|------------------|
+| `grep -r "class"` | No ranking, no structure | `claudemem --nologo map --raw` |
+| Read all files | Token waste | Focus on high-PageRank symbols |
+| Skip `map` command | Miss architecture | ALWAYS start with `map` |
+| Ignore PageRank | Miss core abstractions | High PageRank = important |
 
 ## Notes
 
-- Requires claudemem CLI v0.2.0+ installed and configured
-- **Architecture discovery relies heavily on file_summary**
-- Without enrichment, results show only code_chunk (degraded)
-- Works best on indexed + enriched codebases
-- Focuses on structure over implementation
-- Pairs well with developer-detective for implementation details
+- **`map` is your primary tool** - It shows architecture through PageRank
+- High-PageRank symbols ARE the architecture - they're what everything depends on
+- Use `callers` to see what depends on a component (impact of changes)
+- Use `callees` to see what a component depends on (its requirements)
+- Works best with TypeScript, Go, Python, Rust codebases
 
 ---
 
 **Maintained by:** MadAppGang
-**Plugin:** code-analysis v2.4.0
-**Last Updated:** December 2025
+**Plugin:** code-analysis v2.6.0
+**Last Updated:** December 2025 (v0.4.0 dead-code support)

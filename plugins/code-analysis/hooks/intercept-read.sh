@@ -1,10 +1,12 @@
 #!/bin/bash
 # =============================================================================
-# INTERCEPT READ → WARN ON BULK READS (3+ FILES)
+# INTERCEPT READ → WARN ON BULK READS (3+ FILES) (v0.3.0)
 # =============================================================================
 # This hook tracks file reads in a session and warns when 3+ files are read,
-# suggesting claudemem semantic search as a more efficient alternative.
+# suggesting claudemem map/symbol commands as a more efficient alternative.
 # Does NOT block - just provides helpful guidance.
+#
+# v0.3.0 Update: Recommends map → symbol → callers workflow
 # =============================================================================
 
 set -euo pipefail
@@ -23,7 +25,7 @@ if ! command -v claudemem &>/dev/null; then
   exit 0
 fi
 
-if ! claudemem status 2>/dev/null | grep -qE "[0-9]+ chunks"; then
+if ! claudemem status 2>/dev/null | grep -qE "[0-9]+ (chunks|symbols)"; then
   # Not indexed - no tracking needed
   exit 0
 fi
@@ -53,7 +55,7 @@ if [ "$READ_COUNT" -ge 3 ]; then
 
   cat << EOF >&3
 {
-  "additionalContext": "⚠️ **Bulk Read Warning** ($READ_COUNT files from $UNIQUE_DIRS dirs)\n\nDirs: \`$DIR_LIST\`\n\nConsider using semantic search instead:\n\`\`\`bash\nclaudemem search \"concept you're investigating\"\n\`\`\`\n\nSemantic search provides ranked, relevant results vs reading files one-by-one."
+  "additionalContext": "⚠️ **Bulk Read Warning** ($READ_COUNT files from $UNIQUE_DIRS dirs)\n\nDirs: \`$DIR_LIST\`\n\n**Recommended workflow (v0.3.0):**\n1. \`claudemem --nologo map --raw\` → Get structure with PageRank\n2. \`claudemem --nologo symbol <name> --raw\` → Find specific symbol\n3. \`claudemem --nologo callers <name> --raw\` → Check impact before changes\n4. Read specific file:line from results (NOT whole files)\n\nAST analysis is 80% more token-efficient than bulk file reads."
 }
 EOF
 fi

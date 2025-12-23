@@ -1,435 +1,321 @@
 ---
 name: debugger-detective
-description: "⚡ PRIMARY TOOL for: 'why is X broken', 'find bug source', 'root cause analysis', 'trace error', 'debug issue', 'find where X fails'. REPLACES grep/glob for bug investigation. Uses claudemem v0.2.0 INDEXED MEMORY with LLM enrichment. GREP/FIND/GLOB ARE FORBIDDEN."
+description: "⚡ PRIMARY TOOL for: 'why is X broken', 'find bug source', 'root cause analysis', 'trace error', 'debug issue', 'find where X fails'. Uses claudemem v0.3.0 AST with context command for call chain analysis. GREP/FIND/GLOB ARE FORBIDDEN."
 allowed-tools: Bash, Task, Read, AskUserQuestion
 ---
 
-# ⛔⛔⛔ CRITICAL: INDEXED MEMORY ONLY ⛔⛔⛔
+# ⛔⛔⛔ CRITICAL: AST STRUCTURAL ANALYSIS ONLY ⛔⛔⛔
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                              ║
-║   🧠 THIS SKILL USES INDEXED MEMORY (claudemem v0.2.0) EXCLUSIVELY           ║
+║   🧠 THIS SKILL USES claudemem v0.3.0 AST ANALYSIS EXCLUSIVELY               ║
 ║                                                                              ║
 ║   ❌ GREP IS FORBIDDEN                                                       ║
 ║   ❌ FIND IS FORBIDDEN                                                       ║
 ║   ❌ GLOB IS FORBIDDEN                                                       ║
-║   ❌ Grep tool IS FORBIDDEN                                                  ║
-║   ❌ Glob tool IS FORBIDDEN                                                  ║
 ║                                                                              ║
-║   ✅ claudemem search "query" --use-case navigation IS THE ONLY WAY         ║
+║   ✅ claudemem --nologo context <name> --raw FOR FULL CALL CHAIN            ║
+║   ✅ claudemem --nologo callers <name> --raw TO TRACE BACK TO SOURCE        ║
+║   ✅ claudemem --nologo callees <name> --raw TO TRACE FORWARD               ║
 ║                                                                              ║
-║   ⭐ v0.2.0: Leverages symbol_summary for understanding side effects        ║
+║   ⭐ v0.3.0: context shows full call chain for root cause analysis          ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 # Debugger Detective Skill
 
-**Version:** 2.0.0
+**Version:** 3.1.0
 **Role:** Debugger / Incident Responder
-**Purpose:** Bug investigation and root cause analysis using INDEXED MEMORY with LLM enrichment
+**Purpose:** Bug investigation and root cause analysis using AST call chain tracing with blast radius impact analysis
 
 ## Role Context
 
 You are investigating this codebase as a **Debugger**. Your focus is on:
 - **Error origins** - Where exceptions are thrown
-- **State mutations** - Where data gets corrupted
-- **Failure paths** - Code paths that lead to bugs
-- **Root causes** - The actual source of problems
-- **Symptom vs. cause** - Distinguishing what's visible from what's wrong
+- **Call chains** - How execution flows to the failure point
+- **State mutations** - What changed the data before failure
+- **Root causes** - The actual source of problems (not just symptoms)
+- **Impact radius** - What else might be affected
 
-## Claudemem v0.2.0 Integration
+## Why `context` is Perfect for Debugging
 
-<skill name="claudemem" version="0.2.0">
-<purpose>
-Semantic code search using vector embeddings WITH LLM enrichment.
-Finds code by MEANING AND BEHAVIOR, not just text matching.
-Use INSTEAD of grep/find for: error tracing, root cause analysis, state tracking.
-</purpose>
+The `context` command shows you:
+- **Symbol definition** = Where the buggy code is
+- **Callers** = How we got here (trace backwards)
+- **Callees** = What happens next (trace forward)
+- **Full call chain** = Complete picture for root cause analysis
 
-<document_types>
-- **code_chunk**: Raw AST code (functions, classes, methods)
-- **file_summary**: LLM-generated file purpose, exports, patterns
-- **symbol_summary** ⭐KEY: LLM-generated docs showing side effects and error paths
-</document_types>
+## Debugger-Focused Commands (v0.3.0)
 
-<search_mode>
-ALWAYS use --use-case navigation for agent tasks.
-Weights: symbol_summary (35%) + file_summary (30%) + code_chunk (20%)
-This prioritizes BEHAVIOR understanding for debugging.
-</search_mode>
+### Find the Bug Location
 
-<tools>
-CLI:
-  claudemem index --enrich            # Index with LLM enrichment
-  claudemem enrich                     # Run enrichment on existing index
-  claudemem search "query" --use-case navigation  # Agent-optimized search
-  claudemem status                     # Check index AND enrichment status
-  claudemem ai debugger                # Get debugger-focused instructions
-</tools>
-</skill>
-
-## Why symbol_summary is Perfect for Debugging
-
-The `symbol_summary` document type contains:
-- **Summary**: "Processes payment and updates user balance"
-- **Parameters**: What inputs can cause issues
-- **Returns**: What outputs to validate
-- **Side effects**: "Writes to database, calls Stripe API, emits event"
-- **Usage context**: "Called from checkout flow"
-
-Side effects are THE key for debugging - they tell you what can go wrong.
-
-## Debugger-Focused Search Patterns (v0.2.0)
-
-### Error Origin Hunting (symbol_summary shows error paths)
 ```bash
-# Find where specific error is thrown
-claudemem search "throw Error [error message keywords]" --use-case navigation
+# Find the function mentioned in error
+claudemem --nologo symbol authenticate --raw
 
-# Find error class definitions
-claudemem search "class extends Error custom exception" --use-case navigation
-
-# Find error handling that might swallow issues
-claudemem search "catch error ignore silent suppress" --use-case navigation
-
-# Find error propagation
-claudemem search "throw rethrow propagate error upstream" --use-case navigation
+# Get full context (callers + callees)
+claudemem --nologo context authenticate --raw
 ```
 
-### State Mutation Tracking (symbol_summary shows side effects)
+### Trace Back to Source (callers)
+
 ```bash
-# Find where state is modified
-claudemem search "set state mutate update modify value" --use-case navigation
+# Who called this function? (trace backwards)
+claudemem --nologo callers authenticate --raw
 
-# Find global state changes
-claudemem search "global window process.env mutable state" --use-case navigation
-
-# Find object mutations
-claudemem search "object assign mutate spread modify property" --use-case navigation
-
-# Find array mutations
-claudemem search "push pop splice shift mutate array" --use-case navigation
+# Follow the chain backwards
+claudemem --nologo callers LoginController --raw
+claudemem --nologo callers handleRequest --raw
 ```
 
-### Null/Undefined Issues
+### Trace Forward to Effect (callees)
+
 ```bash
-# Find potential null dereference
-claudemem search "optional chaining null check undefined" --use-case navigation
+# What does this function call? (trace forward)
+claudemem --nologo callees authenticate --raw
 
-# Find places assuming non-null
-claudemem search "property access without null check" --use-case navigation
-
-# Find defensive coding
-claudemem search "if null undefined return early guard" --use-case navigation
+# Find where state changes happen
+claudemem --nologo callees updateSession --raw
 ```
 
-### Race Conditions
+### Blast Radius Analysis (v0.4.0+ Required)
+
 ```bash
-# Find async operations
-claudemem search "async await promise concurrent parallel" --use-case navigation
+# After finding the bug, check what else is affected
+IMPACT=$(claudemem --nologo impact buggyFunction --raw)
 
-# Find shared state with async
-claudemem search "shared state concurrent access race" --use-case navigation
-
-# Find locking/synchronization
-claudemem search "lock mutex semaphore synchronized" --use-case navigation
-
-# Find event loop issues
-claudemem search "setTimeout setInterval callback async" --use-case navigation
+if [ -z "$IMPACT" ] || echo "$IMPACT" | grep -q "No callers"; then
+  echo "No static callers - bug is isolated (or dynamically called)"
+else
+  echo "$IMPACT"
+  echo ""
+  echo "This shows:"
+  echo "- Direct callers (immediately affected)"
+  echo "- Transitive callers (potentially affected)"
+  echo "- Complete list for testing after fix"
+fi
 ```
 
-### Memory Issues
+**Use for**:
+- Post-fix verification (test all impacted code)
+- Regression prevention (know what to test)
+- Incident documentation (impact scope)
+
+**Limitations:**
+Event-driven/callback architectures may have callers not visible to static analysis.
+
+### Error Origin Hunting
+
 ```bash
-# Find potential memory leaks
-claudemem search "addEventListener eventEmitter subscribe listen" --use-case navigation
+# Map error handling code
+claudemem --nologo map "throw error exception" --raw
 
-# Find cleanup missing
-claudemem search "cleanup dispose destroy remove listener" --use-case navigation
+# Find specific error types
+claudemem --nologo symbol AuthenticationError --raw
 
-# Find growing collections
-claudemem search "cache map set push append grow" --use-case navigation
+# Who throws this error?
+claudemem --nologo callers AuthenticationError --raw
 ```
 
-## Workflow: Bug Investigation (v0.2.0)
-
-### Phase 0: Verify Enrichment Status ⭐CRITICAL
+### State Mutation Tracking
 
 ```bash
-# Check if enriched (must have symbol_summary > 0)
-claudemem status
+# Find where state changes
+claudemem --nologo map "set state update mutate" --raw
 
-# If symbol_summary = 0, run enrichment first
-claudemem enrich
+# Find the mutation function
+claudemem --nologo symbol updateUserState --raw
+
+# Who calls this mutation?
+claudemem --nologo callers updateUserState --raw
 ```
 
-**Bug investigation relies heavily on symbol_summary's side effects information.**
+## Workflow: Bug Investigation (v0.3.0)
 
-### Phase 1: Symptom Analysis
+### Phase 1: Locate the Symptom
+
 ```bash
-# 1. Ensure enriched index exists
-claudemem status || claudemem index --enrich
+# Find where the error appears
+claudemem --nologo map "error message keywords" --raw
 
-# 2. Find where the symptom manifests
-claudemem search "[symptom description] error display show" --use-case navigation
-
-# 3. Find error message source
-claudemem search "[exact error message]" --use-case navigation
-
-# 4. Find logging around the issue
-claudemem search "console.log console.error logger [feature]" --use-case navigation
+# Or find the specific function
+claudemem --nologo symbol failingFunction --raw
 ```
 
-### Phase 2: Trace Backwards (symbol_summary shows call context)
+### Phase 2: Get Full Context
+
 ```bash
-# Find callers of the failing function
-claudemem search "call invoke [failing function name]" --use-case navigation
-
-# Find data sources (symbol_summary shows params)
-claudemem search "data source input [failing function]" --use-case navigation
-
-# Find state that affects the failure (symbol_summary shows side effects)
-claudemem search "state condition affects [failure area]" --use-case navigation
+# Get callers + callees in one command
+claudemem --nologo context failingFunction --raw
 ```
 
-### Phase 3: Identify Candidates
+### Phase 3: Trace Backwards (Find Root Cause)
+
 ```bash
-# Find state mutations before failure (symbol_summary lists side effects)
-claudemem search "mutate change set before [failure point]" --use-case navigation
+# For each caller, check if it's the source
+claudemem --nologo callers caller1 --raw
+claudemem --nologo callers caller2 --raw
 
-# Find conditions that could cause the issue
-claudemem search "if condition check [related to failure]" --use-case navigation
-
-# Find external dependencies (symbol_summary shows API calls)
-claudemem search "external API database network [failure area]" --use-case navigation
+# Keep tracing until you find the root
 ```
 
-### Phase 4: Root Cause Verification
-```bash
-# Find related tests that might fail
-claudemem search "test spec [failure area] should" --use-case navigation
+### Phase 4: Verify the Chain
 
-# Find similar issues (by pattern)
-claudemem search "similar bug fix patch workaround [area]" --use-case navigation
+```bash
+# Once you suspect a root cause, verify the path
+claudemem --nologo callees suspectedRoot --raw
+
+# Does it lead to the symptom?
+```
+
+### Phase 5: Check Impact
+
+```bash
+# What else calls the buggy code?
+claudemem --nologo callers buggyFunction --raw
+
+# These are all potentially affected
 ```
 
 ## Output Format: Bug Investigation Report
 
 ### 1. Symptom Summary
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    BUG INVESTIGATION                     │
 ├─────────────────────────────────────────────────────────┤
 │  Symptom: User sees "undefined" in profile name          │
-│  First Reported: src/components/Profile.tsx:45           │
+│  Location: src/components/Profile.tsx:45                │
 │  Error Type: Data inconsistency / Null reference         │
-│  Severity: HIGH - Affects user experience                │
-│  Search Method: claudemem v0.2.0 (enriched)             │
-│  Enrichment: ✅ symbol_summary showing side effects      │
+│  Search Method: claudemem v0.3.0 (AST call chain)       │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 2. Error Trace (with symbol_summary context)
+### 2. Call Chain Trace
+
 ```
 ❌ SYMPTOM: undefined rendered
    └── src/components/Profile.tsx:45
        └── user.name is undefined
 
-↑ DATA SOURCE
-   └── src/hooks/useUser.ts:23
-       └── symbol_summary: "Returns user from API, may be undefined"
-
-↑ API RESPONSE
-   └── src/services/userService.ts:67
-       └── symbol_summary: "Maps API response to User object"
-       └── side_effects: "Calls /api/user endpoint"
-
-↑ API MAPPING (⚠️ SUSPECT)
-   └── src/mappers/userMapper.ts:12
-       └── symbol_summary: "Maps full_name to name field"
-       └── ❌ BUG: API returns 'fullName' (camelCase)
-           but mapper expects 'full_name' (snake_case)
+↑ CALLER CHAIN (trace backwards):
+   └── useUser hook (src/hooks/useUser.ts:23)
+       ↑
+   └── fetchUser API (src/api/user.ts:67)
+       ↑
+   └── userMapper (src/mappers/user.ts:12)
+       ↑
+🔍 ROOT CAUSE FOUND HERE
 ```
 
 ### 3. Root Cause Analysis
+
 ```
 🔍 ROOT CAUSE IDENTIFIED:
 
-Location: src/mappers/userMapper.ts:12-15
-Problem: Field name mismatch between API and mapper
+Location: src/mappers/user.ts:12
+Problem: Field name mismatch
 
-API Response:       { fullName: "John Doe", ... }
-Mapper Expects:     { full_name: "...", ... }
+API Response:       { fullName: "John Doe" }
+Mapper Expects:     { full_name: "..." }
 Result:             name = undefined
 
-Evidence from symbol_summary:
-- userMapper.toUser(): "Maps API response, expects snake_case"
-- userService.getUser(): "Returns User from API, calls /api/user v2"
-- API v2 uses camelCase (breaking change)
+Evidence:
+- callees of fetchUser → userMapper
+- callers of userMapper → useUser → Profile
+- Complete chain verified via context command
 ```
 
-### 4. Failure Path (traced via side effects)
+### 4. Impact Analysis
+
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    FAILURE PATH                          │
-├─────────────────────────────────────────────────────────┤
-│ 1. User requests profile page                            │
-│ 2. useUser hook fetches /api/user                        │
-│    └── side_effect: "API call to /api/user"             │
-│ 3. API returns { fullName: "John" } (new format)         │
-│ 4. userMapper.toUser() looks for 'full_name'            │
-│    └── symbol_summary: "Maps full_name → name"          │
-│ 5. 'full_name' doesn't exist → undefined                 │
-│ 6. User object has { name: undefined }                   │
-│ 7. Profile.tsx renders undefined                         │
-└─────────────────────────────────────────────────────────┘
+⚠️ OTHER AFFECTED CODE:
+
+claudemem --nologo callers userMapper --raw shows:
+  - useUser hook (main app)
+  - useAdmin hook (admin panel)
+  - tests/user.test.ts
+
+All 3 locations may have the same bug!
 ```
 
-### 5. Related Issues (from file_summary patterns)
-```
-🔗 RELATED CODE THAT MAY HAVE SAME BUG:
+## Scenarios
 
-1. src/mappers/profileMapper.ts:8
-   └── file_summary: "Uses same snake_case mapping convention"
+### Scenario: Null Pointer Exception
 
-2. src/services/adminService.ts:45
-   └── symbol_summary: "Similar user mapping logic"
-
-3. src/hooks/useProfile.ts:34
-   └── symbol_summary: "Same API endpoint, different hook"
-```
-
-### 6. Fix Recommendations
-```
-🔧 RECOMMENDED FIX:
-
-Option A (Preferred): Update mapper to match new API
-Location: src/mappers/userMapper.ts:12
-Change:   result.name = data.full_name
-To:       result.name = data.fullName
-
-Option B: Add runtime validation
-Add Zod/yup schema validation at API boundary
-(symbol_summary would show "validates API response structure")
-
-Option C: Add fallback
-result.name = data.fullName || data.full_name || 'Unknown'
-
-✅ ALSO RECOMMENDED:
-- Add API contract tests
-- Add TypeScript strict null checks
-- Add runtime validation at API boundary
-```
-
-## Integration with Detective Agent
-
-When using the codebase-detective agent with this skill:
-
-```typescript
-Task({
-  subagent_type: "code-analysis:detective",
-  description: "Bug investigation",
-  prompt: `
-## Debugger Investigation (v0.2.0)
-
-Use claudemem with debugging-focused queries:
-1. First run: claudemem status (verify enrichment)
-2. If symbol_summary = 0, run: claudemem enrich
-3. Search with: --use-case navigation
-
-Focus on:
-1. Trace the symptom back to its origin
-2. Use symbol_summary side effects to follow the data flow
-3. Find the root cause (not just the symptom)
-4. Identify related code that might have the same issue
-
-symbol_summary side effects are KEY for understanding what can go wrong.
-
-Generate a Bug Investigation Report with:
-- Symptom summary
-- Error trace (with symbol_summary context)
-- Root cause analysis with evidence
-- Failure path diagram (traced via side effects)
-- Related code that may be affected
-- Fix recommendations (prioritized)
-  `
-})
-```
-
-## Best Practices for Bug Investigation (v0.2.0)
-
-1. **Verify enrichment first**
-   - Run `claudemem status`
-   - symbol_summary side_effects are KEY for debugging
-   - Without enrichment, you miss what each function DOES
-
-2. **Use side effects to trace the bug**
-   - symbol_summary lists: "Writes to database, calls API, emits event"
-   - Follow the side effects to find where state changes
-   - Side effects that should happen but don't = bug source
-
-3. **Symptom ≠ Cause**
-   - Where the error appears is rarely where it originates
-   - Use symbol_summary to trace backwards from symptom to source
-
-4. **Follow the data**
-   - symbol_summary shows params and returns
-   - Track data transformation through the call chain
-
-5. **Look for state changes**
-   - symbol_summary side_effects show state mutations
-   - Find all places that modify relevant state
-
-## Debugging Search Patterns by Bug Type (v0.2.0)
-
-### "Undefined" or "Null" Errors
 ```bash
-# Find where the value should be set (symbol_summary shows params)
-claudemem search "set assign initialize [variable name]" --use-case navigation
+# Step 1: Find where undefined is used
+claudemem --nologo map "undefined null" --raw
 
-# Find where value is read
-claudemem search "access read use [variable name]" --use-case navigation
+# Step 2: Get context of the failing function
+claudemem --nologo context renderProfile --raw
 
-# Find conditions that skip initialization
-claudemem search "if condition skip [variable name]" --use-case navigation
+# Step 3: Trace backwards through callers
+claudemem --nologo callers getUserData --raw
+
+# Step 4: Find where null was introduced
+claudemem --nologo callees fetchUser --raw
 ```
 
-### "TypeError: X is not a function"
+### Scenario: Race Condition
+
 ```bash
-# Find where the function should be defined
-claudemem search "function define [function name]" --use-case navigation
+# Step 1: Find async operations
+claudemem --nologo map "async await promise" --raw
 
-# Find where it's imported
-claudemem search "import [function name] from" --use-case navigation
+# Step 2: Find shared state
+claudemem --nologo symbol sharedState --raw
 
-# Find circular dependencies
-claudemem search "import from circular dependency" --use-case navigation
+# Step 3: Who reads it?
+claudemem --nologo callers sharedState --raw
+
+# Step 4: Who writes it?
+claudemem --nologo callees updateState --raw
 ```
 
-### Race Condition / Intermittent Failures
+### Scenario: Incorrect Behavior
+
 ```bash
-# Find async operations (symbol_summary shows async side effects)
-claudemem search "async await [feature]" --use-case navigation
+# Step 1: Find the function with wrong behavior
+claudemem --nologo symbol calculateTotal --raw
 
-# Find shared state access
-claudemem search "shared state global concurrent [feature]" --use-case navigation
+# Step 2: What does it depend on?
+claudemem --nologo callees calculateTotal --raw
 
-# Find event handlers
-claudemem search "addEventListener on event [feature]" --use-case navigation
+# Step 3: Who provides input?
+claudemem --nologo callers calculateTotal --raw
 ```
+
+## Anti-Patterns
+
+| Anti-Pattern | Why Wrong | Correct Approach |
+|--------------|-----------|------------------|
+| `grep "error"` | No call relationships | `claudemem --nologo context func --raw` |
+| Read random files | No direction | Trace callers/callees systematically |
+| Fix symptom only | Bug returns | Trace to root cause with `callers` |
+| Skip impact check | Miss related bugs | ALWAYS check all `callers` |
+
+## Debugging Tips
+
+1. **Start at symptom** - Use `symbol` to find where error appears
+2. **Get full context** - Use `context` for callers + callees together
+3. **Trace backwards** - Follow `callers` chain to root cause
+4. **Verify forward** - Use `callees` to confirm the path
+5. **Check impact** - All `callers` of buggy code may be affected
 
 ## Notes
 
-- Requires claudemem CLI v0.2.0+ installed and configured
-- **Bug investigation relies heavily on symbol_summary side_effects**
-- Without enrichment, results show only code_chunk (no behavior context)
-- Works best on indexed + enriched codebases
-- Focuses on causation over symptoms
-- Pairs well with developer-detective for understanding implementations
+- **`context` is your primary tool** - Shows full call chain
+- **Trace backwards with `callers`** - Find root cause, not just symptom
+- **Verify with `callees`** - Confirm the execution path
+- **Check all callers after fixing** - Don't leave other bugs
+- Works best with TypeScript, Go, Python, Rust codebases
 
 ---
 
 **Maintained by:** MadAppGang
-**Plugin:** code-analysis v2.4.0
-**Last Updated:** December 2025
+**Plugin:** code-analysis v2.6.0
+**Last Updated:** December 2025 (v0.4.0 impact analysis)
