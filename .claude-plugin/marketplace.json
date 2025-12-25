@@ -38,8 +38,8 @@
 		{
 			"name": "code-analysis",
 			"source": "./plugins/code-analysis",
-			"description": "Deep code investigation with claudemem v0.4.0 AST structural analysis. Features Code Analysis Commands, Multi-Agent Orchestration patterns, Workflow Templates, PageRank-based symbol importance, callers/callees dependency tracing.",
-			"version": "2.6.0",
+			"description": "Deep code investigation with claudemem v0.4.0 AST structural analysis. Features Code Analysis Commands, Multi-Agent Orchestration patterns, Workflow Templates, PageRank-based symbol importance, callers/callees dependency tracing. NEW: 深度思考命令用于多维度问题分析。",
+			"version": "2.7.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
