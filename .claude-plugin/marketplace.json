@@ -116,8 +116,8 @@
 		{
 			"name": "agentdev",
 			"source": "./plugins/agentdev",
-			"description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with parallel external model reviews and quality gates.",
-			"version": "1.1.0",
+			"description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with intelligent plugin classification for command creation.",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",

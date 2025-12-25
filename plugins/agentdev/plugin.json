@@ -1,6 +1,6 @@
 {
 	"name": "agentdev",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with design, implementation, and quality review agents.",
 	"author": {
 		"name": "tianzecn",
