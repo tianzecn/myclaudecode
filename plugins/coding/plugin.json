@@ -1,6 +1,6 @@
 {
 	"name": "coding",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "AI 驱动的需求分析与 GitHub Issue 自动创建。深度分析项目代码库、文档和配置，生成结构化、可执行的 GitHub Issue，包含技术建议和验收标准。",
 	"author": {
 		"name": "tianzecn",
@@ -22,6 +22,7 @@
 		"./commands/需求分析.md",
 		"./commands/开发归档.md",
 		"./commands/开发总结.md",
+		"./commands/Issue修复.md",
 		"./commands/帮助.md"
 	]
 }

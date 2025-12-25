@@ -139,8 +139,8 @@
 		{
 			"name": "coding",
 			"source": "./plugins/coding",
-			"description": "AI 驱动的需求分析与 GitHub Issue 自动创建。深度分析项目代码库、文档和配置，生成结构化、可执行的 GitHub Issue，包含技术建议和验收标准。新增开发总结命令，支持快速开发后归档。",
-			"version": "1.1.0",
+			"description": "AI 驱动的需求分析与 GitHub Issue 自动创建。完整的 Issue 驱动开发工作流：需求分析 → Issue修复 → 开发归档。支持问题复现、根因分析、PR 创建的完整流程。",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
