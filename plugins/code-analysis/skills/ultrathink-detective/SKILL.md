@@ -89,7 +89,7 @@ AskUserQuestion({
     multiSelect: false,
     options: [
       { label: "Install via npm (Recommended)", description: "npm install -g claude-codemem" },
-      { label: "Install via Homebrew", description: "brew tap MadAppGang/claude-mem && brew install --cask claudemem" },
+      { label: "Install via Homebrew", description: "brew tap tianzecn/claude-mem && brew install --cask claudemem" },
       { label: "Cancel", description: "I'll install manually" }
     ]
   }]
@@ -560,6 +560,6 @@ skills: code-analysis:ultrathink-detective
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.6.0
 **Last Updated:** December 2025 (v0.4.0 code health dimension)

@@ -487,5 +487,5 @@ To fix: npm install -g claudish@latest
 - Claude Code: Commands now query Claudish dynamically
 
 **Support:**
-- GitHub Issues: https://github.com/MadAppGang/claude-code/issues
-- Claudish Issues: https://github.com/MadAppGang/claude-code/issues (same repo)
+- GitHub Issues: https://github.com/tianzecn/myclaudecode/issues
+- Claudish Issues: https://github.com/tianzecn/myclaudecode/issues (same repo)

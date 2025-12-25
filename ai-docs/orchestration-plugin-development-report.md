@@ -529,7 +529,7 @@ keywords: [grok, gemini, gpt-5, claudish, parallel, consensus, multi-model, exte
    ```json
    {
      "dependencies": {
-       "orchestration@mag-claude-plugins": "^0.1.0"
+       "orchestration@tianzecn-plugins": "^0.1.0"
      }
    }
    ```
@@ -635,7 +635,7 @@ Successfully created the marketplace's first **skills-only plugin** with:
 
 ---
 
-**Maintained by:** MadAppGang  
+**Maintained by:** tianzecn  
 **Development Date:** November 22, 2025  
 **Report Generated:** November 22, 2025  
 **Report Version:** 1.0  

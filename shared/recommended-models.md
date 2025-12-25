@@ -4,7 +4,7 @@
 **Last Updated:** 2025-11-16
 **Pricing Last Verified:** 2025-11-16
 **Purpose:** Curated OpenRouter model recommendations for code development tasks
-**Maintained By:** MadAppGang Claude Code Team
+**Maintained By:** tianzecn Claude Code Team
 
 ---
 
@@ -628,7 +628,7 @@ When updating pricing:
 **For technical issues:**
 - Check `shared/README.md` for sync pattern
 - See `CLAUDE.md` for project overview
-- Contact: Jack Rudenko (i@madappgang.com)
+- Contact: tianzecn (i@madappgang.com)
 
 **To suggest new models:**
 - Open an issue with model details
@@ -637,6 +637,6 @@ When updating pricing:
 
 ---
 
-**Maintained By:** MadAppGang Claude Code Team
-**Repository:** https://github.com/MadAppGang/claude-code
+**Maintained By:** tianzecn Claude Code Team
+**Repository:** https://github.com/tianzecn/myclaudecode
 **License:** MIT

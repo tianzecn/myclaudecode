@@ -37,7 +37,7 @@ This guide covers how to develop, test, and debug plugins locally before publish
 
 ```bash
 # Clone from GitHub
-git clone https://github.com/MadAppGang/claude-code.git
+git clone https://github.com/tianzecn/myclaudecode.git
 
 # Navigate to the directory
 cd claude-code
@@ -74,7 +74,7 @@ Add the local marketplace globally to test across all projects:
 /plugin marketplace add /path/to/claude-code
 
 # Install plugin from local marketplace
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 **Result:** Plugin available in all Claude Code projects from your local copy.
@@ -95,7 +95,7 @@ Add local marketplace to a specific test project:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "local",
         "path": "/path/to/claude-code"
@@ -103,7 +103,7 @@ Add local marketplace to a specific test project:
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -144,8 +144,8 @@ After making changes, reload the plugin:
 
 **Method 1: Reinstall plugin**
 ```bash
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 **Method 2: Restart Claude Code session**
@@ -177,7 +177,7 @@ Check that plugin is loaded correctly:
 /plugin list
 
 # Should show:
-# frontend@mag-claude-plugins (global) - from /path/to/claude-code
+# frontend@tianzecn-plugins (global) - from /path/to/claude-code
 ```
 
 ---
@@ -236,8 +236,8 @@ Provide a concise summary of findings.
 **4. Reload and test:**
 
 ```bash
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Ask Claude to invoke test-agent
 ```
@@ -294,8 +294,8 @@ Provide a summary of the current project structure.
 **4. Reload and test:**
 
 ```bash
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Test the command
 /test-command
@@ -349,8 +349,8 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 
 ```bash
 # Reload plugin
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Check if MCP server is loaded
 # Claude will have access to test-server tools
@@ -367,7 +367,7 @@ console.log('CLAUDE_PLUGIN_ROOT:', process.env.CLAUDE_PLUGIN_ROOT);
 /plugin list
 
 # Should show local path:
-# frontend@mag-claude-plugins (global)
+# frontend@tianzecn-plugins (global)
 #   from /path/to/claude-code
 ```
 
@@ -449,7 +449,7 @@ mkdir -p .claude
 cat > .claude/settings.json << 'EOF'
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "local",
         "path": "/path/to/claude-code"
@@ -457,7 +457,7 @@ cat > .claude/settings.json << 'EOF'
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 EOF
@@ -529,10 +529,10 @@ Compare behavior to ensure changes work as expected.
 
 4. **Reinstall plugin:**
    ```bash
-   /plugin remove frontend@mag-claude-plugins
-   /plugin marketplace remove mag-claude-plugins
+   /plugin remove frontend@tianzecn-plugins
+   /plugin marketplace remove tianzecn-plugins
    /plugin marketplace add /path/to/claude-code
-   /plugin install frontend@mag-claude-plugins
+   /plugin install frontend@tianzecn-plugins
    ```
 
 ---
@@ -547,8 +547,8 @@ Compare behavior to ensure changes work as expected.
 
 1. **Reinstall plugin:**
    ```bash
-   /plugin remove frontend@mag-claude-plugins
-   /plugin install frontend@mag-claude-plugins
+   /plugin remove frontend@tianzecn-plugins
+   /plugin install frontend@tianzecn-plugins
    ```
 
 2. **Restart Claude Code:**
@@ -636,14 +636,14 @@ After pushing, test the GitHub version:
 
 ```bash
 # Remove local version
-/plugin remove frontend@mag-claude-plugins
-/plugin marketplace remove mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin marketplace remove tianzecn-plugins
 
 # Add GitHub version
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install from GitHub
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Test to ensure changes work
 ```
@@ -739,12 +739,12 @@ git push --tags
 ```bash
 # Marketplace management
 /plugin marketplace add /path/to/claude-code
-/plugin marketplace remove mag-claude-plugins
+/plugin marketplace remove tianzecn-plugins
 /plugin marketplace list
 
 # Plugin management
-/plugin install frontend@mag-claude-plugins
-/plugin remove frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
+/plugin remove frontend@tianzecn-plugins
 /plugin list
 
 # Validation
@@ -783,13 +783,13 @@ git push origin main
 2. Verify JSON syntax
 3. Check file permissions
 4. Review Claude Code docs: https://docs.claude.com/en/docs/claude-code/plugins
-5. Open issue: https://github.com/MadAppGang/claude-code/issues
+5. Open issue: https://github.com/tianzecn/myclaudecode/issues
 
 **Contact:**
 - Email: i@madappgang.com
-- GitHub: https://github.com/MadAppGang/claude-code
+- GitHub: https://github.com/tianzecn/myclaudecode
 
 ---
 
 **Last Updated:** November 2024
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn

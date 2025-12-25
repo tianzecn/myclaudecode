@@ -5,7 +5,7 @@ Create, implement, and review Claude Code agents and commands with multi-model v
 ## Installation
 
 ```bash
-/plugin install agentdev@mag-claude-plugins
+/plugin install agentdev@tianzecn-plugins
 ```
 
 ## Features
@@ -57,11 +57,11 @@ Create, implement, and review Claude Code agents and commands with multi-model v
 
 ## Dependencies
 
-- `orchestration@mag-claude-plugins` (auto-installed)
+- `orchestration@tianzecn-plugins` (auto-installed)
 
 ## Multi-Model Validation
 
-The `/develop` command uses external AI models via [Claudish](https://github.com/MadAppGang/claudish) for:
+The `/develop` command uses external AI models via [Claudish](https://github.com/tianzecn/claudish) for:
 - **Plan Review** - Validate design before implementation
 - **Implementation Review** - Quality check with multiple perspectives
 

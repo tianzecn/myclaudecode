@@ -102,7 +102,7 @@ No action needed. The agents will automatically use the new model.
 ## Orchestration Plugin v0.1.0 (2025-11-22)
 
 **Tag:** `plugins/orchestration/v0.1.0`
-**Marketplace:** `mag-claude-plugins@4.0.0`
+**Marketplace:** `tianzecn-plugins@4.0.0`
 **Production Confidence:** 99%
 
 ### 🎯 Overview
@@ -218,7 +218,7 @@ Pre-configured combinations for common use cases:
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -226,14 +226,14 @@ Pre-configured combinations for common use cases:
 **Option 2: Direct Installation**
 
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Option 3: Global Installation**
 
 ```bash
-/plugin marketplace add MadAppGang/claude-code
-/plugin install orchestration@mag-claude-plugins --global
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install orchestration@tianzecn-plugins --global
 ```
 
 ### 💡 Usage
@@ -375,7 +375,7 @@ skills: orchestration:testing, orchestration:multi-model-validation
 
 ### 🙏 Acknowledgments
 
-**Developed By:** Jack Rudenko @ MadAppGang
+**Developed By:** tianzecn @ tianzecn
 **Quality Validation:** Triple-review process with 3 independent AI models
 **Reviewers:** Claude Sonnet 4.5 (Embedded), Grok (x-ai), Sonnet 4.5 (Docs Specialist)
 **Total Development Time:** ~6 hours (design → review → implementation → validation)
@@ -390,10 +390,10 @@ skills: orchestration:testing, orchestration:multi-model-validation
 
 ### 🔗 Quick Links
 
-- **Plugin Source:** [/plugins/orchestration](https://github.com/MadAppGang/claude-code/tree/main/plugins/orchestration)
-- **Marketplace:** [mag-claude-plugins](https://github.com/MadAppGang/claude-code)
-- **Release Tag:** [plugins/orchestration/v0.1.0](https://github.com/MadAppGang/claude-code/releases/tag/plugins%2Forchestration%2Fv0.1.0)
-- **Installation Guide:** [README.md](https://github.com/MadAppGang/claude-code/blob/main/plugins/orchestration/README.md)
+- **Plugin Source:** [/plugins/orchestration](https://github.com/tianzecn/myclaudecode/tree/main/plugins/orchestration)
+- **Marketplace:** [tianzecn-plugins](https://github.com/tianzecn/myclaudecode)
+- **Release Tag:** [plugins/orchestration/v0.1.0](https://github.com/tianzecn/myclaudecode/releases/tag/plugins%2Forchestration%2Fv0.1.0)
+- **Installation Guide:** [README.md](https://github.com/tianzecn/myclaudecode/blob/main/plugins/orchestration/README.md)
 
 ---
 
@@ -634,8 +634,8 @@ The `/implement` command now requires PHASE 1.5 completion:
 
 1. **Update plugin** (if globally installed):
    ```bash
-   /plugin marketplace add MadAppGang/claude-code
-   /plugin install frontend@mag-claude-plugins
+   /plugin marketplace add tianzecn/myclaudecode
+   /plugin install frontend@tianzecn-plugins
    ```
 
 2. **Enable in project** (recommended for teams):
@@ -643,7 +643,7 @@ The `/implement` command now requires PHASE 1.5 completion:
    // .claude/settings.json
    {
      "enabledPlugins": {
-       "frontend@mag-claude-plugins": true
+       "frontend@tianzecn-plugins": true
      }
    }
    ```
@@ -672,7 +672,7 @@ The `/implement` command now requires PHASE 1.5 completion:
 - **CLAUDE.md** - Updated with v3.2.0 information and plan review workflow
 - **CHANGELOG.md** - Detailed changelog entry
 - **Plugin Documentation** - See `/implement` command for complete PHASE 1.5 workflow
-- **Claudish CLI** - See https://github.com/MadAppGang/claudish for OpenRouter model catalog
+- **Claudish CLI** - See https://github.com/tianzecn/claudish for OpenRouter model catalog
 
 ### 🏷️ Git Tag
 
@@ -683,9 +683,9 @@ git push origin plugins/frontend/v3.3.0
 
 ### 👥 Credits
 
-**Developed by:** Jack Rudenko @ MadAppGang
+**Developed by:** tianzecn @ tianzecn
 **License:** MIT
-**Repository:** https://github.com/MadAppGang/claude-code
+**Repository:** https://github.com/tianzecn/myclaudecode
 
 ---
 
@@ -944,9 +944,9 @@ export OPENROUTER_API_KEY="sk-or-v1-your-key"
 **Step 4: Update Plugin**
 
 ```bash
-/plugin marketplace update mag-claude-plugins
-/plugin uninstall frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
+/plugin uninstall frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 #### What Doesn't Change
@@ -1069,13 +1069,13 @@ Benefits:
 
 ### Support
 
-**Issues:** https://github.com/MadAppGang/claude-code/issues
+**Issues:** https://github.com/tianzecn/myclaudecode/issues
 **Discussions:** Use GitHub Discussions for questions
 
 ### Next Steps
 
 Users should:
-1. Update marketplace: `/plugin marketplace update mag-claude-plugins`
+1. Update marketplace: `/plugin marketplace update tianzecn-plugins`
 2. Reinstall plugin: `/plugin uninstall` + `/plugin install`
 3. Remove old MCP configuration (if configured)
 4. Verify: `npx claudish --help`
@@ -1130,7 +1130,7 @@ git push origin main
 git push origin plugins/frontend/vX.Y.Z
 
 # 8. Verify tag on GitHub
-# Check: https://github.com/MadAppGang/claude-code/tags
+# Check: https://github.com/tianzecn/myclaudecode/tags
 ```
 
 #### After Release
@@ -1204,6 +1204,6 @@ Use this template for RELEASES.md entries:
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Last Updated:** 2025-11-11
 **License:** MIT

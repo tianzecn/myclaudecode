@@ -130,8 +130,8 @@ If the `code-analysis` plugin is available (check for codebase-detective agent):
 
 If not available, recommend installation:
 ```
-For best results investigating existing code, install: code-analysis@mag-claude-plugins
-Repository: https://github.com/MadAppGang/claude-code
+For best results investigating existing code, install: code-analysis@tianzecn-plugins
+Repository: https://github.com/tianzecn/myclaudecode
 ```
 
 **Fallback:** Use Glob/Grep to search for existing components and patterns manually.

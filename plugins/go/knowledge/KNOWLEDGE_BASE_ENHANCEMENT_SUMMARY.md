@@ -567,4 +567,4 @@ The XML-enhanced knowledge base represents a **significant leap forward** in how
 **Completion Target:** All core references within 2 weeks
 
 **Last Updated:** 2025-11-14
-**Maintained by:** MadAppGang Go Plugin Team
+**Maintained by:** tianzecn Go Plugin Team

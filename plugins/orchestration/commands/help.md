@@ -63,7 +63,7 @@ Tracks to `ai-docs/llm-performance.json`:
 
 Other plugins declare dependency:
 ```json
-{ "dependencies": { "orchestration@mag-claude-plugins": "^0.2.0" } }
+{ "dependencies": { "orchestration@tianzecn-plugins": "^0.2.0" } }
 ```
 
 Commands reference skills:
@@ -77,10 +77,10 @@ skills: orchestration:multi-model-validation
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Note**: Usually auto-installed as dependency of frontend/agentdev plugins.
@@ -89,5 +89,5 @@ skills: orchestration:multi-model-validation
 
 ## More Info
 
-- **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: Jack Rudenko @ MadAppGang
+- **Repo**: https://github.com/tianzecn/myclaudecode
+- **Author**: tianzecn @ tianzecn

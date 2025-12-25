@@ -122,10 +122,10 @@ The `/implement` command will suggest it for better codebase understanding.
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin
-/plugin install code-analysis@mag-claude-plugins
+/plugin install code-analysis@tianzecn-plugins
 ```
 
 **Optional**: For semantic code search, install claudemem: `npm install -g claude-codemem`
@@ -134,5 +134,5 @@ The `/implement` command will suggest it for better codebase understanding.
 
 ## More Info
 
-- **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: Jack Rudenko @ MadAppGang
+- **Repo**: https://github.com/tianzecn/myclaudecode
+- **Author**: tianzecn @ tianzecn

@@ -111,7 +111,7 @@ git push origin plugins/{plugin-name}/v{X.Y.Z}
 
 ```bash
 # As a user, run:
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 
 # Should show the new version
 # If it still shows old version, you forgot to update marketplace.json!
@@ -218,7 +218,7 @@ git push origin main
 git push origin plugins/frontend/v3.3.0
 
 # 5. Verify
-# Run: /plugin marketplace update mag-claude-plugins
+# Run: /plugin marketplace update tianzecn-plugins
 # Should show: frontend v3.3.0 ✅
 ```
 
@@ -245,7 +245,7 @@ git push origin plugins/{plugin}/v{X.Y.Z}
 A: Use local marketplace:
 ```bash
 /plugin marketplace add /path/to/claude-code
-/plugin install {plugin}@mag-claude-plugins
+/plugin install {plugin}@tianzecn-plugins
 ```
 
 ---
@@ -259,5 +259,5 @@ A: Use local marketplace:
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Last Updated:** November 13, 2025

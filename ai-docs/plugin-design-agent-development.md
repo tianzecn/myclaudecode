@@ -1,7 +1,7 @@
 # Plugin Design: agent-development
 
 **Version:** 1.0.0
-**Author:** MadAppGang
+**Author:** tianzecn
 **Date:** 2025-11-26
 **Status:** Design Phase
 
@@ -74,12 +74,12 @@ plugins/agent-development/
 
 ## Dependencies
 
-### Required: orchestration@mag-claude-plugins
+### Required: orchestration@tianzecn-plugins
 
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.1"
+    "orchestration@tianzecn-plugins": "^0.1.1"
   }
 }
 ```
@@ -262,9 +262,9 @@ skills: |
   "name": "agent-development",
   "version": "1.0.0",
   "description": "Create, implement, and review Claude Code agents and commands with multi-model validation. Includes specialized agents for design, implementation, and quality review, plus a full-cycle orchestration command.",
-  "author": "MadAppGang",
+  "author": "tianzecn",
   "license": "MIT",
-  "homepage": "https://github.com/MadAppGang/claude-code",
+  "homepage": "https://github.com/tianzecn/myclaudecode",
 
   "tags": [
     "agent-development",
@@ -294,7 +294,7 @@ skills: |
   ],
 
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.1"
+    "orchestration@tianzecn-plugins": "^0.1.1"
   },
 
   "compatibility": {
@@ -312,7 +312,7 @@ skills: |
 **Steps:**
 1. Complete plugin implementation
 2. Add to marketplace.json
-3. Install plugin: `/plugin install agent-development@mag-claude-plugins`
+3. Install plugin: `/plugin install agent-development@tianzecn-plugins`
 4. Remove local files:
    - `.claude/agents/agent-architect.md`
    - `.claude/agents/agent-developer.md`

@@ -1685,6 +1685,6 @@ Your work is successful when:
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Plugin:** frontend v2.5.0
 **Last Updated:** November 6, 2024

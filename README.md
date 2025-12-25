@@ -3,13 +3,13 @@
 > **Battle-tested AI workflows from the top 1% of developers**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Maintained by MadAppGang](https://img.shields.io/badge/Maintained%20by-MadAppGang-blue)](https://madappgang.com)
+[![Maintained by tianzecn](https://img.shields.io/badge/Maintained%20by-tianzecn-blue)](https://madappgang.com)
 
 ## 🏆 Stop Wasting Time. Ship Like the Top 1%.
 
 **While you're fighting with AI prompts, elite teams are shipping 3x faster.**
 
-At [MadAppGang](https://madappgang.com) and [10xLabs](https://10xlabs.com.au), we don't do "good enough." We're the teams that Fortune 500 companies hire when their own developers can't deliver. We architect platforms processing **$50M+ in annual transactions**. We scale systems to **500,000+ concurrent users**. We ship features that make or break businesses.
+At [tianzecn](https://madappgang.com) and [10xLabs](https://10xlabs.com.au), we don't do "good enough." We're the teams that Fortune 500 companies hire when their own developers can't deliver. We architect platforms processing **$50M+ in annual transactions**. We scale systems to **500,000+ concurrent users**. We ship features that make or break businesses.
 
 **Here's what separates us:** While most developers adopt new tools, we **engineer competitive advantages**.
 
@@ -68,7 +68,7 @@ These aren't "best practices" from blog posts. This is the **battle-tested playb
 **Already installed?** Update to get the latest features:
 
 ```bash
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 ```
 
 **This single command updates everything** - works for both global and local installations. No need to reinstall plugins.
@@ -81,7 +81,7 @@ These aren't "best practices" from blog posts. This is the **battle-tested playb
 
 ```bash
 # Step 1: Add marketplace globally (one-time setup)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 Then add to your project's `.claude/settings.json`:
@@ -89,10 +89,10 @@ Then add to your project's `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true,
-    "bun@mag-claude-plugins": true,
-    "orchestration@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true,
+    "bun@tianzecn-plugins": true,
+    "orchestration@tianzecn-plugins": true
   }
 }
 ```
@@ -118,7 +118,7 @@ Professional toolkit for TypeScript/React development with intelligent workflow 
 - **13 Specialized Agents** - Including CSS Developer, Designer ecosystem (designer + designer-codex), UI Developer team (ui-developer + ui-developer-codex), architecture planning, code review, and browser testing
 - **6 Slash Commands** - Including `/implement` (8-phase with adaptive workflow detection), `/implement-ui` (with task decomposition), `/validate-ui`
 - **3 Skills** - Browser testing, API analysis, and proactive UI implementation
-- **3 MCP Servers** - Apidog, Figma, Chrome DevTools (plus [Claudish CLI](https://github.com/MadAppGang/claudish) for external AI models)
+- **3 MCP Servers** - Apidog, Figma, Chrome DevTools (plus [Claudish CLI](https://github.com/tianzecn/claudish) for external AI models)
 - **CSS-Aware Validation** - DOM inspection, computed CSS analysis, pattern awareness
 - **CVA Best Practices** - Comprehensive shadcn/ui integration guidance
 - **Task Decomposition** - Parallel execution for independent UI components
@@ -241,7 +241,7 @@ skills: orchestration:complete  # All 5 skills
 
 #### 🤖 Claudish - Multi-Model CLI
 
-**Repository:** [github.com/MadAppGang/claudish](https://github.com/MadAppGang/claudish) | **Category:** Development Tools | **Type:** Standalone CLI
+**Repository:** [github.com/tianzecn/claudish](https://github.com/tianzecn/claudish) | **Category:** Development Tools | **Type:** Standalone CLI
 
 Run Claude Code with any OpenRouter model via local Anthropic API proxy. **100% VERIFIED** - Routes to real OpenRouter models, NOT Anthropic.
 
@@ -286,7 +286,7 @@ claudish --list-models
 claudish --help
 ```
 
-**Documentation:** See [github.com/MadAppGang/claudish](https://github.com/MadAppGang/claudish) for detailed setup and usage.
+**Documentation:** See [github.com/tianzecn/claudish](https://github.com/tianzecn/claudish) for detailed setup and usage.
 
 **Perfect for:** Exploring different AI models, cost optimization, specialized tasks requiring specific model capabilities, testing model performance, avoiding Anthropic API limitations
 
@@ -321,7 +321,7 @@ This approach gives you the best of both worlds: marketplace installed once glob
 Each developer on your team does this once:
 
 ```bash
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 This registers the MAG Claude Plugins marketplace in your Claude Code installation. You only need to do this once, and it works for all your projects.
@@ -333,7 +333,7 @@ Add or edit `.claude/settings.json` in your project root:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -372,10 +372,10 @@ Need more than one plugin? Just add more entries:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true,
-    "bun@mag-claude-plugins": true,
-    "orchestration@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true,
+    "bun@tianzecn-plugins": true,
+    "orchestration@tianzecn-plugins": true
   }
 }
 ```
@@ -394,7 +394,7 @@ After setup, verify everything works:
 /plugin list
 
 # Should show:
-# frontend@mag-claude-plugins (project-specific)
+# frontend@tianzecn-plugins (project-specific)
 #   Version: 1.2.0
 #   Status: ✓ Loaded
 ```
@@ -504,7 +504,7 @@ For architecture and implementation details, see the **[ai-docs](./ai-docs/)** d
 
 ### Community Requests
 
-Have a plugin idea? [Open an issue](https://github.com/MadAppGang/claude-code/issues) with the `plugin-request` label.
+Have a plugin idea? [Open an issue](https://github.com/tianzecn/myclaudecode/issues) with the `plugin-request` label.
 
 ---
 ## 📖 Detailed Documentation
@@ -543,9 +543,9 @@ Individual plugins may have their own licenses specified in their `plugin.json` 
 
 ## 👥 Maintainers
 
-**Jack Rudenko**
-Email: [i@madappgang.com](mailto:i@madappgang.com)
-Company: [MadAppGang](https://madappgang.com)
+**tianzecn**
+Email: [](mailto:)
+Company: [tianzecn](https://madappgang.com)
 
 ---
 
@@ -559,11 +559,11 @@ Company: [MadAppGang](https://madappgang.com)
 
 ## 📞 Contact & Support
 
-- **Email**: [i@madappgang.com](mailto:i@madappgang.com)
-- **Issues**: [GitHub Issues](https://github.com/MadAppGang/claude-code/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/MadAppGang/claude-code/discussions)
+- **Email**: [](mailto:)
+- **Issues**: [GitHub Issues](https://github.com/tianzecn/myclaudecode/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/tianzecn/myclaudecode/discussions)
 - **Website**: [madappgang.com](https://madappgang.com)
 
 ---
 
-**Made with ❤️ by MadAppGang**
+**Made with ❤️ by tianzecn**

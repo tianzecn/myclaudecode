@@ -93,10 +93,10 @@ Present the following help information to the user in a clear, organized format:
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ---
@@ -117,5 +117,5 @@ export OPENROUTER_API_KEY="your-key"  # https://openrouter.ai
 
 ## More Info
 
-- **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: Jack Rudenko @ MadAppGang
+- **Repo**: https://github.com/tianzecn/myclaudecode
+- **Author**: tianzecn @ tianzecn

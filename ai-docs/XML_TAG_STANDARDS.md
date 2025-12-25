@@ -716,10 +716,10 @@ When creating or updating agents/commands:
 
 - [Anthropic Prompt Engineering Guide](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
 - [Anthropic XML Tags Documentation](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags)
-- [MAG Claude Plugins Repository](https://github.com/MadAppGang/claude-code)
+- [MAG Claude Plugins Repository](https://github.com/tianzecn/myclaudecode)
 
 ---
 
 **Version**: 1.0.0
 **Last Updated**: 2025-11-14
-**Maintained by**: Jack Rudenko @ MadAppGang
+**Maintained by**: tianzecn @ tianzecn

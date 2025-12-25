@@ -187,7 +187,7 @@ export OPENROUTER_API_KEY="sk-or-v1-your-key-here"
 
 **Note**: Agents automatically use single-shot mode with `--model` flag for automation.
 
-**Documentation:** https://github.com/MadAppGang/claudish
+**Documentation:** https://github.com/tianzecn/claudish
 
 ### Optional Environment Variables
 
@@ -223,7 +223,7 @@ Project `.claude/settings.json` (committed to git):
     "APIDOG_PROJECT_ID": "your-team-project-id"
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -433,7 +433,7 @@ npx -y @modelcontextprotocol/server-chrome-devtools \
 /plugin list
 
 # Should show:
-# ✅ frontend@mag-claude-plugins
+# ✅ frontend@tianzecn-plugins
 ```
 
 ## Troubleshooting

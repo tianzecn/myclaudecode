@@ -1274,7 +1274,7 @@ Include:
 - Full documentation at GitHub repository
 
 **External Links:**
-- Claudish GitHub: https://github.com/MadAppGang/claudish
+- Claudish GitHub: https://github.com/tianzecn/claudish
 - Install: `npm install -g claudish`
 - OpenRouter: https://openrouter.ai
 - OpenRouter Models: https://openrouter.ai/models
@@ -1293,6 +1293,6 @@ claudish --help-ai     # AI agent usage guide
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Last Updated:** November 25, 2025
 **Skill Version:** 1.1.0

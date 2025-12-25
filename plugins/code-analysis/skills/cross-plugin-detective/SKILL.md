@@ -227,7 +227,7 @@ If your plugin has agents that need code investigation, add this dependency:
 {
   "name": "your-plugin",
   "dependencies": {
-    "code-analysis@mag-claude-plugins": "^1.6.0"
+    "code-analysis@tianzecn-plugins": "^1.6.0"
   }
 }
 ```
@@ -259,6 +259,6 @@ This ensures:
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis
 **Last Updated:** December 2025

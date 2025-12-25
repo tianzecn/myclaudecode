@@ -4,14 +4,14 @@
 
 **Repository:** MAG Claude Plugins
 **Purpose:** Professional plugin marketplace for Claude Code
-**Owner:** Jack Rudenko (i@madappgang.com) @ MadAppGang
+**Owner:** tianzecn () @ tianzecn
 **License:** MIT
 
 ## What This Repository Contains
 
 A complete Claude Code plugin marketplace with enterprise-level architecture:
 
-- **Plugin Marketplace** (`mag-claude-plugins`)
+- **Plugin Marketplace** (`tianzecn-plugins`)
 - **Frontend Development Plugin** (v3.12.0) - Full-featured Opus-powered
   - 11 Specialized Agents (Plan Reviewer + CSS Developer + Designer + UI Developer ecosystem with multi-model review)
   - **LLM Performance Tracking** (NEW in v3.11.0) - Track external model execution times, quality scores, and recommendations to `ai-docs/llm-performance.json`
@@ -79,7 +79,7 @@ A complete Claude Code plugin marketplace with enterprise-level architecture:
   - **Context-efficient** - Load only needed skills (vs monolithic)
   - **Dependency model** - Auto-installs with plugins that need orchestration
 - **Claudish** - Run Claude Code with OpenRouter models
-  - **GitHub**: https://github.com/MadAppGang/claudish
+  - **GitHub**: https://github.com/tianzecn/claudish
   - **Install**: `npm install -g claudish`
   - CLI tool (standalone, separate repository)
   - Local Anthropic API proxy
@@ -286,7 +286,7 @@ Plugins declare orchestration as a dependency:
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -370,7 +370,7 @@ The code-analysis plugin uses **claudemem v0.3.0** CLI with **AST structural ana
 npm install -g claude-codemem
 
 # Homebrew (macOS)
-brew tap MadAppGang/claude-mem && brew install --cask claudemem
+brew tap tianzecn/claude-mem && brew install --cask claudemem
 ```
 
 ### Configuration
@@ -707,7 +707,7 @@ return formatReviewResults(consolidated);
 
 **Step 1: Add marketplace globally (one-time):**
 ```bash
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 **Step 2: Enable plugins in project settings:**
@@ -716,8 +716,8 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true
   }
 }
 ```
@@ -737,21 +737,21 @@ When you install a plugin that depends on orchestration (like frontend), orchest
 **Option 2: Standalone**
 Install orchestration plugin independently:
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Option 3: Global**
 Install globally (available to all projects):
 ```bash
-/plugin install orchestration@mag-claude-plugins --global
+/plugin install orchestration@tianzecn-plugins --global
 ```
 
 ### Alternative: Global Plugin Installation
 
 Install plugin globally (not recommended for teams):
 ```bash
-/plugin marketplace add MadAppGang/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Local Development
@@ -759,7 +759,7 @@ Install plugin globally (not recommended for teams):
 Test local changes:
 ```bash
 /plugin marketplace add /path/to/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Advanced: Project-Specific Marketplace
@@ -768,12 +768,12 @@ Include marketplace in project settings (requires folder trust):
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
-      "source": {"source": "github", "repo": "MadAppGang/claude-code"}
+    "tianzecn-plugins": {
+      "source": {"source": "github", "repo": "tianzecn/myclaudecode"}
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -852,7 +852,7 @@ Include marketplace in project settings (requires folder trust):
 - Code Analysis Plugin: **v2.5.0** (2025-12-14)
 - Bun Backend Plugin: **v1.5.2** (2025-11-26)
 - Agent Development Plugin: **v1.1.0** (2025-12-09)
-- Claudish CLI: See https://github.com/MadAppGang/claudish (separate repository)
+- Claudish CLI: See https://github.com/tianzecn/claudish (separate repository)
 
 **Latest Changes (Code Analysis v2.5.0 - Claudemem v0.3.0 AST Structural Analysis):**
 - ✅ **Claudemem v0.3.0 Integration**: Full AST structural analysis with PageRank ranking
@@ -977,7 +977,7 @@ Missing any of these will cause claudeup to not see the update!
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Last Updated:** December 14, 2025
 **Version:** 5 plugins (Orchestration v0.5.0, Frontend v3.13.0, Code Analysis v2.5.0, Bun Backend v1.5.2, Agent Development v1.1.0)
 - do not use hardcoded path in code, docs, comments or any other files

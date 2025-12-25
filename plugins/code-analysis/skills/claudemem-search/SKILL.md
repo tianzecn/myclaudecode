@@ -1142,7 +1142,7 @@ claudemem --version
 npm install -g claude-codemem
 
 # Homebrew (macOS)
-brew tap MadAppGang/claude-mem && brew install --cask claudemem
+brew tap tianzecn/claude-mem && brew install --cask claudemem
 ```
 
 ### Index Codebase
@@ -1188,6 +1188,6 @@ Before completing a claudemem workflow, ensure:
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Plugin:** code-analysis v2.6.0
 **Last Updated:** December 2025 (v0.4.0 features)

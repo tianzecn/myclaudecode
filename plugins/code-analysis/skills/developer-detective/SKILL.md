@@ -290,6 +290,6 @@ claudemem --nologo callers targetModule --raw
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.6.0
 **Last Updated:** December 2025 (v0.4.0 impact analysis support)

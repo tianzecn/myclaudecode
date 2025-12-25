@@ -70,7 +70,7 @@ After analyzing all existing documentation (15+ files, ~6,000 lines), I've ident
 
 **While you're fighting with AI prompts, elite teams are shipping 3x faster.**
 
-At MadAppGang and 10xLabs, we don't do "good enough." We're the teams that Fortune 500 companies hire when their own developers can't deliver...
+At tianzecn and 10xLabs, we don't do "good enough." We're the teams that Fortune 500 companies hire when their own developers can't deliver...
 ```
 
 **What users need:** Clear value proposition + immediate "try this" command
@@ -472,7 +472,7 @@ claude-code/
 
 > Professional Claude Code plugins battle-tested in production
 
-[Badges: License | Version | Maintained by MadAppGang]
+[Badges: License | Version | Maintained by tianzecn]
 
 ## What is this?
 
@@ -485,12 +485,12 @@ claude-code/
 
 ```bash
 # 1. Add marketplace
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # 2. Enable in .claude/settings.json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 
@@ -549,8 +549,8 @@ claude-code/
 ## Support
 
 - **[Troubleshooting Guide](docs/troubleshooting/)** - Common issues
-- **[GitHub Issues](https://github.com/MadAppGang/claude-code/issues)** - Bug reports
-- **[Discussions](https://github.com/MadAppGang/claude-code/discussions)** - Questions
+- **[GitHub Issues](https://github.com/tianzecn/myclaudecode/issues)** - Bug reports
+- **[Discussions](https://github.com/tianzecn/myclaudecode/discussions)** - Questions
 - **Email:** i@madappgang.com
 
 ## Contributing
@@ -563,7 +563,7 @@ MIT - See [LICENSE](LICENSE)
 
 ---
 
-**Maintained by Jack Rudenko @ MadAppGang**
+**Maintained by tianzecn @ tianzecn**
 ```
 
 **Key Changes:**
@@ -596,7 +596,7 @@ You need:
 
 ```bash
 # In Claude Code, run:
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 You should see: ✅ "Marketplace added successfully"
@@ -608,7 +608,7 @@ Create `.claude/settings.json` in your project:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -624,7 +624,7 @@ Save the file. Claude Code will automatically install the plugin.
 
 You should see:
 ```
-✅ frontend@mag-claude-plugins
+✅ frontend@tianzecn-plugins
    Version: 2.9.0
    Status: Loaded
 ```
@@ -691,7 +691,7 @@ Basic features work without configuration. For advanced features:
 /plugin marketplace list
 
 # 2. If not listed, add again
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # 3. Reload settings
 # Restart Claude Code
@@ -705,13 +705,13 @@ Check settings format (must be object, not array):
 // ✅ CORRECT
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 
 // ❌ WRONG
 {
-  "enabledPlugins": ["frontend@mag-claude-plugins"]
+  "enabledPlugins": ["frontend@tianzecn-plugins"]
 }
 ```
 
@@ -719,7 +719,7 @@ Check settings format (must be object, not array):
 
 - **[Troubleshooting Guide](docs/troubleshooting/)** - Common issues
 - **[FAQ](docs/faq.md)** - Frequently asked questions
-- **[GitHub Issues](https://github.com/MadAppGang/claude-code/issues)** - Get help
+- **[GitHub Issues](https://github.com/tianzecn/myclaudecode/issues)** - Get help
 
 ---
 
@@ -863,14 +863,14 @@ Working examples you can copy:
 
 - **[Troubleshooting Guide](troubleshooting/)** - Common issues
 - **[FAQ](faq.md)** - Frequently asked questions
-- **[GitHub Issues](https://github.com/MadAppGang/claude-code/issues)** - Report bugs
-- **[GitHub Discussions](https://github.com/MadAppGang/claude-code/discussions)** - Ask questions
+- **[GitHub Issues](https://github.com/tianzecn/myclaudecode/issues)** - Report bugs
+- **[GitHub Discussions](https://github.com/tianzecn/myclaudecode/discussions)** - Ask questions
 - **Email:** i@madappgang.com
 
 ---
 
 **Last Updated:** 2025-11-11
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 ```
 
 ---
@@ -906,12 +906,12 @@ Working examples you can copy:
 **Quick Method (Recommended):**
 ```bash
 # 1. Add marketplace globally
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # 2. Enable in .claude/settings.json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -1026,7 +1026,7 @@ Working examples you can copy:
 ```json
 {
   "enabledPlugins": {
-    "code-analysis@mag-claude-plugins": true
+    "code-analysis@tianzecn-plugins": true
   }
 }
 ```
@@ -1052,9 +1052,9 @@ Working examples you can copy:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true,
-    "bun@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true,
+    "bun@tianzecn-plugins": true
   }
 }
 ```
@@ -1078,26 +1078,26 @@ Working examples you can copy:
    ```bash
    /plugin marketplace list
    ```
-   If not listed: `/plugin marketplace add MadAppGang/claude-code`
+   If not listed: `/plugin marketplace add tianzecn/myclaudecode`
 
 2. **Check settings format (must be object, not array):**
    ```json
    // ✅ CORRECT
    {
      "enabledPlugins": {
-       "frontend@mag-claude-plugins": true
+       "frontend@tianzecn-plugins": true
      }
    }
 
    // ❌ WRONG
    {
-     "enabledPlugins": ["frontend@mag-claude-plugins"]
+     "enabledPlugins": ["frontend@tianzecn-plugins"]
    }
    ```
 
 3. **Reload plugin:**
    ```bash
-   /plugin reload frontend@mag-claude-plugins
+   /plugin reload frontend@tianzecn-plugins
    ```
 
 4. **Restart Claude Code**
@@ -1142,13 +1142,13 @@ Working examples you can copy:
 
 **Simple update (updates all):**
 ```bash
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 ```
 
 **Manual update (specific plugin):**
 ```bash
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 **Check current version:**
@@ -1191,7 +1191,7 @@ Working examples you can copy:
    // .claude/settings.json (commit to git)
    {
      "enabledPlugins": {
-       "frontend@mag-claude-plugins": true
+       "frontend@tianzecn-plugins": true
      },
      "env": {
        "APIDOG_PROJECT_ID": "your-project-id"  // Shareable
@@ -1346,7 +1346,7 @@ claudish --model minimax/minimax-m2 "your task"
 
 **Quick contribution guide:**
 
-1. **Fork repository:** https://github.com/MadAppGang/claude-code
+1. **Fork repository:** https://github.com/tianzecn/myclaudecode
 2. **Clone fork:** `git clone <your-fork>`
 3. **Create branch:** `git checkout -b feature/my-feature`
 4. **Make changes:** Edit files
@@ -1401,8 +1401,8 @@ claudish --model minimax/minimax-m2 "your task"
 ### Get Help:
 
 - **[Troubleshooting Guide](troubleshooting/)** - Common issues and solutions
-- **[GitHub Discussions](https://github.com/MadAppGang/claude-code/discussions)** - Ask the community
-- **[GitHub Issues](https://github.com/MadAppGang/claude-code/issues)** - Report bugs
+- **[GitHub Discussions](https://github.com/tianzecn/myclaudecode/discussions)** - Ask the community
+- **[GitHub Issues](https://github.com/tianzecn/myclaudecode/issues)** - Report bugs
 - **Email:** i@madappgang.com
 
 ### Documentation:
@@ -1414,7 +1414,7 @@ claudish --model minimax/minimax-m2 "your task"
 ---
 
 **Last Updated:** 2025-11-11
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 ```
 
 ---
@@ -1586,7 +1586,7 @@ Now that you've completed [this topic], you can:
 
 ---
 
-**Questions?** [Ask in Discussions](https://github.com/MadAppGang/claude-code/discussions)
+**Questions?** [Ask in Discussions](https://github.com/tianzecn/myclaudecode/discussions)
 ```
 
 ---
@@ -1609,14 +1609,14 @@ Now that you've completed [this topic], you can:
 ```markdown
 **While you're fighting with AI prompts, elite teams are shipping 3x faster.**
 
-At MadAppGang, we don't do "good enough." We're the teams Fortune 500 companies hire when their own developers can't deliver.
+At tianzecn, we don't do "good enough." We're the teams Fortune 500 companies hire when their own developers can't deliver.
 ```
 
 **After:**
 ```markdown
 **Professional Claude Code plugins that help teams ship faster.**
 
-Developed by MadAppGang, these plugins are battle-tested in production environments handling millions of users.
+Developed by tianzecn, these plugins are battle-tested in production environments handling millions of users.
 ```
 
 **Why:** Focus on helping users succeed, not making them feel bad about current approach.
@@ -1640,7 +1640,7 @@ Create `.claude/settings.json` in your project root:
 {
   // Enable the frontend plugin
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -1654,7 +1654,7 @@ Save the file. Claude Code will automatically install the plugin.
 
 **Expected output:**
 ```
-✅ frontend@mag-claude-plugins
+✅ frontend@tianzecn-plugins
    Version: 2.9.0
    Status: Loaded
 ```

@@ -524,11 +524,11 @@ if (estimatedTokens < 200000) {
 - Ensure cheapest tier is selected (not first tier!)
 
 **For technical issues:**
-- Contact: Jack Rudenko (i@madappgang.com)
-- Repository: https://github.com/MadAppGang/claude-code
+- Contact: tianzecn (i@madappgang.com)
+- Repository: https://github.com/tianzecn/myclaudecode
 
 ---
 
-**Maintained By:** MadAppGang Claude Code Team
-**Repository:** https://github.com/MadAppGang/claude-code
+**Maintained By:** tianzecn Claude Code Team
+**Repository:** https://github.com/tianzecn/myclaudecode
 **License:** MIT

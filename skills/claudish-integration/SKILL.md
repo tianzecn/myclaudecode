@@ -724,6 +724,6 @@ async function getModelsForReview() {
 - Text output: All versions
 
 **External Resources:**
-- Claudish GitHub: https://github.com/MadAppGang/claudish
+- Claudish GitHub: https://github.com/tianzecn/claudish
 - Install: `npm install -g claudish`
 - OpenRouter: https://openrouter.ai

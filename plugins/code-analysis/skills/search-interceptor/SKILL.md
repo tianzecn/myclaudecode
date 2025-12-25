@@ -238,6 +238,6 @@ This skill works with:
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.2.0
 **Purpose:** Intercept and redirect bulk file operations to semantic search

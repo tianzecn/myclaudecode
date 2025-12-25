@@ -79,7 +79,7 @@ git push origin plugins/{plugin}/v{X.Y.Z}
 ### Step 5: Verify
 
 ```bash
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 # Should show new version ✅
 ```
 
@@ -157,7 +157,7 @@ git push origin main
 git push origin plugins/frontend/v3.3.0
 
 # 5. Verify
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 # Output: frontend v3.3.0 ✅
 ```
 

@@ -9,7 +9,7 @@
 
 Our plugins are already available via our own marketplace:
 ```bash
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 ## Goal
@@ -29,9 +29,9 @@ Open an issue on https://github.com/anthropics/claude-plugins-official/issues
 # Plugin Submission Request: MAG Claude Plugins
 
 ## About Us
-**Organization:** MadAppGang
-**Maintainer:** Jack Rudenko (i@madappgang.com)
-**Repository:** https://github.com/MadAppGang/claude-code
+**Organization:** tianzecn
+**Maintainer:** tianzecn (i@madappgang.com)
+**Repository:** https://github.com/tianzecn/myclaudecode
 
 ## Plugins for Consideration
 
@@ -126,11 +126,11 @@ external_plugins/
 ### Email Template
 
 ```
-Subject: Claude Code Plugin Partnership - MadAppGang
+Subject: Claude Code Plugin Partnership - tianzecn
 
 Hi Anthropic Team,
 
-I'm Jack Rudenko from MadAppGang. We've developed a suite of Claude Code
+I'm tianzecn from tianzecn. We've developed a suite of Claude Code
 plugins focused on code analysis and multi-agent orchestration.
 
 Our flagship plugin (code-analysis v2.6.0) integrates claudemem for AST-based
@@ -143,13 +143,13 @@ repository. Our plugins are:
 - MIT licensed
 - Fully documented (6,000+ lines)
 
-Repository: https://github.com/MadAppGang/claude-code
+Repository: https://github.com/tianzecn/myclaudecode
 
 Would there be an appropriate channel to discuss this?
 
 Best,
-Jack Rudenko
-MadAppGang
+tianzecn
+tianzecn
 i@madappgang.com
 ```
 

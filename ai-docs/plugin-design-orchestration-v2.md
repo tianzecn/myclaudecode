@@ -34,9 +34,9 @@ The **orchestration plugin** extracts and centralizes sophisticated multi-agent 
   "name": "orchestration",
   "version": "0.1.0",
   "description": "Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Provides proven patterns for parallel execution, multi-model validation, quality gates, and phase-based orchestration.",
-  "author": "MadAppGang",
+  "author": "tianzecn",
   "license": "MIT",
-  "homepage": "https://github.com/MadAppGang/claude-code",
+  "homepage": "https://github.com/tianzecn/myclaudecode",
 
   "tags": [
     "orchestration",
@@ -726,7 +726,7 @@ Plugins declare orchestration as a dependency:
   "name": "frontend",
   "version": "3.7.0",
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -742,7 +742,7 @@ Plugins declare orchestration as a dependency:
 Users install orchestration plugin directly:
 
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Use Case:** Users want orchestration patterns for custom agents/workflows
@@ -753,10 +753,10 @@ Install orchestration globally (available to all projects):
 
 ```bash
 # Add marketplace (if not already added)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin globally
-/plugin install orchestration@mag-claude-plugins --global
+/plugin install orchestration@tianzecn-plugins --global
 ```
 
 ---
@@ -837,7 +837,7 @@ skills_optional: orchestration:quality-gates>=1.0.0
 
 ```
 ❌ ERROR: Required skill orchestration:multi-model-validation>=1.0.0 not found
-   Install orchestration plugin: /plugin install orchestration@mag-claude-plugins
+   Install orchestration plugin: /plugin install orchestration@tianzecn-plugins
 
 ⚠️ WARNING: Optional skill orchestration:quality-gates>=1.0.0 not found
    Some features may be unavailable
@@ -1093,7 +1093,7 @@ skills: orchestration:core
 // plugins/frontend/plugin.json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -1201,7 +1201,7 @@ v2.0.0: Remove multi-model-validation, only multi-model-consensus remains
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -1834,7 +1834,7 @@ User Project
 - [ ] Add orchestration to `plugin.json` dependencies:
   ```json
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
   ```
 
@@ -1902,7 +1902,7 @@ User Project
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Design Date:** November 22, 2025
 **Design Version:** 2.0 (Revised)
 **Status:** Ready for Implementation

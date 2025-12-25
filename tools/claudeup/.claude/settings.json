@@ -1,9 +1,9 @@
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     },
     "claude-code-plugins": {

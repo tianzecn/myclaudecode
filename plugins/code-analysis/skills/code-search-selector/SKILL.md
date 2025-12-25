@@ -321,6 +321,6 @@ Don't duplicate work with inferior Read/Glob.
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.2.0
 **Purpose:** Prevent tool familiarity bias, intercept multi-file reads, enforce semantic search

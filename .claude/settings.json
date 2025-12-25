@@ -1,8 +1,8 @@
 {
   "enabledPlugins": {
-    "agentdev@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true,
-    "orchestration@mag-claude-plugins": true,
+    "agentdev@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true,
+    "orchestration@tianzecn-plugins": true,
     "agent-sdk-dev@claude-code-plugins": true,
     "commit-commands@claude-code-plugins": true,
     "explanatory-output-style@claude-code-plugins": true,
@@ -19,10 +19,10 @@
         "repo": "anthropics/claude-code"
       }
     },
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     }
   },

@@ -30,9 +30,9 @@ The **orchestration plugin** extracts and centralizes sophisticated multi-agent 
   "name": "orchestration",
   "version": "1.0.0",
   "description": "Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Provides proven patterns for parallel execution, multi-model validation, quality gates, and phase-based orchestration.",
-  "author": "MadAppGang",
+  "author": "tianzecn",
   "license": "MIT",
-  "homepage": "https://github.com/MadAppGang/claude-code",
+  "homepage": "https://github.com/tianzecn/myclaudecode",
 
   "tags": [
     "orchestration",
@@ -474,7 +474,7 @@ Plugins declare orchestration as a dependency:
   "name": "frontend",
   "version": "3.7.0",
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^1.0.0"
+    "orchestration@tianzecn-plugins": "^1.0.0"
   }
 }
 ```
@@ -490,7 +490,7 @@ Plugins declare orchestration as a dependency:
 Users install orchestration plugin directly:
 
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Use Case:** Users want orchestration patterns for custom agents/workflows
@@ -501,10 +501,10 @@ Install orchestration globally (available to all projects):
 
 ```bash
 # Add marketplace (if not already added)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin globally
-/plugin install orchestration@mag-claude-plugins --global
+/plugin install orchestration@tianzecn-plugins --global
 ```
 
 ### Using Skills in Agents/Commands
@@ -638,7 +638,7 @@ For each agent delegation, follow multi-agent-coordination patterns:
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^1.0.0"
+    "orchestration@tianzecn-plugins": "^1.0.0"
   }
 }
 ```
@@ -1181,7 +1181,7 @@ User Project
 - [ ] Add orchestration to `plugin.json` dependencies:
   ```json
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^1.0.0"
+    "orchestration@tianzecn-plugins": "^1.0.0"
   }
   ```
 
@@ -1243,7 +1243,7 @@ User Project
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Design Date:** November 22, 2025
 **Design Version:** 1.0
 **Status:** Ready for Implementation

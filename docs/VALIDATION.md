@@ -49,7 +49,7 @@ The validation script checks:
 🔍 Validating plugin versions...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📦 Marketplace: mag-claude-plugins v2.9.0
+📦 Marketplace: tianzecn-plugins v2.9.0
    Plugin root: ./plugins
 
 🔧 Checking plugin: frontend
@@ -294,5 +294,5 @@ git push origin main --tags
 
 ---
 
-**Maintained by**: Jack Rudenko @ MadAppGang
+**Maintained by**: tianzecn @ tianzecn
 **Last Updated**: November 12, 2025

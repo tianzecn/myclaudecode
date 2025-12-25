@@ -30,16 +30,16 @@
     "tui",
     "cli"
   ],
-  "author": "Jack Rudenko <i@madappgang.com>",
+  "author": "tianzecn <i@madappgang.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MadAppGang/claude-code"
+    "url": "https://github.com/tianzecn/myclaudecode"
   },
   "bugs": {
-    "url": "https://github.com/MadAppGang/claude-code/issues"
+    "url": "https://github.com/tianzecn/myclaudecode/issues"
   },
-  "homepage": "https://github.com/MadAppGang/claude-code/tree/main/tools/claudeup#readme",
+  "homepage": "https://github.com/tianzecn/myclaudecode/tree/main/tools/claudeup#readme",
   "engines": {
     "node": ">=18.0.0"
   },

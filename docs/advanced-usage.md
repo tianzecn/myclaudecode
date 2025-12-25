@@ -38,10 +38,10 @@ Global installation makes plugins available in **all projects** without per-proj
 
 ```bash
 # Step 1: Add marketplace globally (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Step 2: Install plugin globally
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Step 3: Verify installation
 /plugin list
@@ -65,7 +65,7 @@ Global installation makes plugins available in **all projects** without per-proj
 
 ```bash
 # Uninstall a plugin
-/plugin uninstall frontend@mag-claude-plugins
+/plugin uninstall frontend@tianzecn-plugins
 
 # Verify removal
 /plugin list
@@ -99,7 +99,7 @@ Point to your local clone of the repository:
 #### 2. Install Plugin from Local Source
 
 ```bash
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 #### 3. Make Changes to Plugin Files
@@ -109,7 +109,7 @@ Edit agents, commands, skills, or configurations in your local directory.
 #### 4. Reload Plugin
 
 ```bash
-/plugin reload frontend@mag-claude-plugins
+/plugin reload frontend@tianzecn-plugins
 ```
 
 **Note:** Some changes may require a full Claude Code restart.
@@ -118,7 +118,7 @@ Edit agents, commands, skills, or configurations in your local directory.
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/MadAppGang/claude-code.git
+git clone https://github.com/tianzecn/myclaudecode.git
 cd claude-code
 
 # 2. Create feature branch
@@ -132,13 +132,13 @@ git checkout -b feature/my-new-agent
 
 # 5. Test locally
 /plugin marketplace add /path/to/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 
 # 6. Verify changes work
 # Test your new agent
 
 # 7. Reload after changes
-/plugin reload frontend@mag-claude-plugins
+/plugin reload frontend@tianzecn-plugins
 
 # 8. Commit and push
 git add .
@@ -154,8 +154,8 @@ git push origin feature/my-new-agent
 /plugin marketplace list
 
 # Reinstall plugin
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Verify plugin files exist
 ls -la /path/to/claude-code/plugins/frontend
@@ -164,7 +164,7 @@ ls -la /path/to/claude-code/plugins/frontend
 **Changes not appearing:**
 ```bash
 # Reload plugin
-/plugin reload frontend@mag-claude-plugins
+/plugin reload frontend@tianzecn-plugins
 
 # Or restart Claude Code completely
 ```
@@ -199,16 +199,16 @@ Add marketplace to `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true,
-    "code-analysis@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true,
+    "code-analysis@tianzecn-plugins": true
   }
 }
 ```
@@ -252,10 +252,10 @@ Control plugin versions in `marketplace.json`:
 
 ```bash
 # Install latest version
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 
 # Install specific version
-/plugin install frontend@mag-claude-plugins@2.2.0
+/plugin install frontend@tianzecn-plugins@2.2.0
 
 # Verify installed version
 /plugin list
@@ -285,11 +285,11 @@ cat .claude-plugin/marketplace.json | grep version
 
 ```bash
 # Update marketplace metadata
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 
 # Reinstall plugin to get latest version
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ---
@@ -301,7 +301,7 @@ cat .claude-plugin/marketplace.json | grep version
 Get the latest marketplace metadata:
 
 ```bash
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 ```
 
 This updates:
@@ -319,7 +319,7 @@ This updates:
 
 ```bash
 # Update marketplace
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 
 # Plugins will update automatically on next use
 ```
@@ -328,8 +328,8 @@ This updates:
 
 ```bash
 # Remove and reinstall
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 **Method 3: Reload Plugin**
@@ -337,7 +337,7 @@ This updates:
 For local development changes:
 
 ```bash
-/plugin reload frontend@mag-claude-plugins
+/plugin reload frontend@tianzecn-plugins
 ```
 
 ### Update Workflow for Teams
@@ -346,7 +346,7 @@ For local development changes:
 
 ```bash
 # 1. One team member updates marketplace
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 
 # 2. Check what changed
 /plugin list
@@ -354,7 +354,7 @@ For local development changes:
 # 3. Test updated plugins
 
 # 4. If all good, other team members run:
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 ```
 
 **No action needed by team members if:**
@@ -435,7 +435,7 @@ Some plugins support additional configuration in `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   },
   "pluginConfig": {
     "frontend": {
@@ -486,10 +486,10 @@ Some plugins support additional configuration in `.claude/settings.json`:
 /plugin marketplace list
 
 # Add marketplace
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Update marketplace
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 ```
 
 **Cannot access marketplace:**
@@ -501,8 +501,8 @@ ping github.com
 /plugin marketplace list
 
 # Try re-adding
-/plugin marketplace remove mag-claude-plugins
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace remove tianzecn-plugins
+/plugin marketplace add tianzecn/myclaudecode
 ```
 
 ### Plugin Issues
@@ -531,8 +531,8 @@ echo $FIGMA_ACCESS_TOKEN
 # (if available in plugin documentation)
 
 # Reinstall plugin
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Version Issues
@@ -543,11 +543,11 @@ echo $FIGMA_ACCESS_TOKEN
 /plugin list
 
 # Update marketplace
-/plugin marketplace update mag-claude-plugins
+/plugin marketplace update tianzecn-plugins
 
 # Reinstall specific version
-/plugin remove frontend@mag-claude-plugins
-/plugin install frontend@mag-claude-plugins@2.3.0
+/plugin remove frontend@tianzecn-plugins
+/plugin install frontend@tianzecn-plugins@2.3.0
 ```
 
 ---
@@ -563,6 +563,6 @@ echo $FIGMA_ACCESS_TOKEN
 
 ## 📞 Need Help?
 
-- **GitHub Issues**: [Report a problem](https://github.com/MadAppGang/claude-code/issues)
+- **GitHub Issues**: [Report a problem](https://github.com/tianzecn/myclaudecode/issues)
 - **Email**: [i@madappgang.com](mailto:i@madappgang.com)
 - **Documentation**: Check plugin-specific README files

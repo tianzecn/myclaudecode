@@ -523,4 +523,4 @@ These files link to atomic references with role-specific context.
 
 **Version**: 1.0.0
 **Last Updated**: 2025-11-14
-**Maintained by**: MadAppGang Go Plugin Team
+**Maintained by**: tianzecn Go Plugin Team

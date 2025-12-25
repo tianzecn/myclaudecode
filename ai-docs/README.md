@@ -196,5 +196,5 @@ Read these:
 
 ---
 
-**Maintained by:** Jack Rudenko (i@madappgang.com) @ MadAppGang
+**Maintained by:** tianzecn (i@madappgang.com) @ tianzecn
 **Last Updated:** November 4, 2024

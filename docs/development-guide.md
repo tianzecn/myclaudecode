@@ -82,7 +82,7 @@ your-plugin-name/
 /plugin marketplace add /path/to/claude-code
 
 # Install your plugin
-/plugin install your-plugin-name@mag-claude-plugins
+/plugin install your-plugin-name@tianzecn-plugins
 
 # Verify it works
 /plugin list

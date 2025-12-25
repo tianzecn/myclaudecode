@@ -117,10 +117,10 @@ src/
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin
-/plugin install bun@mag-claude-plugins
+/plugin install bun@tianzecn-plugins
 ```
 
 **Optional**: Configure Apidog integration for API documentation sync.
@@ -129,5 +129,5 @@ src/
 
 ## More Info
 
-- **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: Jack Rudenko @ MadAppGang
+- **Repo**: https://github.com/tianzecn/myclaudecode
+- **Author**: tianzecn @ tianzecn

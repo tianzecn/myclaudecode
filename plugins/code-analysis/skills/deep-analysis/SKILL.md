@@ -363,6 +363,6 @@ This Skill works well with:
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.2.0
 **Last Updated:** December 2025

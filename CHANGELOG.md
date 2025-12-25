@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Marketplace 4.3.0] - 2025-11-28
 
 ### Changed
-- **Claudish moved to separate repository** - Claudish CLI is now maintained at https://github.com/MadAppGang/claudish
+- **Claudish moved to separate repository** - Claudish CLI is now maintained at https://github.com/tianzecn/claudish
   - Install: `npm install -g claudish`
   - Removed `mcp/claudish` directory from this repository
   - Updated all documentation and skills to reference new location
@@ -207,7 +207,7 @@ skills: orchestration:complete  # All 5 skills
 - `plugins/orchestration/v0.1.0`
 
 **Marketplace Version:**
-- Updated to `mag-claude-plugins@4.0.0`
+- Updated to `tianzecn-plugins@4.0.0`
 
 **Roadmap to v1.0.0:**
 - Conservative v0.1.0 release for validation period (Q1 2026)
@@ -631,9 +631,9 @@ printf '%s' "$AGENT_PROMPT" | npx claudish --stdin --model x-ai/grok-code-fast-1
 
 4. **Update plugin:**
    ```bash
-   /plugin marketplace update mag-claude-plugins
-   /plugin uninstall frontend@mag-claude-plugins
-   /plugin install frontend@mag-claude-plugins
+   /plugin marketplace update tianzecn-plugins
+   /plugin uninstall frontend@tianzecn-plugins
+   /plugin install frontend@tianzecn-plugins
    ```
 
 **No changes needed for:**
@@ -1498,5 +1498,5 @@ All features tested and production-ready:
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **License:** MIT

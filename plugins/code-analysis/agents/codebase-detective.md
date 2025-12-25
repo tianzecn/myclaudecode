@@ -83,7 +83,7 @@ AskUserQuestion({
     multiSelect: false,
     options: [
       { label: "Install via npm (Recommended)", description: "npm install -g claude-codemem" },
-      { label: "Install via Homebrew", description: "brew tap MadAppGang/claude-mem && brew install --cask claudemem" },
+      { label: "Install via Homebrew", description: "brew tap tianzecn/claude-mem && brew install --cask claudemem" },
       { label: "Cancel", description: "I'll install manually" }
     ]
   }]

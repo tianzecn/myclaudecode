@@ -29,7 +29,7 @@ The **Quick Reference** section provides a concise, scannable list of recommende
 **Last Updated:** 2025-11-14
 **Pricing Last Verified:** 2025-11-14
 **Purpose:** Curated OpenRouter model recommendations for code development tasks
-**Maintained By:** MadAppGang Claude Code Team
+**Maintained By:** tianzecn Claude Code Team
 
 ---
 
@@ -399,6 +399,6 @@ x-ai/grok-code-fast-1 - Ultra-fast coding, $0.85/1M, 256K ⭐  # Missing backtic
 
 ---
 
-**Maintained By:** MadAppGang Claude Code Team
-**Repository:** https://github.com/MadAppGang/claude-code
+**Maintained By:** tianzecn Claude Code Team
+**Repository:** https://github.com/tianzecn/myclaudecode
 **License:** MIT

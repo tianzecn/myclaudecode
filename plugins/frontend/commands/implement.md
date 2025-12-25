@@ -116,10 +116,10 @@ Benefits:
 - 🎯 Better understanding of where to integrate new features
 
 Installation (2 commands):
-/plugin marketplace add MadAppGang/claude-code
-/plugin install code-analysis@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install code-analysis@tianzecn-plugins
 
-Repository: https://github.com/MadAppGang/claude-code
+Repository: https://github.com/tianzecn/myclaudecode
 
 You can continue without it, but investigation of existing code will be less efficient.
 ```

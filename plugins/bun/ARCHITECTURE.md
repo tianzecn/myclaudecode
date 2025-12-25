@@ -1343,8 +1343,8 @@ Routes → Controllers → Services → Repositories
 
 ```bash
 # 1. Install the plugin
-/plugin marketplace add MadAppGang/claude-code
-/plugin install bun@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install bun@tianzecn-plugins
 
 # 2. Set up environment (if using Apidog)
 echo "APIDOG_PROJECT_ID=your-id" >> .env
@@ -1373,4 +1373,4 @@ git commit -m "feat: implement [feature]"
 
 ---
 
-*For issues or feedback, visit: https://github.com/MadAppGang/claude-code/issues*
+*For issues or feedback, visit: https://github.com/tianzecn/myclaudecode/issues*

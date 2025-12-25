@@ -1408,5 +1408,5 @@ if (!models || models.length < 7) {
 
 **Design Version:** 1.0.0
 **Created:** 2025-11-14
-**Author:** Jack Rudenko @ MadAppGang
+**Author:** tianzecn @ tianzecn
 **Status:** Ready for Implementation

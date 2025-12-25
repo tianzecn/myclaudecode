@@ -32,7 +32,7 @@ Configure Model Context Protocol servers with a curated list:
 ### 2. Plugin Marketplaces
 Add official and community plugin marketplaces:
 - **Anthropic Official** - Official Claude Code plugins
-- **MadAppGang** - Frontend, Backend, Code Analysis plugins
+- **tianzecn** - Frontend, Backend, Code Analysis plugins
 
 ### 3. Manage Plugins
 Install and configure plugins from added marketplaces:

@@ -121,7 +121,7 @@ Requires orchestration plugin:
 ```json
 {
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.2.0"
+    "orchestration@tianzecn-plugins": "^0.2.0"
   }
 }
 ```
@@ -132,10 +132,10 @@ Requires orchestration plugin:
 
 ```bash
 # Add marketplace (one-time)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin
-/plugin install agentdev@mag-claude-plugins
+/plugin install agentdev@tianzecn-plugins
 ```
 
 **Note**: Automatically installs orchestration plugin as dependency.
@@ -144,5 +144,5 @@ Requires orchestration plugin:
 
 ## More Info
 
-- **Repo**: https://github.com/MadAppGang/claude-code
-- **Author**: Jack Rudenko @ MadAppGang
+- **Repo**: https://github.com/tianzecn/myclaudecode
+- **Author**: tianzecn @ tianzecn

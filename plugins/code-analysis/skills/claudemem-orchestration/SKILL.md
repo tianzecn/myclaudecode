@@ -213,6 +213,6 @@ fi
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Plugin:** code-analysis v2.6.0
 **Last Updated:** December 2025

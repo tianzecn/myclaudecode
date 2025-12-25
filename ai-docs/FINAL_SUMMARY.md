@@ -2,9 +2,9 @@
 
 ## 🎉 Repository Complete and Production-Ready!
 
-**Repository:** `mag-claude-plugins` (local development path: project root)
-**Marketplace:** mag-claude-plugins
-**Owner:** Jack Rudenko (i@madappgang.com) @ MadAppGang
+**Repository:** `tianzecn-plugins` (local development path: project root)
+**Marketplace:** tianzecn-plugins
+**Owner:** tianzecn (i@madappgang.com) @ tianzecn
 **License:** MIT
 **Status:** ✅ Production Ready
 
@@ -203,14 +203,14 @@ claude-code/ (27 files)
 
 ```bash
 # Push to GitHub (from repo root)
-git remote add origin https://github.com/MadAppGang/claude-code.git
+git remote add origin https://github.com/tianzecn/myclaudecode.git
 git add .
 git commit -m "Complete plugin marketplace with team architecture"
 git push -u origin main
 
 # Team members install
-/plugin marketplace add MadAppGang/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Option 2: Local Testing
@@ -218,7 +218,7 @@ git push -u origin main
 ```bash
 # Add locally for testing (from repo root)
 /plugin marketplace add /path/to/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Option 3: Auto-Install in Projects
@@ -228,15 +228,15 @@ Add to project's `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -251,8 +251,8 @@ Add to project's `.claude/settings.json`:
 ```bash
 git clone project-repo
 cd project-repo
-/plugin marketplace add MadAppGang/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install frontend@tianzecn-plugins
 ```
 
 **Step 2: Set Up Environment**
@@ -415,9 +415,9 @@ Extracted from real project (caremaster-tenant-frontend) with proven workflows.
 
 ## 📞 Support & Maintenance
 
-**Maintainer:** Jack Rudenko
+**Maintainer:** tianzecn
 **Email:** i@madappgang.com
-**Company:** MadAppGang
+**Company:** tianzecn
 **Website:** https://madappgang.com
 
 **Repository:** https://github.com/madappgang/claude-plugins
@@ -431,7 +431,7 @@ Extracted from real project (caremaster-tenant-frontend) with proven workflows.
 - Built for **Claude Code** by Anthropic
 - Inspired by the **Claude Code community**
 - Battle-tested on **caremaster-tenant-frontend**
-- Created with ❤️ by **MadAppGang**
+- Created with ❤️ by **tianzecn**
 
 ---
 
@@ -463,4 +463,4 @@ Extracted from real project (caremaster-tenant-frontend) with proven workflows.
 **Last Updated:** November 4, 2024
 **Version:** 1.0.0
 **License:** MIT
-**Author:** Jack Rudenko @ MadAppGang
+**Author:** tianzecn @ tianzecn

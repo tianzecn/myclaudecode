@@ -2,7 +2,7 @@
 
 **Created:** November 5, 2024
 **Plugin:** code-analysis v1.0.0
-**Author:** Jack Rudenko @ MadAppGang
+**Author:** tianzecn @ tianzecn
 **Purpose:** Expert guidance for optimal claude-context MCP usage
 
 ---
@@ -918,6 +918,6 @@ The semantic-code-search skill represents a comprehensive approach to teaching o
 
 ---
 
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn
 **Last Updated:** November 5, 2024
 **Status:** Production Ready ✅

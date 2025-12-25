@@ -27,7 +27,7 @@ Get started with orchestration patterns in 5 minutes:
 
 ### 1. Install
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 ### 2. Choose Your Use Case
@@ -187,7 +187,7 @@ Plugins declare orchestration as a dependency:
   "name": "your-plugin",
   "version": "1.0.0",
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -203,7 +203,7 @@ Plugins declare orchestration as a dependency:
 Users install orchestration plugin directly:
 
 ```bash
-/plugin install orchestration@mag-claude-plugins
+/plugin install orchestration@tianzecn-plugins
 ```
 
 **Use Case:** Users want orchestration patterns for custom agents/workflows
@@ -214,10 +214,10 @@ Install orchestration globally (available to all projects):
 
 ```bash
 # Add marketplace (if not already added)
-/plugin marketplace add MadAppGang/claude-code
+/plugin marketplace add tianzecn/myclaudecode
 
 # Install plugin globally
-/plugin install orchestration@mag-claude-plugins --global
+/plugin install orchestration@tianzecn-plugins --global
 ```
 
 ### Verify Installation
@@ -228,7 +228,7 @@ After installing, verify the orchestration plugin is available:
 ```bash
 /plugin list
 ```
-Look for: `orchestration@mag-claude-plugins (v0.1.0)`
+Look for: `orchestration@tianzecn-plugins (v0.1.0)`
 
 **Method 2: Test Skill Reference**
 Create a test agent with:
@@ -334,7 +334,7 @@ See detailed workflow examples in:
   "name": "my-review-plugin",
   "version": "1.0.0",
   "dependencies": {
-    "orchestration@mag-claude-plugins": "^0.1.0"
+    "orchestration@tianzecn-plugins": "^0.1.0"
   }
 }
 ```
@@ -417,7 +417,7 @@ Plugin version matches highest skill version. All skills stay synchronized durin
 
 ## Contributing
 
-This plugin is maintained by MadAppGang as part of the MAG Claude Plugins marketplace. Contributions are welcome!
+This plugin is maintained by tianzecn as part of the MAG Claude Plugins marketplace. Contributions are welcome!
 
 **To contribute:**
 1. Fork the repository
@@ -432,13 +432,13 @@ MIT License - see [LICENSE](../../LICENSE) file for details.
 
 ## Support
 
-- **Homepage:** https://github.com/MadAppGang/claude-code
-- **Issues:** https://github.com/MadAppGang/claude-code/issues
-- **Author:** MadAppGang
+- **Homepage:** https://github.com/tianzecn/myclaudecode
+- **Issues:** https://github.com/tianzecn/myclaudecode/issues
+- **Author:** tianzecn
 
 ---
 
-**Maintained by:** MadAppGang
+**Maintained by:** tianzecn
 **Version:** 0.1.0
 **Status:** Production Ready
 **Last Updated:** November 22, 2025

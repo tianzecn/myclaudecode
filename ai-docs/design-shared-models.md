@@ -728,7 +728,7 @@ See main documentation:
 - [README.md](../README.md) - User documentation
 - [RELEASE_PROCESS.md](../RELEASE_PROCESS.md) - Release workflow
 
-Contact: Jack Rudenko (i@madappgang.com)
+Contact: tianzecn (i@madappgang.com)
 ```
 
 ---
@@ -897,7 +897,7 @@ Commands could read both files and merge recommendations.
 **Version:** 1.0.0
 **Last Updated:** 2025-11-14
 **Purpose:** Curated OpenRouter model recommendations for code development tasks
-**Maintained By:** MadAppGang Claude Code Team
+**Maintained By:** tianzecn Claude Code Team
 
 ---
 
@@ -1768,7 +1768,7 @@ When updating pricing:
 **For technical issues:**
 - Check `shared/README.md` for sync pattern
 - See `CLAUDE.md` for project overview
-- Contact: Jack Rudenko (i@madappgang.com)
+- Contact: tianzecn (i@madappgang.com)
 
 **To suggest new models:**
 - Open an issue with model details
@@ -1777,8 +1777,8 @@ When updating pricing:
 
 ---
 
-**Maintained By:** MadAppGang Claude Code Team
-**Repository:** https://github.com/MadAppGang/claude-code
+**Maintained By:** tianzecn Claude Code Team
+**Repository:** https://github.com/tianzecn/myclaudecode
 **License:** MIT
 ```
 

@@ -4,7 +4,7 @@
 
 Version: 2.6.1
 Category: Development
-Author: Jack Rudenko @ MadAppGang
+Author: tianzecn @ tianzecn
 
 ---
 
@@ -837,7 +837,7 @@ Access GitHub repositories and issues.
 ### Global Installation
 ```bash
 /plugin marketplace add madappgang/claude-plugins
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Project-Specific Installation
@@ -845,15 +845,15 @@ Add to `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -943,4 +943,4 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom
 
 **Plugin Version:** 2.6.1
 **Last Updated:** November 2024
-**Maintained by:** Jack Rudenko @ MadAppGang
+**Maintained by:** tianzecn @ tianzecn

@@ -2,9 +2,9 @@
 
 ## ✅ Repository Status: PRODUCTION READY
 
-**Repository:** `mag-claude-plugins` (local development path: project root)
-**Marketplace:** mag-claude-plugins
-**Owner:** Jack Rudenko (i@madappgang.com) @ MadAppGang
+**Repository:** `tianzecn-plugins` (local development path: project root)
+**Marketplace:** tianzecn-plugins
+**Owner:** tianzecn (i@madappgang.com) @ tianzecn
 **License:** MIT
 
 ---
@@ -280,7 +280,7 @@ claude-code/
 /plugin marketplace add /path/to/claude-code
 
 # Install plugin
-/plugin install frontend@mag-claude-plugins
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Option 2: GitHub Distribution
@@ -292,20 +292,20 @@ git commit -m "Complete plugin marketplace with all agents, skills, and MCP supp
 git push origin main
 
 # Team members install
-/plugin marketplace add MadAppGang/claude-code
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace add tianzecn/myclaudecode
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Option 3: GitLab/Other Git
 
 ```bash
 # Push to GitLab or other git hosting
-git remote add origin https://gitlab.com/MadAppGang/claude-code.git
+git remote add origin https://gitlab.com/tianzecn/myclaudecode.git
 git push -u origin main
 
 # Team members install
-/plugin marketplace add https://gitlab.com/MadAppGang/claude-code.git
-/plugin install frontend@mag-claude-plugins
+/plugin marketplace add https://gitlab.com/tianzecn/myclaudecode.git
+/plugin install frontend@tianzecn-plugins
 ```
 
 ### Option 4: Auto-Install in Projects
@@ -315,15 +315,15 @@ Add to project's `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mag-claude-plugins": {
+    "tianzecn-plugins": {
       "source": {
         "source": "github",
-        "repo": "MadAppGang/claude-code"
+        "repo": "tianzecn/myclaudecode"
       }
     }
   },
   "enabledPlugins": {
-    "frontend@mag-claude-plugins": true
+    "frontend@tianzecn-plugins": true
   }
 }
 ```
@@ -416,7 +416,7 @@ Claude: [Automatically invokes api-spec-analyzer skill]
 - [x] `/configure-mcp` command for easy setup
 - [x] Comprehensive documentation (800+ lines)
 - [x] Security best practices implemented
-- [x] Proper attribution (Jack Rudenko @ MadAppGang)
+- [x] Proper attribution (tianzecn @ tianzecn)
 - [x] MIT License included
 - [x] .gitignore configured
 - [x] Plugin manifest (plugin.json) complete
@@ -493,13 +493,13 @@ Agents work together with **handoffs, quality gates, and feedback loops** for pr
 
 ## 📞 Support & Contact
 
-**Maintainer:** Jack Rudenko
+**Maintainer:** tianzecn
 **Email:** i@madappgang.com
-**Company:** MadAppGang
+**Company:** tianzecn
 **Website:** https://madappgang.com
 
-**Issues:** https://github.com/MadAppGang/claude-code/issues
-**Discussions:** https://github.com/MadAppGang/claude-code/discussions
+**Issues:** https://github.com/tianzecn/myclaudecode/issues
+**Discussions:** https://github.com/tianzecn/myclaudecode/discussions
 
 ---
 
@@ -508,7 +508,7 @@ Agents work together with **handoffs, quality gates, and feedback loops** for pr
 - Built for **Claude Code** by Anthropic
 - Inspired by the **Claude Code community**
 - Battle-tested on **caremaster-tenant-frontend** project
-- Created with ❤️ by **MadAppGang**
+- Created with ❤️ by **tianzecn**
 
 ---
 
