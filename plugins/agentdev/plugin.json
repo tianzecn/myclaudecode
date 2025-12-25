@@ -1,46 +1,36 @@
 {
-  "name": "agentdev",
-  "version": "1.1.0",
-  "description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with design, implementation, and quality review agents. Tracks model performance to ai-docs/llm-performance.json.",
-  "author": "tianzecn",
-  "license": "MIT",
-  "homepage": "https://github.com/tianzecn/myclaudecode",
-
-  "tags": [
-    "agents",
-    "commands",
-    "development",
-    "multi-model",
-    "claudish",
-    "quality-review",
-    "xml-standards",
-    "orchestration",
-    "statistics",
-    "performance-tracking"
-  ],
-
-  "agents": [
-    "architect",
-    "developer",
-    "reviewer"
-  ],
-
-  "commands": [
-    "./commands/develop.md",
-    "./commands/help.md"
-  ],
-
-  "skills": [
-    "xml-standards",
-    "patterns",
-    "schemas"
-  ],
-
-  "dependencies": {
-    "orchestration@tianzecn-plugins": "^0.2.0"
-  },
-
-  "compatibility": {
-    "claudeCode": ">=0.1.0"
-  }
+	"name": "agentdev",
+	"version": "1.1.0",
+	"description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with design, implementation, and quality review agents.",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"agents",
+		"commands",
+		"development",
+		"multi-model",
+		"claudish",
+		"quality-review",
+		"xml-standards",
+		"orchestration"
+	],
+	"category": "development",
+	"agents": [
+		"./agents/architect.md",
+		"./agents/developer.md",
+		"./agents/reviewer.md"
+	],
+	"commands": [
+		"./commands/develop.md",
+		"./commands/help.md"
+	],
+	"skills": [
+		"./skills/xml-standards",
+		"./skills/patterns",
+		"./skills/schemas"
+	]
 }

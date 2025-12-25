@@ -4,8 +4,8 @@
 	"description": "Deep code investigation with ENFORCED claudemem v0.4.0 AST structural analysis. PageRank-based symbol importance, callers/callees dependency tracing, and full call chain context. v0.4.0: dead-code detection, test-gaps analysis, impact (BFS traversal). PreToolUse hooks intercept Grep/Bash/Glob/Read and replace with AST commands.",
 	"author": {
 		"name": "tianzecn",
-		"email": "i@madappgang.com",
-		"company": "tianzecn"
+		"email": "",
+		"company": ""
 	},
 	"license": "MIT",
 	"keywords": [

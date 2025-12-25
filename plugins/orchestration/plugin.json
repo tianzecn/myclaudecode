@@ -1,86 +1,69 @@
 {
-  "name": "orchestration",
-  "version": "0.6.0",
-  "description": "Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Provides proven patterns for parallel execution, multi-model validation with dynamic model discovery, session-based workspaces, free model support, quality gates, and phase-based orchestration. NEW in v0.6.0: model-tracking-protocol skill with MANDATORY pre-launch checklist, file-based tracking detection, PreToolUse hook for pre-launch verification, enhanced SubagentStop hook with 5-component validation.",
-  "author": "tianzecn",
-  "license": "MIT",
-  "homepage": "https://github.com/tianzecn/myclaudecode",
-
-  "tags": [
-    "orchestration",
-    "multi-agent",
-    "workflow",
-    "claudish",
-    "quality-gates",
-    "parallel-execution",
-    "coordination",
-    "grok",
-    "gemini",
-    "consensus",
-    "error-recovery",
-    "statistics",
-    "performance-tracking",
-    "model-tracking"
-  ],
-
-  "skills": [
-    "multi-agent-coordination",
-    "multi-model-validation",
-    "quality-gates",
-    "todowrite-orchestration",
-    "error-recovery",
-    "model-tracking-protocol"
-  ],
-
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-statistics.sh"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "toolNames": ["Task"],
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-launch-check.sh"
-          }
-        ]
-      }
-    ]
-  },
-
-  "commands": [
-    "./commands/help.md",
-    "./commands/setup.md"
-  ],
-
-  "skillBundles": {
-    "core": ["multi-agent-coordination", "quality-gates"],
-    "advanced": ["multi-model-validation", "error-recovery"],
-    "testing": ["quality-gates", "error-recovery", "todowrite-orchestration"],
-    "complete": ["multi-agent-coordination", "multi-model-validation", "quality-gates", "todowrite-orchestration", "error-recovery"]
-  },
-
-  "dependencies": [],
-
-  "compatibility": {
-    "claudeCode": ">=0.1.0"
-  }
+	"name": "orchestration",
+	"version": "0.6.0",
+	"description": "Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Provides proven patterns for parallel execution, multi-model validation with dynamic model discovery, session-based workspaces, quality gates, and phase-based orchestration.",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"orchestration",
+		"multi-agent",
+		"workflow",
+		"claudish",
+		"quality-gates",
+		"parallel-execution",
+		"coordination",
+		"error-recovery",
+		"statistics",
+		"performance-tracking"
+	],
+	"category": "development",
+	"skills": [
+		"./skills/multi-agent-coordination",
+		"./skills/multi-model-validation",
+		"./skills/quality-gates",
+		"./skills/todowrite-orchestration",
+		"./skills/error-recovery",
+		"./skills/model-tracking-protocol"
+	],
+	"hooks": {
+		"SessionStart": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
+					}
+				]
+			}
+		],
+		"SubagentStop": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-statistics.sh"
+					}
+				]
+			}
+		],
+		"PreToolUse": [
+			{
+				"toolNames": ["Task"],
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-launch-check.sh"
+					}
+				]
+			}
+		]
+	},
+	"commands": [
+		"./commands/help.md",
+		"./commands/setup.md"
+	]
 }
