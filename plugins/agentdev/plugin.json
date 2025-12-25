@@ -18,7 +18,6 @@
 		"xml-standards",
 		"orchestration"
 	],
-	"category": "development",
 	"agents": [
 		"./agents/architect.md",
 		"./agents/developer.md",

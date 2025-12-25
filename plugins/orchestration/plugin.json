@@ -20,7 +20,6 @@
 		"statistics",
 		"performance-tracking"
 	],
-	"category": "development",
 	"skills": [
 		"./skills/multi-agent-coordination",
 		"./skills/multi-model-validation",

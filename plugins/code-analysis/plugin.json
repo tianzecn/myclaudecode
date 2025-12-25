@@ -23,7 +23,6 @@
 		"interception",
 		"enforcement"
 	],
-	"category": "development",
 	"hooks": {
 		"SessionStart": [
 			{
