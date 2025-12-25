@@ -1,0 +1,25 @@
+{
+	"name": "coding",
+	"version": "1.0.0",
+	"description": "AI-powered requirement analysis and GitHub Issue creation. Automatically analyzes project codebase, documentation, and configuration to generate structured, actionable GitHub Issues with technical recommendations and acceptance criteria.",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"requirement",
+		"analysis",
+		"github",
+		"issue",
+		"project-management",
+		"automation",
+		"documentation",
+		"codebase-analysis"
+	],
+	"commands": [
+		"./commands/requirement.md",
+		"./commands/help.md"
+	]
+}

@@ -135,6 +135,29 @@
 				"orchestration"
 			],
 			"strict": true
+		},
+		{
+			"name": "coding",
+			"source": "./plugins/coding",
+			"description": "AI-powered requirement analysis and GitHub Issue creation. Automatically analyzes project codebase, documentation, and configuration to generate structured, actionable GitHub Issues with technical recommendations and acceptance criteria.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"requirement",
+				"analysis",
+				"github",
+				"issue",
+				"project-management",
+				"automation",
+				"documentation",
+				"codebase-analysis"
+			],
+			"strict": true
 		}
 	]
 }
