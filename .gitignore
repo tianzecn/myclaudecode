@@ -62,3 +62,9 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .spec-workflow/
+
+# Tool generated
+.serena/
+
+# Collected references
+Collected/
