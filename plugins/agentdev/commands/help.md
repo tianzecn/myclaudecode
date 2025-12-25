@@ -9,13 +9,20 @@ Present the following help information to the user:
 
 ---
 
-## Agent Development Plugin v1.1.0
+## Agent Development Plugin v1.3.0
 
-**Create, implement, and review Claude Code agents and commands with multi-model validation.**
+**Create, implement, and review Claude Code agents and commands with multi-model validation and intelligent plugin classification.**
 
 ### Quick Start
 
 ```bash
+# 创建新命令（智能分类到正确插件）
+/agentdev:创建命令 代码审查 - 审查代码质量和规范
+
+# 发布插件到市场
+/agentdev:发布 frontend
+
+# 完整的 Agent 开发流程
 /agentdev:develop Design a GraphQL code reviewer agent
 ```
 
@@ -31,13 +38,30 @@ Present the following help information to the user:
 
 ---
 
-## Commands (3)
+## Commands (4)
 
 | Command | Description |
 |---------|-------------|
 | **/agentdev:develop** | Full-cycle agent development: design → plan review → implement → quality review |
-| **/agentdev:创建命令** | Interactive slash command creation - generates command files with Chinese XML tags |
+| **/agentdev:创建命令** | Interactive slash command creation with intelligent plugin classification |
+| **/agentdev:发布** | Publish plugin to marketplace - updates versions, creates Git Tag, pushes |
 | **/agentdev:help** | Show this help |
+
+### /创建命令 Workflow (v1.2.0+)
+
+1. **需求收集** - Parse command name and description from user input
+2. **智能插件分类** - Scan all plugins, analyze command category, recommend target plugin
+3. **生成命令文件** - Create command file with Chinese XML tags
+4. **注册命令** - Add command to plugin.json
+5. **可选发布** - Option to immediately publish to marketplace
+
+### /发布 Workflow (v1.3.0+)
+
+1. **确定发布目标** - Select plugin and version type (major/minor/patch)
+2. **检查发布条件** - Verify git status and plugin structure
+3. **更新版本号** - Update plugin.json and marketplace.json
+4. **提交和标签** - Create commit and Git Tag
+5. **推送发布** - Push to GitHub with tags
 
 ### /develop Workflow
 
@@ -46,10 +70,20 @@ Present the following help information to the user:
 3. **Implementation** - Developer builds the agent from approved plan
 4. **Quality Review** - Reviewer validates against standards
 
-### Example
+### Examples
 
 ```bash
-/agentdev:develop Create a database migration reviewer agent that checks SQL migrations for safety issues
+# 创建命令并自动分类到正确插件
+/agentdev:创建命令 组件文档 - 自动生成 React 组件的使用文档
+
+# 发布插件（默认 minor 版本）
+/agentdev:发布 frontend
+
+# 发布补丁版本
+/agentdev:发布 bun patch
+
+# 完整 Agent 开发
+/agentdev:develop Create a database migration reviewer agent
 ```
 
 ---
@@ -107,7 +141,7 @@ Agents should track progress:
 
 ---
 
-## LLM Performance Tracking (v1.1.0)
+## LLM Performance Tracking
 
 Tracks external model performance to `ai-docs/llm-performance.json`:
 - Plan review execution times
