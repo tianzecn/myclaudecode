@@ -1,7 +1,7 @@
 {
 	"name": "coding",
 	"version": "1.0.0",
-	"description": "AI-powered requirement analysis and GitHub Issue creation. Automatically analyzes project codebase, documentation, and configuration to generate structured, actionable GitHub Issues with technical recommendations and acceptance criteria.",
+	"description": "AI 驱动的需求分析与 GitHub Issue 自动创建。深度分析项目代码库、文档和配置，生成结构化、可执行的 GitHub Issue，包含技术建议和验收标准。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -19,7 +19,8 @@
 		"codebase-analysis"
 	],
 	"commands": [
-		"./commands/requirement.md",
-		"./commands/help.md"
+		"./commands/需求分析.md",
+		"./commands/开发归档.md",
+		"./commands/帮助.md"
 	]
 }

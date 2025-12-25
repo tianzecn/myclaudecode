@@ -31,12 +31,13 @@ Present the following help information to the user:
 
 ---
 
-## Commands (2)
+## Commands (3)
 
 | Command | Description |
 |---------|-------------|
 | **/agentdev:develop** | Full-cycle agent development: design → plan review → implement → quality review |
-| **/help** | Show this help |
+| **/agentdev:创建命令** | Interactive slash command creation - generates command files with Chinese XML tags |
+| **/agentdev:help** | Show this help |
 
 ### /develop Workflow
 

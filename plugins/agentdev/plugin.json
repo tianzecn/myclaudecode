@@ -25,6 +25,7 @@
 	],
 	"commands": [
 		"./commands/develop.md",
+		"./commands/创建命令.md",
 		"./commands/help.md"
 	],
 	"skills": [
