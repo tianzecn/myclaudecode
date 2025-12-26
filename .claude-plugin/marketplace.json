@@ -243,6 +243,28 @@
 				"mcp"
 			],
 			"strict": true
+		},
+		{
+			"name": "superpowers-lab",
+			"source": "./plugins/superpowers-lab",
+			"description": "Experimental skills for Claude Code: tmux-based interactive command automation for vim, git rebase -i, REPLs, and terminal UI tools. By Jesse Vincent.",
+			"version": "0.1.0",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"experimental",
+				"tmux",
+				"interactive",
+				"terminal",
+				"automation",
+				"vim",
+				"repl"
+			],
+			"strict": true
 		}
 	]
 }
