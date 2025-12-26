@@ -1,0 +1,70 @@
+{
+  "url": "https://shipany.ai/zh/docs/customize/locale",
+  "title": "自定义多语言",
+  "content": "ShipAny 基于 next-intl 实现多语言系统。\n\n你可以参考以下内容，为你的项目自定义多语言展示。\n\n在 src/config/locale/index.ts 配置文件中，设置项目支持显示的语言。\n\n你可以根据需求，自行添加或删除支持显示的语言。\n\n在 src/config/locale/messages/{locale}/landing.json 文件中，通过 header 区块和 footer 区块的 show_locale 字段，控制是否显示语言切换按钮。\n\n注意：请根据启用的语言列表，修改每种语言对应的 src/config/locale/messages/{locale}/ 文件夹里面的配置内容，确保每种语言的页面内容都能正常显示。\n\n如果项目第一版上线，不需要支持多语言，可以设置：\n\n并把 src/config/locale/messages/en/landing.json 文件中的 show_locale 字段设置为 false。\n\n项目默认显示的语言是英文，如果你希望默认显示其他语言，比如中文，可以通过环境变量来配置默认语言。\n\n默认语言访问，不会在 URL 中显示对应的语言代码。非默认语言访问，会在 URL 中显示对应的语言代码。\n\n比如按照上述配置，访问中文价格表，路由是：/pricing，访问英文价格表，路由是：/en/pricing。\n\n比如你希望在项目中新增一个 /about 页面，并支持多语言展示。\n\n在 src/config/locale/messages/{locale} 文件夹下面，创建对应的页面文件，支持二级目录。\n\n比如新建英文显示的页面文件：src/config/locale/messages/en/pages/about.json。\n\n注意：根据配置的语言列表，为每种语言都创建对应的页面文件。\n\n在 src/config/locale/index.ts 文件导出的 localeMessagesPaths 数组中，添加新创建的多语言文件：\n\n在 src/app/[locale] 文件夹下面，创建支持多语言访问的页面路由文件。\n\n比如 /about 页面对应的路由文件是：src/app/[locale]/about/page.tsx。\n\n注意：如果你希望复用着陆页的布局，创建的页面路由文件应该是： src/app/[locale]/(landing)/about/page.tsx。\n\n访问 /about 页面时，看到的效果如下：",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "自定义多语言",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "设置多语言切换",
+      "id": "设置多语言切换"
+    },
+    {
+      "level": "h2",
+      "text": "设置默认显示的语言",
+      "id": "设置默认显示的语言"
+    },
+    {
+      "level": "h2",
+      "text": "自定义多语言页面",
+      "id": "自定义多语言页面"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "export const localeNames: any = {\n  en: 'English',\n  zh: '中文',\n  ja: '日本語',\n};\n\nexport const locales = ['en', 'zh', 'ja'];",
+      "language": "typescript"
+    },
+    {
+      "code": "export const localeNames: any = {\n  en: 'English',\n};\n\nexport const locales = ['en'];",
+      "language": "typescript"
+    },
+    {
+      "code": "NEXT_PUBLIC_DEFAULT_LOCALE = \"zh\"",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n  \"metadata\": {\n    \"title\": \"About\",\n    \"description\": \"Nano Banana Pro is an AI image generator based on the Nano Banana Pro model, powered by Gemini 3 Pro image generation technology. Create stunning images with advanced AI capabilities.\"\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "export const localeMessagesPaths = [\n  // ... 其他多语言文件列表\n  'pages/about',\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "import { getTranslations } from 'next-intl/server';\n\nimport { Hero } from '@/themes/default/blocks';\n\nexport default async function AboutPage() {\n  const t = await getTranslations('pages.about');\n\n  return (\n    <Hero\n      hero={{\n        title: t('metadata.title'),\n        description: t('metadata.description'),\n      }}\n    />\n  );\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/customize/appinfo",
+    "https://shipany.ai/zh/docs/customize/page",
+    "https://shipany.ai/zh/docs/customize/theme",
+    "https://shipany.ai/zh/docs/customize/locale",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service",
+    "https://shipany.ai/zh/docs/deploy/vercel"
+  ]
+}

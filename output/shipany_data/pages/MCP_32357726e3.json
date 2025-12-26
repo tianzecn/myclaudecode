@@ -1,0 +1,63 @@
+{
+  "url": "https://shipany.ai/zh/docs/vibe-coding/mcp",
+  "title": "MCP",
+  "content": "ShipAny 支持 MCP 实现 氛围编程。\n\n以下介绍在 ShipAny 项目中使用 MCP 服务器的主要场景。\n\n在基于 ShipAny 开发项目时，经常需要查询 ShipAny 开发文档，引导 Coding Agent 快速实现相应的功能。\n\nShipAny Two 的在线文档地址是：https://shipany.ai/zh/docs\n\n在开发项目时，你可以打开文档中某部分内容，把链接贴给 Coding Agent，让 Coding Agent 快速了解相关知识，辅助你完成开发任务。\n\nShipAny Two 的文档在 Github 开源，仓库地址是：https://github.com/shipanyai/shipany-two-docs\n\n你也可以把整个文档项目拉到本地，在开发项目时，提示 Coding Agent 扫描文档项目，辅助你完成开发任务。\n\n另外，你也可以使用 MCP 服务器挂载 ShipAny 开发文档。推荐使用 Ref MCP 和 Context7 MCP。\n\n进入 Ref API Keys 页面，生成你的 API Key。\n\n在 Ref Install 页面，选择一种方式，在你使用的 AI 应用中安装 Ref MCP。\n\n比如在 Cursor 安装 Ref MCP 后，实际填入的 MCP 服务器配置是：\n\n在开发项目时，提示 Coding Agent 使用 Ref MCP，快速了解相应的知识。\n\n可以看到，Coding Agent 通过 Ref MCP 的 ref_search_documentation 工具，查询到了相关的文档链接，\n\n然后多次调用 ref_read_url 工具，读取了相关的文档内容，最终给出了答案。\n\n进入 Context7 Dashboard 页面，点击 Create API Key 按钮，生成你的 API Key。\n\n在 Connect 面板，选择一种方式，在你的 AI 应用中安装 Context7 MCP。\n\n比如在 Cursor 安装 Context7 MCP 后，实际填入的 MCP 服务器配置是：\n\n在开发项目时，提示 Coding Agent 使用 Context7 MCP，快速了解相应的知识。\n\n可以看到，Coding Agent 通过 Context7 MCP 的 resolve-library-id 工具，查询到了相关的文档仓库 ID，\n\n然后多次调用 get-library-docs 工具，读取了相关的文档内容，最终给出了答案。\n\n通过以上两个 MCP 服务器，你可以在开发项目时，随时查询 ShipAny 开发文档，让 Coding Agent 快速了解相应的知识，辅助你完成开发任务。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "MCP",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "挂载文档",
+      "id": "挂载文档"
+    },
+    {
+      "level": "h3",
+      "text": "Ref MCP",
+      "id": "ref-mcp"
+    },
+    {
+      "level": "h3",
+      "text": "Context7 MCP",
+      "id": "context7-mcp"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "git clone git@github.com:shipanyai/shipany-two-docs.git",
+      "language": "python"
+    },
+    {
+      "code": "{\n  \"mcpServers\": {\n    \"Ref\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.ref.tools/mcp?apiKey=ref-xxxxxxx\",\n      \"headers\": {}\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "Use Ref MCP to check the development documentation of ShipAny,\ntell me how to integrate Stripe payment",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n  \"mcpServers\": {\n    \"context7\": {\n      \"url\": \"https://mcp.context7.com/mcp\",\n      \"headers\": {\n        \"CONTEXT7_API_KEY\": \"ctx7sk-xxxxxx\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "Use Context7 MCP to check the development documentation of ShipAny Two,\ntell me how to Send Email",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/vibe-coding/mcp",
+    "https://shipany.ai/zh/docs/vibe-coding/skills",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

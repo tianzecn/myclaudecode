@@ -1,0 +1,83 @@
+{
+  "url": "https://shipany.ai/zh/docs/config/env-variables",
+  "title": "环境变量",
+  "content": "ShipAny 支持通过环境变量来配置项目中的各种功能。\n\nShipAny 支持通过项目管理后台可视化修改项目中的配置项。但是此功能依赖数据库。\n\n在未配置数据库的情况下，你可以通过环境变量来覆盖可视化配置项。\n\n比如，项目上线的第一个版本，你只做了着陆页，暂未配置数据库，但是希望通过 Plausible 统计访问量，你可以参考如下步骤进行配置。\n\n通过可视化配置的 配置项 介绍，找到 Plausible 统计对应的配置项变量。\n\n修改环境变量配置文件，填写对应的配置项变量值。\n\n配置变量可以是全大写，或者全小写。比如也可以配置成这样：\n\n可视化配置中列举的所有配置项变量，都支持通过环境变量进行增量覆盖。\n\n除了 ShipAny 内置的配置项，你也可以通过环境变量设置自定义配置项。\n\n在环境变量文件中，可以设置以下格式的配置项：\n\n在项目逻辑中，通过 process.env 读取配置项。\n\nNEXT_PUBLIC_ 开头的配置项，可以在客户端和服务端组件中访问。非 NEXT_PUBLIC_ 开头的配置项，只能在服务端组件访问。\n\n在线上环境运行项目时，如果修改了环境变量中的配置项的值，一般需要重启项目，新的配置项才会生效。\n\nShipAny 在 src/config/index.ts 文件中，定义了 envConfigs 对象，内置了常用的几个配置项。\n\n你可以在项目逻辑中，通过 envConfigs 对象读取这些配置项。\n\n非 NEXT_PUBLIC_ 开头的配置项，只能在服务端组件访问。\n\n你可以把在环境变量文件中定义的配置项，设置到 envConfigs 对象中，方便在项目逻辑中读取。\n\n在 src/config/index.ts 文件中，设置 envConfigs 配置项：\n\n同样，在环境变量文件中设置的配置项，配置到 envConfigs 对象中后，也需要重启项目后才会生效。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "环境变量",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "覆盖可视化配置项",
+      "id": "覆盖可视化配置项"
+    },
+    {
+      "level": "h2",
+      "text": "设置自定义配置项",
+      "id": "设置自定义配置项"
+    },
+    {
+      "level": "h2",
+      "text": "使用 envConfigs",
+      "id": "使用-envconfigs"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# plausible\nplausible_domain = \"my-project.com\"\nplausible_src = \"https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js\"",
+      "language": "markdown"
+    },
+    {
+      "code": "# plausible\nPLAUSIBLE_DOMAIN = \"my-project.com\"\nPLAUSIBLE_SRC = \"https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js\"",
+      "language": "markdown"
+    },
+    {
+      "code": "# api settings\nNEXT_PUBLIC_API_BASE_URL = \"https://api.my-product.com\"\nAPI_KEY = \"xxxxxx\"",
+      "language": "markdown"
+    },
+    {
+      "code": "export async function GET() {\n  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;\n  const apiKey = process.env.API_KEY;\n\n  return new Response(`API Base URL: ${apiBaseUrl}, API Key: ${apiKey}`);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "'use client';\n\nexport function Hero({ section }: { section: Section }) {\n  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;\n\n  return <div>API Base URL: {apiBaseUrl}</div>;\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "export const envConfigs = {\n  app_url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',\n  app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'ShipAny App',\n  theme: process.env.NEXT_PUBLIC_THEME ?? 'default',\n  appearance: process.env.NEXT_PUBLIC_APPEARANCE ?? 'system',\n  locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',\n  database_url: process.env.DATABASE_URL ?? '',\n  database_provider: process.env.DATABASE_PROVIDER ?? 'postgresql',\n  db_singleton_enabled: process.env.DB_SINGLETON_ENABLED || 'false',\n  db_max_connections: process.env.DB_MAX_CONNECTIONS || '1',\n  auth_url: process.env.AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || '',\n  auth_secret: process.env.AUTH_SECRET ?? '', // openssl rand -base64 32\n  version: packageJson.version,\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "import { envConfigs } from '@/config';\n\nexport async function GET() {\n  const authUrl = envConfigs.auth_url;\n  return new Response(`Auth URL: ${authUrl}`);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "'use client';\n\nimport { envConfigs } from '@/config';\n\nexport function Hero({ section }: { section: Section }) {\n  const appUrl = envConfigs.app_url;\n  return <div>App URL: {appUrl}</div>;\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "export const envConfigs = {\n  // ... other configs\n  api_base_url: process.env.NEXT_PUBLIC_API_BASE_URL ?? '',\n  api_key: process.env.API_KEY ?? '',\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "import { envConfigs } from '@/config';\n\nconst apiBaseUrl = envConfigs.api_base_url;\nconst apiKey = envConfigs.api_key;",
+      "language": "sql"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/config/admin-settings",
+    "https://shipany.ai/zh/docs/config/env-variables",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

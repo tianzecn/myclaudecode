@@ -350,6 +350,48 @@
 				"automation"
 			],
 			"strict": true
+		},
+		{
+			"name": "docs",
+			"source": "./plugins/docs",
+			"description": "文档技能集合 - 包含 ShipAny 等产品的中文文档技能，帮助快速了解和使用相关产品。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"documentation",
+				"shipany",
+				"saas",
+				"skills",
+				"chinese"
+			],
+			"strict": true
+		},
+		{
+			"name": "feiskyer",
+			"source": "./plugins/feiskyer",
+			"description": "feiskyer 的 Claude Code 技能集合 - 包含 Codex 自主执行、长期任务自动化、图像生成、YouTube 字幕提取、Kiro 交互式开发、Spec-Kit 规范驱动开发等 6 个专业技能。",
+			"version": "1.0.0",
+			"author": {
+				"name": "feiskyer",
+				"email": "",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"codex",
+				"autonomous",
+				"image-generation",
+				"youtube",
+				"kiro",
+				"spec-kit",
+				"workflow"
+			],
+			"strict": true
 		}
 	]
 }

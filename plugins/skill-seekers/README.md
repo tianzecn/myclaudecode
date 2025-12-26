@@ -2,9 +2,9 @@
 
 > 自动将文档网站、GitHub 仓库、PDF 文件转换为 Claude AI 技能
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yusufkaraaslan/Skill_Seekers)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[ ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yusufkaraaslan/Skill_Seekers)
+[ ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[ ![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 ## 概述
 
@@ -28,21 +28,23 @@ pip install --user skill-seekers
 ```
 
 **系统要求：**
-- Python 3.10+
-- uv (推荐) 或 pipx 或 pip
+
+* Python 3.10+
+* uv (推荐) 或 pipx 或 pip
 
 ## 安装
 
+
 1. 启用插件：
+
    ```bash
    /plugin install skill-seekers@tianzecn-plugins
    ```
-
 2. 安装 Python 依赖：
+
    ```bash
    pip install skill-seekers
    ```
-
 3. 重启 Claude Code 会话
 
 ## 可用工具 (17 个)
@@ -50,7 +52,7 @@ pip install --user skill-seekers
 ### 配置工具
 
 | 工具 | 功能 |
-|------|------|
+|----|----|
 | `generate_config` | 为文档网站生成配置文件 |
 | `list_configs` | 列出所有 25 个预设配置 |
 | `validate_config` | 验证配置文件结构 |
@@ -58,7 +60,7 @@ pip install --user skill-seekers
 ### 爬取工具
 
 | 工具 | 功能 |
-|------|------|
+|----|----|
 | `estimate_pages` | 爬取前估计页面数量 |
 | `scrape_docs` | 爬取文档网站并构建技能 |
 | `scrape_github` | 分析 GitHub 仓库（AST 解析 6 种语言） |
@@ -67,7 +69,7 @@ pip install --user skill-seekers
 ### 打包工具
 
 | 工具 | 功能 |
-|------|------|
+|----|----|
 | `package_skill` | 将技能打包为 .zip 文件 |
 | `upload_skill` | 上传技能到 Claude |
 | `install_skill` | 完整的一键工作流 |
@@ -75,14 +77,14 @@ pip install --user skill-seekers
 ### 分割工具
 
 | 工具 | 功能 |
-|------|------|
+|----|----|
 | `split_config` | 分割大型文档配置 |
 | `generate_router` | 生成路由/中枢技能 |
 
 ### 源管理工具
 
 | 工具 | 功能 |
-|------|------|
+|----|----|
 | `fetch_config` | 从源获取配置 |
 | `submit_config` | 提交配置到源 |
 | `add_config_source` | 添加配置源 |
@@ -94,7 +96,7 @@ pip install --user skill-seekers
 开箱即用的配置文件：
 
 | 框架/工具 | 配置文件 |
-|-----------|---------|
+|----|----|
 | React | `react.json` |
 | Vue | `vue.json` |
 | Django | `django.json` |
@@ -110,6 +112,28 @@ pip install --user skill-seekers
 | ... | 等等 (共 25 个) |
 
 ## 使用示例
+
+## 如何正确提问
+
+笨蛋，你可以这样对本小姐说：
+
+### 简单方式（一句话）
+
+```javascript
+"帮我把 https://shipany.ai/zh/docs/ 做成 Claude 技能包"
+```
+
+### 带参数的方式
+
+```javascript
+"把 https://react.dev/ 爬取成技能包，限制 200 页，命名为 react-docs"
+```
+
+### 高级方式
+
+```javascript
+"分析 vercel/next.js GitHub 仓库，提取代码结构作为技能"
+```
 
 ### 从文档网站创建技能
 
@@ -137,20 +161,20 @@ pip install --user skill-seekers
 
 ## 关键特性
 
-- **llms.txt 支持** - 自动检测 LLM 就绪的文档文件
-- **通用爬虫** - 适用于任何文档网站
-- **GitHub 分析** - AST 解析 TypeScript、Python、Go、Rust、Java、C#
-- **PDF 支持** - 文本提取、OCR、表格识别
-- **多源统一爬虫** - 组合文档 + GitHub + PDF
-- **冲突检测** - 比较文档和代码实现差异
-- **私有配置仓库** - 支持 GitHub、GitLab、Bitbucket
-- **异步模式** - 爬虫速度快 2-3 倍
+* **llms.txt 支持** - 自动检测 LLM 就绪的文档文件
+* **通用爬虫** - 适用于任何文档网站
+* **GitHub 分析** - AST 解析 TypeScript、Python、Go、Rust、Java、C#
+* **PDF 支持** - 文本提取、OCR、表格识别
+* **多源统一爬虫** - 组合文档 + GitHub + PDF
+* **冲突检测** - 比较文档和代码实现差异
+* **私有配置仓库** - 支持 GitHub、GitLab、Bitbucket
+* **异步模式** - 爬虫速度快 2-3 倍
 
 ## 相关链接
 
-- **GitHub**: https://github.com/yusufkaraaslan/Skill_Seekers
-- **PyPI**: https://pypi.org/project/skill-seekers/
-- **作者**: yusufkaraaslan
+* **GitHub**: https://github.com/yusufkaraaslan/Skill_Seekers
+* **PyPI**: https://pypi.org/project/skill-seekers/
+* **作者**: yusufkaraaslan
 
 ## 许可证
 

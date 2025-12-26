@@ -1,0 +1,60 @@
+{
+  "url": "https://shipany.ai/zh/docs/guide/architecture",
+  "title": "系统架构",
+  "content": "ShipAny Two 基于最新的 Next.js 16，在编译性能方面有很大提升，本地开发更快、内存占用更小。\n\n在框架设计层面，分为核心系统、核心模块、扩展模块、主题系统、配置系统、内容管理系统六大件。\n\nShipAny Two 内置 Landing、Admin、User Console 三套核心系统，对应三套独立的页面布局，用于实现网站着陆页、后台管理、用户中心三类常见业务功能。\n\n通过 json 文件控制页面内容，方便 AI 修改，支持多语言；页面按区块（blocks）拆分，可自由组装，灵活度高；通过 theme.css 调整配色和字体，个性化程度高\n\n集成用户管理、订单管理、积分管理功能；集成配置中心，可视化开启/关闭各类功能；集成 CURD 操作，通过自定义的 PageBuilder 做到几行代码渲染数据管理页面（table、form）\n\n用户在 Settings 面板管理自己的账单、订阅、支付、积分流水，修改头像昵称；用户在 Activity 面板查看AI 生成任务和 AI 对话记录\n\n三套核心系统在 src/app 目录实现，按功能划分文件夹，开发者很容易新增自己的功能。\n\nShipAny 把框架全局支持的功能归为核心模块，包括 db、auth、i18n、rbac 几类\n\n基于 drizzle orm 集成数据库功能，支持 postgres、mysql、sqlite 等数据库类型；通过 schema 定义数据表，支持增量迁移；CURD 数据操作层面用同一套 sql 语法，抹平各类数据库的差异\n\n基于 better-auth 实现登录鉴权功能，可以在管理后台一键开启常用的登录方式\n\n基于权限的管理控制，通过自定义的角色和权限节点控制后台管理系统的访问\n\n基于 next-intl 实现国际化功能，通过 json 文件控制多语言显示\n\nShipAny 的核心模块定义在 src/core 下面\n\nShipAny 利用 extensions 支持可插拔架构，每一类扩展定义一个统一的 interface，每个扩展按接口实现具体的功能逻辑。目前支持的 extensions 包括\n\n联盟营销。集成 affonso、promotekit\n\nAI 供应商。集成 OpenRouter、Fal、Replicate、Kie\n\n数据统计。集成 ga、clarity、plausible、open-panel、vercel-analytics\n\n支付。集成 Stripe、Creem、PayPal\n\n存储。集成 aws s3，cloudflare r2\n\nShipAny 的扩展模块定义在 src/extentions 目录下，每一类扩展要新增一个选项，只需要写很少的代码\n\nShipAny 支持多主题系统，让开发者可以自定义主题实现个性化的页面展示。\n\n主题系统定义在 src/themes 下面\n\n组合管理配置项，实现低代码的功能，不是很懂代码的用户也能方便地使用 ShipAny\n\nShipAny 实现的内容管理系统包括三个层面的内容管理\n\n通过管理后台写入博客内容，也可以在 content/posts 目录用 markdown 写博客。博客可以给你的网站增加 SEO 权重，也能通过 guest post 接商单。\n\n基于 fumadocs 实现文档系统，在 content/docs 目录写内容，几分钟为你的网站渲染一个 /docs 文档\n\n在 content/pages 目录写内容动态创建页面，比如常用的网站协议页面 /privacy-policy 和/terms-of-service",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "系统架构",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "1. 核心系统（app）",
+      "id": "1-核心系统app"
+    },
+    {
+      "level": "h2",
+      "text": "2. 核心模块（core）",
+      "id": "2-核心模块core"
+    },
+    {
+      "level": "h2",
+      "text": "3. 扩展模块（extensions）",
+      "id": "3-扩展模块extensions"
+    },
+    {
+      "level": "h2",
+      "text": "4. 主题系统（themes）",
+      "id": "4-主题系统themes"
+    },
+    {
+      "level": "h2",
+      "text": "5. 配置系统（config）",
+      "id": "5-配置系统config"
+    },
+    {
+      "level": "h2",
+      "text": "6. 内容管理系统（cms）",
+      "id": "6-内容管理系统cms"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/guide/get-shipany",
+    "https://shipany.ai/zh/docs/guide/faq",
+    "https://shipany.ai/zh/docs/guide/architecture",
+    "https://shipany.ai/zh/docs/guide/prerequisites",
+    "https://shipany.ai/zh/docs/guide/tutorial",
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

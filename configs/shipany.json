@@ -1,0 +1,17 @@
+{
+  "name": "shipany",
+  "description": "ShipAny \u4e2d\u6587\u6587\u6863 - AI SaaS \u5feb\u901f\u6784\u5efa\u5e73\u53f0",
+  "base_url": "https://shipany.ai/zh/docs/",
+  "selectors": {
+    "main_content": "article",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": [],
+    "exclude": []
+  },
+  "categories": {},
+  "rate_limit": 0.5,
+  "max_pages": 100
+}

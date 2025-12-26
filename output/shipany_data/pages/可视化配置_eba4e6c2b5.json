@@ -1,0 +1,87 @@
+{
+  "url": "https://shipany.ai/zh/docs/config/admin-settings",
+  "title": "可视化配置",
+  "content": "ShipAny 支持通过管理后台可视化修改项目中用到的配置项。\n\n登录项目管理后台，进入 Admin -> Settings 面板，找到对应的配置项，填入配置值，即可动态更新项目配置。\n\n支持在项目管理后台可视化修改的配置项，分为以下几大部分。\n\n系统初始化后，默认开启邮箱登录，你可以在配置其他登录方式后，可选择关闭邮箱登录。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "可视化配置",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    },
+    {
+      "level": "h2",
+      "text": "配置项",
+      "id": "配置项"
+    },
+    {
+      "level": "h3",
+      "text": "通用项",
+      "id": "通用项"
+    },
+    {
+      "level": "h3",
+      "text": "登录鉴权",
+      "id": "登录鉴权"
+    },
+    {
+      "level": "h3",
+      "text": "支付",
+      "id": "支付"
+    },
+    {
+      "level": "h3",
+      "text": "邮件",
+      "id": "邮件"
+    },
+    {
+      "level": "h3",
+      "text": "存储",
+      "id": "存储"
+    },
+    {
+      "level": "h3",
+      "text": "AI",
+      "id": "ai"
+    },
+    {
+      "level": "h3",
+      "text": "数据统计",
+      "id": "数据统计"
+    },
+    {
+      "level": "h3",
+      "text": "广告",
+      "id": "广告"
+    },
+    {
+      "level": "h3",
+      "text": "联盟营销",
+      "id": "联盟营销"
+    },
+    {
+      "level": "h3",
+      "text": "客服",
+      "id": "客服"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/config/admin-settings",
+    "https://shipany.ai/zh/docs/config/env-variables",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

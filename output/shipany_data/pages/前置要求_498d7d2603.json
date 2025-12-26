@@ -1,0 +1,79 @@
+{
+  "url": "https://shipany.ai/zh/docs/guide/prerequisites",
+  "title": "前置要求",
+  "content": "为确保你能顺利使用 ShipAny 开发项目，请确保完成以下前置要求。\n\n请确保你的网络环境可以正常访问 Github、Google 等第三方服务。\n\n可以在终端执行以下命令，查看你的网络出口 ip：\n\n如果网络环境不佳，可能会导致无法正常安装项目必须的 npm 依赖，无法连接云数据库、无法使用 AI 生成图片等功能。\n\n请根据你的操作系统，搭建本地开发环境，安装必要的开发工具。以 Mac OS 为例：\n\n推荐使用以下或更高版本的 NodeJS 和 npm：\n\n为了更好地理解 ShipAny 框架，更高效地开发项目，推荐使用以下 AI 工具辅助开发\n\n在 AI 编辑器中安装以下插件，可以更好地辅助开发：",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "前置要求",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "网络环境畅通",
+      "id": "网络环境畅通"
+    },
+    {
+      "level": "h2",
+      "text": "搭建本地开发环境",
+      "id": "搭建本地开发环境"
+    },
+    {
+      "level": "h2",
+      "text": "AI 辅助编程工具",
+      "id": "ai-辅助编程工具"
+    },
+    {
+      "level": "h2",
+      "text": "其他工具",
+      "id": "其他工具"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "curl https://ipinfo.io",
+      "language": "unknown"
+    },
+    {
+      "code": "curl https://google.com",
+      "language": "unknown"
+    },
+    {
+      "code": "$ node -v\nv22.2.0\n\n$ npm -v\n10.7.0",
+      "language": "unknown"
+    },
+    {
+      "code": "$ npm install -g pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "$ pnpm -v\n9.15.0",
+      "language": "unknown"
+    },
+    {
+      "code": "$ git --version\ngit version 2.39.3 (Apple Git-146)",
+      "language": "unknown"
+    },
+    {
+      "code": "$ ssh -T git@github.com",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/guide/get-shipany",
+    "https://shipany.ai/zh/docs/guide/faq",
+    "https://shipany.ai/zh/docs/guide/architecture",
+    "https://shipany.ai/zh/docs/guide/prerequisites",
+    "https://shipany.ai/zh/docs/guide/tutorial",
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

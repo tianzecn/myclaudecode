@@ -1,0 +1,62 @@
+{
+  "url": "https://shipany.ai/zh/docs/deploy/vercel",
+  "title": "部署到 Vercel",
+  "content": "基于 ShipAny 完成新项目的开发后，你可以参考下面的流程，将你的项目部署到 Vercel，开始上线运营。\n\n在 Github 选择一个组织，或者在你的个人账户下面，创建一个代码仓库，用于托管新项目的代码。\n\n请注意：一定要选择 Private 创建私有类型的代码仓库。不要公开发布基于 ShipAny 开发的项目代码。\n\n进入根据 快速开始 创建的项目，在项目根目录下执行以下命令，设置项目代码托管地址。\n\n把 your-org/your-repo 替换为你在上一步创建的代码仓库地址。\n\n然后执行以下命令把代码推送到你的代码仓库。\n\n在 Vercel 创建一个新项目，连接上你的 Github 账户。选择上一步创建的代码仓库，导入代码开始部署。\n\n你可以在第一次部署的时候，设置线上使用的环境变量。也可以在项目部署之后，再修改环境变量。\n\n在这里，我们先不设置环境变量，导入项目之后直接点击 Deploy 按钮，开始部署。第一次部署大约需要 2 分钟的时间。\n\n等部署完成后，点击 Continue to Dashboard 按钮，进入项目管理页面。\n\n在项目管理页面，可以看到 Vercel 为你的项目分配的访问域名。点击域名，即可访问你的项目。\n\n至此，已通过 Vercel 成功部署你的项目。\n\n接下来，可以通过 绑定自定义域名、设置环境变量、配置访问统计 等操作，让新项目正式上线运营。\n\n点击项目管理页面右上角的 Domains 按钮，进入域名管理页面。\n\n输入你的自定义域名，点击 Save 按钮，添加自定义域名。\n\n添加完域名后，点开刚添加的域名，查看 DNS 解析指引。这里可能提示你设置 CNAME 记录或者是 A 记录。\n\n打开你的域名注册商的 DNS 解析页面，按照上面的指引添加 DNS 解析。\n\n等 DNS 解析生效（一般半小时内生效，最多可能需要 48 小时），Vercel 会为你添加的自定义域名生成 SSL 证书。\n\n访问你的自定义域名，就可以看到线上版本的网站了。\n\n你可以在第一次创建 Vercel 部署时就设置环境变量，也可以在项目部署后，再修改环境变量。\n\n可以在本地项目根目录下创建一个 .env.production 文件，再填入项目的生产环境变量。\n\n记得根据你的项目信息，修改上面的环境变量值。\n\n在 Vercel 项目管理的 Setting -> Environment Variables 页面，粘贴本地 .env.production 文件中的环境变量内容，点击 Save 按钮，设置环境变量。\n\n每次设置完环境变量后，在项目管理的 Deployments 页面，选择最新的一次部署，点击 Redeploy 按钮，重新部署项目。\n\n你可以选择使用 Vercel 内置的访问统计，也可以使用第三方访问统计服务。\n\n可以按以下步骤配置 Vercel 内置的访问统计：\n\n在项目管理的 Analytics 页面，点击 Enable 按钮，开通 Vercel 的 Web Analytics 访问统计功能。\n\n注意：Vercel 内置的访问统计功能，是收费功能。请自行评估是否开通。\n\n进入项目管理后台，在 Settings -> Analytics 页面，划到 Vercel Analytics 面板，点击 Enabled 按钮开启，然后点 Save 按钮，保存配置。\n\n你需要先 配置管理后台访问 ，才能进行上述配置。\n\n部署到 Cloudflare Workers",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "部署到 Vercel",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "新项目部署流程",
+      "id": "新项目部署流程"
+    },
+    {
+      "level": "h2",
+      "text": "绑定自定义域名",
+      "id": "绑定自定义域名"
+    },
+    {
+      "level": "h2",
+      "text": "设置环境变量",
+      "id": "设置环境变量"
+    },
+    {
+      "level": "h2",
+      "text": "配置访问统计",
+      "id": "配置访问统计"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "git remote set-url origin git@github.com:your-org/your-repo.git",
+      "language": "powershell"
+    },
+    {
+      "code": "git add .\ngit commit -m \"first version\"\ngit push origin main",
+      "language": "unknown"
+    },
+    {
+      "code": "# app\nNEXT_PUBLIC_APP_URL = \"https://your-domain.com\"\nNEXT_PUBLIC_APP_NAME = \"Your App Name\"\n\n# theme\nNEXT_PUBLIC_THEME = \"default\"\n\n# appearance\nNEXT_PUBLIC_APPEARANCE = \"dark\"\n\n# database\nDATABASE_URL = \"postgresql://user:password@domain:port/database\"\nDATABASE_PROVIDER = \"postgresql\"\nDB_SINGLETON_ENABLED = \"false\"\n\n# auth\nAUTH_SECRET = \"xxx\"",
+      "language": "markdown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/deploy/vercel",
+    "https://shipany.ai/zh/docs/deploy/cloudflare",
+    "https://shipany.ai/zh/docs/deploy/dokploy",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service",
+    "https://shipany.ai/zh/docs/customize/locale"
+  ]
+}

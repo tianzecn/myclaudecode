@@ -1,0 +1,36 @@
+{
+  "url": "https://shipany.ai/zh/docs/customer-service/crisp",
+  "title": "Crisp",
+  "content": "ShipAny 集成了 Crisp 客服系统，简单配置即可在你的网站接入网页客服组件。\n\n参考以下步骤，在你的网站快速接入 Crisp 客服组件。\n\n进入 Crisp 控制台，添加你要接入客服组件的网站域名。\n\n进入 Settings -> Workspace Settings -> Setup & Integrations 页面，复制 Website ID。\n\n在项目管理后台，进入 Settings -> Customer Service -> Crisp 面板，在 Crisp Website ID 字段填入上一步复制的 Website ID。\n\n开启 Crisp Enabled 开关，点击 Save 按钮保存配置。\n\n在项目主页，刷新页面，可以看到右下角有一个客服图标，点击后可以打开 Crisp 客服组件。\n\n在 Crisp 控制台，进入 Inbox 页面，查看用户留言，回复用户留言。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Crisp",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    },
+    {
+      "level": "h2",
+      "text": "参考",
+      "id": "参考"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service",
+    "https://shipany.ai/zh/docs/customer-service/crisp"
+  ]
+}

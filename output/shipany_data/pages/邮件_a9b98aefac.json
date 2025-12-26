@@ -1,0 +1,27 @@
+{
+  "url": "https://shipany.ai/zh/docs/email",
+  "title": "邮件",
+  "content": "",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "邮件",
+      "id": ""
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/email/resend",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service",
+    "https://shipany.ai/zh/docs/storage/cloudflare-r2"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "url": "https://shipany.ai/zh/docs/guide/tutorial",
+  "title": "视频教程",
+  "content": "视频教程讲解的内容，使用的 ShipAny 模板不是最新版本，演示的代码跟最新版本的内容或路径不完全一致，仅供参考。实际开发请以最新的文档内容为准。\n\n视频链接：小红书直播回放，从 18:30 开始看\n\n视频链接：腾讯会议回放，访问密码：ARCE",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "视频教程",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "ShipAny 开发实战",
+      "id": "shipany-开发实战"
+    },
+    {
+      "level": "h3",
+      "text": "使用 ShipAny 一小时极速上站",
+      "id": "使用-shipany-一小时极速上站"
+    },
+    {
+      "level": "h3",
+      "text": "使用 ShipAny 重构 AI Wallpaper Generator",
+      "id": "使用-shipany-重构-ai-wallpaper-generator"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/guide/get-shipany",
+    "https://shipany.ai/zh/docs/guide/faq",
+    "https://shipany.ai/zh/docs/guide/architecture",
+    "https://shipany.ai/zh/docs/guide/prerequisites",
+    "https://shipany.ai/zh/docs/guide/tutorial",
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

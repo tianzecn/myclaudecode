@@ -1,0 +1,20 @@
+{
+	"name": "feiskyer",
+	"version": "1.0.0",
+	"description": "feiskyer 的 Claude Code 技能集合 - 包含 Codex 自主执行、长期任务自动化、图像生成、YouTube 字幕提取、Kiro 交互式开发、Spec-Kit 规范驱动开发等 6 个专业技能。",
+	"author": {
+		"name": "feiskyer",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"codex",
+		"autonomous",
+		"image-generation",
+		"youtube",
+		"kiro",
+		"spec-kit",
+		"workflow"
+	]
+}

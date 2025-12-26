@@ -1,0 +1,42 @@
+{
+  "url": "https://shipany.ai/zh/docs/auth/google",
+  "title": "Google 登录",
+  "content": "按照以下步骤为你的项目配置 Google 登录。\n\n进入 Google Cloud 控制台，进入 API & Services -> Credentials 页面。\n\n点击左上角的项目选择器，选择一个项目，或者新建一个项目。\n\n在 API & Services -> Credentials 页面，点击 Create Credentials 按钮，选择 OAuth client ID，开始创建 OAuth 客户端。\n\n在 Authorized javascript origins 下面添加你的项目域名，比如：\n\n在 Authorized redirect URIs 下面添加你的项目回调地址，格式为：\n\n点击 Create 按钮，在弹出的窗口中，复制 Client ID 和 Client secret。\n\n注意：如果是新项目创建 OAuth 客户端，需要先完成 OAuth consent screen 配置，按照提示一步步操作即可。记得不要上传 App logo，否则会触发验证。\n\n在项目管理后台，进入 Settings -> Auth -> Google Auth 面板，填入上一步复制的 Client ID 和 Client secret。\n\n打开 Auth Enabled 开关启用谷歌跳转登录功能，打开 OneTap Enabled 开关启用谷歌快捷登录功能。\n\n进入项目主页，刷新页面，可以看到右上角弹出 谷歌快捷登录 弹窗，用户可以使用谷歌账号一键登录你的网站。\n\n在页面右上角点击 Sign In 按钮，显示登录弹窗，底部包含 谷歌登录 按钮，用户点击跳转 谷歌 OAuth 登录。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Google 登录",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "https://your-domain.com",
+      "language": "yaml"
+    },
+    {
+      "code": "https://your-domain.com/api/auth/callback/google",
+      "language": "yaml"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/auth/email",
+    "https://shipany.ai/zh/docs/auth/google",
+    "https://shipany.ai/zh/docs/auth/github",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

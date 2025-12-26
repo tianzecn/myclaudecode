@@ -1,0 +1,97 @@
+{
+  "url": "https://shipany.ai/zh/docs/email/resend",
+  "title": "Resend",
+  "content": "ShipAny 集成了 Resend 作为邮件服务提供商，可用于发送登录验证码、发送客户欢迎邮件、发送订阅通知等场景。\n\n参考以下步骤，在你的项目快速接入 Resend 邮件服务。\n\n在 Resend 控制台，进入 Domains 页面，点击 Add Domain 按钮，添加一个邮件域名。\n\n可以是子域名或主域名。比如：mail.shipany.codes\n\n按照指示，完成邮件域名的 DNS 解析和验证。\n\n在 Resend 控制台，进入 API Keys 页面，点击 Create API Key 按钮，创建一个 API 密钥。\n\n在项目管理后台，进入 Settings -> Email -> Resend 面板，\n\n在 Resend API Key 字段填入上一步创建的 API 密钥。\n\n在 Resend Sender Email 字段填入一个用于发送邮件的邮箱地址，域名需要与在 Resend 控制台添加的邮件域名一致，@ 符号前面的邮箱别名可以任意指定，比如：no-reply@mail.shipany.codes。\n\n如果需要显示发送者名称，可以填写带发送者名称的邮箱地址，比如：\n\n通过 curl 命令，请求项目的邮件发送接口，测试邮件发送能力：\n\n请求成功后，curl 命令会返回邮件发送结果：\n\n邮件接收方，登录自己的邮箱，看到邮件内容如下：\n\n至此，Resend 邮件服务配置成功，后面就可以在项目中使用 Resend 发送邮件了。\n\n你可以在项目中，根据具体的业务需求，自定义发送邮件的方式和内容。\n\n先在项目文件中，使用 React 组件定义邮件模板。\n\n比如，在 src/shared/blocks/email/verification-code.tsx 文件中，定义一个验证码邮件模板：\n\nReact Email 是一个用于构建邮件模板的库，可以用于构建复杂的邮件模板。\n\n你需要在项目中安装 react-email 库\n\n使用 React Email 组件库，构建邮件模板。\n\n比如，在 src/shared/blocks/email/react-email.tsx 文件中，定义一个邮件模板：\n\n你可以在 React Email 模板市场 中，找到一些常用的邮件模板，",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Resend",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    },
+    {
+      "level": "h2",
+      "text": "自定义发送邮件",
+      "id": "自定义发送邮件"
+    },
+    {
+      "level": "h3",
+      "text": "发送纯文本邮件",
+      "id": "发送纯文本邮件"
+    },
+    {
+      "level": "h3",
+      "text": "发送 HTML 富文本邮件",
+      "id": "发送-html-富文本邮件"
+    },
+    {
+      "level": "h3",
+      "text": "发送模板邮件",
+      "id": "发送模板邮件"
+    },
+    {
+      "level": "h3",
+      "text": "使用 React Email 构建邮件模板",
+      "id": "使用-react-email-构建邮件模板"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "ShipAny Two <no-reply@mail.shipany.codes>",
+      "language": "python"
+    },
+    {
+      "code": "curl -X POST https://{your-domain}/api/email/send-email \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"emails\":[\"support@xxx.com\"],\n    \"subject\":\"Test Email\"\n  }'",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"code\": 0,\n  \"message\": \"ok\",\n  \"data\": {\n    \"success\": true,\n    \"messageId\": \"xxx\",\n    \"provider\": \"resend\"\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "import { getEmailService } from '@/shared/services/email';\n\nconst emails = ['support@xxx.com'];\nconst subject = 'Test Email';\n\nconst emailService = await getEmailService();\nconst emailProvider = emailService.getProvider('resend');\n\nconst result = await emailProvider.sendEmail({\n  to: emails,\n  subject: subject,\n  text: 'Hello World.',\n});\n\nconsole.log('send email result', result);",
+      "language": "javascript"
+    },
+    {
+      "code": "import { getEmailService } from '@/shared/services/email';\n\nconst emails = ['support@xxx.com'];\nconst subject = 'Test Email';\n\nconst emailService = await getEmailService();\nconst emailProvider = emailService.getProvider('resend');\n\nconst result = await emailProvider.sendEmail({\n  to: emails,\n  subject: subject,\n  html: '<p style=\"color: red;\">Hello from <a href=\"https://shipany.ai\">ShipAny</a>.</p>',\n});\n\nconsole.log('send email result', result);",
+      "language": "javascript"
+    },
+    {
+      "code": "export function VerificationCode({ code }: { code: string }) {\n  return (\n    <div>\n      <h1>Verification Code</h1>\n      <p style={{ color: 'red' }}>Your verification code is: {code}</p>\n    </div>\n  );\n}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { VerificationCode } from '@/shared/blocks/email/verification-code';\nimport { getEmailService } from '@/shared/services/email';\n\nconst emails = ['support@xxx.com'];\nconst subject = 'Test Email';\n\nconst emailService = await getEmailService();\nconst emailProvider = emailService.getProvider('resend');\n\nconst result = await emailProvider.sendEmail({\n  to: emails,\n  subject: subject,\n  react: VerificationCode({ code: '123455' }),\n});\n\nconsole.log('send email result', result);",
+      "language": "javascript"
+    },
+    {
+      "code": "pnpm add @react-email/components",
+      "language": "python"
+    },
+    {
+      "code": "import * as React from 'react';\nimport { Button, Html } from '@react-email/components';\n\nexport function ReactEmail(props: { url: string }) {\n  const { url } = props;\n\n  return (\n    <Html lang=\"en\">\n      <Button href={url}>Click me</Button>\n    </Html>\n  );\n}",
+      "language": "jsx"
+    },
+    {
+      "code": "import { ReactEmail } from '@/shared/blocks/email/react-email';\nimport { getEmailService } from '@/shared/services/email';\n\nconst emails = ['support@xxx.com'];\nconst subject = 'Test Email';\n\nconst emailService = await getEmailService();\nconst emailProvider = emailService.getProvider('resend');\n\nconst result = await emailProvider.sendEmail({\n  to: emails,\n  subject: subject,\n  react: ReactEmail({ url: 'https://shipany.ai' }),\n});\n\nconsole.log('send email result', result);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/email/resend",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

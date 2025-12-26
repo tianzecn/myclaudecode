@@ -1,0 +1,83 @@
+{
+  "url": "https://shipany.ai/zh/docs/deploy/dokploy",
+  "title": "使用 Dokploy 部署",
+  "content": "ShipAny 可以构建成 Docker 镜像，支持部署到任意支持 Docker 的平台。\n\nDokploy 是一款开源的部署面板，可以让你用自己的服务器搭建类似 Vercel 一样的项目部署平台。\n\n你可以按照下面的步骤，搭建 Dokploy 部署面板，使用 Dokploy 部署 ShipAny 项目。\n\n你需要先购买一台服务器，用于搭建 Dokploy 部署面板。\n\n购买服务器的平台有很多，比如：AWS Lightsail、DigitalOcean、LightNode、Hostinger 等，也可以在任意的云服务器厂商购买。\n\n推荐配置：4 核 8G 内存 100G 硬盘，操作系统选择 Ubuntu 24.04。\n\n使用 Dokploy 官方提供的脚本，一键安装 Dokploy 部署面板。\n\n通过 http://your-server-ip:3000 访问 Dokploy 部署面板。\n\n在 Web Server 页面绑定域名，后面就可以通过域名来访问 Dokploy 部署面板。\n\n基于 ShipAny 创建的项目，在项目根目录下有一个 Dockerfile 文件，你可以基于项目代码构建 Docker 镜像。\n\n进入按照 快速开始 创建的项目，在项目根目录下执行以下命令，构建 Docker 镜像。\n\n在构建镜像前，请确保你执行构建命令的环境安装了 Docker。如果是 MacOS 系统，推荐 OrbStack，其他操作系统请自行搜索 Docker 的安装方式。\n\nShipAny 项目的 cf 分支不支持 Docker，请确保你是基于 main 分支或 dev 分支创建的项目。\n\n构建镜像完成后，在项目根目录下执行以下命令，基于 Docker 镜像启动项目。\n\n然后访问 http://localhost:8080，就可以预览项目了。\n\n此步骤是为了验证 Docker 镜像构建是否正常。如果你不想本地安装 Docker，可以跳过此步骤，把代码推送到 Github 走远程构建。\n\n基于 ShipAny 创建的项目，在根目录下有一个 .github/workflows/docker-build.yaml 文件，定义了使用 Github Actions 远程构建 Docker 镜像的流程。\n\n默认情况下，会在 main 分支代码有更新时，自动构建 Docker 镜像，并推送到 ghcr.io 镜像仓库。你可以根据自己的需求，修改 docker-build.yaml 文件的内容。\n\n在确保上面的步骤，使用 Github Actions 远程构建 Docker 镜像成功后。我们可以在 Dokploy 部署面板创建项目，拉取远程的 Docker 镜像进行部署。\n\n在 Dokploy 部署面板，进入 Projects 页面，点击 Create Project 按钮，创建一个新项目。\n\n点击进入上一步创建的项目，点击 Create Service 按钮，选择 Application，创建一个新应用。\n\n参考 ghcr 镜像仓库设置，进入 Github Settings 页面，创建一个新 Token，用于访问 ghcr.io 镜像仓库。\n\n进入第 2 步创建的应用，在 General 标签页，选择 Provider -> Docker，配置 Docker 部署。\n\n配置好 Docker 部署后，点击 Deploy 按钮，开始部署应用。\n\n在 Deployments 标签页，可以查看部署记录，点击 View 按钮，可以看到部署的进度和状态。\n\n可以看到，拉取远程构建好的镜像到 Dokploy 部署的方式，只花了十几秒就完成了部署，非常快速。\n\n至此，我们已经完成了通过 Dokploy 部署 ShipAny 项目的流程。接下来，可以通过 绑定自定义域名、设置环境变量、配置访问统计 等操作，让新项目正式上线运营。\n\n进入项目的 Domains 页面，点击 Add Domain 按钮，添加自定义域名。\n\n输入你想绑定的自定义域名，可以是根域名，也可以是子域名。部署路径使用根目录，容器端口使用默认的 3000。 开启 HTTPS 选项，让 Dokploy 自动为你的域名生成 SSL 证书。点击 Create 按钮，添加自定义域名。\n\n登录你的域名服务商的 DNS 解析页面，为你添加的域名配置一条 A 记录，解析到 Dokploy 部署面板所在的服务器 IP 地址。\n\n请注意：Dokploy 部署面板所在服务器的 IP 地址必须可公网访问。调整防火墙，开启 80、443、3000 等端口的访问。\n\n等 DNS 解析生效（一般半小时内生效，最多可能需要 48 小时），在浏览器访问你的自定义域名，就可以预览项目了。\n\n在项目正式上线运行前，请修改环境变量，确保项目在线上运行时，使用正确的配置。\n\n先在本地项目根目录下设置 .env.production 文件，填入项目在线上运行的配置，NEXT_PUBLIC_APP_URL 填入上一步添加的自定义域名。\n\n进入 Dokploy 项目的 Environment 标签页，粘贴本地 .env.production 文件中的环境变量内容，点击 Save 按钮，设置环境变量。\n\n进入 Dokploy 项目的 General 标签页，点击 Reload 按钮，重载应用，加载最新设置的环境变量。\n\n再次访问你的自定义域名，新版本已经使用了最新设置的环境变量内容。\n\nPlausible 是一套开源的访问统计系统。你可以通过 Dokploy 面板一键安装 Plausible，搭建自己的访问统计系统。\n\n等 Plausible 安装完成后，点击 Domains 标签页，可以看到 Dokploy 默认分配的域名，类似：xxx.traefik.me。你可以直接使用默认分配的域名做访问统计，也可以添加自己的域名。\n\nService Name 选择 plausible，容器端口填写 8000，勾选启用 HTTPS 选项，点击 Create 按钮，绑定自定义域名。\n\n同样需要去域名服务商做 DNS 解析，为自定义域名添加一条 A 记录，解析到 Dokploy 部署面板所在的服务器 IP 地址。\n\n进入 Environment 标签页，修改 BASE_URL，改成你的自定义域名，另外两个参数保持默认。\n\n进入 Plausible 应用的 General 标签页，点击 Reload 按钮，重载应用，加载最新设置的环境变量。\n\n通过自定义域名访问 Plausible 应用，设置管理员账号和登录密码。\n\n至此，在 Dokploy 面板已成功安装 Plausible 访问统计系统，接下来就可以添加网站做访问统计了。\n\n通过自定义域名访问 Plausible 应用，点击 Add website 按钮，添加你要统计的网站域名。\n\n按照指示一直往下走，最后会提示你在你的网站添加一段这样的脚本：\n\n登录你的 ShipAny 项目管理后台，在 Settings -> Analytics 页面，找到 Plausible 面板，填入上一步 data-domain 和 src 的值，点击 Save 按钮，配置 Plausible 访问统计。\n\n配置完成后，等项目正式上线运营后，你就可以在 Plausible 系统后台看到项目的访问统计数据了。\n\n部署到 Cloudflare Workers",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "使用 Dokploy 部署",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "搭建 Dokploy 部署面板",
+      "id": "搭建-dokploy-部署面板"
+    },
+    {
+      "level": "h2",
+      "text": "构建 Docker 镜像",
+      "id": "构建-docker-镜像"
+    },
+    {
+      "level": "h2",
+      "text": "使用 Dokploy 部署项目",
+      "id": "使用-dokploy-部署项目"
+    },
+    {
+      "level": "h2",
+      "text": "绑定自定义域名",
+      "id": "绑定自定义域名"
+    },
+    {
+      "level": "h2",
+      "text": "设置环境变量",
+      "id": "设置环境变量"
+    },
+    {
+      "level": "h2",
+      "text": "配置访问统计",
+      "id": "配置访问统计"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "curl -sSL https://dokploy.com/install.sh | sh",
+      "language": "unknown"
+    },
+    {
+      "code": "docker build -t my-shipany-project .",
+      "language": "unknown"
+    },
+    {
+      "code": "docker run -p 8080:3000 my-shipany-project:latest",
+      "language": "json"
+    },
+    {
+      "code": "on:\n  push:\n    branches: ['main']\n  pull_request:\n    branches: ['main']\n  workflow_dispatch:\n\nenv:\n  REGISTRY: ghcr.io\n  IMAGE_NAME: ${{ github.repository }}\n  SVR_NAME: ${{ github.event.repository.name }}",
+      "language": "yaml"
+    },
+    {
+      "code": "# app\nNEXT_PUBLIC_APP_URL = \"https://your-domain.com\"\nNEXT_PUBLIC_APP_NAME = \"Your App Name\"\n\n# theme\nNEXT_PUBLIC_THEME = \"default\"\n\n# appearance\nNEXT_PUBLIC_APPEARANCE = \"dark\"\n\n# database\nDATABASE_URL = \"postgresql://user:password@domain:port/database\"\nDATABASE_PROVIDER = \"postgresql\"\nDB_SINGLETON_ENABLED = \"false\"\n\n# auth secret\n# openssl rand -base64 32\nAUTH_SECRET = \"your-secret-key\"",
+      "language": "markdown"
+    },
+    {
+      "code": "<script\n  defer\n  data-domain=\"your-domain.com\"\n  src=\"https://your-plausible-domain.com/js/script.js\"\n></script>",
+      "language": "jsx"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/deploy/vercel",
+    "https://shipany.ai/zh/docs/deploy/cloudflare",
+    "https://shipany.ai/zh/docs/deploy/dokploy",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

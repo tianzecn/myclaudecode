@@ -1,0 +1,31 @@
+{
+  "url": "https://shipany.ai/zh/docs/analytics/ga",
+  "title": "Google Analytics",
+  "content": "ShipAny 集成了 Google Analytics 作为访问统计服务提供商，只需简单配置即可接入使用。\n\n参考以下步骤，在你的项目快速接入 Google Analytics 访问统计服务。\n\n访问 Google Analytics 官网，注册一个账户。\n\n在 Google Analytics 控制台，进入 Admin 页面，点击 Create -> Property 按钮，按照指示输入属性名称和你的网站域名，进入到 Set up a Google tag 页面。\n\n在项目管理后台，进入 Settings -> Analytics 页面，找到 Google Analytics 面板，在 Google Analytics ID 字段填入上一步复制的属性 ID，点击 Save 按钮。\n\n回到 Google Analytics 控制台的 Set up a Google tag 页面，点击 Test installation 按钮，验证 Google Analytics 接入是否成功。\n\n配置完成后，等项目正式上线运营后，你就可以在 Google Analytics 控制台看到项目的访问统计数据了。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Google Analytics",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/analytics/ga",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "url": "https://shipany.ai/zh/docs/database/sqlite",
+  "title": "SQLite",
+  "content": "ShipAny 支持 SQLite 数据库。按照以下步骤快速开始。\n\n根据你的操作系统类型，自行搜索安装 SQLite，安装完成后，通过命令行创建数据库文件：\n\n你也可以跳过这一步，在项目中配置 SQLite 后，执行数据表迁移命令时，会自动创建数据库文件。\n\n在项目的环境变量文件中，填入 SQLite 数据库相关的配置。\n\n使用 SQLite 数据库时，数据表结构定义在 ./src/config/db/schema.sqlite.ts 文件中，你需要导出这个文件的数据表。\n\n打开 ./src/config/db/schema.ts 文件，修改内容为：\n\n如果你需要新增数据表，或者修改数据表字段，可以打开 ./src/config/db/schema.sqlite.ts 文件，修改数据表结构。\n\n如果你需要修改数据表连接参数，比如配置自定义选项、连接池等，可以修改 ./src/core/db/sqlite.ts 文件中的逻辑。\n\n在进行数据操作时，默认使用的是 ./src/core/db/index.ts 导出的 db() 对象，导出类型是 any，在某些情况下，可能会缺乏类型提示。\n\n如果你希望使用强类型的数据库对象，可以在操作数据时，使用以下方式获取数据库对象：\n\n使用 Cloudflare Workers 部署项目时，暂不支持使用 SQLite 数据库。\n\n你可以使用 Turso 等兼容 SQLite 的数据库服务。",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "SQLite",
+      "id": ""
+    },
+    {
+      "level": "h2",
+      "text": "快速开始",
+      "id": "快速开始"
+    },
+    {
+      "level": "h2",
+      "text": "自定义",
+      "id": "自定义"
+    },
+    {
+      "level": "h3",
+      "text": "修改数据表",
+      "id": "修改数据表"
+    },
+    {
+      "level": "h3",
+      "text": "修改数据库连接",
+      "id": "修改数据库连接"
+    },
+    {
+      "level": "h3",
+      "text": "部署到 Cloudflare Workers",
+      "id": "部署到-cloudflare-workers"
+    },
+    {
+      "level": "h2",
+      "text": "参考",
+      "id": "参考"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "sqlite3 data/local.db",
+      "language": "unknown"
+    },
+    {
+      "code": "DATABASE_PROVIDER = \"sqlite\"\nDATABASE_URL = \"file:data/local.db\"\nDB_SCHEMA_FILE = \"./src/config/db/schema.sqlite.ts\"\nDB_MIGRATIONS_OUT = \"./src/config/db/migrations_sqlite\"",
+      "language": "unknown"
+    },
+    {
+      "code": "export * from './schema.sqlite';",
+      "language": "sql"
+    },
+    {
+      "code": "pnpm db:generate\npnpm db:migrate",
+      "language": "unknown"
+    },
+    {
+      "code": "pnpm db:studio",
+      "language": "unknown"
+    },
+    {
+      "code": "pnpm db:generate\npnpm db:migrate",
+      "language": "unknown"
+    },
+    {
+      "code": "import { db } from '@/core/db';\nimport { user } from '@/config/db/schema';\n\nconst [result] = await db().select().from(user).limit(1);",
+      "language": "csharp"
+    },
+    {
+      "code": "import { dbSqlite } from '@/core/db';\nimport { user } from '@/config/db/schema';\n\nconst [result] = await dbSqlite().select().from(user).limit(1);",
+      "language": "csharp"
+    },
+    {
+      "code": "import { getSqliteDb } from '@/core/db/sqlite';\nimport { user } from '@/config/db/schema';\n\nconst [result] = await getSqliteDb().select().from(user).limit(1);",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://shipany.ai/zh/docs/quick-start",
+    "https://shipany.ai/zh/docs/config",
+    "https://shipany.ai/zh/docs/page-builder",
+    "https://shipany.ai/zh/docs/vibe-coding",
+    "https://shipany.ai/zh/docs/database",
+    "https://shipany.ai/zh/docs/database/supabase",
+    "https://shipany.ai/zh/docs/database/neon",
+    "https://shipany.ai/zh/docs/database/postgresql",
+    "https://shipany.ai/zh/docs/database/turso",
+    "https://shipany.ai/zh/docs/database/sqlite",
+    "https://shipany.ai/zh/docs/database/mysql",
+    "https://shipany.ai/zh/docs/email",
+    "https://shipany.ai/zh/docs/analytics",
+    "https://shipany.ai/zh/docs/ads",
+    "https://shipany.ai/zh/docs/customer-service"
+  ]
+}
