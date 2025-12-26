@@ -201,6 +201,27 @@
 				"mcp"
 			],
 			"strict": true
+		},
+		{
+			"name": "elements-of-style",
+			"source": "./plugins/the-elements-of-style",
+			"description": "Writing guidance based on Strunk's The Elements of Style (1918). Clear, precise writing rules for documentation and prose. By Jesse Vincent.",
+			"version": "1.0.0",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "writing",
+			"keywords": [
+				"writing",
+				"style",
+				"grammar",
+				"composition",
+				"clarity",
+				"documentation"
+			],
+			"strict": true
 		}
 	]
 }
