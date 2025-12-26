@@ -1,8 +1,10 @@
 #!/bin/bash
-# 一键更新所有第三方插件（Jesse Vincent 全家桶）
+# 一键更新所有第三方插件
 # 用法: ./scripts/update-all-third-party.sh
 #
 # 此脚本会依次更新以下插件：
+#
+# Jesse Vincent 全家桶:
 # - superpowers (核心技能库)
 # - superpowers-chrome (Chrome DevTools 自动化)
 # - the-elements-of-style (写作风格指南)
@@ -10,6 +12,9 @@
 # - superpowers-lab (实验性技能)
 # - superpowers-developing-for-claude-code (插件开发指南)
 # - double-shot-latte (自动继续工作流)
+#
+# 其他第三方:
+# - notebooklm-skill (NotebookLM 集成 by PleasePrompto)
 
 set -e
 
@@ -34,6 +39,7 @@ PLUGINS=(
     "update-superpowers-lab.sh:🧪 Superpowers Lab"
     "update-superpowers-developing-for-claude-code.sh:📚 Developing for Claude Code"
     "update-double-shot-latte.sh:☕ Double Shot Latte"
+    "update-notebooklm-skill.sh:📓 NotebookLM Skill"
 )
 
 for plugin in "${PLUGINS[@]}"; do
