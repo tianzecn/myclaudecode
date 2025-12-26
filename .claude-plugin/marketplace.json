@@ -158,6 +158,27 @@
 				"codebase-analysis"
 			],
 			"strict": true
+		},
+		{
+			"name": "superpowers",
+			"source": "./plugins/superpowers",
+			"description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques. By Jesse Vincent.",
+			"version": "4.0.2",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"skills",
+				"tdd",
+				"debugging",
+				"collaboration",
+				"best-practices",
+				"workflows"
+			],
+			"strict": true
 		}
 	]
 }
