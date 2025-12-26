@@ -328,6 +328,28 @@
 				"source-grounded"
 			],
 			"strict": true
+		},
+		{
+			"name": "skill-seekers",
+			"source": "./plugins/skill-seekers",
+			"description": "自动将文档网站、GitHub 仓库、PDF 文件转换为 Claude AI 技能。17 个 MCP 工具，25 个预设配置。By yusufkaraaslan.",
+			"version": "1.0.0",
+			"author": {
+				"name": "yusufkaraaslan",
+				"email": "",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"skill-generation",
+				"documentation",
+				"github",
+				"pdf",
+				"scraping",
+				"mcp",
+				"automation"
+			],
+			"strict": true
 		}
 	]
 }

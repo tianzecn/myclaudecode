@@ -2,7 +2,10 @@
   "mcpServers": {
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp"],
+      "args": [
+        "-y",
+        "chrome-devtools-mcp"
+      ],
       "env": {
         "CHROME_EXECUTABLE_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
       }
