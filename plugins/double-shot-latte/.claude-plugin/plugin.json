@@ -1,0 +1,12 @@
+{
+  "name": "double-shot-latte",
+  "version": "1.1.5",
+  "description": "Automatically evaluates whether Claude should continue working instead of stopping prematurely using Claude-judged decision making",
+  "author": {
+    "name": "Jesse",
+    "url": "https://github.com/anthropics"
+  },
+  "homepage": "https://github.com/anthropics/claude-code",
+  "license": "MIT",
+  "keywords": ["hooks", "automation", "workflow", "continuation"]
+}

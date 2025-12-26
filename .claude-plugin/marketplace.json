@@ -286,6 +286,26 @@
 				"hooks"
 			],
 			"strict": true
+		},
+		{
+			"name": "double-shot-latte",
+			"source": "./plugins/double-shot-latte",
+			"description": "Stops 'Would you like me to continue?' interruptions. Uses Claude to judge whether Claude should continue working automatically. By Jesse Vincent.",
+			"version": "1.1.5",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"hooks",
+				"automation",
+				"workflow",
+				"continuation",
+				"productivity"
+			],
+			"strict": true
 		}
 	]
 }
