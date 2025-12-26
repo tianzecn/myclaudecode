@@ -265,6 +265,27 @@
 				"repl"
 			],
 			"strict": true
+		},
+		{
+			"name": "superpowers-developing-for-claude-code",
+			"source": "./plugins/superpowers-developing-for-claude-code",
+			"description": "Skills and docs for Claude Code plugin development. 42 official documentation files + self-update mechanism + plugin creation workflows. By Jesse Vincent.",
+			"version": "0.3.1",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"plugin-development",
+				"skills",
+				"mcp",
+				"documentation",
+				"claude-code",
+				"hooks"
+			],
+			"strict": true
 		}
 	]
 }
