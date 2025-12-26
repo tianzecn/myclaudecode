@@ -17,16 +17,19 @@ Skill Seekers 是一个强大的 MCP 服务器，提供 17 个专业工具用于
 ⚠️ **安装插件后，你需要手动安装 Python 包：**
 
 ```bash
-# 使用 pip
-pip install skill-seekers
-
-# 或使用 uv
+# 推荐：使用 uv (自动管理虚拟环境)
 uv tool install skill-seekers
+
+# 或使用 pipx
+pipx install skill-seekers
+
+# 或使用 pip (需要虚拟环境或 --user)
+pip install --user skill-seekers
 ```
 
 **系统要求：**
 - Python 3.10+
-- pip 或 uv
+- uv (推荐) 或 pipx 或 pip
 
 ## 安装
 

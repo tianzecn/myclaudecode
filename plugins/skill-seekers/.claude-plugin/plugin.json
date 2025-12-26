@@ -18,8 +18,8 @@
 	],
 	"mcpServers": {
 		"skill-seekers": {
-			"command": "python",
-			"args": ["-m", "skill_seekers.mcp.server_fastmcp"]
+			"command": "bash",
+			"args": ["${CLAUDE_PLUGIN_ROOT}/start-mcp.sh"]
 		}
 	}
 }
