@@ -222,6 +222,27 @@
 				"documentation"
 			],
 			"strict": true
+		},
+		{
+			"name": "episodic-memory",
+			"source": "./plugins/episodic-memory",
+			"description": "Semantic search for Claude Code conversations. Remember past discussions, decisions, and patterns. MCP server + auto-indexing. By Jesse Vincent.",
+			"version": "1.0.15",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"memory",
+				"search",
+				"conversations",
+				"semantic-search",
+				"episodic",
+				"mcp"
+			],
+			"strict": true
 		}
 	]
 }

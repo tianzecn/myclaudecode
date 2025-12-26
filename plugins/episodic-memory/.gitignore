@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+tmp/
+*.log
+.DS_Store
+*.db
+*.db-shm
+*.db-wal
+.env
+.claude/settings.local.json
