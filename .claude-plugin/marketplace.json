@@ -179,6 +179,28 @@
 				"workflows"
 			],
 			"strict": true
+		},
+		{
+			"name": "superpowers-chrome",
+			"source": "./plugins/superpowers-chrome",
+			"description": "Direct Chrome DevTools Protocol access via 'browsing' skill. 17 CLI commands + MCP mode. Zero dependencies, auto-starts Chrome. By Jesse Vincent.",
+			"version": "1.6.1",
+			"author": {
+				"name": "Jesse Vincent",
+				"email": "jesse@fsck.com",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"chrome",
+				"browser",
+				"automation",
+				"devtools",
+				"cdp",
+				"websocket",
+				"mcp"
+			],
+			"strict": true
 		}
 	]
 }
