@@ -8,10 +8,7 @@
     "url": "https://github.com/ComposioHQ/awesome-claude-skills"
   },
   "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ComposioHQ/awesome-claude-skills"
-  },
+  "repository": "https://github.com/ComposioHQ/awesome-claude-skills",
   "keywords": [
     "skills",
     "claude",
@@ -21,6 +18,5 @@
     "creative",
     "document-processing",
     "automation"
-  ],
-  "strict": true
+  ]
 }
