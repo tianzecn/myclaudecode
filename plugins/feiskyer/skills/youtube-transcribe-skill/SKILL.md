@@ -1,7 +1,7 @@
 ---
 name: youtube-transcribe-skill
 description: Extract subtitles/transcripts from YouTube videos. Triggers: "youtube transcript", "extract subtitles", "video captions", "视频字幕", "字幕提取", "YouTube转文字", "提取字幕".
-allowed-tools: Read, Write, Glob, Grep, Task, Bash(cat:*), Bash(ls:*), Bash(tree:*), Bash(yt-dlp:*), Bash(which:*), mcp__plugin_claude-code-settings_chrome__*
+allowed-tools: Read, Write, Glob, Grep, Task, Bash(cat:*), Bash(ls:*), Bash(tree:*), Bash(yt-dlp:*), Bash(which:*), mcp__plugin_superpowers-chrome_chrome__use_browser
 ---
 
 # YouTube Transcript Extraction
@@ -48,65 +48,115 @@ Use command-line tools to quickly extract subtitles.
 
 ## Step 3: Browser Automation (Fallback)
 
-When the CLI method fails or `yt-dlp` is missing, use browser UI automation to extract subtitles.
+When the CLI method fails or `yt-dlp` is missing, use `superpowers-chrome` browser automation to extract subtitles.
 
-1. **Check Tool Availability**:
+### 3.1 Check Tool Availability
 
-   - Check if `chrome-devtools-mcp` tools (specifically `mcp__plugin_claude-code-settings_chrome__new_page`) are available.
-   - **CRITICAL CHECK**: If `chrome-devtools-mcp` is **NOT** available AND `yt-dlp` was **NOT** found in Step 2:
-     - **STOP** execution.
-     - **Notify the User**: "Unable to proceed. Please either install `yt-dlp` (for fast CLI extraction) OR configure `chrome-devtools-mcp` (for browser automation)."
+- Check if `use_browser` MCP tool is available (`mcp__plugin_superpowers-chrome_chrome__use_browser`).
+- **CRITICAL CHECK**: If `use_browser` is **NOT** available AND `yt-dlp` was **NOT** found in Step 2:
+  - **STOP** execution.
+  - **Notify the User**: "Unable to proceed. Please either install `yt-dlp` (for fast CLI extraction) OR enable `superpowers-chrome` plugin (for browser automation)."
 
-2. **Initialize Browser Session** (If tools are available):
+### 3.2 Navigate to Video Page
 
-   Call `mcp__plugin_claude-code-settings_chrome__new_page` to open the video URL.
+Use `use_browser` with `navigate` action to open the video URL:
 
-### 3.2 Analyze Page State
+```json
+{
+  "action": "navigate",
+  "payload": "[VIDEO_URL]"
+}
+```
 
-Call `mcp__plugin_claude-code-settings_chrome__take_snapshot` to read the page accessibility tree.
+Then wait for page to load:
+
+```json
+{
+  "action": "await_element",
+  "selector": "#description",
+  "timeout": 10000
+}
+```
 
 ### 3.3 Expand Video Description
 
 _Reason: The "Show transcript" button is usually hidden within the collapsed description area._
 
-1. Search the snapshot for a button labeled **"...more"**, **"...更多"**, or **"Show more"** (usually located in the description block below the video title).
-2. Call `mcp__plugin_claude-code-settings_chrome__click` to click that button.
+1. Click the "...more" / "...更多" / "Show more" button to expand description:
+
+```json
+{
+  "action": "click",
+  "selector": "tp-yt-paper-button#expand"
+}
+```
+
+Or use the alternative selector:
+
+```json
+{
+  "action": "click",
+  "selector": "#description-inline-expander #expand"
+}
+```
+
+2. Wait for expansion:
+
+```json
+{
+  "action": "await_element",
+  "selector": "ytd-video-description-transcript-section-renderer",
+  "timeout": 5000
+}
+```
 
 ### 3.4 Open Transcript Panel
 
-1. Call `mcp__plugin_claude-code-settings_chrome__take_snapshot` to get the updated UI snapshot.
-2. Search for a button labeled **"Show transcript"**, **"显示转录稿"**, or **"内容转文字"**.
-3. Call `mcp__plugin_claude-code-settings_chrome__click` to click that button.
+1. Click the "Show transcript" / "显示转录稿" / "内容转文字" button:
+
+```json
+{
+  "action": "click",
+  "selector": "ytd-video-description-transcript-section-renderer button"
+}
+```
+
+2. Wait for transcript panel to load:
+
+```json
+{
+  "action": "await_element",
+  "selector": "ytd-transcript-segment-renderer",
+  "timeout": 10000
+}
+```
 
 ### 3.5 Extract Content via DOM
 
 _Reason: Directly reading the accessibility tree for long lists is slow and consumes many tokens; DOM injection is more efficient._
 
-Call `mcp__plugin_claude-code-settings_chrome__evaluate_script` to execute the following JavaScript:
+Use `eval` action to execute JavaScript and extract transcript:
 
-```javascript
-() => {
-  // Select all transcript segment containers
-  const segments = document.querySelectorAll("ytd-transcript-segment-renderer");
-  if (!segments.length) return "BUFFERING"; // Retry if empty
-
-  // Iterate and format as "timestamp text"
-  return Array.from(segments)
-    .map((seg) => {
-      const time = seg.querySelector(".segment-timestamp")?.innerText.trim();
-      const text = seg.querySelector(".segment-text")?.innerText.trim();
-      return `${time} ${text}`;
-    })
-    .join("\n");
-};
+```json
+{
+  "action": "eval",
+  "payload": "(() => { const segments = document.querySelectorAll('ytd-transcript-segment-renderer'); if (!segments.length) return 'BUFFERING'; return Array.from(segments).map(seg => { const time = seg.querySelector('.segment-timestamp')?.innerText.trim(); const text = seg.querySelector('.segment-text')?.innerText.trim(); return `${time} ${text}`; }).join('\\n'); })()"
+}
 ```
 
-If it returns "BUFFERING", wait a few seconds and retry.
+If it returns `"BUFFERING"`, wait 2-3 seconds and retry.
 
 ### 3.6 Save and Cleanup
 
 1. Use the Write tool to save the extracted text as a local file (e.g., `<Video Title>.txt`).
-2. Call `mcp__plugin_claude-code-settings_chrome__close_page` to release resources.
+
+2. Close the browser tab to release resources:
+
+```json
+{
+  "action": "close_tab"
+}
+```
 
 ## Output Requirements
 
