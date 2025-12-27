@@ -71,3 +71,6 @@ Collected/
 
 # Git worktrees
 .worktrees/
+
+# VSCode Local History
+.history/
