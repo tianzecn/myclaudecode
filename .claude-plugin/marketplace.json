@@ -392,6 +392,29 @@
 				"workflow"
 			],
 			"strict": true
+		},
+		{
+			"name": "claude-skills",
+			"source": "./plugins/claude-skills",
+			"description": "Awesome Claude Skills Collection - 来自 ComposioHQ 的精选技能集合（27个技能），包含开发工具、商业营销、创意媒体、文档处理、生产力等多个领域的实用技能。",
+			"version": "1.0.0",
+			"author": {
+				"name": "ComposioHQ",
+				"email": "tech@composio.dev",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"skills",
+				"productivity",
+				"development",
+				"marketing",
+				"creative",
+				"document-processing",
+				"automation",
+				"composio"
+			],
+			"strict": true
 		}
 	]
 }

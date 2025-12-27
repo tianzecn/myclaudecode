@@ -1,0 +1,26 @@
+{
+  "name": "claude-skills",
+  "version": "1.0.0",
+  "description": "Awesome Claude Skills Collection - 来自 ComposioHQ 的精选技能集合，包含开发工具、商业营销、创意媒体、生产力等多个领域的实用技能。",
+  "author": {
+    "name": "ComposioHQ",
+    "email": "tech@composio.dev",
+    "url": "https://github.com/ComposioHQ/awesome-claude-skills"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ComposioHQ/awesome-claude-skills"
+  },
+  "keywords": [
+    "skills",
+    "claude",
+    "productivity",
+    "development",
+    "marketing",
+    "creative",
+    "document-processing",
+    "automation"
+  ],
+  "strict": true
+}
