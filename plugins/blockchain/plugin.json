@@ -19,5 +19,12 @@
 		"./agents/smart-contract-auditor.md",
 		"./agents/smart-contract-specialist.md",
 		"./agents/web3-integration-specialist.md"
+	],
+	"skills": [
+		"./skills/ccxt",
+		"./skills/coingecko",
+		"./skills/cryptofeed",
+		"./skills/hummingbot",
+		"./skills/polymarket"
 	]
 }

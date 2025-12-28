@@ -39,5 +39,9 @@
 		"./agents/neon-expert.md",
 		"./agents/nosql-specialist.md",
 		"./agents/supabase-schema-architect.md"
+	],
+	"skills": [
+		"./skills/postgresql",
+		"./skills/timescaledb"
 	]
 }

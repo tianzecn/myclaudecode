@@ -75,6 +75,11 @@
 	"skills": [
 		"./skills/patterns",
 		"./skills/schemas",
-		"./skills/xml-standards"
+		"./skills/xml-standards",
+		"./skills/ddd-doc-steward",
+		"./skills/proxychains",
+		"./skills/snapdom",
+		"./skills/telegram-dev",
+		"./skills/twscrape"
 	]
 }

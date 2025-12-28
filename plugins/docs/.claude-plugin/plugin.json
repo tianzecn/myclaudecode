@@ -1,7 +1,7 @@
 {
 	"name": "docs",
 	"version": "1.0.0",
-	"description": "文档技能集合 - 包含 ShipAny 等产品的中文文档技能，帮助快速了解和使用相关产品。",
+	"description": "文档技能集合 - 包含 ShipAny、Claude Code Guide、Claude Cookbooks 等产品的中文文档技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -13,6 +13,12 @@
 		"shipany",
 		"saas",
 		"skills",
-		"chinese"
+		"chinese",
+		"claude-code"
+	],
+	"skills": [
+		"./skills/claude-code-guide",
+		"./skills/claude-cookbooks",
+		"./skills/headless-cli"
 	]
 }
