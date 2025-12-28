@@ -74,3 +74,19 @@ Collected/
 
 # VSCode Local History
 .history/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Browser automation data
+**/browser_state/
+**/auth_info.json
+**/browser_profile/
