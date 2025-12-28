@@ -1,7 +1,7 @@
 {
 	"name": "documentation",
 	"version": "1.0.0",
-	"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 优化、写作风格指南等文档能力。8 个命令 + 3 个代理 + 2 个技能。",
+	"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、CLAUDE.md 优化等文档能力。21 个命令 + 3 个代理 + 2 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -21,13 +21,26 @@
 	],
 	"commands": [
 		"./commands/analyze-codebase.md",
+		"./commands/contributing.md",
+		"./commands/create-architecture-documentation.md",
+		"./commands/create-onboarding-guide.md",
+		"./commands/doc-api.md",
+		"./commands/docs-maintenance.md",
+		"./commands/docs.md",
 		"./commands/documentation-generator.md",
+		"./commands/explain-like-senior.md",
 		"./commands/generate-api-docs.md",
+		"./commands/generate-api-documentation.md",
+		"./commands/interactive-documentation.md",
+		"./commands/load-llms-txt.md",
+		"./commands/migration-guide.md",
 		"./commands/openapi-expert.md",
+		"./commands/troubleshooting-guide.md",
 		"./commands/update-claudemd.md",
+		"./commands/update-docs.md",
+		"./commands/优化CLAUDE.md",
 		"./commands/开发归档.md",
-		"./commands/开发总结.md",
-		"./commands/优化CLAUDE.md"
+		"./commands/开发总结.md"
 	],
 	"agents": [
 		"./agents/changelog-generator.md",

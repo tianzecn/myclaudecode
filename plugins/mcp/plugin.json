@@ -1,0 +1,27 @@
+{
+	"name": "mcp",
+	"version": "1.0.0",
+	"description": "MCP 开发插件 - Model Context Protocol 服务器开发、部署、测试、安全审计等 MCP 生态能力。7 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"mcp",
+		"model-context-protocol",
+		"server",
+		"integration",
+		"deployment"
+	],
+	"agents": [
+		"./agents/mcp-deployment-orchestrator.md",
+		"./agents/mcp-integration-engineer.md",
+		"./agents/mcp-protocol-specialist.md",
+		"./agents/mcp-registry-navigator.md",
+		"./agents/mcp-security-auditor.md",
+		"./agents/mcp-server-architect.md",
+		"./agents/mcp-testing-engineer.md"
+	]
+}

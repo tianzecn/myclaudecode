@@ -1,0 +1,36 @@
+{
+	"name": "media",
+	"version": "1.0.0",
+	"description": "媒体处理插件 - 视频剪辑、音频处理、播客制作、OCR 文档提取等多媒体处理能力。15 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"media",
+		"video",
+		"audio",
+		"podcast",
+		"ocr",
+		"ffmpeg"
+	],
+	"agents": [
+		"./agents/audio-mixer.md",
+		"./agents/audio-quality-controller.md",
+		"./agents/document-structure-analyzer.md",
+		"./agents/markdown-syntax-formatter.md",
+		"./agents/ocr-grammar-fixer.md",
+		"./agents/ocr-preprocessing-optimizer.md",
+		"./agents/ocr-quality-assurance.md",
+		"./agents/podcast-content-analyzer.md",
+		"./agents/podcast-metadata-specialist.md",
+		"./agents/podcast-transcriber.md",
+		"./agents/social-media-clip-creator.md",
+		"./agents/text-comparison-validator.md",
+		"./agents/timestamp-precision-specialist.md",
+		"./agents/video-editor.md",
+		"./agents/visual-analysis-ocr.md"
+	]
+}

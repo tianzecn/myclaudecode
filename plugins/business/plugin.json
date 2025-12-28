@@ -1,7 +1,7 @@
 {
 	"name": "business",
 	"version": "1.0.0",
-	"description": "商业插件 - 销售、营销、合规、客户成功、社交媒体等商业能力。23 个代理。",
+	"description": "商业插件 - 销售、营销、内容发布、合规、客户成功、社交媒体等商业能力。5 个命令 + 23 个代理。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -15,6 +15,13 @@
 		"compliance",
 		"social-media",
 		"enterprise"
+	],
+	"commands": [
+		"./commands/publisher-all.md",
+		"./commands/publisher-devto.md",
+		"./commands/publisher-linkedin.md",
+		"./commands/publisher-medium.md",
+		"./commands/publisher-x.md"
 	],
 	"agents": [
 		"./agents/ai-ethics-governance-specialist.md",

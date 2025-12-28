@@ -32,14 +32,25 @@
 		"./agents/ui-developer.md"
 	],
 	"commands": [
-		"./commands/implement.md",
-		"./commands/implement-ui.md",
-		"./commands/import-figma.md",
 		"./commands/api-docs.md",
 		"./commands/cleanup-artifacts.md",
-		"./commands/validate-ui.md",
+		"./commands/help.md",
+		"./commands/implement-ui.md",
+		"./commands/implement.md",
+		"./commands/import-figma.md",
+		"./commands/nextjs-api-tester.md",
+		"./commands/nextjs-bundle-analyzer.md",
+		"./commands/nextjs-component-generator.md",
+		"./commands/nextjs-middleware-creator.md",
+		"./commands/nextjs-migration-helper.md",
+		"./commands/nextjs-performance-audit.md",
+		"./commands/nextjs-scaffold.md",
 		"./commands/review.md",
-		"./commands/help.md"
+		"./commands/validate-ui.md",
+		"./commands/vercel-analytics.md",
+		"./commands/vercel-deploy-optimize.md",
+		"./commands/vercel-edge-function.md",
+		"./commands/vercel-env-sync.md"
 	],
 	"skills": [
 		"./skills/core-principles",

@@ -1,0 +1,32 @@
+{
+	"name": "research",
+	"version": "1.0.0",
+	"description": "深度研究插件 - 学术研究、竞争情报、数据分析、事实核查、研究报告生成等研究能力。12 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"research",
+		"academic",
+		"analysis",
+		"fact-check",
+		"intelligence"
+	],
+	"agents": [
+		"./agents/academic-researcher.md",
+		"./agents/competitive-intelligence-analyst.md",
+		"./agents/data-analyst.md",
+		"./agents/fact-checker.md",
+		"./agents/nia-oracle.md",
+		"./agents/query-clarifier.md",
+		"./agents/report-generator.md",
+		"./agents/research-brief-generator.md",
+		"./agents/research-coordinator.md",
+		"./agents/research-orchestrator.md",
+		"./agents/research-synthesizer.md",
+		"./agents/technical-researcher.md"
+	]
+}

@@ -1,0 +1,37 @@
+{
+	"name": "languages",
+	"version": "1.0.0",
+	"description": "编程语言专家插件 - 14 种编程语言的专业开发能力，包括 Python、TypeScript、Rust、Go、Java、C/C++ 等。14 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"languages",
+		"python",
+		"typescript",
+		"rust",
+		"golang",
+		"java",
+		"cpp",
+		"csharp"
+	],
+	"agents": [
+		"./agents/c-pro.md",
+		"./agents/cpp-pro.md",
+		"./agents/csharp-pro.md",
+		"./agents/elixir-pro.md",
+		"./agents/golang-pro.md",
+		"./agents/java-pro.md",
+		"./agents/javascript-pro.md",
+		"./agents/php-pro.md",
+		"./agents/python-pro.md",
+		"./agents/ruby-pro.md",
+		"./agents/rust-pro.md",
+		"./agents/scala-pro.md",
+		"./agents/sql-pro.md",
+		"./agents/typescript-pro.md"
+	]
+}

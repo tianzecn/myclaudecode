@@ -1,0 +1,31 @@
+{
+	"name": "seo",
+	"version": "1.0.0",
+	"description": "SEO 专家插件 - 内容优化、关键词策略、E-E-A-T 信号、精选摘要等搜索引擎优化能力。10 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"seo",
+		"content",
+		"keywords",
+		"meta",
+		"serp",
+		"e-e-a-t"
+	],
+	"agents": [
+		"./agents/seo-authority-builder.md",
+		"./agents/seo-cannibalization-detector.md",
+		"./agents/seo-content-auditor.md",
+		"./agents/seo-content-planner.md",
+		"./agents/seo-content-refresher.md",
+		"./agents/seo-content-writer.md",
+		"./agents/seo-keyword-strategist.md",
+		"./agents/seo-meta-optimizer.md",
+		"./agents/seo-snippet-hunter.md",
+		"./agents/seo-structure-architect.md"
+	]
+}

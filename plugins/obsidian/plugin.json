@@ -1,0 +1,27 @@
+{
+	"name": "obsidian",
+	"version": "1.0.0",
+	"description": "Obsidian 运维插件 - 知识库管理、笔记连接、标签管理、元数据、内容策展等 Obsidian Vault 运维能力。7 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"obsidian",
+		"vault",
+		"knowledge-base",
+		"notes",
+		"metadata"
+	],
+	"agents": [
+		"./agents/connection-agent.md",
+		"./agents/content-curator.md",
+		"./agents/metadata-agent.md",
+		"./agents/moc-agent.md",
+		"./agents/review-agent.md",
+		"./agents/tag-agent.md",
+		"./agents/vault-optimizer.md"
+	]
+}

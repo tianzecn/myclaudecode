@@ -1,0 +1,23 @@
+{
+	"name": "blockchain",
+	"version": "1.0.0",
+	"description": "区块链/Web3 插件 - 智能合约开发、安全审计、前端集成等 Web3 开发能力。3 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"blockchain",
+		"web3",
+		"smart-contract",
+		"solidity",
+		"defi"
+	],
+	"agents": [
+		"./agents/smart-contract-auditor.md",
+		"./agents/smart-contract-specialist.md",
+		"./agents/web3-integration-specialist.md"
+	]
+}

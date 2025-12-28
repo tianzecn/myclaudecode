@@ -1,0 +1,43 @@
+{
+	"name": "database",
+	"version": "1.0.0",
+	"description": "数据库专家插件 - PostgreSQL、MongoDB、Supabase、Neon 等数据库架构设计、迁移、优化和运维能力。10 个命令 + 9 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"database",
+		"postgresql",
+		"mongodb",
+		"supabase",
+		"neon",
+		"nosql",
+		"optimization"
+	],
+	"commands": [
+		"./commands/create-database-migrations.md",
+		"./commands/design-database-schema.md",
+		"./commands/supabase-backup-manager.md",
+		"./commands/supabase-data-explorer.md",
+		"./commands/supabase-migration-assistant.md",
+		"./commands/supabase-performance-optimizer.md",
+		"./commands/supabase-realtime-monitor.md",
+		"./commands/supabase-schema-sync.md",
+		"./commands/supabase-security-audit.md",
+		"./commands/supabase-type-generator.md"
+	],
+	"agents": [
+		"./agents/database-admin.md",
+		"./agents/database-architect.md",
+		"./agents/database-optimization.md",
+		"./agents/database-optimizer.md",
+		"./agents/neon-auth-specialist.md",
+		"./agents/neon-database-architect.md",
+		"./agents/neon-expert.md",
+		"./agents/nosql-specialist.md",
+		"./agents/supabase-schema-architect.md"
+	]
+}

@@ -88,8 +88,8 @@
 		{
 			"name": "development",
 			"source": "./plugins/development",
-			"description": "开发核心插件 - Bug 修复、代码审查、调试、PR 处理等核心开发能力。14 个命令 + 9 个代理。Originally from cc-marketplace.",
-			"version": "1.0.0",
+			"description": "开发核心插件 - Bug 修复、代码审查、调试、开发环境设置、API 设计、Monorepo 配置等核心开发能力。30 个命令 + 22 个代理 + 3 个技能。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -109,8 +109,8 @@
 		{
 			"name": "testing",
 			"source": "./plugins/testing",
-			"description": "测试插件 - 单元测试、测试分析、质量控制等测试能力。2 个命令 + 4 个代理。Originally from cc-marketplace.",
-			"version": "1.0.0",
+			"description": "测试插件 - 单元测试、E2E 测试、性能优化、安全审计、渗透测试等测试与安全能力。35 个命令 + 26 个代理。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -128,8 +128,8 @@
 		{
 			"name": "devops",
 			"source": "./plugins/devops",
-			"description": "DevOps 插件 - Git 提交、PR 创建、分支管理、部署自动化等 DevOps 能力。7 个命令 + 6 个代理。Originally from cc-marketplace.",
-			"version": "1.0.0",
+			"description": "DevOps 插件 - Git Flow、CI/CD、部署、容器化、Kubernetes、监控可观测性等 DevOps 能力。39 个命令 + 20 个代理。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -149,7 +149,7 @@
 		{
 			"name": "documentation",
 			"source": "./plugins/documentation",
-			"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 优化、写作风格指南等文档能力。8 个命令 + 3 个代理 + 2 个技能。Originally from cc-marketplace + elements-of-style.",
+			"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、CLAUDE.md 优化等文档能力。21 个命令 + 3 个代理 + 2 个技能。",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -173,8 +173,8 @@
 		{
 			"name": "planning",
 			"source": "./plugins/planning",
-			"description": "规划插件 - 需求分析、任务探索、项目规划、PRD 编写等规划能力。5 个命令 + 6 个代理。Originally from cc-marketplace.",
-			"version": "1.0.0",
+			"description": "规划插件 - 需求分析、项目管理、团队协作、Sprint 规划、PRD 编写等规划能力。44 个命令 + 7 个代理。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -193,8 +193,8 @@
 		{
 			"name": "workflow",
 			"source": "./plugins/workflow",
-			"description": "工作流插件 - Sugar 工作流、多代理协调、质量门控、代码质量审查、任务规划、Codex 自主执行等综合工作流能力。16 个命令 + 16 个代理 + 12 个技能。Originally from cc-marketplace + orchestration + feiskyer.",
-			"version": "1.0.0",
+			"description": "工作流插件 - Sugar 工作流、任务编排、同步协调、多代理协调、质量门控、Codex 自主执行等综合工作流能力。41 个命令 + 17 个代理 + 12 个技能。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -238,7 +238,7 @@
 		{
 			"name": "business",
 			"source": "./plugins/business",
-			"description": "商业插件 - 销售、营销、合规、客户成功、社交媒体等商业能力。23 个代理。Originally from cc-marketplace.",
+			"description": "商业插件 - 销售、营销、内容发布、合规、客户成功、社交媒体等商业能力。5 个命令 + 23 个代理。",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -259,8 +259,8 @@
 		{
 			"name": "design",
 			"source": "./plugins/design",
-			"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事、AI 图像生成等设计能力。5 个代理 + 1 个技能。Originally from cc-marketplace + feiskyer.",
-			"version": "1.0.0",
+			"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事、AI 图像生成等设计能力。6 个代理 + 1 个技能。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -279,8 +279,8 @@
 		{
 			"name": "specialized",
 			"source": "./plugins/specialized",
-			"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、NotebookLM 集成、YouTube 字幕提取等专业领域能力。16 个代理 + 2 个技能。Originally from cc-marketplace + feiskyer.",
-			"version": "1.0.0",
+			"description": "专业领域插件 - AI 工程、数据科学、机器学习、模拟仿真、工具集等专业领域能力。33 个命令 + 31 个代理 + 2 个技能。",
+			"version": "1.1.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -487,6 +487,213 @@
 				"document-processing",
 				"automation",
 				"composio"
+			],
+			"strict": true
+		},
+		{
+			"name": "languages",
+			"source": "./plugins/languages",
+			"description": "编程语言专家插件 - 14 种编程语言的专业开发能力，包括 Python、TypeScript、Rust、Go、Java、C/C++ 等。14 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"languages",
+				"python",
+				"typescript",
+				"rust",
+				"go",
+				"java",
+				"cpp",
+				"csharp"
+			],
+			"strict": true
+		},
+		{
+			"name": "database",
+			"source": "./plugins/database",
+			"description": "数据库专家插件 - PostgreSQL、Neon、Supabase、NoSQL、SQL 优化、数据库架构设计等数据库能力。10 个命令 + 9 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"database",
+				"postgresql",
+				"neon",
+				"supabase",
+				"nosql",
+				"sql"
+			],
+			"strict": true
+		},
+		{
+			"name": "seo",
+			"source": "./plugins/seo",
+			"description": "SEO 专家插件 - 内容优化、元数据优化、关键词策略、结构化数据、E-E-A-T 优化等 SEO 能力。10 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "marketing",
+			"keywords": [
+				"seo",
+				"content",
+				"keywords",
+				"meta",
+				"eeat",
+				"snippet"
+			],
+			"strict": true
+		},
+		{
+			"name": "game",
+			"source": "./plugins/game",
+			"description": "游戏开发插件 - Unity、Unreal Engine、3D 美术、游戏设计、资产管线、性能分析等游戏开发能力。5 个命令 + 4 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"game",
+				"unity",
+				"unreal",
+				"3d",
+				"game-design"
+			],
+			"strict": true
+		},
+		{
+			"name": "blockchain",
+			"source": "./plugins/blockchain",
+			"description": "区块链与 Web3 插件 - 智能合约开发、安全审计、Web3 前端集成等区块链能力。3 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"blockchain",
+				"web3",
+				"smart-contract",
+				"solidity",
+				"defi"
+			],
+			"strict": true
+		},
+		{
+			"name": "media",
+			"source": "./plugins/media",
+			"description": "媒体处理插件 - 视频编辑、音频处理、播客制作、OCR 文字识别、社交媒体剪辑等媒体能力。15 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "creative",
+			"keywords": [
+				"media",
+				"video",
+				"audio",
+				"podcast",
+				"ocr",
+				"social-media"
+			],
+			"strict": true
+		},
+		{
+			"name": "research",
+			"source": "./plugins/research",
+			"description": "深度研究插件 - 学术研究、竞争情报、数据分析、事实核查、报告生成等研究能力。12 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"research",
+				"academic",
+				"analysis",
+				"fact-check",
+				"report"
+			],
+			"strict": true
+		},
+		{
+			"name": "mcp",
+			"source": "./plugins/mcp",
+			"description": "MCP 开发插件 - MCP 服务器架构、协议规范、部署运维、安全审计、测试工程等 MCP 开发能力。7 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"mcp",
+				"protocol",
+				"server",
+				"integration",
+				"testing"
+			],
+			"strict": true
+		},
+		{
+			"name": "obsidian",
+			"source": "./plugins/obsidian",
+			"description": "Obsidian 知识库插件 - MOC 生成、标签管理、元数据规范、内容连接、质量审查等 Obsidian 管理能力。7 个代理。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "productivity",
+			"keywords": [
+				"obsidian",
+				"knowledge-base",
+				"moc",
+				"tags",
+				"metadata"
+			],
+			"strict": true
+		},
+		{
+			"name": "svelte",
+			"source": "./plugins/svelte",
+			"description": "Svelte 和 SvelteKit 开发插件 - 项目脚手架、组件开发、测试集成、Storybook、性能优化、无障碍检查等 Svelte 开发能力。16 个命令。",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"svelte",
+				"sveltekit",
+				"frontend",
+				"component",
+				"storybook",
+				"testing"
 			],
 			"strict": true
 		}

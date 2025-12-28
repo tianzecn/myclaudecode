@@ -1,0 +1,24 @@
+{
+  "name": "svelte",
+  "version": "1.0.0",
+  "description": "Svelte and SvelteKit development plugin with scaffolding, testing, Storybook integration, and optimization tools",
+  "commands": [
+    "./commands/svelte-a11y.md",
+    "./commands/svelte-component.md",
+    "./commands/svelte-debug.md",
+    "./commands/svelte-migrate.md",
+    "./commands/svelte-optimize.md",
+    "./commands/svelte-scaffold.md",
+    "./commands/svelte-storybook-migrate.md",
+    "./commands/svelte-storybook-mock.md",
+    "./commands/svelte-storybook-setup.md",
+    "./commands/svelte-storybook-story.md",
+    "./commands/svelte-storybook-troubleshoot.md",
+    "./commands/svelte-storybook.md",
+    "./commands/svelte-test-coverage.md",
+    "./commands/svelte-test-fix.md",
+    "./commands/svelte-test-setup.md",
+    "./commands/svelte-test.md"
+  ],
+  "agents": []
+}
