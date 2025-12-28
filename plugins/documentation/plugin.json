@@ -1,7 +1,7 @@
 {
 	"name": "documentation",
 	"version": "1.0.0",
-	"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 维护等文档能力。7 个命令 + 3 个代理。",
+	"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 优化、写作风格指南等文档能力。8 个命令 + 3 个代理 + 2 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -13,7 +13,11 @@
 		"api-docs",
 		"changelog",
 		"codebase-analysis",
-		"openapi"
+		"openapi",
+		"claude-md",
+		"optimization",
+		"writing-style",
+		"elements-of-style"
 	],
 	"commands": [
 		"./commands/analyze-codebase.md",
@@ -22,11 +26,16 @@
 		"./commands/openapi-expert.md",
 		"./commands/update-claudemd.md",
 		"./commands/开发归档.md",
-		"./commands/开发总结.md"
+		"./commands/开发总结.md",
+		"./commands/优化CLAUDE.md"
 	],
 	"agents": [
 		"./agents/changelog-generator.md",
 		"./agents/codebase-documenter.md",
 		"./agents/context7-docs-fetcher.md"
+	],
+	"skills": [
+		"./skills/claudemd-optimization",
+		"./skills/writing-clearly-and-concisely"
 	]
 }

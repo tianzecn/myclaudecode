@@ -1,7 +1,7 @@
 {
 	"name": "development",
 	"version": "1.0.0",
-	"description": "开发核心插件 - Bug 修复、代码审查、调试、PR 处理等核心开发能力。14 个命令 + 9 个代理。",
+	"description": "开发核心插件 - Bug 修复、代码审查、调试、PR 处理、代理开发等核心开发能力。18 个命令 + 9 个代理 + 3 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -23,14 +23,18 @@
 		"./commands/code-review-assistant.md",
 		"./commands/code-review.md",
 		"./commands/debug-session.md",
+		"./commands/develop.md",
 		"./commands/fix-github-issue.md",
 		"./commands/fix-issue.md",
 		"./commands/fix-pr.md",
 		"./commands/github-issue-fix.md",
+		"./commands/help.md",
 		"./commands/optimize.md",
 		"./commands/pr-issue-resolve.md",
 		"./commands/pr-review.md",
-		"./commands/refractor.md"
+		"./commands/refractor.md",
+		"./commands/创建命令.md",
+		"./commands/发布.md"
 	],
 	"agents": [
 		"./agents/api-integration-specialist.md",
@@ -42,5 +46,10 @@
 		"./agents/frontend-developer.md",
 		"./agents/python-expert.md",
 		"./agents/web-dev.md"
+	],
+	"skills": [
+		"./skills/patterns",
+		"./skills/schemas",
+		"./skills/xml-standards"
 	]
 }

@@ -1,7 +1,7 @@
 {
 	"name": "workflow",
 	"version": "1.0.0",
-	"description": "工作流插件 - Sugar 工作流、代码质量审查、任务规划、自动化等综合工作流能力。14 个命令 + 16 个代理 + 2 个技能。",
+	"description": "工作流插件 - Sugar 工作流、多代理协调、质量门控、代码质量审查、任务规划、Codex 自主执行等综合工作流能力。16 个命令 + 16 个代理 + 12 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -14,13 +14,19 @@
 		"sugar",
 		"quality",
 		"task-planning",
-		"n8n"
+		"n8n",
+		"orchestration",
+		"multi-agent",
+		"quality-gates",
+		"parallel-execution"
 	],
 	"commands": [
 		"./commands/audit.md",
 		"./commands/claude-desktop-extension.md",
 		"./commands/code-explain.md",
+		"./commands/help.md",
 		"./commands/lyra.md",
+		"./commands/setup.md",
 		"./commands/sugar-analyze.md",
 		"./commands/sugar-review.md",
 		"./commands/sugar-run.md",
@@ -52,6 +58,49 @@
 	],
 	"skills": [
 		"./skills/api-contract-sync",
-		"./skills/math"
-	]
+		"./skills/autonomous-skill",
+		"./skills/codex-skill",
+		"./skills/error-recovery",
+		"./skills/kiro-skill",
+		"./skills/math",
+		"./skills/model-tracking-protocol",
+		"./skills/multi-agent-coordination",
+		"./skills/multi-model-validation",
+		"./skills/quality-gates",
+		"./skills/spec-kit-skill",
+		"./skills/todowrite-orchestration"
+	],
+	"hooks": {
+		"SessionStart": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
+					}
+				]
+			}
+		],
+		"SubagentStop": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-statistics.sh"
+					}
+				]
+			}
+		],
+		"PreToolUse": [
+			{
+				"toolNames": ["Task"],
+				"hooks": [
+					{
+						"type": "command",
+						"command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-launch-check.sh"
+					}
+				]
+			}
+		]
+	}
 }

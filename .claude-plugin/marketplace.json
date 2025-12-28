@@ -86,57 +86,6 @@
 			"strict": true
 		},
 		{
-			"name": "orchestration",
-			"source": "./plugins/orchestration",
-			"description": "Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Skills-only plugin providing proven patterns for parallel execution, dynamic model discovery, session-based workspaces, LLM performance tracking.",
-			"version": "0.6.0",
-			"author": {
-				"name": "tianzecn",
-				"email": "",
-				"company": ""
-			},
-			"category": "development",
-			"keywords": [
-				"orchestration",
-				"multi-agent",
-				"workflow",
-				"claudish",
-				"quality-gates",
-				"parallel-execution",
-				"coordination",
-				"grok",
-				"gemini",
-				"consensus",
-				"error-recovery",
-				"tdd",
-				"skills"
-			],
-			"strict": true
-		},
-		{
-			"name": "agentdev",
-			"source": "./plugins/agentdev",
-			"description": "Create, implement, and review Claude Code agents and commands with multi-model validation and LLM performance tracking. Full-cycle development workflow with intelligent plugin classification and marketplace publishing.",
-			"version": "1.3.0",
-			"author": {
-				"name": "tianzecn",
-				"email": "",
-				"company": ""
-			},
-			"category": "development",
-			"keywords": [
-				"agents",
-				"commands",
-				"development",
-				"multi-model",
-				"claudish",
-				"quality-review",
-				"xml-standards",
-				"orchestration"
-			],
-			"strict": true
-		},
-		{
 			"name": "development",
 			"source": "./plugins/development",
 			"description": "开发核心插件 - Bug 修复、代码审查、调试、PR 处理等核心开发能力。14 个命令 + 9 个代理。Originally from cc-marketplace.",
@@ -200,7 +149,7 @@
 		{
 			"name": "documentation",
 			"source": "./plugins/documentation",
-			"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 维护等文档能力。7 个命令 + 3 个代理。Originally from cc-marketplace.",
+			"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 优化、写作风格指南等文档能力。8 个命令 + 3 个代理 + 2 个技能。Originally from cc-marketplace + elements-of-style.",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -213,7 +162,11 @@
 				"api-docs",
 				"changelog",
 				"codebase-analysis",
-				"openapi"
+				"openapi",
+				"claude-md",
+				"optimization",
+				"writing-style",
+				"elements-of-style"
 			],
 			"strict": true
 		},
@@ -240,7 +193,7 @@
 		{
 			"name": "workflow",
 			"source": "./plugins/workflow",
-			"description": "工作流插件 - Sugar 工作流、代码质量审查、任务规划、自动化等综合工作流能力。14 个命令 + 16 个代理 + 2 个技能。Originally from cc-marketplace.",
+			"description": "工作流插件 - Sugar 工作流、多代理协调、质量门控、代码质量审查、任务规划、Codex 自主执行等综合工作流能力。16 个命令 + 16 个代理 + 12 个技能。Originally from cc-marketplace + orchestration + feiskyer.",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -254,7 +207,11 @@
 				"sugar",
 				"quality",
 				"task-planning",
-				"n8n"
+				"n8n",
+				"orchestration",
+				"multi-agent",
+				"quality-gates",
+				"parallel-execution"
 			],
 			"strict": true
 		},
@@ -302,7 +259,7 @@
 		{
 			"name": "design",
 			"source": "./plugins/design",
-			"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事等设计能力。5 个代理。Originally from cc-marketplace.",
+			"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事、AI 图像生成等设计能力。5 个代理 + 1 个技能。Originally from cc-marketplace + feiskyer.",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -322,7 +279,7 @@
 		{
 			"name": "specialized",
 			"source": "./plugins/specialized",
-			"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、分析报告等专业领域能力。13 个代理。Originally from cc-marketplace.",
+			"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、NotebookLM 集成、YouTube 字幕提取等专业领域能力。16 个代理 + 2 个技能。Originally from cc-marketplace + feiskyer.",
 			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
@@ -335,7 +292,9 @@
 				"ai",
 				"data-science",
 				"mcp",
-				"analytics"
+				"analytics",
+				"notebooklm",
+				"gemini"
 			],
 			"strict": true
 		},
@@ -379,27 +338,6 @@
 				"cdp",
 				"websocket",
 				"mcp"
-			],
-			"strict": true
-		},
-		{
-			"name": "elements-of-style",
-			"source": "./plugins/the-elements-of-style",
-			"description": "Writing guidance based on Strunk's The Elements of Style (1918). Clear, precise writing rules for documentation and prose. By Jesse Vincent.",
-			"version": "1.0.0",
-			"author": {
-				"name": "Jesse Vincent",
-				"email": "jesse@fsck.com",
-				"company": ""
-			},
-			"category": "writing",
-			"keywords": [
-				"writing",
-				"style",
-				"grammar",
-				"composition",
-				"clarity",
-				"documentation"
 			],
 			"strict": true
 		},
@@ -488,28 +426,6 @@
 			"strict": true
 		},
 		{
-			"name": "notebooklm-skill",
-			"source": "./plugins/notebooklm-skill",
-			"description": "Query Google NotebookLM notebooks directly from Claude Code for source-grounded, citation-backed answers from Gemini. Browser automation, library management, persistent auth. By PleasePrompto.",
-			"version": "1.0.0",
-			"author": {
-				"name": "PleasePrompto",
-				"email": "",
-				"company": ""
-			},
-			"category": "productivity",
-			"keywords": [
-				"notebooklm",
-				"google",
-				"gemini",
-				"research",
-				"documentation",
-				"browser-automation",
-				"source-grounded"
-			],
-			"strict": true
-		},
-		{
 			"name": "skill-seekers",
 			"source": "./plugins/skill-seekers",
 			"description": "自动将文档网站、GitHub 仓库、PDF 文件转换为 Claude AI 技能。17 个 MCP 工具，25 个预设配置。By yusufkaraaslan.",
@@ -552,28 +468,6 @@
 			"strict": true
 		},
 		{
-			"name": "feiskyer",
-			"source": "./plugins/feiskyer",
-			"description": "feiskyer 的 Claude Code 技能集合 - 包含 Codex 自主执行、长期任务自动化、图像生成、YouTube 字幕提取、Kiro 交互式开发、Spec-Kit 规范驱动开发等 6 个专业技能。",
-			"version": "1.0.0",
-			"author": {
-				"name": "feiskyer",
-				"email": "",
-				"company": ""
-			},
-			"category": "productivity",
-			"keywords": [
-				"codex",
-				"autonomous",
-				"image-generation",
-				"youtube",
-				"kiro",
-				"spec-kit",
-				"workflow"
-			],
-			"strict": true
-		},
-		{
 			"name": "claude-skills",
 			"source": "./plugins/claude-skills",
 			"description": "Awesome Claude Skills Collection - 来自 ComposioHQ 的精选技能集合（27个技能），包含开发工具、商业营销、创意媒体、文档处理、生产力等多个领域的实用技能。",
@@ -593,27 +487,6 @@
 				"document-processing",
 				"automation",
 				"composio"
-			],
-			"strict": true
-		},
-		{
-			"name": "ctz-skills",
-			"source": "./plugins/ctz-skills",
-			"description": "tianzecn 的通用开发技能集合 - 包含 CLAUDE.md 优化命令和技能，帮助提升 Claude Code 开发效率。基于 humanlayer.dev 最佳实践。",
-			"version": "1.1.0",
-			"author": {
-				"name": "tianzecn",
-				"email": "",
-				"company": ""
-			},
-			"category": "productivity",
-			"keywords": [
-				"skills",
-				"claudemd",
-				"optimization",
-				"best-practices",
-				"progressive-disclosure",
-				"developer-tools"
 			],
 			"strict": true
 		}

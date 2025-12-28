@@ -1,7 +1,7 @@
 {
 	"name": "design",
 	"version": "1.0.0",
-	"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事等设计能力。5 个代理。",
+	"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事、AI 图像生成等设计能力。5 个代理 + 1 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -21,5 +21,8 @@
 		"./agents/ux-researcher.md",
 		"./agents/vision-specialist.md",
 		"./agents/visual-storyteller.md"
+	],
+	"skills": [
+		"./skills/nanobanana-skill"
 	]
 }

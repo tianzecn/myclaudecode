@@ -1,7 +1,7 @@
 {
 	"name": "specialized",
 	"version": "1.0.0",
-	"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、分析报告等专业领域能力。13 个代理。",
+	"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、NotebookLM 集成、YouTube 字幕提取等专业领域能力。16 个代理 + 2 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -13,21 +13,30 @@
 		"ai",
 		"data-science",
 		"mcp",
-		"analytics"
+		"analytics",
+		"notebooklm",
+		"gemini"
 	],
 	"agents": [
 		"./agents/ai-engineer.md",
 		"./agents/analytics-reporter.md",
 		"./agents/angelos-symbo.md",
+		"./agents/architect.md",
 		"./agents/data-scientist.md",
+		"./agents/developer.md",
 		"./agents/experiment-tracker.md",
 		"./agents/feedback-synthesizer.md",
 		"./agents/joker.md",
 		"./agents/model-context-protocol-mcp-expert.md",
 		"./agents/onomastophes.md",
+		"./agents/reviewer.md",
 		"./agents/studio-coach.md",
 		"./agents/studio-producer.md",
 		"./agents/tool-evaluator.md",
 		"./agents/whimsy-injector.md"
+	],
+	"skills": [
+		"./skills/notebooklm",
+		"./skills/youtube-transcribe-skill"
 	]
 }
