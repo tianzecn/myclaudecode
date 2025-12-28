@@ -1,0 +1,36 @@
+{
+	"name": "devops",
+	"version": "1.0.0",
+	"description": "DevOps 插件 - Git 提交、PR 创建、分支管理、部署自动化等 DevOps 能力。7 个命令 + 6 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"devops",
+		"git",
+		"commit",
+		"pull-request",
+		"deployment",
+		"infrastructure"
+	],
+	"commands": [
+		"./commands/2-commit-fast.md",
+		"./commands/commit.md",
+		"./commands/create-pr.md",
+		"./commands/create-pull-request.md",
+		"./commands/create-worktrees.md",
+		"./commands/husky.md",
+		"./commands/update-branch-name.md"
+	],
+	"agents": [
+		"./agents/database-performance-optimizer.md",
+		"./agents/deployment-engineer.md",
+		"./agents/devops-automator.md",
+		"./agents/infrastructure-maintainer.md",
+		"./agents/monitoring-observability-specialist.md",
+		"./agents/performance-benchmarker.md"
+	]
+}

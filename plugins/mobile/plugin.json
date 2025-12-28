@@ -1,0 +1,26 @@
+{
+	"name": "mobile",
+	"version": "1.0.0",
+	"description": "移动开发插件 - Flutter、React Native、桌面应用、App Store 优化等移动开发能力。6 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"mobile",
+		"flutter",
+		"react-native",
+		"desktop-app",
+		"app-store"
+	],
+	"agents": [
+		"./agents/app-store-optimizer.md",
+		"./agents/desktop-app-dev.md",
+		"./agents/flutter-mobile-app-dev.md",
+		"./agents/mobile-app-builder.md",
+		"./agents/mobile-ux-optimizer.md",
+		"./agents/react-native-dev.md"
+	]
+}

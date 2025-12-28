@@ -1,0 +1,57 @@
+{
+	"name": "workflow",
+	"version": "1.0.0",
+	"description": "工作流插件 - Sugar 工作流、代码质量审查、任务规划、自动化等综合工作流能力。14 个命令 + 16 个代理 + 2 个技能。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"workflow",
+		"automation",
+		"sugar",
+		"quality",
+		"task-planning",
+		"n8n"
+	],
+	"commands": [
+		"./commands/audit.md",
+		"./commands/claude-desktop-extension.md",
+		"./commands/code-explain.md",
+		"./commands/lyra.md",
+		"./commands/sugar-analyze.md",
+		"./commands/sugar-review.md",
+		"./commands/sugar-run.md",
+		"./commands/sugar-status.md",
+		"./commands/sugar-task.md",
+		"./commands/ultrathink.md",
+		"./commands/update-claude.md",
+		"./commands/帮助.md",
+		"./commands/提交推送.md",
+		"./commands/标准化流程.md"
+	],
+	"agents": [
+		"./agents/api-architect.md",
+		"./agents/code-quality-reviewer.md",
+		"./agents/database-architect.md",
+		"./agents/devops-engineer.md",
+		"./agents/documentation-writer.md",
+		"./agents/n8n-workflow-builder.md",
+		"./agents/performance-engineer.md",
+		"./agents/quality-guardian.md",
+		"./agents/rapid-prototyper.md",
+		"./agents/security-specialist.md",
+		"./agents/sugar-orchestrator.md",
+		"./agents/task-planner.md",
+		"./agents/tech-lead.md",
+		"./agents/testing-specialist.md",
+		"./agents/ux-ui-designer.md",
+		"./agents/workflow-optimizer.md"
+	],
+	"skills": [
+		"./skills/api-contract-sync",
+		"./skills/math"
+	]
+}

@@ -1,0 +1,44 @@
+{
+	"name": "business",
+	"version": "1.0.0",
+	"description": "商业插件 - 销售、营销、合规、客户成功、社交媒体等商业能力。23 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"business",
+		"sales",
+		"marketing",
+		"compliance",
+		"social-media",
+		"enterprise"
+	],
+	"agents": [
+		"./agents/ai-ethics-governance-specialist.md",
+		"./agents/b2b-project-shipper.md",
+		"./agents/brand-guardian.md",
+		"./agents/compliance-automation-specialist.md",
+		"./agents/content-creator.md",
+		"./agents/customer-success-manager.md",
+		"./agents/data-privacy-engineer.md",
+		"./agents/enterprise-integrator-architect.md",
+		"./agents/enterprise-onboarding-specialist.md",
+		"./agents/enterprise-security-reviewer.md",
+		"./agents/finance-tracker.md",
+		"./agents/growth-hacker.md",
+		"./agents/instagram-curator.md",
+		"./agents/legal-advisor.md",
+		"./agents/legal-compliance-checker.md",
+		"./agents/pricing-packaging-specialist.md",
+		"./agents/product-sales-specialist.md",
+		"./agents/reddit-community-builder.md",
+		"./agents/support-responder.md",
+		"./agents/technical-sales-engineer.md",
+		"./agents/tiktok-strategist.md",
+		"./agents/trend-researcher.md",
+		"./agents/twitter-engager.md"
+	]
+}

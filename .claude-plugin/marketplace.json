@@ -137,10 +137,10 @@
 			"strict": true
 		},
 		{
-			"name": "coding",
-			"source": "./plugins/coding",
-			"description": "全能编程工作流插件 - 整合 cc-marketplace 180+ 插件。49 个命令 + 91 个代理 + 2 个技能。覆盖开发、测试、DevOps、文档、规划、工作流、移动开发、业务等全方位能力。Originally from ananddtyagi/cc-marketplace.",
-			"version": "2.0.0",
+			"name": "development",
+			"source": "./plugins/development",
+			"description": "开发核心插件 - Bug 修复、代码审查、调试、PR 处理等核心开发能力。14 个命令 + 9 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -148,18 +148,194 @@
 			},
 			"category": "development",
 			"keywords": [
-				"coding",
 				"development",
+				"bug-fix",
+				"code-review",
+				"debugging",
+				"pull-request",
+				"refactoring"
+			],
+			"strict": true
+		},
+		{
+			"name": "testing",
+			"source": "./plugins/testing",
+			"description": "测试插件 - 单元测试、测试分析、质量控制等测试能力。2 个命令 + 4 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
 				"testing",
+				"unit-test",
+				"quality-control",
+				"test-analysis"
+			],
+			"strict": true
+		},
+		{
+			"name": "devops",
+			"source": "./plugins/devops",
+			"description": "DevOps 插件 - Git 提交、PR 创建、分支管理、部署自动化等 DevOps 能力。7 个命令 + 6 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
 				"devops",
+				"git",
+				"commit",
+				"pull-request",
+				"deployment",
+				"infrastructure"
+			],
+			"strict": true
+		},
+		{
+			"name": "documentation",
+			"source": "./plugins/documentation",
+			"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 维护等文档能力。7 个命令 + 3 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
 				"documentation",
+				"api-docs",
+				"changelog",
+				"codebase-analysis",
+				"openapi"
+			],
+			"strict": true
+		},
+		{
+			"name": "planning",
+			"source": "./plugins/planning",
+			"description": "规划插件 - 需求分析、任务探索、项目规划、PRD 编写等规划能力。5 个命令 + 6 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
 				"planning",
+				"prd",
+				"requirements",
+				"project-management",
+				"sprint"
+			],
+			"strict": true
+		},
+		{
+			"name": "workflow",
+			"source": "./plugins/workflow",
+			"description": "工作流插件 - Sugar 工作流、代码质量审查、任务规划、自动化等综合工作流能力。14 个命令 + 16 个代理 + 2 个技能。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
 				"workflow",
-				"mobile",
-				"business",
-				"agents",
 				"automation",
-				"cc-marketplace"
+				"sugar",
+				"quality",
+				"task-planning",
+				"n8n"
+			],
+			"strict": true
+		},
+		{
+			"name": "mobile",
+			"source": "./plugins/mobile",
+			"description": "移动开发插件 - Flutter、React Native、桌面应用、App Store 优化等移动开发能力。6 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"mobile",
+				"flutter",
+				"react-native",
+				"desktop-app",
+				"app-store"
+			],
+			"strict": true
+		},
+		{
+			"name": "business",
+			"source": "./plugins/business",
+			"description": "商业插件 - 销售、营销、合规、客户成功、社交媒体等商业能力。23 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "business",
+			"keywords": [
+				"business",
+				"sales",
+				"marketing",
+				"compliance",
+				"social-media",
+				"enterprise"
+			],
+			"strict": true
+		},
+		{
+			"name": "design",
+			"source": "./plugins/design",
+			"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事等设计能力。5 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "design",
+			"keywords": [
+				"design",
+				"ui",
+				"ux",
+				"accessibility",
+				"visual"
+			],
+			"strict": true
+		},
+		{
+			"name": "specialized",
+			"source": "./plugins/specialized",
+			"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、分析报告等专业领域能力。13 个代理。Originally from cc-marketplace.",
+			"version": "1.0.0",
+			"author": {
+				"name": "tianzecn",
+				"email": "",
+				"company": ""
+			},
+			"category": "development",
+			"keywords": [
+				"specialized",
+				"ai",
+				"data-science",
+				"mcp",
+				"analytics"
 			],
 			"strict": true
 		},

@@ -1,0 +1,25 @@
+{
+	"name": "design",
+	"version": "1.0.0",
+	"description": "设计插件 - UI/UX 设计、无障碍设计、视觉叙事等设计能力。5 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"design",
+		"ui",
+		"ux",
+		"accessibility",
+		"visual"
+	],
+	"agents": [
+		"./agents/accessibility-expert.md",
+		"./agents/ui-designer.md",
+		"./agents/ux-researcher.md",
+		"./agents/vision-specialist.md",
+		"./agents/visual-storyteller.md"
+	]
+}

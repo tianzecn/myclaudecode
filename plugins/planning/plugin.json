@@ -1,0 +1,33 @@
+{
+	"name": "planning",
+	"version": "1.0.0",
+	"description": "规划插件 - 需求分析、任务探索、项目规划、PRD 编写等规划能力。5 个命令 + 6 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"planning",
+		"prd",
+		"requirements",
+		"project-management",
+		"sprint"
+	],
+	"commands": [
+		"./commands/analyze-issue.md",
+		"./commands/discuss.md",
+		"./commands/explore.md",
+		"./commands/plan.md",
+		"./commands/需求分析.md"
+	],
+	"agents": [
+		"./agents/planning-prd-agent.md",
+		"./agents/prd-specialist.md",
+		"./agents/problem-solver-specialist.md",
+		"./agents/project-curator.md",
+		"./agents/project-shipper.md",
+		"./agents/sprint-prioritizer.md"
+	]
+}

@@ -1,0 +1,33 @@
+{
+	"name": "specialized",
+	"version": "1.0.0",
+	"description": "专业领域插件 - AI 工程、数据科学、MCP 专家、分析报告等专业领域能力。13 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"specialized",
+		"ai",
+		"data-science",
+		"mcp",
+		"analytics"
+	],
+	"agents": [
+		"./agents/ai-engineer.md",
+		"./agents/analytics-reporter.md",
+		"./agents/angelos-symbo.md",
+		"./agents/data-scientist.md",
+		"./agents/experiment-tracker.md",
+		"./agents/feedback-synthesizer.md",
+		"./agents/joker.md",
+		"./agents/model-context-protocol-mcp-expert.md",
+		"./agents/onomastophes.md",
+		"./agents/studio-coach.md",
+		"./agents/studio-producer.md",
+		"./agents/tool-evaluator.md",
+		"./agents/whimsy-injector.md"
+	]
+}

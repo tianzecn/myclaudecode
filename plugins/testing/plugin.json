@@ -1,0 +1,27 @@
+{
+	"name": "testing",
+	"version": "1.0.0",
+	"description": "测试插件 - 单元测试、测试分析、质量控制等测试能力。2 个命令 + 4 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"testing",
+		"unit-test",
+		"quality-control",
+		"test-analysis"
+	],
+	"commands": [
+		"./commands/double-check.md",
+		"./commands/test-file.md"
+	],
+	"agents": [
+		"./agents/ceo-quality-controller-agent.md",
+		"./agents/test-results-analyzer.md",
+		"./agents/test-writer-fixer.md",
+		"./agents/unit-test-generator.md"
+	]
+}

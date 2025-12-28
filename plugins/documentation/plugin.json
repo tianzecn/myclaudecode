@@ -1,0 +1,32 @@
+{
+	"name": "documentation",
+	"version": "1.0.0",
+	"description": "文档插件 - API 文档生成、代码库分析、开发归档、CLAUDE.md 维护等文档能力。7 个命令 + 3 个代理。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"documentation",
+		"api-docs",
+		"changelog",
+		"codebase-analysis",
+		"openapi"
+	],
+	"commands": [
+		"./commands/analyze-codebase.md",
+		"./commands/documentation-generator.md",
+		"./commands/generate-api-docs.md",
+		"./commands/openapi-expert.md",
+		"./commands/update-claudemd.md",
+		"./commands/开发归档.md",
+		"./commands/开发总结.md"
+	],
+	"agents": [
+		"./agents/changelog-generator.md",
+		"./agents/codebase-documenter.md",
+		"./agents/context7-docs-fetcher.md"
+	]
+}

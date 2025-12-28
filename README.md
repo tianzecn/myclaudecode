@@ -589,110 +589,27 @@ Company: [tianzecn](https://madappgang.com)
 
 ---
 
-plugins/coding/
-├── plugin.json
-├── commands/  
-│ ├── 需求分析.md # 现有命令（保留在根目录）
-│ ├── Issue 修复.md
-│ ├── 开发归档.md
-│ ├── 开发总结.md
-│ ├── 提交推送.md
-│ ├── 标准化流程.md
-│ ├── 帮助.md
-│ │
-│ ├── development/ # 🆕 开发工程类
-│ │ ├── code-review.md
-│ │ ├── refactor.md
-│ │ └── ...
-│ ├── testing/ # 🆕 测试质量类
-│ │ ├── unit-test-generator.md
-│ │ └── ...
-│ ├── devops/ # 🆕 DevOps 类
-│ │ ├── deploy.md
-│ │ └── ...
-│ ├── documentation/ # 🆕 文档类
-│ │ ├── documentation-generator.md
-│ │ └── ...
-│ ├── planning/ # 🆕 规划产品类
-│ │ ├── prd-specialist.md
-│ │ └── ...
-│ └── workflow/ # 🆕 工作流类
-│ ├── sugar-analyze.md
-│ ├── ultrathink.md
+plugins/
+├── development/ # 独立插件
+│ ├── plugin.json
+│ ├── commands/
+│ │ └── code-review.md
+│ ├── agents/
+│ │ └── frontend-developer.md
+│ └── skills/
+│
+├── testing/ # 独立插件
+│ ├── plugin.json
+│ ├── commands/
+│ ├── agents/
+│ └── skills/
+│
+├── devops/ # 独立插件
 │ └── ...
 │
-├── agents/
-│ ├── development/ # 开发类代理
-│ │ ├── frontend-developer.md
-│ │ ├── backend-architect.md
-│ │ └── ...
-│ ├── quality/ # 质量类代理
-│ │ ├── code-reviewer.md
-│ │ └── ...
-│ ├── devops/ # DevOps 类代理
-│ │ └── ...
-│ └── specialized/ # 专业领域代理
+├── documentation/ # 独立插件
 │ └── ...
 │
-└── skills/ # 有附件/脚本
-│ ├── some-skill/
-│ │ ├── SKILL.md
-│ │ └── scripts/
-│ │ └── attachments/
-│ │ └── ...
-│ └── ...
-
-plugins/coding/
-├── plugin.json
-├── commands/  
-│ ├── 需求分析.md # 现有命令（保留在根目录）
-│ ├── Issue 修复.md
-│ ├── 开发归档.md
-│ ├── 开发总结.md
-│ ├── 提交推送.md
-│ ├── 标准化流程.md
-│ ├── 帮助.md
-│ │
-│ ├── development/ # 🆕 开发工程类
-│ │ ├── code-review.md
-│ │ ├── refactor.md
-│ │ └── ...
-│ ├── testing/ # 🆕 测试质量类
-│ │ ├── unit-test-generator.md
-│ │ └── ...
-│ ├── devops/ # 🆕 DevOps 类
-│ │ ├── deploy.md
-│ │ └── ...
-│ ├── documentation/ # 🆕 文档类
-│ │ ├── documentation-generator.md
-│ │ └── ...
-│ ├── planning/ # 🆕 规划产品类
-│ │ ├── prd-specialist.md
-│ │ └── ...
-│ └── workflow/ # 🆕 工作流类
-│ ├── sugar-analyze.md
-│ ├── ultrathink.md
-│ └── ...
-│
-├── agents/
-│ ├── development/ # 开发类代理
-│ │ ├── frontend-developer.md
-│ │ ├── backend-architect.md
-│ │ └── ...
-│ ├── quality/ # 质量类代理
-│ │ ├── code-reviewer.md
-│ │ └── ...
-│ ├── devops/ # DevOps 类代理
-│ │ └── ...
-│ └── specialized/ # 专业领域代理
-│ └── ...
-│
-└── skills/ # 有附件/脚本
-│ ├── some-skill/
-│ │ ├── SKILL.md
-│ │ └── scripts/
-│ │ └── attachments/
-│ │ └── ...
-│ └── ...
+└── ... (更多分类插件)
 
 **Made with ❤️ by tianzecn**
