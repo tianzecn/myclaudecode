@@ -114,6 +114,7 @@ This repository contains production-ready plugins designed for modern web develo
 Professional toolkit for TypeScript/React development with intelligent workflow detection, CSS-aware design validation, orchestrated workflows, quality automation, and team collaboration features.
 
 **Highlights:**
+
 - **NEW in v2.8.0: Intelligent Workflow Detection** - Automatically detects API/UI/Mixed tasks and adapts execution for faster, more focused implementations
 - **13 Specialized Agents** - Including CSS Developer, Designer ecosystem (designer + designer-codex), UI Developer team (ui-developer + ui-developer-codex), architecture planning, code review, and browser testing
 - **6 Slash Commands** - Including `/implement` (8-phase with adaptive workflow detection), `/implement-ui` (with task decomposition), `/validate-ui`
@@ -128,23 +129,27 @@ Professional toolkit for TypeScript/React development with intelligent workflow 
 The star feature is the `/implement` command—now with intelligent workflow detection that automatically adapts based on your task:
 
 **For API Integration Tasks** (e.g., "Integrate user management API"):
+
 - Skips design validation (PHASE 2.5) entirely
 - Runs 2 code reviewers (manual + AI) focused on API patterns
 - Skips UI testing - focuses on API service tests
 - **Result**: Faster implementation, no wasted time on irrelevant UI checks
 
 **For UI Implementation Tasks** (e.g., "Build UserProfile component"):
+
 1. **Architecture Planning** → Designs solution, asks questions, gets approval
 2. **Implementation** → Generates code following project patterns
-2.5. **Design Fidelity Validation** → CSS-aware validation if Figma links present
+   2.5. **Design Fidelity Validation** → CSS-aware validation if Figma links present
 3. **Triple Review** → Manual review + AI analysis + browser testing
 4. **Test Generation** → UI-focused test suites
 5. **User Approval** → Final review gate
 6. **Cleanup** → Removes temporary artifacts
 7. **Delivery** → Production-ready feature with documentation
+
 - **Result**: Pixel-perfect UI, comprehensive validation
 
 **For Mixed Tasks** (both API and UI):
+
 - Combines both workflows with appropriate focus areas
 - Design validation for UI parts only
 - All 3 reviewers with targeted focus
@@ -163,6 +168,7 @@ The star feature is the `/implement` command—now with intelligent workflow det
 Deep code investigation and analysis toolkit for understanding complex codebases with semantic search capabilities.
 
 **Highlights:**
+
 - **codebase-detective agent** - Investigates code patterns, relationships, and architecture
 - **2 Skills** - Deep analysis + semantic code search expert guidance
 - **MCP Integration** - Optimal usage of claude-context for 40% token reduction
@@ -181,6 +187,7 @@ Deep code investigation and analysis toolkit for understanding complex codebases
 Production-ready TypeScript backend development with Bun runtime, featuring comprehensive camelCase naming conventions, API documentation synchronization, and clean architecture patterns.
 
 **Highlights:**
+
 - **3 Specialized Agents** - Backend developer, API architect, Apidog synchronization specialist
 - **3 Slash Commands** - `/implement-api` (full-cycle), `/setup-project` (initialize), `/apidog` (sync API docs)
 - **1 Comprehensive Skill** - Best practices (2025) with camelCase conventions
@@ -191,6 +198,7 @@ Production-ready TypeScript backend development with Bun runtime, featuring comp
 - **Security First** - Authentication, authorization, validation, error handling built-in
 
 **The Stack:**
+
 - **Bun 1.x** - Native TypeScript execution, lightning-fast performance
 - **Hono 4.6** - Ultra-fast web framework, TypeScript-first
 - **Prisma 6.2** - Type-safe ORM with camelCase schema support
@@ -209,6 +217,7 @@ Production-ready TypeScript backend development with Bun runtime, featuring comp
 Shared multi-agent coordination and workflow orchestration patterns for complex Claude Code workflows. Battle-tested patterns extracted from 100+ days of production use.
 
 **Highlights:**
+
 - **5 Comprehensive Skills** - Multi-agent coordination, multi-model validation, quality gates, TodoWrite orchestration, error recovery
 - **Skills-Only Architecture** - Pure knowledge plugin (no agents/commands) for context-efficient loading
 - **Skill Bundles** - Pre-configured combinations (core, advanced, testing, complete)
@@ -218,6 +227,7 @@ Shared multi-agent coordination and workflow orchestration patterns for complex 
 - **Zero Dependencies** - Standalone, can be used by any plugin
 
 **The Skills:**
+
 1. **multi-agent-coordination** - Parallel vs sequential execution, agent selection, sub-agent delegation
 2. **multi-model-validation** - Run multiple AI models (Grok, Gemini, GPT-5) in parallel via Claudish
 3. **quality-gates** - User approval gates, iteration loops, severity classification, test-driven development
@@ -225,6 +235,7 @@ Shared multi-agent coordination and workflow orchestration patterns for complex 
 5. **error-recovery** - Timeout handling, API failures, partial success, graceful degradation
 
 **Usage:**
+
 ```yaml
 # In your agent or command frontmatter
 skills: orchestration:multi-model-validation, orchestration:quality-gates
@@ -246,6 +257,7 @@ skills: orchestration:complete  # All 5 skills
 Run Claude Code with any OpenRouter model via local Anthropic API proxy. **100% VERIFIED** - Routes to real OpenRouter models, NOT Anthropic.
 
 **Top Recommended Models for Development:**
+
 - `x-ai/grok-code-fast-1` - xAI's Grok (fast coding, great for rapid prototyping)
 - `openai/gpt-5-codex` - OpenAI's GPT-5 Codex (advanced reasoning, complex tasks)
 - `minimax/minimax-m2` - MiniMax M2 (high performance, balanced)
@@ -253,6 +265,7 @@ Run Claude Code with any OpenRouter model via local Anthropic API proxy. **100% 
 - `anthropic/claude-sonnet-4.5` - Claude Sonnet (for comparison/baseline)
 
 **Features:**
+
 - 🎯 **Interactive Model Selector** - Beautiful terminal UI when no model specified
 - ⚡ **One-Shot Proxy** - Fresh proxy per run, random ports, parallel execution supported
 - 🔄 **Real-Time Streaming** - Live output from Claude Code
@@ -261,11 +274,13 @@ Run Claude Code with any OpenRouter model via local Anthropic API proxy. **100% 
 - ✅ **100% Verified** - Comprehensive tests prove models are NOT Anthropic
 
 **Installation:**
+
 ```bash
 npm install -g claudish
 ```
 
 **Usage:**
+
 ```bash
 # Interactive mode - shows model selector
 claudish "implement user authentication"
@@ -297,6 +312,7 @@ claudish --help
 ### Prerequisites
 
 **Claude Code Requirements:**
+
 - Claude Code version with plugin system support
 - Plugin manifest location: `.claude-plugin/plugin.json` (required)
 - Settings format: `enabledPlugins` must be object with boolean values:
@@ -309,6 +325,7 @@ claudish --help
   ```
 
 **System Requirements:**
+
 - Claude Code installed and configured
 - Git access to GitHub
 
@@ -400,6 +417,7 @@ After setup, verify everything works:
 ```
 
 **Common issues:**
+
 - If `/doctor` shows errors, see [Troubleshooting](#-troubleshooting) below
 - If plugin not listed, ensure marketplace was added in Step 1
 - Plugin activates automatically when you open a project with `.claude/settings.json`
@@ -425,6 +443,7 @@ Once installed, plugins work seamlessly with Claude Code:
 ```
 
 This single command:
+
 1. Plans the architecture and gets your approval
 2. Implements all components following your project patterns
 3. Reviews code with 3 different approaches (human + AI + browser)
@@ -449,6 +468,7 @@ Fetches your Figma component, adapts it to your codebase, installs dependencies,
 👉 **[Frontend Development Plugin - Complete Guide](./docs/frontend.md)**
 
 The complete guide includes:
+
 - Detailed `/implement` workflow (all 7 stages explained)
 - Complete agent reference with use cases
 - All slash commands with examples
@@ -457,7 +477,6 @@ The complete guide includes:
 - Troubleshooting and best practices
 
 ---
-
 
 ## 📚 Documentation
 
@@ -507,6 +526,7 @@ For architecture and implementation details, see the **[ai-docs](./ai-docs/)** d
 Have a plugin idea? [Open an issue](https://github.com/tianzecn/myclaudecode/issues) with the `plugin-request` label.
 
 ---
+
 ## 📖 Detailed Documentation
 
 ### User Documentation
@@ -519,15 +539,18 @@ Have a plugin idea? [Open an issue](https://github.com/tianzecn/myclaudecode/iss
 For technical details and architecture, see the **[ai-docs](./ai-docs/)** directory:
 
 #### Architecture & Configuration
+
 - **[TEAM_CONFIG_ARCHITECTURE.md](./ai-docs/TEAM_CONFIG_ARCHITECTURE.md)** - Team-first configuration, shareable config vs private secrets
 - **[DYNAMIC_MCP_GUIDE.md](./ai-docs/DYNAMIC_MCP_GUIDE.md)** - Dynamic MCP server configuration patterns
 - **[IMPROVEMENTS_SUMMARY.md](./ai-docs/IMPROVEMENTS_SUMMARY.md)** - Configuration command design decisions
 
 #### Reference
+
 - **[COMPLETE_PLUGIN_SUMMARY.md](./ai-docs/COMPLETE_PLUGIN_SUMMARY.md)** - Complete plugin inventory (13 frontend agents, 6 commands, 3 skills)
 - **[FINAL_SUMMARY.md](./ai-docs/FINAL_SUMMARY.md)** - Project overview and statistics
 
 #### Plugin-Specific Technical Docs
+
 - **[DEPENDENCIES.md](./plugins/frontend/DEPENDENCIES.md)** - All dependencies and environment variables
 - **[CONFIGURE_MCP_FLOW.md](./plugins/frontend/commands/CONFIGURE_MCP_FLOW.md)** - Configuration flow diagram
 
@@ -565,5 +588,111 @@ Company: [tianzecn](https://madappgang.com)
 - **Website**: [madappgang.com](https://madappgang.com)
 
 ---
+
+plugins/coding/
+├── plugin.json
+├── commands/  
+│ ├── 需求分析.md # 现有命令（保留在根目录）
+│ ├── Issue 修复.md
+│ ├── 开发归档.md
+│ ├── 开发总结.md
+│ ├── 提交推送.md
+│ ├── 标准化流程.md
+│ ├── 帮助.md
+│ │
+│ ├── development/ # 🆕 开发工程类
+│ │ ├── code-review.md
+│ │ ├── refactor.md
+│ │ └── ...
+│ ├── testing/ # 🆕 测试质量类
+│ │ ├── unit-test-generator.md
+│ │ └── ...
+│ ├── devops/ # 🆕 DevOps 类
+│ │ ├── deploy.md
+│ │ └── ...
+│ ├── documentation/ # 🆕 文档类
+│ │ ├── documentation-generator.md
+│ │ └── ...
+│ ├── planning/ # 🆕 规划产品类
+│ │ ├── prd-specialist.md
+│ │ └── ...
+│ └── workflow/ # 🆕 工作流类
+│ ├── sugar-analyze.md
+│ ├── ultrathink.md
+│ └── ...
+│
+├── agents/
+│ ├── development/ # 开发类代理
+│ │ ├── frontend-developer.md
+│ │ ├── backend-architect.md
+│ │ └── ...
+│ ├── quality/ # 质量类代理
+│ │ ├── code-reviewer.md
+│ │ └── ...
+│ ├── devops/ # DevOps 类代理
+│ │ └── ...
+│ └── specialized/ # 专业领域代理
+│ └── ...
+│
+└── skills/ # 有附件/脚本
+│ ├── some-skill/
+│ │ ├── SKILL.md
+│ │ └── scripts/
+│ │ └── attachments/
+│ │ └── ...
+│ └── ...
+
+plugins/coding/
+├── plugin.json
+├── commands/  
+│ ├── 需求分析.md # 现有命令（保留在根目录）
+│ ├── Issue 修复.md
+│ ├── 开发归档.md
+│ ├── 开发总结.md
+│ ├── 提交推送.md
+│ ├── 标准化流程.md
+│ ├── 帮助.md
+│ │
+│ ├── development/ # 🆕 开发工程类
+│ │ ├── code-review.md
+│ │ ├── refactor.md
+│ │ └── ...
+│ ├── testing/ # 🆕 测试质量类
+│ │ ├── unit-test-generator.md
+│ │ └── ...
+│ ├── devops/ # 🆕 DevOps 类
+│ │ ├── deploy.md
+│ │ └── ...
+│ ├── documentation/ # 🆕 文档类
+│ │ ├── documentation-generator.md
+│ │ └── ...
+│ ├── planning/ # 🆕 规划产品类
+│ │ ├── prd-specialist.md
+│ │ └── ...
+│ └── workflow/ # 🆕 工作流类
+│ ├── sugar-analyze.md
+│ ├── ultrathink.md
+│ └── ...
+│
+├── agents/
+│ ├── development/ # 开发类代理
+│ │ ├── frontend-developer.md
+│ │ ├── backend-architect.md
+│ │ └── ...
+│ ├── quality/ # 质量类代理
+│ │ ├── code-reviewer.md
+│ │ └── ...
+│ ├── devops/ # DevOps 类代理
+│ │ └── ...
+│ └── specialized/ # 专业领域代理
+│ └── ...
+│
+└── skills/ # 有附件/脚本
+│ ├── some-skill/
+│ │ ├── SKILL.md
+│ │ └── scripts/
+│ │ └── attachments/
+│ │ └── ...
+│ └── ...
 
 **Made with ❤️ by tianzecn**
