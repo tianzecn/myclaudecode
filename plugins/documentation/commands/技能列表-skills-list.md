@@ -1,7 +1,6 @@
 ---
-name: 技能列表
 description: 列出所有可用的插件、代理、命令和技能信息。当用户问"你都有什么技能"、"有哪些命令"、"有什么功能"时触发此命令。
-allowed-tools: Read
+allowed-tools: Read, Glob
 ---
 
 # 技能列表命令
