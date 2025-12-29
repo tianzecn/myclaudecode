@@ -20,7 +20,7 @@
 		"elements-of-style"
 	],
 	"commands": [
-		"./commands/技能列表-skills-list.md",
+		"./commands/skillslist-技能列表.md",
 		"./commands/analyze-codebase-分析代码库.md",
 		"./commands/contributing.md",
 		"./commands/create-architecture-documentation-创建架构文档.md",
