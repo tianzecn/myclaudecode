@@ -1,7 +1,7 @@
 {
 	"name": "development",
-	"version": "1.2.0",
-	"description": "开发核心插件 - Bug 修复、代码审查、调试、开发环境设置、API 设计、Monorepo 配置等核心开发能力。30 个命令 + 22 个代理 + 3 个技能。",
+	"version": "1.3.0",
+	"description": "开发核心插件 - Bug 修复、代码审查、调试、开发环境设置、API 设计、Monorepo 配置、胶水开发等核心开发能力。31 个命令 + 22 个代理 + 8 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -46,7 +46,8 @@
 		"./commands/setup-rate-limiting-配置速率限制.md",
 		"./commands/update-dependencies-更新依赖.md",
 		"./commands/创建命令.md",
-		"./commands/发布.md"
+		"./commands/发布.md",
+		"./commands/胶水开发.md"
 	],
 	"agents": [
 		"./agents/api-integration-specialist.md",
