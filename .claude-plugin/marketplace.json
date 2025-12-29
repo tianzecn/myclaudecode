@@ -279,8 +279,8 @@
 		{
 			"name": "specialized",
 			"source": "./plugins/specialized",
-			"description": "专业领域插件 - AI 工程、数据科学、机器学习、模拟仿真、工具集等专业领域能力。33 个命令 + 31 个代理 + 2 个技能。",
-			"version": "1.2.0",
+			"description": "专业领域插件 - AI 工程、数据科学、机器学习、模拟仿真、工具集等专业领域能力。34 个命令 + 31 个代理 + 2 个技能。",
+			"version": "1.3.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
