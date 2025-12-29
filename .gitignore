@@ -1,5 +1,6 @@
 # 忽略根目录下的所有内容
 /*
+/plugins/claude-skills/*
 
 # 只允许上传以下目录
 !.claude-plugin/
