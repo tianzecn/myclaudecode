@@ -34,7 +34,7 @@
 		"./commands/help-帮助.md"
 	],
 	"skills": [
-		"./skills/best-practices"
+		"./skills/claudish-usage"
 	],
 	"mcpServers": "./mcp-servers/mcp-config.json"
 }

@@ -11,6 +11,7 @@
   "license": "MIT",
   "keywords": ["chrome", "browser", "automation", "devtools", "cdp", "websocket"],
   "agents": ["./agents/browser-user.md"],
+  "skills": ["./skills/browsing"],
   "mcpServers": {
     "chrome": {
       "command": "node",

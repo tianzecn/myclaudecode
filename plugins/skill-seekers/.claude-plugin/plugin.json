@@ -16,6 +16,7 @@
 		"scraping",
 		"mcp"
 	],
+	"skills": ["./skills/skill-creation"],
 	"mcpServers": {
 		"skill-seekers": {
 			"command": "bash",

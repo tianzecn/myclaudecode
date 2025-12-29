@@ -65,7 +65,8 @@
 		"./skills/api-spec-analyzer",
 		"./skills/ui-implementer",
 		"./skills/shadcn-ui",
-		"./skills/dependency-check"
+		"./skills/dependency-check",
+		"./skills/claudish-usage"
 	],
 	"mcpServers": "./mcp-servers/mcp-config.json"
 }

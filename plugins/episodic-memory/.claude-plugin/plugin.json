@@ -11,6 +11,7 @@
   "license": "MIT",
   "keywords": ["memory", "search", "conversations", "semantic-search", "episodic"],
   "agents": ["./agents/search-conversations.md"],
+  "skills": ["./skills/remembering-conversations"],
   "mcpServers": {
     "episodic-memory": {
       "command": "node",

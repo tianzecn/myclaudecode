@@ -11,6 +11,8 @@
   "license": "MIT",
   "keywords": ["claude-code", "plugin-development", "skills", "mcp", "documentation", "development"],
   "skills": [
-    "./skills/claude-skills"
+    "./skills/claude-skills",
+    "./skills/developing-claude-code-plugins",
+    "./skills/working-with-claude-code"
   ]
 }

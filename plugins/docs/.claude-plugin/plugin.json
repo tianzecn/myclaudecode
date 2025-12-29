@@ -19,6 +19,7 @@
 	"skills": [
 		"./skills/claude-code-guide",
 		"./skills/claude-cookbooks",
-		"./skills/headless-cli"
+		"./skills/headless-cli",
+		"./skills/shipany"
 	]
 }
