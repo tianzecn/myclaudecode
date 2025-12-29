@@ -1,7 +1,7 @@
 {
 	"name": "planning",
-	"version": "1.4.0",
-	"description": "规划插件 - 需求分析、项目管理、团队协作、Sprint 规划、PRD 编写、任务分析与补全、项目计划生成等规划能力。46 个命令 + 7 个代理。",
+	"version": "1.5.0",
+	"description": "规划插件 - 需求分析、项目管理、团队协作、Sprint 规划、PRD 编写、任务分析与补全、项目计划生成、智能需求导航等规划能力。47 个命令 + 7 个代理。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -61,7 +61,8 @@
 		"./commands/understand-理解项目.md",
 		"./commands/需求分析.md",
 		"./commands/任务分析与补全.md",
-		"./commands/项目计划生成.md"
+		"./commands/项目计划生成.md",
+		"./commands/智能需求导航.md"
 	],
 	"agents": [
 		"./agents/planner.md",
