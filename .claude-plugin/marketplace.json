@@ -15,7 +15,7 @@
 			"name": "frontend",
 			"source": "./plugins/frontend",
 			"description": "Comprehensive frontend development toolkit with TypeScript, React 19, Vite, TanStack Router & Query v5, shadcn/ui. Features code-analysis integration via claudemem semantic search, session-based artifact isolation, LLM performance tracking, multi-model plan/code review, 13 focused skills, intelligent workflow detection, and Chrome DevTools MCP debugging.",
-			"version": "3.13.0",
+			"version": "3.14.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -39,7 +39,7 @@
 			"name": "code-analysis",
 			"source": "./plugins/code-analysis",
 			"description": "Deep code investigation with claudemem v0.4.0 AST structural analysis. Features Code Analysis Commands, Multi-Agent Orchestration patterns, Workflow Templates, PageRank-based symbol importance, callers/callees dependency tracing. NEW: 架构分析命令（数据-过程-抽象三维度）。",
-			"version": "2.8.0",
+			"version": "2.9.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -64,7 +64,7 @@
 			"name": "bun",
 			"source": "./plugins/bun",
 			"description": "Production-ready TypeScript backend development with Bun runtime. Includes specialized agents for backend development, API design, and DevOps. Features comprehensive best practices, tools integration (Biome, Prisma, Hono, Docker), testing workflows, and AWS ECS deployment guidance.",
-			"version": "1.5.2",
+			"version": "1.6.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -89,7 +89,7 @@
 			"name": "development",
 			"source": "./plugins/development",
 			"description": "开发核心插件 - Bug 修复、代码审查、调试、开发环境设置、API 设计、Monorepo 配置等核心开发能力。30 个命令 + 22 个代理 + 3 个技能。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -110,7 +110,7 @@
 			"name": "testing",
 			"source": "./plugins/testing",
 			"description": "测试插件 - 单元测试、E2E 测试、性能优化、安全审计、渗透测试等测试与安全能力。35 个命令 + 26 个代理。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -129,7 +129,7 @@
 			"name": "devops",
 			"source": "./plugins/devops",
 			"description": "DevOps 插件 - Git Flow、CI/CD、部署、容器化、Kubernetes、监控可观测性等 DevOps 能力。39 个命令 + 20 个代理。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -150,7 +150,7 @@
 			"name": "documentation",
 			"source": "./plugins/documentation",
 			"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、CLAUDE.md 优化等文档能力。21 个命令 + 3 个代理 + 2 个技能。",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -174,7 +174,7 @@
 			"name": "planning",
 			"source": "./plugins/planning",
 			"description": "规划插件 - 需求分析、项目管理、团队协作、Sprint 规划、PRD 编写等规划能力。44 个命令 + 7 个代理。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -194,7 +194,7 @@
 			"name": "workflow",
 			"source": "./plugins/workflow",
 			"description": "工作流插件 - Sugar 工作流、任务编排、同步协调、多代理协调、质量门控、Codex 自主执行等综合工作流能力。41 个命令 + 17 个代理 + 12 个技能。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -239,7 +239,7 @@
 			"name": "business",
 			"source": "./plugins/business",
 			"description": "商业插件 - 销售、营销、内容发布、合规、客户成功、社交媒体等商业能力。5 个命令 + 23 个代理。",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -280,7 +280,7 @@
 			"name": "specialized",
 			"source": "./plugins/specialized",
 			"description": "专业领域插件 - AI 工程、数据科学、机器学习、模拟仿真、工具集等专业领域能力。33 个命令 + 31 个代理 + 2 个技能。",
-			"version": "1.1.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -517,7 +517,7 @@
 			"name": "database",
 			"source": "./plugins/database",
 			"description": "数据库专家插件 - PostgreSQL、Neon、Supabase、NoSQL、SQL 优化、数据库架构设计等数据库能力。10 个命令 + 9 个代理。",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -559,7 +559,7 @@
 			"name": "game",
 			"source": "./plugins/game",
 			"description": "游戏开发插件 - Unity、Unreal Engine、3D 美术、游戏设计、资产管线、性能分析等游戏开发能力。5 个命令 + 4 个代理。",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
@@ -680,7 +680,7 @@
 			"name": "svelte",
 			"source": "./plugins/svelte",
 			"description": "Svelte 和 SvelteKit 开发插件 - 项目脚手架、组件开发、测试集成、Storybook、性能优化、无障碍检查等 Svelte 开发能力。16 个命令。",
-			"version": "1.0.0",
+			"version": "1.2.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",

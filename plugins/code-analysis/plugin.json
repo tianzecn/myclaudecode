@@ -1,6 +1,6 @@
 {
 	"name": "code-analysis",
-	"version": "2.8.0",
+	"version": "2.9.0",
 	"description": "Deep code investigation with ENFORCED claudemem v0.4.0 AST structural analysis. PageRank-based symbol importance, callers/callees dependency tracing, and full call chain context. v0.4.0: dead-code detection, test-gaps analysis, impact (BFS traversal). PreToolUse hooks intercept Grep/Bash/Glob/Read and replace with AST commands.",
 	"author": {
 		"name": "tianzecn",
@@ -77,9 +77,9 @@
 		"./agents/codebase-detective.md"
 	],
 	"commands": [
-		"./commands/analyze.md",
-		"./commands/help.md",
-		"./commands/setup.md",
+		"./commands/analyze-分析.md",
+		"./commands/help-帮助.md",
+		"./commands/setup-设置.md",
 		"./commands/深度思考.md",
 		"./commands/架构分析.md"
 	],

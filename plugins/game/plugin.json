@@ -1,6 +1,6 @@
 {
 	"name": "game",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"description": "游戏开发插件 - Unity、Unreal Engine、3D 美术、游戏设计、资产管线、性能分析等游戏开发能力。5 个命令 + 4 个代理。",
 	"author": {
 		"name": "tianzecn",
@@ -16,11 +16,11 @@
 		"game-design"
 	],
 	"commands": [
-		"./commands/game-analytics-integration.md",
-		"./commands/game-asset-pipeline.md",
-		"./commands/game-performance-profiler.md",
-		"./commands/game-testing-framework.md",
-		"./commands/unity-project-setup.md"
+		"./commands/game-analytics-integration-游戏分析集成.md",
+		"./commands/game-asset-pipeline-游戏资源管线.md",
+		"./commands/game-performance-profiler-游戏性能分析.md",
+		"./commands/game-testing-framework-游戏测试框架.md",
+		"./commands/unity-project-setup-Unity项目配置.md"
 	],
 	"agents": [
 		"./agents/3d-artist.md",

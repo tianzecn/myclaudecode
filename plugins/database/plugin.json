@@ -1,6 +1,6 @@
 {
 	"name": "database",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"description": "数据库专家插件 - PostgreSQL、MongoDB、Supabase、Neon 等数据库架构设计、迁移、优化和运维能力。10 个命令 + 9 个代理。",
 	"author": {
 		"name": "tianzecn",
@@ -18,16 +18,16 @@
 		"optimization"
 	],
 	"commands": [
-		"./commands/create-database-migrations.md",
-		"./commands/design-database-schema.md",
-		"./commands/supabase-backup-manager.md",
-		"./commands/supabase-data-explorer.md",
-		"./commands/supabase-migration-assistant.md",
-		"./commands/supabase-performance-optimizer.md",
-		"./commands/supabase-realtime-monitor.md",
-		"./commands/supabase-schema-sync.md",
-		"./commands/supabase-security-audit.md",
-		"./commands/supabase-type-generator.md"
+		"./commands/create-database-migrations-创建迁移.md",
+		"./commands/design-database-schema-架构设计.md",
+		"./commands/supabase-backup-manager-备份管理器.md",
+		"./commands/supabase-data-explorer-数据探索器.md",
+		"./commands/supabase-migration-assistant-迁移助手.md",
+		"./commands/supabase-performance-optimizer-性能优化器.md",
+		"./commands/supabase-realtime-monitor-实时监控.md",
+		"./commands/supabase-schema-sync-架构同步.md",
+		"./commands/supabase-security-audit-安全审计.md",
+		"./commands/supabase-type-generator-类型生成器.md"
 	],
 	"agents": [
 		"./agents/database-admin.md",

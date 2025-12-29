@@ -1,6 +1,6 @@
 {
 	"name": "bun",
-	"version": "1.5.2",
+	"version": "1.6.0",
 	"description": "Production-ready TypeScript backend development with Bun runtime. Includes specialized agents for backend development, API design, Apidog synchronization, and DevOps. Features comprehensive best practices, tools integration (Biome, Prisma, Hono, Docker, Apidog MCP), testing workflows, and AWS ECS deployment guidance (2025).",
 	"author": {
 		"name": "tianzecn",
@@ -28,10 +28,10 @@
 		"./agents/apidog.md"
 	],
 	"commands": [
-		"./commands/implement-api.md",
-		"./commands/setup-project.md",
-		"./commands/apidog.md",
-		"./commands/help.md"
+		"./commands/implement-api-实现接口.md",
+		"./commands/setup-project-项目初始化.md",
+		"./commands/apidog-接口文档同步.md",
+		"./commands/help-帮助.md"
 	],
 	"skills": [
 		"./skills/best-practices"
