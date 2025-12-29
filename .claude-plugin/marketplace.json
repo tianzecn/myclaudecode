@@ -14,8 +14,8 @@
 		{
 			"name": "frontend",
 			"source": "./plugins/frontend",
-			"description": "Comprehensive frontend development toolkit with TypeScript, React 19, Vite, TanStack Router & Query v5, shadcn/ui. Features code-analysis integration via claudemem semantic search, session-based artifact isolation, LLM performance tracking, multi-model plan/code review, 13 focused skills, intelligent workflow detection, and Chrome DevTools MCP debugging.",
-			"version": "3.14.0",
+			"description": "Comprehensive frontend development toolkit with TypeScript, React 19, Vite, TanStack Router & Query v5, shadcn/ui. Features code-analysis integration via claudemem semantic search, session-based artifact isolation, LLM performance tracking, multi-model plan/code review, 13 focused skills, intelligent workflow detection, Chrome DevTools MCP debugging, and user-centric frontend design methodology.",
+			"version": "3.15.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
