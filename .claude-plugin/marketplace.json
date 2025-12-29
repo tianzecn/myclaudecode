@@ -149,8 +149,8 @@
 		{
 			"name": "documentation",
 			"source": "./plugins/documentation",
-			"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、精华技术文档、CLAUDE.md 优化、项目上下文文档生成、DDD文档管家等文档能力。26 个命令 + 3 个代理 + 2 个技能。",
-			"version": "1.7.0",
+			"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、精华技术文档、CLAUDE.md 优化、项目上下文文档生成、DDD文档管家、ASCII图生成等文档能力。27 个命令 + 3 个代理 + 2 个技能。",
+			"version": "1.8.0",
 			"author": {
 				"name": "tianzecn",
 				"email": "",
