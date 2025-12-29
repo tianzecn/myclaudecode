@@ -1,7 +1,7 @@
 {
 	"name": "documentation",
-	"version": "1.4.0",
-	"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、精华技术文档、CLAUDE.md 优化等文档能力。23 个命令 + 3 个代理 + 2 个技能。",
+	"version": "1.5.0",
+	"description": "文档插件 - API 文档生成、架构文档、迁移指南、代码库分析、精华技术文档、CLAUDE.md 优化、项目上下文文档生成等文档能力。24 个命令 + 3 个代理 + 2 个技能。",
 	"author": {
 		"name": "tianzecn",
 		"email": "",
@@ -43,7 +43,8 @@
 		"./commands/优化CLAUDE.md",
 		"./commands/开发归档.md",
 		"./commands/开发总结.md",
-		"./commands/精华技术文档.md"
+		"./commands/精华技术文档.md",
+		"./commands/项目上下文文档生成.md"
 	],
 	"agents": [
 		"./agents/changelog-generator.md",
