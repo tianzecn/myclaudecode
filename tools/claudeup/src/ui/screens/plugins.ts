@@ -25,87 +25,107 @@ import {
   type PluginInfo,
 } from '../../services/plugin-manager.js';
 import { cloneMarketplace, deleteMarketplace, addToKnownMarketplaces, removeFromKnownMarketplaces } from '../../services/local-marketplace.js';
+import {
+  loadPluginComponents as loadComponents,
+  loadComponentFullContent,
+  COMPONENT_ICONS,
+  COMPONENT_TYPE_LABELS,
+} from '../../services/component-parser.js';
+import { openInEditor } from '../../services/editor.js';
+import {
+  loadPersistedState,
+  debouncedSaveState,
+  collapseStateToPersistedState,
+  persistedStateToCollapseState,
+} from '../../services/state-persistence.js';
 
-import type { Marketplace } from '../../types/index.js';
+import type {
+  Marketplace,
+  ComponentType,
+  ListItemType as _ListItemType, // Type reserved for future use
+  PluginComponent,
+  ListItem,
+  CollapseState,
+} from '../../types/index.js';
 import path from 'path';
 import os from 'os';
+import fs from 'fs-extra';
 
-// Component types for 4-level hierarchy
-type ComponentType = 'agents' | 'commands' | 'skills' | 'invalid';
-type ListItemType = 'marketplace' | 'plugin' | 'type-header' | 'component' | 'empty';
+// ============================================
+// State Management
+// ============================================
 
-interface PluginComponent {
-  name: string;
-  description: string;
-  type: ComponentType;
-  filePath: string;      // Relative path within plugin
-  absolutePath: string;  // Full path for opening
-  isValid: boolean;
-}
-
-interface ListItem {
-  label: string;
-  type: ListItemType;
-  depth: number;  // 0=marketplace, 1=plugin, 2=type-header, 3=component
-  marketplace?: Marketplace;
-  marketplaceEnabled?: boolean;
-  plugin?: PluginInfo;
-  componentType?: ComponentType;
-  component?: PluginComponent;
-  pluginId?: string;  // For type-header items
-}
-
-// Track current scope - persists across screen refreshes
+/** 当前作用域 */
 let currentScope: 'project' | 'global' = 'project';
 
-// Track collapsed state for all levels - persists across screen refreshes
-const collapsedMarketplaces = new Set<string>();
-const collapsedPlugins = new Set<string>();      // pluginId
-const collapsedTypes = new Set<string>();        // "pluginId:componentType"
+/** 折叠状态 */
+let collapseState: CollapseState = {
+  marketplaces: new Set<string>(),
+  plugins: new Set<string>(),
+  types: new Set<string>(),
+};
 
-// Track current selection - persists across screen refreshes
+/** 当前选中项索引 */
 let currentSelection = 0;
 
-// Component type icons and labels
-const TYPE_ICONS: Record<ComponentType, string> = {
-  agents: '🤖',
-  commands: '⌘',
-  skills: '✨',
-  invalid: '⚠️',
-};
+/** 搜索关键词 */
+let searchQuery = '';
 
-const TYPE_LABELS: Record<ComponentType, string> = {
-  agents: 'Agents',
-  commands: 'Commands',
-  skills: 'Skills',
-  invalid: 'Invalid',
-};
+/** 是否显示组件完整内容 */
+let showFullContent = false;
 
-// Cache for loaded components
-const componentCache = new Map<string, Map<ComponentType, PluginComponent[]>>();
+/** 状态是否已加载 */
+let stateLoaded = false;
+
+/** 组件缓存 */
+const componentCache = new Map<string, Map<ComponentType | 'invalid', PluginComponent[]>>();
+
+/** 已初始化折叠状态的 typeKey（防止重复设置默认值） */
+const initializedTypeKeys = new Set<string>();
+
+// ============================================
+// Helper Functions
+// ============================================
 
 /**
- * Load components (agents/commands/skills) for a plugin
+ * 加载并初始化持久化状态
  */
-async function loadPluginComponents(plugin: PluginInfo): Promise<Map<ComponentType, PluginComponent[]>> {
-  // Check cache first
+async function initializeState(): Promise<void> {
+  if (stateLoaded) return;
+
+  const persisted = await loadPersistedState();
+  collapseState = persistedStateToCollapseState(persisted);
+  currentScope = persisted.lastScope;
+  stateLoaded = true;
+}
+
+/**
+ * 保存当前状态（防抖）
+ */
+function saveState(): void {
+  debouncedSaveState(collapseStateToPersistedState(collapseState, currentScope));
+}
+
+/**
+ * 加载插件组件（使用 component-parser 服务）
+ */
+async function loadPluginComponentsForPlugin(plugin: PluginInfo): Promise<Map<ComponentType | 'invalid', PluginComponent[]>> {
+  // 检查缓存
   if (componentCache.has(plugin.id)) {
     return componentCache.get(plugin.id)!;
   }
 
-  const result = new Map<ComponentType, PluginComponent[]>();
-  result.set('agents', []);
-  result.set('commands', []);
-  result.set('skills', []);
+  const result = new Map<ComponentType | 'invalid', PluginComponent[]>();
+  result.set('agent', []);
+  result.set('command', []);
+  result.set('skill', []);
   result.set('invalid', []);
 
   try {
-    // Dynamic import for ESM compatibility
-    const { default: fs } = await import('fs-extra');
-
-    // Build plugin path - check marketplace cache location
+    // 构建插件路径
     const marketplacesPath = path.join(os.homedir(), '.claude', 'plugins', 'marketplaces');
-    const pluginJsonPath = path.join(marketplacesPath, plugin.marketplace, 'plugins', plugin.name, 'plugin.json');
+    const pluginDir = path.join(marketplacesPath, plugin.marketplace, 'plugins', plugin.name);
+    const pluginJsonPath = path.join(pluginDir, 'plugin.json');
 
     if (!await fs.pathExists(pluginJsonPath)) {
       componentCache.set(plugin.id, result);
@@ -113,87 +133,114 @@ async function loadPluginComponents(plugin: PluginInfo): Promise<Map<ComponentTy
     }
 
     const pluginJson = await fs.readJson(pluginJsonPath);
-    const pluginDir = path.dirname(pluginJsonPath);
 
-    // Process each component type
-    const componentTypes: Array<{ key: 'agents' | 'commands' | 'skills'; type: ComponentType }> = [
-      { key: 'agents', type: 'agents' },
-      { key: 'commands', type: 'commands' },
-      { key: 'skills', type: 'skills' },
-    ];
+    // 使用 component-parser 服务加载组件
+    const components = await loadComponents(pluginDir, pluginJson);
 
-    for (const { key, type } of componentTypes) {
-      const items = pluginJson[key] || [];
-      for (const item of items) {
-        // Handle both string format ("./agents/dev.md") and object format ({ source: "...", name: "..." })
-        let filePath: string;
-        let itemName: string;
-        let itemDesc: string;
-
-        if (typeof item === 'string') {
-          // String format: "./agents/developer.md"
-          filePath = item;
-          itemName = path.basename(item, '.md');
-          itemDesc = '';
-        } else if (item && typeof item === 'object' && item.source) {
-          // Object format: { source: "...", name: "...", description: "..." }
-          filePath = item.source;
-          itemName = item.name || path.basename(filePath, '.md');
-          itemDesc = item.description || '';
-        } else {
-          continue;
-        }
-
-        const absolutePath = path.join(pluginDir, filePath);
-        const exists = await fs.pathExists(absolutePath);
-
-        const component: PluginComponent = {
-          name: itemName,
-          description: itemDesc,
-          type: exists ? type : 'invalid',
-          filePath,
-          absolutePath,
-          isValid: exists,
-        };
-
-        if (exists) {
-          result.get(type)!.push(component);
-        } else {
-          result.get('invalid')!.push(component);
-        }
-      }
+    // 复制到结果
+    for (const [type, comps] of components) {
+      result.set(type, comps);
     }
   } catch (error) {
-    // Silently fail - plugin may not have components
+    // 静默失败
   }
 
   componentCache.set(plugin.id, result);
   return result;
 }
 
-// Helper to clean up screen-level key bindings before re-registering
-// This prevents handler accumulation when createPluginsScreen is called recursively
-function cleanupPluginScreenKeys(screen: blessed.Screen): void {
+/**
+ * 搜索过滤：检查项目是否匹配搜索关键词
+ */
+function matchesSearch(item: ListItem, query: string): boolean {
+  if (!query) return true;
+
+  const lowerQuery = query.toLowerCase();
+  const label = item.label.replace(/\{[^}]+\}/g, '').toLowerCase(); // 移除 blessed 标签
+
+  // 检查标签
+  if (label.includes(lowerQuery)) return true;
+
+  // 检查关联数据
+  if (item.data) {
+    if (item.data.marketplace && item.data.marketplace.toLowerCase().includes(lowerQuery)) return true;
+    if (item.data.pluginId && item.data.pluginId.toLowerCase().includes(lowerQuery)) return true;
+    if (item.data.component) {
+      if (item.data.component.name.toLowerCase().includes(lowerQuery)) return true;
+      if (item.data.component.description.toLowerCase().includes(lowerQuery)) return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * 过滤列表项（搜索模式）
+ */
+function filterItems(items: ListItem[], query: string): ListItem[] {
+  if (!query) return items;
+
+  const matchedIndices = new Set<number>();
+
+  // 第一遍：标记匹配的项
+  for (let i = 0; i < items.length; i++) {
+    if (matchesSearch(items[i], query)) {
+      matchedIndices.add(i);
+
+      // 回溯标记父节点
+      let parentDepth = items[i].depth - 1;
+      for (let j = i - 1; j >= 0 && parentDepth >= 0; j--) {
+        if (items[j].depth === parentDepth) {
+          matchedIndices.add(j);
+          parentDepth--;
+        }
+      }
+    }
+  }
+
+  // 返回匹配的项
+  return items.filter((_, i) => matchedIndices.has(i));
+}
+
+/**
+ * 清理屏幕级快捷键绑定
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function cleanupPluginScreenKeys(screen: any): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scr = screen as any;
   if (scr.unkey && typeof scr.unkey === 'function') {
     try {
-      scr.unkey(['g']);
-      scr.unkey(['u']);
-      scr.unkey(['d']);
-      scr.unkey(['r']);
-      scr.unkey(['a']);
-      scr.unkey(['n']);
-      scr.unkey(['j']);
-      scr.unkey(['k']);
+      // 基础操作键
+      scr.unkey(['g', 'u', 'd', 'r', 'n']);
+      // 导航键
+      scr.unkey(['j', 'k']);
+      // 类型跳转键
+      scr.unkey(['a', 'c', 's']);
+      // 搜索键
+      scr.unkey(['/']);
+      // 详情切换键
+      scr.unkey(['tab']);
     } catch {
-      // Ignore errors if keys weren't bound
+      // 静默忽略
     }
   }
 }
 
+/**
+ * 构建层级图标
+ */
+function getCollapseIcon(collapsed: boolean): string {
+  return collapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}';
+}
+
+// Note: getIndent function will be added in Phase 3 for search highlighting
+
 export async function createPluginsScreen(state: AppState): Promise<void> {
-  // Clean up any existing screen-level key handlers to prevent accumulation
+  // 初始化持久化状态
+  await initializeState();
+
+  // 清理现有快捷键绑定
   cleanupPluginScreenKeys(state.screen);
 
   createHeader(state, 'Plugins');
@@ -249,17 +296,17 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
   }
 
   // Preload components for enabled plugins
-  const pluginComponents = new Map<string, Map<ComponentType, PluginComponent[]>>();
+  const pluginComponents = new Map<string, Map<ComponentType | 'invalid', PluginComponent[]>>();
   for (const plugin of allPlugins) {
     if (plugin.enabled || plugin.installedVersion) {
-      const components = await loadPluginComponents(plugin);
+      const components = await loadPluginComponentsForPlugin(plugin);
       pluginComponents.set(plugin.id, components);
     }
   }
 
   // Build unified list with 4-level hierarchy
-  const listItems: ListItem[] = [];
-  const INDENT = '  ';  // 2 spaces per level
+  const allListItems: ListItem[] = [];
+  const INDENT = '  ';
 
   for (const marketplace of allMarketplaces) {
     // Marketplace is enabled if it's in local cache (actually cloned) or explicitly configured
@@ -267,33 +314,35 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
     const isConfigured = configuredMarketplaces[marketplace.name] !== undefined;
     const isEnabled = isInLocalCache || isConfigured;
     const plugins = pluginsByMarketplace.get(marketplace.name) || [];
-    const isMarketplaceCollapsed = collapsedMarketplaces.has(marketplace.name);
+    const isMarketplaceCollapsed = collapseState.marketplaces.has(marketplace.name);
 
     // Marketplace header (depth=0)
     const expandIcon = isEnabled && plugins.length > 0
-      ? (isMarketplaceCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}')
+      ? getCollapseIcon(isMarketplaceCollapsed)
       : ' ';
     const enabledBadge = isEnabled ? '{green-fg}✓{/green-fg}' : '{gray-fg}○{/gray-fg}';
     const officialBadge = marketplace.official ? ' {cyan-fg}[Official]{/cyan-fg}' : '';
     const pluginCount = plugins.length > 0 ? ` {gray-fg}(${plugins.length}){/gray-fg}` : '';
 
-    listItems.push({
+    allListItems.push({
       label: `${expandIcon} ${enabledBadge} {bold}${marketplace.displayName}{/bold}${officialBadge}${pluginCount}`,
       type: 'marketplace',
       depth: 0,
-      marketplace,
-      marketplaceEnabled: isEnabled,
+      id: `mp:${marketplace.name}`,
+      collapsible: isEnabled && plugins.length > 0,
+      collapsed: isMarketplaceCollapsed,
+      data: { marketplace: marketplace.name },
     });
 
     // Plugins under this marketplace (if enabled and not collapsed)
     if (isEnabled && plugins.length > 0 && !isMarketplaceCollapsed) {
       for (const plugin of plugins) {
-        const isPluginCollapsed = collapsedPlugins.has(plugin.id);
+        const isPluginCollapsed = collapseState.plugins.has(plugin.id);
         const components = pluginComponents.get(plugin.id);
         const hasComponents = components && (
-          (components.get('agents')?.length || 0) +
-          (components.get('commands')?.length || 0) +
-          (components.get('skills')?.length || 0) +
+          (components.get('agent')?.length || 0) +
+          (components.get('command')?.length || 0) +
+          (components.get('skill')?.length || 0) +
           (components.get('invalid')?.length || 0)
         ) > 0;
 
@@ -307,7 +356,7 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
 
         // Plugin expand/collapse icon (only if has components)
         const pluginExpandIcon = hasComponents
-          ? (isPluginCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}')
+          ? getCollapseIcon(isPluginCollapsed)
           : ' ';
 
         // Version display
@@ -320,40 +369,46 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
 
         const updateBadge = plugin.hasUpdate ? ' {yellow-fg}⬆{/yellow-fg}' : '';
 
-        listItems.push({
+        allListItems.push({
           label: `${INDENT}${pluginExpandIcon} ${status} ${plugin.name} ${versionDisplay}${updateBadge}`,
           type: 'plugin',
           depth: 1,
-          plugin,
+          id: `pl:${plugin.id}`,
+          collapsible: hasComponents || false,
+          collapsed: isPluginCollapsed,
+          data: { marketplace: marketplace.name, pluginId: plugin.id },
         });
 
         // Type headers and components (if plugin expanded and has components)
         if (!isPluginCollapsed && hasComponents && components) {
-          const typeOrder: ComponentType[] = ['agents', 'commands', 'skills', 'invalid'];
+          const typeOrder: (ComponentType | 'invalid')[] = ['agent', 'command', 'skill', 'invalid'];
 
           for (const componentType of typeOrder) {
             const typeComponents = components.get(componentType) || [];
             if (typeComponents.length === 0) continue;
 
             const typeKey = `${plugin.id}:${componentType}`;
-            // Default to collapsed for type headers (user's request!)
-            if (!collapsedTypes.has(typeKey)) {
-              collapsedTypes.add(typeKey);  // Default collapsed
+            // Default to collapsed for type headers (only on first encounter!)
+            if (!initializedTypeKeys.has(typeKey)) {
+              initializedTypeKeys.add(typeKey);
+              collapseState.types.add(typeKey);  // Default collapsed
             }
-            const isTypeCollapsed = collapsedTypes.has(typeKey);
+            const isTypeCollapsed = collapseState.types.has(typeKey);
 
             // Type header (depth=2)
-            const typeExpandIcon = isTypeCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}';
-            const typeIcon = TYPE_ICONS[componentType];
-            const typeLabel = TYPE_LABELS[componentType];
+            const typeExpandIcon = getCollapseIcon(isTypeCollapsed);
+            const typeIcon = COMPONENT_ICONS[componentType];
+            const typeLabel = COMPONENT_TYPE_LABELS[componentType];
             const componentCount = typeComponents.length;
 
-            listItems.push({
+            allListItems.push({
               label: `${INDENT}${INDENT}${typeExpandIcon} ${typeIcon} ${typeLabel} {gray-fg}(${componentCount}){/gray-fg}`,
               type: 'type-header',
               depth: 2,
-              componentType,
-              pluginId: plugin.id,
+              id: `th:${typeKey}`,
+              collapsible: true,
+              collapsed: isTypeCollapsed,
+              data: { marketplace: marketplace.name, pluginId: plugin.id, componentType },
             });
 
             // Components (if type expanded)
@@ -364,12 +419,14 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
                   ? ` {gray-fg}- ${component.description.substring(0, 30)}${component.description.length > 30 ? '...' : ''}{/gray-fg}`
                   : '';
 
-                listItems.push({
+                allListItems.push({
                   label: `${INDENT}${INDENT}${INDENT}${componentIcon} ${component.name}${descPreview}`,
                   type: 'component',
                   depth: 3,
-                  component,
-                  pluginId: plugin.id,
+                  id: `cp:${plugin.id}:${componentType}:${component.name}`,
+                  collapsible: false,
+                  collapsed: false,
+                  data: { marketplace: marketplace.name, pluginId: plugin.id, componentType, component },
                 });
               }
             }
@@ -377,13 +434,20 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
         }
       }
     } else if (isEnabled && !isMarketplaceCollapsed) {
-      listItems.push({
+      allListItems.push({
         label: `${INDENT}{gray-fg}No plugins available{/gray-fg}`,
         type: 'empty',
         depth: 1,
+        id: `empty:${marketplace.name}`,
+        collapsible: false,
+        collapsed: false,
+        data: { marketplace: marketplace.name },
       });
     }
   }
+
+  // Apply search filter
+  const listItems = filterItems(allListItems, searchQuery);
 
   // List label (simplified since we have tab bar)
   const scopeLabel = ' Marketplaces & Plugins ';
@@ -452,10 +516,16 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
       return;
     }
 
-    if (item.type === 'marketplace' && item.marketplace) {
-      const mp = item.marketplace;
+    if (item.type === 'marketplace' && item.data?.marketplace) {
+      const mp = allMarketplaces.find(m => m.name === item.data?.marketplace);
+      if (!mp) {
+        detailBox.setContent('{gray-fg}Marketplace not found{/gray-fg}');
+        state.screen.render();
+        return;
+      }
 
-      const statusText = item.marketplaceEnabled
+      const isMarketplaceEnabled = localMarketplaces.has(mp.name) || configuredMarketplaces[mp.name] !== undefined;
+      const statusText = isMarketplaceEnabled
         ? '{green-fg}● Enabled{/green-fg}'
         : '{gray-fg}○ Not added{/gray-fg}';
 
@@ -464,7 +534,7 @@ export async function createPluginsScreen(state: AppState): Promise<void> {
         ? `{bold}Plugins:{/bold} ${plugins.length} available`
         : '{gray-fg}Enable to see plugins{/gray-fg}';
 
-      const actionText = item.marketplaceEnabled
+      const actionText = isMarketplaceEnabled
         ? '{red-fg}Press Enter to remove{/red-fg}'
         : '{green-fg}Press Enter to add{/green-fg}';
 
@@ -492,8 +562,13 @@ ${actionText}
       `.trim();
 
       detailBox.setContent(content);
-    } else if (item.type === 'plugin' && item.plugin) {
-      const plugin = item.plugin;
+    } else if (item.type === 'plugin' && item.data?.pluginId) {
+      const plugin = allPlugins.find(p => p.id === item.data?.pluginId);
+      if (!plugin) {
+        detailBox.setContent('{gray-fg}Plugin not found{/gray-fg}');
+        state.screen.render();
+        return;
+      }
 
       let statusText = '{gray-fg}Not installed{/gray-fg}';
       if (plugin.enabled) {
@@ -533,9 +608,9 @@ ${actionText}
       const components = pluginComponents.get(plugin.id);
       let componentSummary = '';
       if (components) {
-        const agentCount = components.get('agents')?.length || 0;
-        const commandCount = components.get('commands')?.length || 0;
-        const skillCount = components.get('skills')?.length || 0;
+        const agentCount = components.get('agent')?.length || 0;
+        const commandCount = components.get('command')?.length || 0;
+        const skillCount = components.get('skill')?.length || 0;
         if (agentCount + commandCount + skillCount > 0) {
           componentSummary = `\n{bold}Components:{/bold}`;
           if (agentCount > 0) componentSummary += ` 🤖 ${agentCount}`;
@@ -563,22 +638,24 @@ ${actions}
       `.trim();
 
       detailBox.setContent(content);
-    } else if (item.type === 'type-header' && item.componentType && item.pluginId) {
+    } else if (item.type === 'type-header' && item.data?.componentType && item.data?.pluginId) {
       // Type header detail
-      const plugin = allPlugins.find(p => p.id === item.pluginId);
-      const components = pluginComponents.get(item.pluginId);
-      const typeComponents = components?.get(item.componentType) || [];
+      const pluginId = item.data.pluginId;
+      const componentType = item.data.componentType;
+      const plugin = allPlugins.find(p => p.id === pluginId);
+      const components = pluginComponents.get(pluginId);
+      const typeComponents = components?.get(componentType) || [];
 
-      const typeIcon = TYPE_ICONS[item.componentType];
-      const typeLabel = TYPE_LABELS[item.componentType];
-      const typeKey = `${item.pluginId}:${item.componentType}`;
-      const isCollapsed = collapsedTypes.has(typeKey);
+      const typeIcon = COMPONENT_ICONS[componentType];
+      const typeLabel = COMPONENT_TYPE_LABELS[componentType];
+      const typeKey = `${pluginId}:${componentType}`;
+      const isCollapsed = collapseState.types.has(typeKey);
 
       const content = `
 {bold}{cyan-fg}${typeIcon} ${typeLabel}{/cyan-fg}{/bold}
 
-{bold}Plugin:{/bold} ${plugin?.name || item.pluginId}
-{bold}Count:{/bold} ${typeComponents.length} ${item.componentType}
+{bold}Plugin:{/bold} ${plugin?.name || pluginId}
+{bold}Count:{/bold} ${typeComponents.length} ${componentType}s
 
 {gray-fg}Components:{/gray-fg}
 ${typeComponents.slice(0, 5).map(c => `  • ${c.name}`).join('\n')}
@@ -588,34 +665,64 @@ ${typeComponents.length > 5 ? `  {gray-fg}... and ${typeComponents.length - 5} m
       `.trim();
 
       detailBox.setContent(content);
-    } else if (item.type === 'component' && item.component) {
+    } else if (item.type === 'component' && item.data?.component) {
       // Component detail
-      const comp = item.component;
-      const plugin = allPlugins.find(p => p.id === item.pluginId);
+      const comp = item.data.component;
+      const pluginId = item.data.pluginId;
+      const plugin = allPlugins.find(p => p.id === pluginId);
 
-      const typeIcon = TYPE_ICONS[comp.type];
-      const typeLabel = TYPE_LABELS[comp.type];
+      const typeIcon = COMPONENT_ICONS[comp.type];
+      const typeLabel = COMPONENT_TYPE_LABELS[comp.type];
 
       const validityStatus = comp.isValid
         ? '{green-fg}● Valid{/green-fg}'
         : '{red-fg}✗ File not found{/red-fg}';
 
-      const content = `
+      if (showFullContent && comp.isValid) {
+        // Load and display full content asynchronously
+        loadComponentFullContent(comp).then((compWithContent) => {
+          const fullContent = compWithContent.fullContent || '{gray-fg}No content available{/gray-fg}';
+          // Escape blessed tags in content and show raw markdown
+          const escapedContent = fullContent
+            .replace(/\{/g, '\\{')
+            .replace(/\}/g, '\\}');
+
+          const content = `
+{bold}{cyan-fg}${typeIcon} ${comp.name}{/cyan-fg}{/bold} {yellow-fg}[Full Content]{/yellow-fg}
+
+{gray-fg}─── File: ${comp.filePath} ───{/gray-fg}
+
+${escapedContent}
+
+{gray-fg}────────────────────────────────────{/gray-fg}
+{cyan-fg}[Tab]{/cyan-fg} Hide content  {cyan-fg}[Enter]{/cyan-fg} Open in editor
+          `.trim();
+
+          detailBox.setContent(content);
+          state.screen.render();
+        });
+        // Show loading while fetching
+        detailBox.setContent(`{bold}{cyan-fg}${typeIcon} ${comp.name}{/cyan-fg}{/bold}\n\n{yellow-fg}Loading content...{/yellow-fg}`);
+      } else {
+        // Normal detail view
+        const content = `
 {bold}{cyan-fg}${typeIcon} ${comp.name}{/cyan-fg}{/bold}
 
 ${comp.description || '{gray-fg}No description{/gray-fg}'}
 
 {bold}Type:{/bold} ${typeLabel}
-{bold}Plugin:{/bold} ${plugin?.name || item.pluginId}
+{bold}Plugin:{/bold} ${plugin?.name || pluginId}
 {bold}Status:{/bold} ${validityStatus}
 
 {bold}Path:{/bold}
 {gray-fg}${comp.filePath}{/gray-fg}
 
+{cyan-fg}[Tab]{/cyan-fg} Show full content
 {cyan-fg}[Enter]{/cyan-fg} Open in editor
-      `.trim();
+        `.trim();
 
-      detailBox.setContent(content);
+        detailBox.setContent(content);
+      }
     }
 
     state.screen.render();
@@ -623,6 +730,7 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
 
   list.on('select item', () => {
     currentSelection = list.selected as number;
+    showFullContent = false; // Reset full content view when selection changes
     updateDetail();
   });
   setTimeout(updateDetail, 0);
@@ -632,10 +740,13 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     const selected = listItems[index];
     if (!selected || selected.type === 'empty') return;
 
-    if (selected.type === 'marketplace' && selected.marketplace) {
-      const mp = selected.marketplace;
+    if (selected.type === 'marketplace' && selected.data?.marketplace) {
+      const mp = allMarketplaces.find(m => m.name === selected.data?.marketplace);
+      if (!mp) return;
 
-      if (selected.marketplaceEnabled) {
+      const isMarketplaceEnabled = localMarketplaces.has(mp.name) || configuredMarketplaces[mp.name] !== undefined;
+
+      if (isMarketplaceEnabled) {
         // Remove marketplace with confirmation
         const confirm = await showConfirm(
           state,
@@ -690,8 +801,10 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
         }
         await navigateTo(state, 'plugins');
       }
-    } else if (selected.type === 'plugin' && selected.plugin) {
-      const plugin = selected.plugin;
+    } else if (selected.type === 'plugin' && selected.data?.pluginId) {
+      const plugin = allPlugins.find(p => p.id === selected.data?.pluginId);
+      if (!plugin) return;
+
       const isInstalled = plugin.enabled || plugin.installedVersion;
 
       if (plugin.hasUpdate) {
@@ -737,46 +850,24 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
         }
         await navigateTo(state, 'plugins');
       }
-    } else if (selected.type === 'type-header' && selected.pluginId && selected.componentType) {
+    } else if (selected.type === 'type-header' && selected.data?.pluginId && selected.data?.componentType) {
       // Toggle expand/collapse for type header
-      const typeKey = `${selected.pluginId}:${selected.componentType}`;
-      if (collapsedTypes.has(typeKey)) {
-        collapsedTypes.delete(typeKey);
+      const typeKey = `${selected.data.pluginId}:${selected.data.componentType}`;
+      if (collapseState.types.has(typeKey)) {
+        collapseState.types.delete(typeKey);
       } else {
-        collapsedTypes.add(typeKey);
+        collapseState.types.add(typeKey);
       }
+      saveState();
       createPluginsScreen(state);
-    } else if (selected.type === 'component' && selected.component) {
-      // Open component file in editor
-      const filePath = selected.component.absolutePath;
-      const { exec } = await import('child_process');
-      const { promisify } = await import('util');
-      const execAsync = promisify(exec);
-
-      // Try to open in editor: cursor > code > windsurf
-      const editors = [
-        { cmd: 'cursor', name: 'Cursor' },
-        { cmd: 'code', name: 'VS Code' },
-        { cmd: 'windsurf', name: 'Windsurf' },
-      ];
-
-      let opened = false;
-      for (const editor of editors) {
-        try {
-          await execAsync(`which ${editor.cmd}`);
-          await execAsync(`${editor.cmd} "${filePath}"`);
-          opened = true;
-          break;
-        } catch {
-          // Editor not found, try next
-        }
-      }
-
-      if (!opened) {
+    } else if (selected.type === 'component' && selected.data?.component) {
+      // Open component file in editor using editor service
+      const result = await openInEditor(selected.data.component.absolutePath);
+      if (!result.success) {
         await showMessage(
           state,
           'No Editor Found',
-          'Could not find Cursor, VS Code, or Windsurf.\nPlease open the file manually:\n' + filePath,
+          result.error || 'Could not open file in editor.',
           'error'
         );
       }
@@ -788,6 +879,7 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     if (state.isSearching) return;
     currentScope = currentScope === 'project' ? 'global' : 'project';
     currentSelection = 0; // Reset selection when scope changes
+    saveState(); // Persist the scope change
     await navigateTo(state, 'plugins');
   });
 
@@ -796,10 +888,10 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     if (state.isSearching) return;
     const selected = list.selected as number;
     const item = listItems[selected];
-    if (!item || item.type !== 'plugin' || !item.plugin) return;
+    if (!item || item.type !== 'plugin' || !item.data?.pluginId) return;
 
-    const plugin = item.plugin;
-    if (!plugin.hasUpdate) {
+    const plugin = allPlugins.find(p => p.id === item.data?.pluginId);
+    if (!plugin || !plugin.hasUpdate) {
       return; // Silent no-op if no update available
     }
 
@@ -821,9 +913,11 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     if (state.isSearching) return;
     const selected = list.selected as number;
     const item = listItems[selected];
-    if (!item || item.type !== 'plugin' || !item.plugin) return;
+    if (!item || item.type !== 'plugin' || !item.data?.pluginId) return;
 
-    const plugin = item.plugin;
+    const plugin = allPlugins.find(p => p.id === item.data?.pluginId);
+    if (!plugin) return;
+
     const isInstalled = plugin.enabled || plugin.installedVersion;
     if (!isInstalled) {
       await showMessage(state, 'Not Installed', `${plugin.name} is not installed.`, 'info');
@@ -879,8 +973,8 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     await navigateTo(state, 'plugins');
   });
 
-  // Update all plugins (a key) - immediate, no confirmation
-  list.key(['a'], async () => {
+  // Update all plugins (A key - Shift+A) - immediate, no confirmation
+  list.key(['S-a'], async () => {
     if (state.isSearching) return;
     const updatable = allPlugins.filter((p) => p.hasUpdate);
     if (updatable.length === 0) {
@@ -900,6 +994,47 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
       loading.stop();
     }
     await navigateTo(state, 'plugins');
+  });
+
+  // Type jump: a → next Agent, c → next Command, s → next Skill
+  const jumpToNextType = (targetType: ComponentType) => {
+    if (state.isSearching) return;
+    const currentIdx = list.selected as number;
+
+    // Find next item of target type (wrapping around)
+    for (let offset = 1; offset <= listItems.length; offset++) {
+      const nextIdx = (currentIdx + offset) % listItems.length;
+      const item = listItems[nextIdx];
+
+      // Match component of target type or type-header of target type
+      if (item.type === 'component' && item.data?.component?.type === targetType) {
+        // neo-blessed's select method exists but isn't typed properly
+        (list as any).select(nextIdx);
+        state.screen.render();
+        return;
+      }
+      if (item.type === 'type-header' && item.data?.componentType === targetType) {
+        (list as any).select(nextIdx);
+        state.screen.render();
+        return;
+      }
+    }
+  };
+
+  list.key(['a'], () => jumpToNextType('agent'));
+  list.key(['c'], () => jumpToNextType('command'));
+  list.key(['s'], () => jumpToNextType('skill'));
+
+  // Toggle full content display (Tab key)
+  list.key(['tab'], () => {
+    const selected = list.selected as number;
+    const item = listItems[selected];
+
+    // Only toggle for component items
+    if (item?.type === 'component' && item.data?.component?.isValid) {
+      showFullContent = !showFullContent;
+      updateDetail();
+    }
   });
 
   // Add new marketplace (n key)
@@ -974,34 +1109,34 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
 
     switch (item.type) {
       case 'marketplace':
-        if (item.marketplace) {
+        if (item.data?.marketplace) {
           if (collapse) {
-            collapsedMarketplaces.add(item.marketplace.name);
+            collapseState.marketplaces.add(item.data.marketplace);
           } else {
-            collapsedMarketplaces.delete(item.marketplace.name);
+            collapseState.marketplaces.delete(item.data.marketplace);
           }
           needRefresh = true;
         }
         break;
 
       case 'plugin':
-        if (item.plugin) {
+        if (item.data?.pluginId) {
           if (collapse) {
-            collapsedPlugins.add(item.plugin.id);
+            collapseState.plugins.add(item.data.pluginId);
           } else {
-            collapsedPlugins.delete(item.plugin.id);
+            collapseState.plugins.delete(item.data.pluginId);
           }
           needRefresh = true;
         }
         break;
 
       case 'type-header':
-        if (item.pluginId && item.componentType) {
-          const typeKey = `${item.pluginId}:${item.componentType}`;
+        if (item.data?.pluginId && item.data?.componentType) {
+          const typeKey = `${item.data.pluginId}:${item.data.componentType}`;
           if (collapse) {
-            collapsedTypes.add(typeKey);
+            collapseState.types.add(typeKey);
           } else {
-            collapsedTypes.delete(typeKey);
+            collapseState.types.delete(typeKey);
           }
           needRefresh = true;
         }
@@ -1009,12 +1144,12 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
 
       case 'component':
         // For components, toggle parent type header
-        if (item.pluginId && item.component) {
-          const typeKey = `${item.pluginId}:${item.component.type}`;
+        if (item.data?.pluginId && item.data?.component) {
+          const typeKey = `${item.data.pluginId}:${item.data.component.type}`;
           if (collapse) {
-            collapsedTypes.add(typeKey);
+            collapseState.types.add(typeKey);
           } else {
-            collapsedTypes.delete(typeKey);
+            collapseState.types.delete(typeKey);
           }
           needRefresh = true;
         }
@@ -1022,12 +1157,37 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     }
 
     if (needRefresh) {
+      saveState();
       createPluginsScreen(state);
     }
   };
 
   list.key(['left', 'h'], () => toggleCollapse(true));
   list.key(['right', 'l'], () => toggleCollapse(false));
+
+  // Search mode (/ key)
+  list.key(['/'], async () => {
+    if (state.isSearching) return;
+
+    const query = await showInput(state, 'Search', 'Filter by name:');
+    if (query === null || query === undefined) {
+      // User cancelled
+      return;
+    }
+
+    searchQuery = query.trim();
+    currentSelection = 0;
+    await navigateTo(state, 'plugins');
+  });
+
+  // Clear search (Escape key - only when search is active)
+  list.key(['escape'], async () => {
+    if (searchQuery) {
+      searchQuery = '';
+      currentSelection = 0;
+      await navigateTo(state, 'plugins');
+    }
+  });
 
   // Legend (scope now visible in tab bar)
   blessed.box({
@@ -1041,7 +1201,12 @@ ${comp.description || '{gray-fg}No description{/gray-fg}'}
     style: { fg: 'white' },
   });
 
-  createFooter(state, '↑↓ Navigate │ Enter Toggle │ n New │ g Scope │ u Update │ a All │ d Del │ r Refresh');
+  // Show search query in footer if active
+  const footerBase = '↑↓ Navigate │ ←→ Collapse │ Tab Content │ / Search │ a/c/s Type │ n New │ g Scope │ u/d Plugin │ r Refresh';
+  const footerText = searchQuery
+    ? `{yellow-fg}[Search: ${searchQuery}]{/yellow-fg} │ Esc Clear │ ${footerBase}`
+    : footerBase;
+  createFooter(state, footerText);
 
   list.focus();
   state.screen.render();

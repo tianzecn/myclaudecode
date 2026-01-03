@@ -50,15 +50,19 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "fs-extra": "^11.2.0",
+    "gray-matter": "^4.0.3",
     "neo-blessed": "^0.2.0",
     "semver": "^7.6.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.19.3",
     "@types/semver": "^7.5.8",
     "typescript": "^5.6.3"
+  },
+  "optionalDependencies": {
+    "@types/gray-matter": "^4.0.1"
   },
   "templateOSS": {
     "//@npmcli/template-oss": "This file is partially managed by @npmcli/template-oss. Edits may be overwritten.",

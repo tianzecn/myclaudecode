@@ -1,0 +1,312 @@
+/**
+ * Component Parser Service
+ *
+ * 解析插件内部的 agents/commands/skills 组件文件
+ * 支持 Markdown frontmatter 和内容提取
+ */
+
+import fs from 'fs-extra';
+import path from 'path';
+import matter from 'gray-matter';
+import type { ComponentType, ParsedComponent, PluginComponent } from '../types/index.js';
+
+/** 组件类型目录映射 */
+const COMPONENT_DIRS: Record<ComponentType, string> = {
+  agent: 'agents',
+  command: 'commands',
+  skill: 'skills',
+};
+
+/** 组件类型显示名称 */
+export const COMPONENT_TYPE_LABELS: Record<ComponentType | 'invalid', string> = {
+  agent: 'Agents',
+  command: 'Commands',
+  skill: 'Skills',
+  invalid: 'Invalid',
+};
+
+/** 组件类型图标 */
+export const COMPONENT_ICONS: Record<ComponentType | 'invalid', string> = {
+  agent: '🤖',
+  command: '⌘',
+  skill: '✨',
+  invalid: '⚠️',
+};
+
+/**
+ * 解析单个组件文件
+ * @param filePath 文件绝对路径
+ * @returns 解析后的组件信息
+ */
+export async function parseComponentFile(filePath: string): Promise<ParsedComponent> {
+  const name = path.basename(filePath, path.extname(filePath));
+
+  try {
+    const content = await fs.readFile(filePath, 'utf-8');
+
+    // 使用 gray-matter 解析 frontmatter
+    const { data: metadata, content: body } = matter(content);
+
+    // 提取描述：优先从 frontmatter 获取，否则从首行非空内容提取
+    let description = '';
+    if (metadata.description) {
+      description = String(metadata.description);
+    } else {
+      // 从内容中提取首行非空文本作为描述
+      const lines = body.split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim();
+        // 跳过空行和标题行
+        if (trimmed && !trimmed.startsWith('#')) {
+          // 移除 Markdown 格式符号
+          description = trimmed
+            .replace(/^\*+\s*/, '')  // 移除列表符号
+            .replace(/^-\s*/, '')
+            .replace(/\*\*/g, '')    // 移除加粗
+            .replace(/\*/g, '')      // 移除斜体
+            .substring(0, 120);      // 限制长度
+          break;
+        }
+      }
+    }
+
+    // 如果还是没有描述，使用 frontmatter 的 name 或文件名
+    if (!description) {
+      description = metadata.name ? String(metadata.name) : name;
+    }
+
+    return {
+      name,
+      description,
+      metadata,
+      content: body,
+      isValid: true,
+    };
+  } catch (error) {
+    return {
+      name,
+      description: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      metadata: {},
+      content: '',
+      isValid: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * 插件 JSON 配置接口
+ */
+interface PluginJson {
+  name?: string;
+  version?: string;
+  agents?: string[];
+  commands?: string[];
+  skills?: string[];
+}
+
+/**
+ * 加载插件的所有组件
+ * @param pluginPath 插件根目录路径
+ * @param pluginJson 插件配置（plugin.json 内容）
+ * @returns 按类型分组的组件映射
+ */
+export async function loadPluginComponents(
+  pluginPath: string,
+  pluginJson: PluginJson
+): Promise<Map<ComponentType | 'invalid', PluginComponent[]>> {
+  const result = new Map<ComponentType | 'invalid', PluginComponent[]>();
+
+  // 初始化所有类型的空数组
+  result.set('agent', []);
+  result.set('command', []);
+  result.set('skill', []);
+  result.set('invalid', []);
+
+  // 遍历每种组件类型
+  for (const [componentType, dirName] of Object.entries(COMPONENT_DIRS)) {
+    const type = componentType as ComponentType;
+    const componentDir = path.join(pluginPath, dirName);
+
+    // 获取该类型在 plugin.json 中声明的组件列表
+    const declaredComponents = pluginJson[`${type}s` as keyof PluginJson] as string[] | undefined;
+
+    if (!declaredComponents || declaredComponents.length === 0) {
+      continue;
+    }
+
+    // 检查目录是否存在
+    if (!await fs.pathExists(componentDir)) {
+      // 目录不存在，将所有声明的组件标记为无效
+      for (const componentPath of declaredComponents) {
+        const invalidComponent: PluginComponent = {
+          name: path.basename(componentPath, path.extname(componentPath)),
+          description: `Error: Directory "${dirName}" not found`,
+          type,
+          filePath: componentPath,
+          absolutePath: path.join(pluginPath, componentPath),
+          isValid: false,
+          error: `Directory "${dirName}" not found`,
+        };
+        result.get('invalid')!.push(invalidComponent);
+      }
+      continue;
+    }
+
+    // 解析每个声明的组件
+    for (const componentPath of declaredComponents) {
+      const absolutePath = path.join(pluginPath, componentPath);
+      const relativePath = componentPath;
+
+      // 检查路径是否存在
+      if (!await fs.pathExists(absolutePath)) {
+        const invalidComponent: PluginComponent = {
+          name: path.basename(componentPath, path.extname(componentPath)),
+          description: `Error: File not found`,
+          type,
+          filePath: relativePath,
+          absolutePath,
+          isValid: false,
+          error: 'File not found',
+        };
+        result.get('invalid')!.push(invalidComponent);
+        continue;
+      }
+
+      // 检查是文件还是目录
+      const stat = await fs.stat(absolutePath);
+
+      if (stat.isDirectory()) {
+        // 如果是目录，扫描其中的 .md 文件
+        const files = await fs.readdir(absolutePath);
+        const mdFiles = files.filter(f => f.endsWith('.md'));
+
+        if (mdFiles.length === 0) {
+          // 目录中没有 .md 文件
+          const invalidComponent: PluginComponent = {
+            name: path.basename(componentPath),
+            description: `Error: No .md files in directory`,
+            type,
+            filePath: relativePath,
+            absolutePath,
+            isValid: false,
+            error: 'No .md files in directory',
+          };
+          result.get('invalid')!.push(invalidComponent);
+          continue;
+        }
+
+        // 解析目录中的每个 .md 文件
+        for (const mdFile of mdFiles) {
+          const fileAbsolutePath = path.join(absolutePath, mdFile);
+          const fileRelativePath = path.join(relativePath, mdFile);
+
+          const parsed = await parseComponentFile(fileAbsolutePath);
+
+          const component: PluginComponent = {
+            name: parsed.name,
+            description: parsed.description,
+            type,
+            filePath: fileRelativePath,
+            absolutePath: fileAbsolutePath,
+            isValid: parsed.isValid,
+            metadata: parsed.metadata,
+            error: parsed.error,
+          };
+
+          if (parsed.isValid) {
+            result.get(type)!.push(component);
+          } else {
+            result.get('invalid')!.push(component);
+          }
+        }
+      } else {
+        // 如果是文件，直接解析
+        const parsed = await parseComponentFile(absolutePath);
+
+        const component: PluginComponent = {
+          name: parsed.name,
+          description: parsed.description,
+          type,
+          filePath: relativePath,
+          absolutePath,
+          isValid: parsed.isValid,
+          metadata: parsed.metadata,
+          error: parsed.error,
+        };
+
+        if (parsed.isValid) {
+          result.get(type)!.push(component);
+        } else {
+          result.get('invalid')!.push(component);
+        }
+      }
+    }
+  }
+
+  // 移除空的类型分组
+  for (const [key, value] of result) {
+    if (value.length === 0) {
+      result.delete(key);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * 获取组件的完整内容（延迟加载）
+ * @param component 组件信息
+ * @returns 带完整内容的组件
+ */
+export async function loadComponentFullContent(
+  component: PluginComponent
+): Promise<PluginComponent> {
+  if (component.fullContent) {
+    return component;
+  }
+
+  try {
+    const content = await fs.readFile(component.absolutePath, 'utf-8');
+    return {
+      ...component,
+      fullContent: content,
+    };
+  } catch (error) {
+    return {
+      ...component,
+      fullContent: `Error loading content: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    };
+  }
+}
+
+/**
+ * 计算组件统计信息
+ */
+export interface ComponentStats {
+  total: number;
+  agents: number;
+  commands: number;
+  skills: number;
+  invalid: number;
+}
+
+/**
+ * 获取组件统计
+ * @param components 组件映射
+ * @returns 统计信息
+ */
+export function getComponentStats(
+  components: Map<ComponentType | 'invalid', PluginComponent[]>
+): ComponentStats {
+  return {
+    total:
+      (components.get('agent')?.length || 0) +
+      (components.get('command')?.length || 0) +
+      (components.get('skill')?.length || 0),
+    agents: components.get('agent')?.length || 0,
+    commands: components.get('command')?.length || 0,
+    skills: components.get('skill')?.length || 0,
+    invalid: components.get('invalid')?.length || 0,
+  };
+}

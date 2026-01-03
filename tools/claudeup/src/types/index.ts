@@ -106,3 +106,99 @@ export interface McpRegistryResponse {
   servers: McpRegistryServer[];
   next_cursor?: string;
 }
+
+// ============================================
+// Component Hierarchy Types (Phase 1)
+// ============================================
+
+/** 组件类型：agent/command/skill */
+export type ComponentType = 'agent' | 'command' | 'skill';
+
+/** 列表项类型：4层结构 + empty占位 */
+export type ListItemType = 'marketplace' | 'plugin' | 'type-header' | 'component' | 'empty';
+
+/** 插件组件信息 */
+export interface PluginComponent {
+  /** 组件名称（不含扩展名） */
+  name: string;
+  /** 组件描述（从 frontmatter 或首行提取） */
+  description: string;
+  /** 组件类型 */
+  type: ComponentType;
+  /** 相对于插件根目录的路径 */
+  filePath: string;
+  /** 绝对路径 */
+  absolutePath: string;
+  /** 完整内容（延迟加载） */
+  fullContent?: string;
+  /** 是否有效（解析成功） */
+  isValid: boolean;
+  /** 解析错误信息 */
+  error?: string;
+  /** frontmatter 元数据 */
+  metadata?: Record<string, unknown>;
+}
+
+/** 解析后的组件信息（内部使用） */
+export interface ParsedComponent {
+  name: string;
+  description: string;
+  metadata: Record<string, unknown>;
+  content: string;
+  isValid: boolean;
+  error?: string;
+}
+
+/** 列表项（用于渲染） */
+export interface ListItem {
+  /** 显示标签 */
+  label: string;
+  /** 项目类型 */
+  type: ListItemType;
+  /** 层级深度：0=marketplace, 1=plugin, 2=type-header, 3=component */
+  depth: number;
+  /** 唯一标识符 */
+  id: string;
+  /** 是否可折叠 */
+  collapsible: boolean;
+  /** 是否已折叠 */
+  collapsed: boolean;
+  /** 关联数据 */
+  data?: {
+    marketplace?: string;
+    pluginId?: string;
+    componentType?: ComponentType | 'invalid';
+    component?: PluginComponent;
+  };
+}
+
+/** 折叠状态 */
+export interface CollapseState {
+  /** 已折叠的 marketplace 名称 */
+  marketplaces: Set<string>;
+  /** 已折叠的 pluginId */
+  plugins: Set<string>;
+  /** 已折叠的 "pluginId:componentType" */
+  types: Set<string>;
+}
+
+/** 持久化状态格式 */
+export interface PersistedState {
+  version: 1;
+  collapseState: {
+    marketplaces: string[];
+    plugins: string[];
+    types: string[];
+  };
+  lastScope: 'project' | 'global';
+}
+
+/** 编辑器类型 */
+export type EditorType = 'vscode' | 'cursor' | 'windsurf' | null;
+
+/** 编辑器信息 */
+export interface EditorInfo {
+  type: EditorType;
+  command: string;
+  name: string;
+}
