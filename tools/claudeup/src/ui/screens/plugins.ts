@@ -1,0 +1,1048 @@
+import blessed from 'neo-blessed';
+import type { AppState } from '../app.js';
+import { createHeader, createFooter, showMessage, showConfirm, showProgress, hideProgress, showInput, showLoading, navigateTo } from '../app.js';
+import { getAllMarketplaces } from '../../data/marketplaces.js';
+import {
+  addMarketplace,
+  removeMarketplace,
+  getConfiguredMarketplaces,
+  enablePlugin,
+  addGlobalMarketplace,
+  removeGlobalMarketplace,
+  getGlobalConfiguredMarketplaces,
+  enableGlobalPlugin,
+  saveGlobalInstalledPluginVersion,
+  removeGlobalInstalledPluginVersion,
+} from '../../services/claude-settings.js';
+import {
+  saveInstalledPluginVersion,
+  removeInstalledPluginVersion,
+  getAvailablePlugins,
+  getGlobalAvailablePlugins,
+  getLocalMarketplacesInfo,
+  refreshAllMarketplaces,
+  clearMarketplaceCache,
+  type PluginInfo,
+} from '../../services/plugin-manager.js';
+import { cloneMarketplace, deleteMarketplace, addToKnownMarketplaces, removeFromKnownMarketplaces } from '../../services/local-marketplace.js';
+
+import type { Marketplace } from '../../types/index.js';
+import path from 'path';
+import os from 'os';
+
+// Component types for 4-level hierarchy
+type ComponentType = 'agents' | 'commands' | 'skills' | 'invalid';
+type ListItemType = 'marketplace' | 'plugin' | 'type-header' | 'component' | 'empty';
+
+interface PluginComponent {
+  name: string;
+  description: string;
+  type: ComponentType;
+  filePath: string;      // Relative path within plugin
+  absolutePath: string;  // Full path for opening
+  isValid: boolean;
+}
+
+interface ListItem {
+  label: string;
+  type: ListItemType;
+  depth: number;  // 0=marketplace, 1=plugin, 2=type-header, 3=component
+  marketplace?: Marketplace;
+  marketplaceEnabled?: boolean;
+  plugin?: PluginInfo;
+  componentType?: ComponentType;
+  component?: PluginComponent;
+  pluginId?: string;  // For type-header items
+}
+
+// Track current scope - persists across screen refreshes
+let currentScope: 'project' | 'global' = 'project';
+
+// Track collapsed state for all levels - persists across screen refreshes
+const collapsedMarketplaces = new Set<string>();
+const collapsedPlugins = new Set<string>();      // pluginId
+const collapsedTypes = new Set<string>();        // "pluginId:componentType"
+
+// Track current selection - persists across screen refreshes
+let currentSelection = 0;
+
+// Component type icons and labels
+const TYPE_ICONS: Record<ComponentType, string> = {
+  agents: '🤖',
+  commands: '⌘',
+  skills: '✨',
+  invalid: '⚠️',
+};
+
+const TYPE_LABELS: Record<ComponentType, string> = {
+  agents: 'Agents',
+  commands: 'Commands',
+  skills: 'Skills',
+  invalid: 'Invalid',
+};
+
+// Cache for loaded components
+const componentCache = new Map<string, Map<ComponentType, PluginComponent[]>>();
+
+/**
+ * Load components (agents/commands/skills) for a plugin
+ */
+async function loadPluginComponents(plugin: PluginInfo): Promise<Map<ComponentType, PluginComponent[]>> {
+  // Check cache first
+  if (componentCache.has(plugin.id)) {
+    return componentCache.get(plugin.id)!;
+  }
+
+  const result = new Map<ComponentType, PluginComponent[]>();
+  result.set('agents', []);
+  result.set('commands', []);
+  result.set('skills', []);
+  result.set('invalid', []);
+
+  try {
+    // Dynamic import for ESM compatibility
+    const { default: fs } = await import('fs-extra');
+
+    // Build plugin path - check marketplace cache location
+    const marketplacesPath = path.join(os.homedir(), '.claude', 'plugins', 'marketplaces');
+    const pluginJsonPath = path.join(marketplacesPath, plugin.marketplace, 'plugins', plugin.name, 'plugin.json');
+
+    if (!await fs.pathExists(pluginJsonPath)) {
+      componentCache.set(plugin.id, result);
+      return result;
+    }
+
+    const pluginJson = await fs.readJson(pluginJsonPath);
+    const pluginDir = path.dirname(pluginJsonPath);
+
+    // Process each component type
+    const componentTypes: Array<{ key: 'agents' | 'commands' | 'skills'; type: ComponentType }> = [
+      { key: 'agents', type: 'agents' },
+      { key: 'commands', type: 'commands' },
+      { key: 'skills', type: 'skills' },
+    ];
+
+    for (const { key, type } of componentTypes) {
+      const items = pluginJson[key] || [];
+      for (const item of items) {
+        // Handle both string format ("./agents/dev.md") and object format ({ source: "...", name: "..." })
+        let filePath: string;
+        let itemName: string;
+        let itemDesc: string;
+
+        if (typeof item === 'string') {
+          // String format: "./agents/developer.md"
+          filePath = item;
+          itemName = path.basename(item, '.md');
+          itemDesc = '';
+        } else if (item && typeof item === 'object' && item.source) {
+          // Object format: { source: "...", name: "...", description: "..." }
+          filePath = item.source;
+          itemName = item.name || path.basename(filePath, '.md');
+          itemDesc = item.description || '';
+        } else {
+          continue;
+        }
+
+        const absolutePath = path.join(pluginDir, filePath);
+        const exists = await fs.pathExists(absolutePath);
+
+        const component: PluginComponent = {
+          name: itemName,
+          description: itemDesc,
+          type: exists ? type : 'invalid',
+          filePath,
+          absolutePath,
+          isValid: exists,
+        };
+
+        if (exists) {
+          result.get(type)!.push(component);
+        } else {
+          result.get('invalid')!.push(component);
+        }
+      }
+    }
+  } catch (error) {
+    // Silently fail - plugin may not have components
+  }
+
+  componentCache.set(plugin.id, result);
+  return result;
+}
+
+// Helper to clean up screen-level key bindings before re-registering
+// This prevents handler accumulation when createPluginsScreen is called recursively
+function cleanupPluginScreenKeys(screen: blessed.Screen): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const scr = screen as any;
+  if (scr.unkey && typeof scr.unkey === 'function') {
+    try {
+      scr.unkey(['g']);
+      scr.unkey(['u']);
+      scr.unkey(['d']);
+      scr.unkey(['r']);
+      scr.unkey(['a']);
+      scr.unkey(['n']);
+      scr.unkey(['j']);
+      scr.unkey(['k']);
+    } catch {
+      // Ignore errors if keys weren't bound
+    }
+  }
+}
+
+export async function createPluginsScreen(state: AppState): Promise<void> {
+  // Clean up any existing screen-level key handlers to prevent accumulation
+  cleanupPluginScreenKeys(state.screen);
+
+  createHeader(state, 'Plugins');
+
+  const isGlobal = currentScope === 'global';
+
+  // Scope tabs - visible tab bar for switching between Project and Global
+  const projectTab = isGlobal
+    ? '{gray-fg}[ Project ]{/gray-fg}'
+    : '{cyan-fg}{bold}[ Project ]{/bold}{/cyan-fg}';
+  const globalTab = isGlobal
+    ? '{magenta-fg}{bold}[ Global ]{/bold}{/magenta-fg}'
+    : '{gray-fg}[ Global ]{/gray-fg}';
+
+  blessed.box({
+    parent: state.screen,
+    top: 1,
+    left: 2,
+    width: '100%-4',
+    height: 1,
+    content: `${projectTab}  ${globalTab}  {gray-fg}(press g to switch){/gray-fg}`,
+    tags: true,
+    style: { fg: 'white' },
+  });
+
+  // Fetch configured marketplaces based on scope (for enabled status)
+  const configuredMarketplaces = isGlobal
+    ? await getGlobalConfiguredMarketplaces()
+    : await getConfiguredMarketplaces(state.projectPath);
+
+  // Get local marketplace cache (single source of truth)
+  const localMarketplaces = await getLocalMarketplacesInfo();
+
+  // Get all marketplaces from local cache + hardcoded defaults (deduped by repo)
+  const allMarketplaces = getAllMarketplaces(localMarketplaces);
+
+  // Fetch all available plugins based on scope
+  let allPlugins: PluginInfo[] = [];
+  try {
+    allPlugins = isGlobal
+      ? await getGlobalAvailablePlugins()
+      : await getAvailablePlugins(state.projectPath);
+  } catch {
+    // Continue with empty plugins
+  }
+
+  // Group plugins by marketplace
+  const pluginsByMarketplace = new Map<string, PluginInfo[]>();
+  for (const plugin of allPlugins) {
+    const existing = pluginsByMarketplace.get(plugin.marketplace) || [];
+    existing.push(plugin);
+    pluginsByMarketplace.set(plugin.marketplace, existing);
+  }
+
+  // Preload components for enabled plugins
+  const pluginComponents = new Map<string, Map<ComponentType, PluginComponent[]>>();
+  for (const plugin of allPlugins) {
+    if (plugin.enabled || plugin.installedVersion) {
+      const components = await loadPluginComponents(plugin);
+      pluginComponents.set(plugin.id, components);
+    }
+  }
+
+  // Build unified list with 4-level hierarchy
+  const listItems: ListItem[] = [];
+  const INDENT = '  ';  // 2 spaces per level
+
+  for (const marketplace of allMarketplaces) {
+    // Marketplace is enabled if it's in local cache (actually cloned) or explicitly configured
+    const isInLocalCache = localMarketplaces.has(marketplace.name);
+    const isConfigured = configuredMarketplaces[marketplace.name] !== undefined;
+    const isEnabled = isInLocalCache || isConfigured;
+    const plugins = pluginsByMarketplace.get(marketplace.name) || [];
+    const isMarketplaceCollapsed = collapsedMarketplaces.has(marketplace.name);
+
+    // Marketplace header (depth=0)
+    const expandIcon = isEnabled && plugins.length > 0
+      ? (isMarketplaceCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}')
+      : ' ';
+    const enabledBadge = isEnabled ? '{green-fg}✓{/green-fg}' : '{gray-fg}○{/gray-fg}';
+    const officialBadge = marketplace.official ? ' {cyan-fg}[Official]{/cyan-fg}' : '';
+    const pluginCount = plugins.length > 0 ? ` {gray-fg}(${plugins.length}){/gray-fg}` : '';
+
+    listItems.push({
+      label: `${expandIcon} ${enabledBadge} {bold}${marketplace.displayName}{/bold}${officialBadge}${pluginCount}`,
+      type: 'marketplace',
+      depth: 0,
+      marketplace,
+      marketplaceEnabled: isEnabled,
+    });
+
+    // Plugins under this marketplace (if enabled and not collapsed)
+    if (isEnabled && plugins.length > 0 && !isMarketplaceCollapsed) {
+      for (const plugin of plugins) {
+        const isPluginCollapsed = collapsedPlugins.has(plugin.id);
+        const components = pluginComponents.get(plugin.id);
+        const hasComponents = components && (
+          (components.get('agents')?.length || 0) +
+          (components.get('commands')?.length || 0) +
+          (components.get('skills')?.length || 0) +
+          (components.get('invalid')?.length || 0)
+        ) > 0;
+
+        // Status icon
+        let status = '{gray-fg}○{/gray-fg}';
+        if (plugin.enabled) {
+          status = '{green-fg}●{/green-fg}';
+        } else if (plugin.installedVersion) {
+          status = '{yellow-fg}●{/yellow-fg}';
+        }
+
+        // Plugin expand/collapse icon (only if has components)
+        const pluginExpandIcon = hasComponents
+          ? (isPluginCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}')
+          : ' ';
+
+        // Version display
+        let versionDisplay = `{gray-fg}v${plugin.version}{/gray-fg}`;
+        if (plugin.hasUpdate) {
+          versionDisplay = `{yellow-fg}v${plugin.installedVersion} → v${plugin.version}{/yellow-fg}`;
+        } else if (plugin.installedVersion) {
+          versionDisplay = `{green-fg}v${plugin.installedVersion}{/green-fg}`;
+        }
+
+        const updateBadge = plugin.hasUpdate ? ' {yellow-fg}⬆{/yellow-fg}' : '';
+
+        listItems.push({
+          label: `${INDENT}${pluginExpandIcon} ${status} ${plugin.name} ${versionDisplay}${updateBadge}`,
+          type: 'plugin',
+          depth: 1,
+          plugin,
+        });
+
+        // Type headers and components (if plugin expanded and has components)
+        if (!isPluginCollapsed && hasComponents && components) {
+          const typeOrder: ComponentType[] = ['agents', 'commands', 'skills', 'invalid'];
+
+          for (const componentType of typeOrder) {
+            const typeComponents = components.get(componentType) || [];
+            if (typeComponents.length === 0) continue;
+
+            const typeKey = `${plugin.id}:${componentType}`;
+            // Default to collapsed for type headers (user's request!)
+            if (!collapsedTypes.has(typeKey)) {
+              collapsedTypes.add(typeKey);  // Default collapsed
+            }
+            const isTypeCollapsed = collapsedTypes.has(typeKey);
+
+            // Type header (depth=2)
+            const typeExpandIcon = isTypeCollapsed ? '{gray-fg}▶{/gray-fg}' : '{gray-fg}▼{/gray-fg}';
+            const typeIcon = TYPE_ICONS[componentType];
+            const typeLabel = TYPE_LABELS[componentType];
+            const componentCount = typeComponents.length;
+
+            listItems.push({
+              label: `${INDENT}${INDENT}${typeExpandIcon} ${typeIcon} ${typeLabel} {gray-fg}(${componentCount}){/gray-fg}`,
+              type: 'type-header',
+              depth: 2,
+              componentType,
+              pluginId: plugin.id,
+            });
+
+            // Components (if type expanded)
+            if (!isTypeCollapsed) {
+              for (const component of typeComponents) {
+                const componentIcon = component.isValid ? '{gray-fg}•{/gray-fg}' : '{red-fg}✗{/red-fg}';
+                const descPreview = component.description
+                  ? ` {gray-fg}- ${component.description.substring(0, 30)}${component.description.length > 30 ? '...' : ''}{/gray-fg}`
+                  : '';
+
+                listItems.push({
+                  label: `${INDENT}${INDENT}${INDENT}${componentIcon} ${component.name}${descPreview}`,
+                  type: 'component',
+                  depth: 3,
+                  component,
+                  pluginId: plugin.id,
+                });
+              }
+            }
+          }
+        }
+      }
+    } else if (isEnabled && !isMarketplaceCollapsed) {
+      listItems.push({
+        label: `${INDENT}{gray-fg}No plugins available{/gray-fg}`,
+        type: 'empty',
+        depth: 1,
+      });
+    }
+  }
+
+  // List label (simplified since we have tab bar)
+  const scopeLabel = ' Marketplaces & Plugins ';
+
+  // Ensure currentSelection is within bounds
+  if (currentSelection >= listItems.length) {
+    currentSelection = Math.max(0, listItems.length - 1);
+  }
+
+  // List
+  const list = blessed.list({
+    parent: state.screen,
+    top: 4,
+    left: 2,
+    width: '50%-2',
+    height: '100%-6',
+    items: listItems.map((item) => item.label),
+    keys: true,
+    vi: false,
+    mouse: true,
+    tags: true,
+    scrollable: true,
+    border: { type: 'line' },
+    style: {
+      fg: 'white',
+      selected: { bg: isGlobal ? 'magenta' : 'blue', fg: 'white' },
+      border: { fg: isGlobal ? 'magenta' : 'gray' },
+    },
+    scrollbar: { ch: '│', style: { bg: 'gray' } },
+    label: scopeLabel,
+  });
+
+  // Restore selection position
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const listAny = list as any;
+  if (currentSelection > 0 && currentSelection < listItems.length) {
+    listAny.select(currentSelection);
+    listAny.scrollTo(currentSelection);
+  }
+
+  // Detail panel
+  const detailBox = blessed.box({
+    parent: state.screen,
+    top: 4,
+    right: 2,
+    width: '50%-2',
+    height: '100%-6',
+    content: '',
+    tags: true,
+    border: { type: 'line' },
+    style: {
+      fg: 'white',
+      border: { fg: 'gray' },
+    },
+    label: ' {white-fg}Details{/white-fg} ',
+  });
+
+  // Update detail panel
+  const updateDetail = (): void => {
+    const selected = list.selected as number;
+    const item = listItems[selected];
+
+    if (!item || item.type === 'empty') {
+      detailBox.setContent('{gray-fg}Select an item to see details{/gray-fg}');
+      state.screen.render();
+      return;
+    }
+
+    if (item.type === 'marketplace' && item.marketplace) {
+      const mp = item.marketplace;
+
+      const statusText = item.marketplaceEnabled
+        ? '{green-fg}● Enabled{/green-fg}'
+        : '{gray-fg}○ Not added{/gray-fg}';
+
+      const plugins = pluginsByMarketplace.get(mp.name) || [];
+      const pluginInfo = plugins.length > 0
+        ? `{bold}Plugins:{/bold} ${plugins.length} available`
+        : '{gray-fg}Enable to see plugins{/gray-fg}';
+
+      const actionText = item.marketplaceEnabled
+        ? '{red-fg}Press Enter to remove{/red-fg}'
+        : '{green-fg}Press Enter to add{/green-fg}';
+
+      const scopeInfo = isGlobal
+        ? '{magenta-fg}Scope: Global (~/.claude){/magenta-fg}'
+        : `{cyan-fg}Scope: Project (${state.projectPath}){/cyan-fg}`;
+
+      const sourceDisplay = mp.source.repo
+        ? `{bold}Source:{/bold}\n{gray-fg}github.com/${mp.source.repo}{/gray-fg}`
+        : `{bold}Source:{/bold}\n{gray-fg}Local cache{/gray-fg}`;
+
+      const content = `
+{bold}{cyan-fg}${mp.displayName}{/cyan-fg}{/bold}${mp.official ? ' {cyan-fg}[Official]{/cyan-fg}' : ''}
+
+${mp.description}
+
+{bold}Status:{/bold} ${statusText}
+${pluginInfo}
+
+${sourceDisplay}
+
+${scopeInfo}
+
+${actionText}
+      `.trim();
+
+      detailBox.setContent(content);
+    } else if (item.type === 'plugin' && item.plugin) {
+      const plugin = item.plugin;
+
+      let statusText = '{gray-fg}Not installed{/gray-fg}';
+      if (plugin.enabled) {
+        statusText = '{green-fg}● Enabled{/green-fg}';
+      } else if (plugin.installedVersion) {
+        statusText = '{yellow-fg}● Installed (disabled){/yellow-fg}';
+      }
+
+      let versionInfo = `{bold}Latest:{/bold} v${plugin.version}`;
+      if (plugin.installedVersion) {
+        versionInfo = `{bold}Installed:{/bold} v${plugin.installedVersion}\n{bold}Latest:{/bold} v${plugin.version}`;
+        if (plugin.hasUpdate) {
+          versionInfo += '\n{yellow-fg}⬆ Update available{/yellow-fg}';
+        }
+      }
+
+      let actions = '';
+      // Check both enabled and installedVersion - plugin can be enabled without version tracking
+      const isInstalled = plugin.enabled || plugin.installedVersion;
+      if (isInstalled) {
+        actions = plugin.enabled
+          ? '{cyan-fg}[Enter]{/cyan-fg} Disable'
+          : '{cyan-fg}[Enter]{/cyan-fg} Enable';
+        if (plugin.hasUpdate) {
+          actions += '  {green-fg}[u]{/green-fg} Update';
+        }
+        actions += '  {red-fg}[d]{/red-fg} Uninstall';
+      } else {
+        actions = '{green-fg}[Enter]{/green-fg} Install & Enable';
+      }
+
+      const scopeInfo = isGlobal
+        ? '{magenta-fg}Scope: Global{/magenta-fg}'
+        : '{cyan-fg}Scope: Project{/cyan-fg}';
+
+      // Component summary for plugins
+      const components = pluginComponents.get(plugin.id);
+      let componentSummary = '';
+      if (components) {
+        const agentCount = components.get('agents')?.length || 0;
+        const commandCount = components.get('commands')?.length || 0;
+        const skillCount = components.get('skills')?.length || 0;
+        if (agentCount + commandCount + skillCount > 0) {
+          componentSummary = `\n{bold}Components:{/bold}`;
+          if (agentCount > 0) componentSummary += ` 🤖 ${agentCount}`;
+          if (commandCount > 0) componentSummary += ` ⌘ ${commandCount}`;
+          if (skillCount > 0) componentSummary += ` ✨ ${skillCount}`;
+        }
+      }
+
+      const content = `
+{bold}{cyan-fg}${plugin.name}{/cyan-fg}{/bold}
+
+${plugin.description}
+
+{bold}Status:{/bold} ${statusText}
+
+${versionInfo}
+${componentSummary}
+
+{bold}ID:{/bold} ${plugin.id}
+${scopeInfo}
+
+${actions}
+
+{gray-fg}← / → to expand/collapse{/gray-fg}
+      `.trim();
+
+      detailBox.setContent(content);
+    } else if (item.type === 'type-header' && item.componentType && item.pluginId) {
+      // Type header detail
+      const plugin = allPlugins.find(p => p.id === item.pluginId);
+      const components = pluginComponents.get(item.pluginId);
+      const typeComponents = components?.get(item.componentType) || [];
+
+      const typeIcon = TYPE_ICONS[item.componentType];
+      const typeLabel = TYPE_LABELS[item.componentType];
+      const typeKey = `${item.pluginId}:${item.componentType}`;
+      const isCollapsed = collapsedTypes.has(typeKey);
+
+      const content = `
+{bold}{cyan-fg}${typeIcon} ${typeLabel}{/cyan-fg}{/bold}
+
+{bold}Plugin:{/bold} ${plugin?.name || item.pluginId}
+{bold}Count:{/bold} ${typeComponents.length} ${item.componentType}
+
+{gray-fg}Components:{/gray-fg}
+${typeComponents.slice(0, 5).map(c => `  • ${c.name}`).join('\n')}
+${typeComponents.length > 5 ? `  {gray-fg}... and ${typeComponents.length - 5} more{/gray-fg}` : ''}
+
+{gray-fg}${isCollapsed ? '→ to expand' : '← to collapse'}{/gray-fg}
+      `.trim();
+
+      detailBox.setContent(content);
+    } else if (item.type === 'component' && item.component) {
+      // Component detail
+      const comp = item.component;
+      const plugin = allPlugins.find(p => p.id === item.pluginId);
+
+      const typeIcon = TYPE_ICONS[comp.type];
+      const typeLabel = TYPE_LABELS[comp.type];
+
+      const validityStatus = comp.isValid
+        ? '{green-fg}● Valid{/green-fg}'
+        : '{red-fg}✗ File not found{/red-fg}';
+
+      const content = `
+{bold}{cyan-fg}${typeIcon} ${comp.name}{/cyan-fg}{/bold}
+
+${comp.description || '{gray-fg}No description{/gray-fg}'}
+
+{bold}Type:{/bold} ${typeLabel}
+{bold}Plugin:{/bold} ${plugin?.name || item.pluginId}
+{bold}Status:{/bold} ${validityStatus}
+
+{bold}Path:{/bold}
+{gray-fg}${comp.filePath}{/gray-fg}
+
+{cyan-fg}[Enter]{/cyan-fg} Open in editor
+      `.trim();
+
+      detailBox.setContent(content);
+    }
+
+    state.screen.render();
+  };
+
+  list.on('select item', () => {
+    currentSelection = list.selected as number;
+    updateDetail();
+  });
+  setTimeout(updateDetail, 0);
+
+  // Handle selection (Enter)
+  list.on('select', async (_item: unknown, index: number) => {
+    const selected = listItems[index];
+    if (!selected || selected.type === 'empty') return;
+
+    if (selected.type === 'marketplace' && selected.marketplace) {
+      const mp = selected.marketplace;
+
+      if (selected.marketplaceEnabled) {
+        // Remove marketplace with confirmation
+        const confirm = await showConfirm(
+          state,
+          `Remove ${mp.displayName}?`,
+          `Plugins from this marketplace will no longer be available.\n(${isGlobal ? 'Global' : 'Project'} scope)`
+        );
+
+        if (confirm) {
+          const loading = showLoading(state, `Removing ${mp.displayName}...`);
+          try {
+            // Step 1: Remove from settings
+            if (isGlobal) {
+              await removeGlobalMarketplace(mp.name);
+            } else {
+              await removeMarketplace(mp.name, state.projectPath);
+            }
+
+            // Step 2: Delete directory
+            await deleteMarketplace(mp.name);
+
+            // Step 3: Remove from Claude's known_marketplaces.json
+            await removeFromKnownMarketplaces(mp.name);
+
+            // Step 4: Clear cache
+            clearMarketplaceCache();
+
+            await showMessage(state, 'Removed', `${mp.displayName} removed.`, 'success');
+          } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+            await showMessage(
+              state,
+              'Removal Failed',
+              `Failed to remove ${mp.displayName}: ${errorMsg}`,
+              'error'
+            );
+          } finally {
+            loading.stop();
+          }
+          await navigateTo(state, 'plugins');
+        }
+      } else {
+        // Add marketplace - immediate, no confirmation
+        const loading = showLoading(state, `Adding ${mp.displayName}...`);
+        try {
+          if (isGlobal) {
+            await addGlobalMarketplace(mp);
+          } else {
+            await addMarketplace(mp, state.projectPath);
+          }
+        } finally {
+          loading.stop();
+        }
+        await navigateTo(state, 'plugins');
+      }
+    } else if (selected.type === 'plugin' && selected.plugin) {
+      const plugin = selected.plugin;
+      const isInstalled = plugin.enabled || plugin.installedVersion;
+
+      if (plugin.hasUpdate) {
+        // Update plugin - immediate when update available
+        const loading = showLoading(state, `Updating ${plugin.name}...`);
+        try {
+          if (isGlobal) {
+            await saveGlobalInstalledPluginVersion(plugin.id, plugin.version);
+          } else {
+            await saveInstalledPluginVersion(plugin.id, plugin.version, state.projectPath);
+          }
+        } finally {
+          loading.stop();
+        }
+        await navigateTo(state, 'plugins');
+      } else if (isInstalled) {
+        // Toggle enabled/disabled - immediate
+        const newState = !plugin.enabled;
+        const loading = showLoading(state, `${newState ? 'Enabling' : 'Disabling'} ${plugin.name}...`);
+        try {
+          if (isGlobal) {
+            await enableGlobalPlugin(plugin.id, newState);
+          } else {
+            await enablePlugin(plugin.id, newState, state.projectPath);
+          }
+        } finally {
+          loading.stop();
+        }
+        await navigateTo(state, 'plugins');
+      } else {
+        // Install plugin - immediate
+        const loading = showLoading(state, `Installing ${plugin.name}...`);
+        try {
+          if (isGlobal) {
+            await enableGlobalPlugin(plugin.id, true);
+            await saveGlobalInstalledPluginVersion(plugin.id, plugin.version);
+          } else {
+            await enablePlugin(plugin.id, true, state.projectPath);
+            await saveInstalledPluginVersion(plugin.id, plugin.version, state.projectPath);
+          }
+        } finally {
+          loading.stop();
+        }
+        await navigateTo(state, 'plugins');
+      }
+    } else if (selected.type === 'type-header' && selected.pluginId && selected.componentType) {
+      // Toggle expand/collapse for type header
+      const typeKey = `${selected.pluginId}:${selected.componentType}`;
+      if (collapsedTypes.has(typeKey)) {
+        collapsedTypes.delete(typeKey);
+      } else {
+        collapsedTypes.add(typeKey);
+      }
+      createPluginsScreen(state);
+    } else if (selected.type === 'component' && selected.component) {
+      // Open component file in editor
+      const filePath = selected.component.absolutePath;
+      const { exec } = await import('child_process');
+      const { promisify } = await import('util');
+      const execAsync = promisify(exec);
+
+      // Try to open in editor: cursor > code > windsurf
+      const editors = [
+        { cmd: 'cursor', name: 'Cursor' },
+        { cmd: 'code', name: 'VS Code' },
+        { cmd: 'windsurf', name: 'Windsurf' },
+      ];
+
+      let opened = false;
+      for (const editor of editors) {
+        try {
+          await execAsync(`which ${editor.cmd}`);
+          await execAsync(`${editor.cmd} "${filePath}"`);
+          opened = true;
+          break;
+        } catch {
+          // Editor not found, try next
+        }
+      }
+
+      if (!opened) {
+        await showMessage(
+          state,
+          'No Editor Found',
+          'Could not find Cursor, VS Code, or Windsurf.\nPlease open the file manually:\n' + filePath,
+          'error'
+        );
+      }
+    }
+  });
+
+  // Toggle scope (g key) - don't clear cache, just switch view
+  list.key(['g'], async () => {
+    if (state.isSearching) return;
+    currentScope = currentScope === 'project' ? 'global' : 'project';
+    currentSelection = 0; // Reset selection when scope changes
+    await navigateTo(state, 'plugins');
+  });
+
+  // Update plugin (u key) - immediate, no confirmation
+  list.key(['u'], async () => {
+    if (state.isSearching) return;
+    const selected = list.selected as number;
+    const item = listItems[selected];
+    if (!item || item.type !== 'plugin' || !item.plugin) return;
+
+    const plugin = item.plugin;
+    if (!plugin.hasUpdate) {
+      return; // Silent no-op if no update available
+    }
+
+    const loading = showLoading(state, `Updating ${plugin.name}...`);
+    try {
+      if (isGlobal) {
+        await saveGlobalInstalledPluginVersion(plugin.id, plugin.version);
+      } else {
+        await saveInstalledPluginVersion(plugin.id, plugin.version, state.projectPath);
+      }
+    } finally {
+      loading.stop();
+    }
+    await navigateTo(state, 'plugins');
+  });
+
+  // Uninstall plugin (d key) - immediate, no confirmation
+  list.key(['d'], async () => {
+    if (state.isSearching) return;
+    const selected = list.selected as number;
+    const item = listItems[selected];
+    if (!item || item.type !== 'plugin' || !item.plugin) return;
+
+    const plugin = item.plugin;
+    const isInstalled = plugin.enabled || plugin.installedVersion;
+    if (!isInstalled) {
+      await showMessage(state, 'Not Installed', `${plugin.name} is not installed.`, 'info');
+      return;
+    }
+
+    const loading = showLoading(state, `Uninstalling ${plugin.name}...`);
+    try {
+      if (isGlobal) {
+        await enableGlobalPlugin(plugin.id, false);
+        await removeGlobalInstalledPluginVersion(plugin.id);
+      } else {
+        await enablePlugin(plugin.id, false, state.projectPath);
+        await removeInstalledPluginVersion(plugin.id, state.projectPath);
+      }
+    } finally {
+      loading.stop();
+    }
+    await navigateTo(state, 'plugins');
+  });
+
+  // Refresh (r key) - git pull all marketplaces and clear cache
+  state.screen.key(['r'], async () => {
+    if (state.isSearching || state.isRefreshing) return;
+
+    // Show progress bar
+    showProgress(state, 'Refreshing marketplaces...');
+
+    // Git pull all local marketplaces and clear cache with progress updates
+    const results = await refreshAllMarketplaces((progress) => {
+      showProgress(state, `Refreshing ${progress.name}...`, progress.current, progress.total);
+    });
+
+    // Hide progress bar
+    hideProgress(state);
+
+    // Build summary message
+    const updated = results.filter((r) => r.updated);
+    const failed = results.filter((r) => !r.success);
+
+    let message = '';
+    if (updated.length > 0) {
+      message += `Updated: ${updated.map((r) => r.name).join(', ')}\n`;
+    }
+    if (failed.length > 0) {
+      message += `Failed: ${failed.map((r) => r.name).join(', ')}\n`;
+    }
+    if (updated.length === 0 && failed.length === 0) {
+      message = 'All marketplaces up to date.';
+    }
+
+    await showMessage(state, 'Refreshed', message.trim(), updated.length > 0 ? 'success' : 'info');
+    await navigateTo(state, 'plugins');
+  });
+
+  // Update all plugins (a key) - immediate, no confirmation
+  list.key(['a'], async () => {
+    if (state.isSearching) return;
+    const updatable = allPlugins.filter((p) => p.hasUpdate);
+    if (updatable.length === 0) {
+      return; // Silent no-op if all up-to-date
+    }
+
+    const loading = showLoading(state, `Updating ${updatable.length} plugin(s)...`);
+    try {
+      for (const plugin of updatable) {
+        if (isGlobal) {
+          await saveGlobalInstalledPluginVersion(plugin.id, plugin.version);
+        } else {
+          await saveInstalledPluginVersion(plugin.id, plugin.version, state.projectPath);
+        }
+      }
+    } finally {
+      loading.stop();
+    }
+    await navigateTo(state, 'plugins');
+  });
+
+  // Add new marketplace (n key)
+  state.screen.key(['n'], async () => {
+    if (state.isSearching) return;
+
+    const repo = await showInput(state, 'Add Marketplace', 'GitHub repo (owner/repo):');
+    if (!repo || !repo.trim()) return;
+
+    showProgress(state, 'Cloning marketplace...');
+    const result = await cloneMarketplace(repo.trim());
+    hideProgress(state);
+
+    if (result.success) {
+      try {
+        // Add to settings and Claude's known_marketplaces.json
+        const normalizedRepo = repo.trim().replace(/^https:\/\/github\.com\//, '').replace(/\.git$/, '');
+        const marketplace: Marketplace = {
+          name: result.name,
+          displayName: result.name,
+          source: { source: 'github', repo: normalizedRepo },
+          description: '',
+          official: false,
+        };
+
+        // Step 1: Add to settings
+        if (isGlobal) {
+          await addGlobalMarketplace(marketplace);
+        } else {
+          await addMarketplace(marketplace, state.projectPath);
+        }
+
+        // Step 2: Add to known marketplaces
+        await addToKnownMarketplaces(result.name, normalizedRepo);
+
+        // Step 3: Clear cache
+        clearMarketplaceCache();
+
+        await showMessage(state, 'Added', `${result.name} marketplace added.\nPlugins are now available.`, 'success');
+      } catch (error) {
+        // Rollback: delete cloned directory on failure
+        await deleteMarketplace(result.name).catch(() => {});
+
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        await showMessage(state, 'Add Failed', `Failed to add marketplace: ${errorMsg}`, 'error');
+      }
+      createPluginsScreen(state);
+    } else {
+      await showMessage(state, 'Failed', result.error || 'Clone failed', 'error');
+    }
+  });
+
+  // Navigation
+  list.key(['j'], () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (list as any).down();
+    state.screen.render();
+  });
+  list.key(['k'], () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (list as any).up();
+    state.screen.render();
+  });
+
+  // Expand/collapse for all levels (left/right arrows or h/l vim keys)
+  const toggleCollapse = (collapse: boolean) => {
+    const selected = list.selected as number;
+    const item = listItems[selected];
+    if (!item) return;
+
+    let needRefresh = false;
+
+    switch (item.type) {
+      case 'marketplace':
+        if (item.marketplace) {
+          if (collapse) {
+            collapsedMarketplaces.add(item.marketplace.name);
+          } else {
+            collapsedMarketplaces.delete(item.marketplace.name);
+          }
+          needRefresh = true;
+        }
+        break;
+
+      case 'plugin':
+        if (item.plugin) {
+          if (collapse) {
+            collapsedPlugins.add(item.plugin.id);
+          } else {
+            collapsedPlugins.delete(item.plugin.id);
+          }
+          needRefresh = true;
+        }
+        break;
+
+      case 'type-header':
+        if (item.pluginId && item.componentType) {
+          const typeKey = `${item.pluginId}:${item.componentType}`;
+          if (collapse) {
+            collapsedTypes.add(typeKey);
+          } else {
+            collapsedTypes.delete(typeKey);
+          }
+          needRefresh = true;
+        }
+        break;
+
+      case 'component':
+        // For components, toggle parent type header
+        if (item.pluginId && item.component) {
+          const typeKey = `${item.pluginId}:${item.component.type}`;
+          if (collapse) {
+            collapsedTypes.add(typeKey);
+          } else {
+            collapsedTypes.delete(typeKey);
+          }
+          needRefresh = true;
+        }
+        break;
+    }
+
+    if (needRefresh) {
+      createPluginsScreen(state);
+    }
+  };
+
+  list.key(['left', 'h'], () => toggleCollapse(true));
+  list.key(['right', 'l'], () => toggleCollapse(false));
+
+  // Legend (scope now visible in tab bar)
+  blessed.box({
+    parent: state.screen,
+    bottom: 1,
+    right: 2,
+    width: 50,
+    height: 1,
+    content: `{green-fg}●{/green-fg} Enabled  {yellow-fg}●{/yellow-fg} Disabled  {gray-fg}○{/gray-fg} Not installed`,
+    tags: true,
+    style: { fg: 'white' },
+  });
+
+  createFooter(state, '↑↓ Navigate │ Enter Toggle │ n New │ g Scope │ u Update │ a All │ d Del │ r Refresh');
+
+  list.focus();
+  state.screen.render();
+}

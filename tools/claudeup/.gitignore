@@ -1,0 +1,35 @@
+# This file is automatically added by @npmcli/template-oss. Do not edit.
+
+# ignore everything in the root
+/*
+
+!**/.gitignore
+!/.commitlintrc.cjs
+!/.eslint.config.js
+!/.eslintrc.cjs
+!/.eslintrc.local.*
+!/.git-blame-ignore-revs
+!/.github/
+!/.gitignore
+!/.npmrc
+!/.prettierignore
+!/.prettierrc.cjs
+!/.release-please-manifest.json
+!/bin/
+!/CHANGELOG*
+!/CODE_OF_CONDUCT.md
+!/CONTRIBUTING.md
+!/docs/
+!/lib/
+!/LICENSE*
+!/map.js
+!/package.json
+!/README*
+!/release-please-config.json
+!/scripts/
+!/SECURITY.md
+!/src/
+!/tap-snapshots/
+!/test/
+!/tsconfig.json
+tap-testdir*/
