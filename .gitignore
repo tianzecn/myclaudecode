@@ -6,5 +6,7 @@
 !.claude-plugin/
 !plugins/
 !ai-docs/
+!tools/
 # 保留 .gitignore 本身
 !.gitignore
+!.gitmodules
