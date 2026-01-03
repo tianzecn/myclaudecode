@@ -177,38 +177,20 @@ export async function loadPluginComponents(
       const stat = await fs.stat(absolutePath);
 
       if (stat.isDirectory()) {
-        // 如果是目录，扫描其中的 .md 文件
-        const files = await fs.readdir(absolutePath);
-        const mdFiles = files.filter(f => f.endsWith('.md'));
+        // 如果是目录，优先查找 SKILL.md 文件（标准 skill 目录结构）
+        const skillMdPath = path.join(absolutePath, 'SKILL.md');
+        const dirName = path.basename(componentPath);
 
-        if (mdFiles.length === 0) {
-          // 目录中没有 .md 文件
-          const invalidComponent: PluginComponent = {
-            name: path.basename(componentPath),
-            description: `Error: No .md files in directory`,
-            type,
-            filePath: relativePath,
-            absolutePath,
-            isValid: false,
-            error: 'No .md files in directory',
-          };
-          result.get('invalid')!.push(invalidComponent);
-          continue;
-        }
-
-        // 解析目录中的每个 .md 文件
-        for (const mdFile of mdFiles) {
-          const fileAbsolutePath = path.join(absolutePath, mdFile);
-          const fileRelativePath = path.join(relativePath, mdFile);
-
-          const parsed = await parseComponentFile(fileAbsolutePath);
+        if (await fs.pathExists(skillMdPath)) {
+          // 找到 SKILL.md，解析它并使用目录名作为组件名
+          const parsed = await parseComponentFile(skillMdPath);
 
           const component: PluginComponent = {
-            name: parsed.name,
+            name: dirName,  // 使用目录名作为组件名
             description: parsed.description,
             type,
-            filePath: fileRelativePath,
-            absolutePath: fileAbsolutePath,
+            filePath: path.join(relativePath, 'SKILL.md'),
+            absolutePath: skillMdPath,
             isValid: parsed.isValid,
             metadata: parsed.metadata,
             error: parsed.error,
@@ -218,6 +200,50 @@ export async function loadPluginComponents(
             result.get(type)!.push(component);
           } else {
             result.get('invalid')!.push(component);
+          }
+        } else {
+          // 没有 SKILL.md，扫描目录中所有 .md 文件
+          const files = await fs.readdir(absolutePath);
+          const mdFiles = files.filter(f => f.endsWith('.md'));
+
+          if (mdFiles.length === 0) {
+            // 目录中没有 .md 文件
+            const invalidComponent: PluginComponent = {
+              name: dirName,
+              description: `Error: No .md files in directory`,
+              type,
+              filePath: relativePath,
+              absolutePath,
+              isValid: false,
+              error: 'No .md files in directory',
+            };
+            result.get('invalid')!.push(invalidComponent);
+            continue;
+          }
+
+          // 解析目录中的每个 .md 文件
+          for (const mdFile of mdFiles) {
+            const fileAbsolutePath = path.join(absolutePath, mdFile);
+            const fileRelativePath = path.join(relativePath, mdFile);
+
+            const parsed = await parseComponentFile(fileAbsolutePath);
+
+            const component: PluginComponent = {
+              name: parsed.name,
+              description: parsed.description,
+              type,
+              filePath: fileRelativePath,
+              absolutePath: fileAbsolutePath,
+              isValid: parsed.isValid,
+              metadata: parsed.metadata,
+              error: parsed.error,
+            };
+
+            if (parsed.isValid) {
+              result.get(type)!.push(component);
+            } else {
+              result.get('invalid')!.push(component);
+            }
           }
         }
       } else {
