@@ -5,6 +5,7 @@
 # 只允许上传以下目录
 !.claude-plugin/
 !plugins/
+!output-styles/
 !ai-docs/
 !tools/
 # 保留 .gitignore 本身
