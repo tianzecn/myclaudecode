@@ -34,6 +34,66 @@ export const COMPONENT_ICONS: Record<ComponentType | 'invalid', string> = {
 };
 
 /**
+ * 手动解析 frontmatter（当 gray-matter 失败时的备用方案）
+ * @param content 文件内容
+ * @returns 解析后的 metadata 和 body
+ */
+function manualParseFrontmatter(content: string): { metadata: Record<string, string>; body: string } {
+  const metadata: Record<string, string> = {};
+
+  // 检查是否以 --- 开头
+  if (!content.startsWith('---')) {
+    return { metadata, body: content };
+  }
+
+  // 找到结束的 ---
+  const endIndex = content.indexOf('\n---', 3);
+  if (endIndex === -1) {
+    return { metadata, body: content };
+  }
+
+  const frontmatterBlock = content.substring(4, endIndex);
+  const body = content.substring(endIndex + 4).trim();
+
+  // 逐行解析 frontmatter
+  const lines = frontmatterBlock.split('\n');
+  for (const line of lines) {
+    // 匹配 key: value 格式
+    const match = line.match(/^(\w+(?:-\w+)*):\s*(.*)$/);
+    if (match) {
+      const [, key, value] = match;
+      // 移除值两端的引号（如果有）
+      metadata[key] = value.replace(/^["']|["']$/g, '').trim();
+    }
+  }
+
+  return { metadata, body };
+}
+
+/**
+ * 从内容中提取描述
+ * @param body Markdown 内容（不含 frontmatter）
+ * @returns 提取的描述
+ */
+function extractDescriptionFromBody(body: string): string {
+  const lines = body.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    // 跳过空行和标题行
+    if (trimmed && !trimmed.startsWith('#')) {
+      // 移除 Markdown 格式符号
+      return trimmed
+        .replace(/^\*+\s*/, '')  // 移除列表符号
+        .replace(/^-\s*/, '')
+        .replace(/\*\*/g, '')    // 移除加粗
+        .replace(/\*/g, '')      // 移除斜体
+        .substring(0, 120);      // 限制长度
+    }
+  }
+  return '';
+}
+
+/**
  * 解析单个组件文件
  * @param filePath 文件绝对路径
  * @returns 解析后的组件信息
@@ -44,30 +104,27 @@ export async function parseComponentFile(filePath: string): Promise<ParsedCompon
   try {
     const content = await fs.readFile(filePath, 'utf-8');
 
-    // 使用 gray-matter 解析 frontmatter
-    const { data: metadata, content: body } = matter(content);
+    let metadata: Record<string, unknown> = {};
+    let body = '';
+
+    // 首先尝试用 gray-matter 解析
+    try {
+      const parsed = matter(content);
+      metadata = parsed.data;
+      body = parsed.content;
+    } catch {
+      // gray-matter 失败，使用手动解析作为备用
+      const manual = manualParseFrontmatter(content);
+      metadata = manual.metadata;
+      body = manual.body;
+    }
 
     // 提取描述：优先从 frontmatter 获取，否则从首行非空内容提取
     let description = '';
     if (metadata.description) {
       description = String(metadata.description);
     } else {
-      // 从内容中提取首行非空文本作为描述
-      const lines = body.split('\n');
-      for (const line of lines) {
-        const trimmed = line.trim();
-        // 跳过空行和标题行
-        if (trimmed && !trimmed.startsWith('#')) {
-          // 移除 Markdown 格式符号
-          description = trimmed
-            .replace(/^\*+\s*/, '')  // 移除列表符号
-            .replace(/^-\s*/, '')
-            .replace(/\*\*/g, '')    // 移除加粗
-            .replace(/\*/g, '')      // 移除斜体
-            .substring(0, 120);      // 限制长度
-          break;
-        }
-      }
+      description = extractDescriptionFromBody(body);
     }
 
     // 如果还是没有描述，使用 frontmatter 的 name 或文件名
