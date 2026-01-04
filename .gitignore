@@ -11,3 +11,4 @@
 # 保留 .gitignore 本身
 !.gitignore
 !.gitmodules
+!CLAUDE.md
