@@ -606,13 +606,3 @@ tg.MainButton.onClick(() => {
   console.log("主按钮被点击");
 });
 ```
-
-**次要按钮 (SecondaryButton)：**
-
-```javascript
-tg.SecondaryButton.setText("取消");
-tg.SecondaryButton.show();
-tg.SecondaryButton.onClick(() => {
-  tg.close();
-});
-```
