@@ -616,5 +616,3 @@ tg.SecondaryButton.onClick(() => {
   tg.close();
 });
 ```
-
-**返回按钮 (BackButton)：**
