@@ -1,6 +1,6 @@
 ---
 name: telegram-dev
-description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web Apps)、MTProto 客户端开发。包括消息处理、支付、内联模式、Webhook、认证、存储、传感器 API 等完整开发资源。
+description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web Apps)、MTProto 客户端开发。包括消息处理、支付、内联模式、Webhook、认证、存储、传感器 API 等完整开发资源。。
 ---
 
 # Telegram 生态开发技能
@@ -12,6 +12,7 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 ### 快速导航
 
 #### 🤖 Bot API 开发
+
 - [快速开始](#bot-api-开发-快速开始) - 获取 Token，第一个 Bot
 - [核心 API 方法](#bot-api-开发-core-api-methods) - 消息、交互、文件、支付
 - [Webhook 配置](#webhook-配置) - 设置和管理 Webhook
@@ -22,6 +23,7 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 - [Telegram Stars 支付](#telegram-stars-支付) - 虚拟货币支付
 
 #### 🌐 Mini Apps (Web Apps) 开发
+
 - [初始化 Mini App](#mini-apps-web-apps-开发-初始化-mini-app) - HTML 模板和基础设置
 - [核心 API](#mini-app-核心-api) - WebApp 对象方法
 - [UI 控件](#ui-控件) - 主按钮、次要按钮、触觉反馈
@@ -33,10 +35,12 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 - [启动方式](#启动-mini-app) - 键盘按钮、内联按钮、菜单按钮
 
 #### 👥 客户端开发 (TDLib)
+
 - [使用 TDLib](#使用-tdlib) - Python 和 JavaScript 示例
 - [MTProto 协议](#mtproto-协议) - 特点和限制
 
 #### 🔧 实战指南
+
 - [错误处理和调试](#错误处理和调试) - 完整的错误处理框架
 - [部署和运维](#生产环境部署) - Heroku、Vercel、Docker 部署
 - [Node.js 开发](#nodejs-bot-开发) - Telegraf 和 Grammy 框架
@@ -46,6 +50,7 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 - [故障排除](#故障排除和常见问题) - 常见问题和解决方案
 
 #### 🏗️ 项目架构
+
 - [项目结构](#完整项目结构) - Python 和 Node.js 项目模板
 - [模块化设计](#模块化设计原则) - 单一职责、依赖注入
 - [配置管理](#配置管理) - 分层配置和环境变量
@@ -53,6 +58,7 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 - [日志监控](#日志和监控) - 结构化日志和性能指标
 
 #### 📚 实战案例
+
 - [电商 Bot](#案例-1-电商-bot) - 商品展示、购物车、支付
 - [投票 Bot](#案例-2-投票-bot) - 创建投票、匿名投票、结果统计
 - [客服 Bot](#案例-3-客服-bot) - FAQ、自动回复、人工转接
@@ -63,6 +69,7 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 ## 何时使用此技能
 
 当需要以下帮助时使用此技能：
+
 - 开发 Telegram Bot（消息机器人）
 - 创建 Telegram Mini Apps（小程序）
 - 构建自定义 Telegram 客户端
@@ -77,11 +84,13 @@ description: Telegram 生态开发全栈指南 - 涵盖 Bot API、Mini Apps (Web
 ### 三大核心 API
 
 1. **Bot API** - 创建机器人程序
+
    - HTTP 接口，简单易用
    - 自动处理加密和通信
    - 适合：聊天机器人、自动化工具
 
 2. **Mini Apps API** (Web Apps) - 创建 Web 应用
+
    - JavaScript 接口
    - 在 Telegram 内运行
    - 适合：小程序、游戏、电商
@@ -192,15 +201,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # 普通 /start 命令
         await update.message.reply_text("欢迎！使用 /help 查看帮助")
 
-async def handle_referral(user_id: int, referrer_id: str):
-    """处理推荐关系"""
-    # 检查推荐人是否存在
-    referrer = await get_user(referrer_id)
-    if referrer:
-        # 保存推荐关系
-        await save_referral(user_id, referrer_id)
-        # 发送推荐奖励
-        await send_referral_reward(referrer_id)
+
 ```
 
 **内联深度链接：**
@@ -326,20 +327,22 @@ async def process_payment(user_id: int, payload: str, amount: int):
 const tg = window.Telegram.WebApp;
 
 // 打开发票链接
-tg.openInvoice('https://t.me/$invoice_link', (status) => {
-  if (status === 'paid') {
-    console.log('支付成功');
+tg.openInvoice("https://t.me/$invoice_link", (status) => {
+  if (status === "paid") {
+    console.log("支付成功");
     // 通知 Bot 支付完成
-    tg.sendData(JSON.stringify({
-      action: 'payment_completed',
-      invoice_id: '...'
-    }));
-  } else if (status === 'cancelled') {
-    console.log('支付取消');
-  } else if (status === 'pending') {
-    console.log('支付处理中');
-  } else if (status === 'failed') {
-    console.log('支付失败');
+    tg.sendData(
+      JSON.stringify({
+        action: "payment_completed",
+        invoice_id: "...",
+      })
+    );
+  } else if (status === "cancelled") {
+    console.log("支付取消");
+  } else if (status === "pending") {
+    console.log("支付处理中");
+  } else if (status === "failed") {
+    console.log("支付失败");
   }
 });
 ```
@@ -410,17 +413,20 @@ else:
 ```
 
 **API 端点：**
+
 ```
 https://api.telegram.org/bot<TOKEN>/METHOD_NAME
 ```
 
 **获取 Bot Token：**
+
 1. 与 @BotFather 对话
 2. 发送 `/newbot`
 3. 按提示设置名称
 4. 获取 token
 
 **第一个 Bot (Python)：**
+
 ```python
 import requests
 
@@ -446,22 +452,24 @@ while True:
     for update in updates.get("result", []):
         chat_id = update["message"]["chat"]["id"]
         text = update["message"]["text"]
-        
+
         # 回复消息
         send_message(chat_id, f"你说了：{text}")
-        
+
         offset = update["update_id"] + 1
 ```
 
 ### 核心 API 方法
 
 **更新管理：**
+
 - `getUpdates` - 长轮询获取更新
 - `setWebhook` - 设置 Webhook
 - `deleteWebhook` - 删除 Webhook
 - `getWebhookInfo` - 查询 Webhook 状态
 
 **消息操作：**
+
 - `sendMessage` - 发送文本消息
 - `sendPhoto` / `sendVideo` / `sendDocument` - 发送媒体
 - `sendAudio` / `sendVoice` - 发送音频
@@ -471,17 +479,20 @@ while True:
 - `forwardMessage` / `copyMessage` - 转发/复制消息
 
 **交互元素：**
+
 - `sendPoll` - 发送投票（最多 12 个选项）
 - 内联键盘 (InlineKeyboardMarkup)
 - 回复键盘 (ReplyKeyboardMarkup)
 - `answerCallbackQuery` - 响应回调查询
 
 **文件操作：**
+
 - `getFile` - 获取文件信息
 - `downloadFile` - 下载文件
 - 支持最大 2GB 文件（本地 Bot API 模式）
 
 **支付功能：**
+
 - `sendInvoice` - 发送发票
 - `answerPreCheckoutQuery` - 处理支付
 - Telegram Stars 支付（最高 10,000 Stars）
@@ -489,6 +500,7 @@ while True:
 ### Webhook 配置
 
 **设置 Webhook：**
+
 ```python
 import requests
 
@@ -502,6 +514,7 @@ requests.post(
 ```
 
 **Flask Webhook 示例：**
+
 ```python
 from flask import Flask, request
 import requests
@@ -512,16 +525,16 @@ BOT_TOKEN = "your_token"
 @app.route('/webhook', methods=['POST'])
 def webhook():
     update = request.get_json()
-    
+
     chat_id = update["message"]["chat"]["id"]
     text = update["message"]["text"]
-    
+
     # 发送回复
     requests.post(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
         json={"chat_id": chat_id, "text": f"收到: {text}"}
     )
-    
+
     return "OK"
 
 if __name__ == '__main__':
@@ -529,6 +542,7 @@ if __name__ == '__main__':
 ```
 
 **Webhook 要求：**
+
 - 必须使用 HTTPS
 - 支持 TLS 1.2+
 - 端口：443, 80, 88, 8443
@@ -541,6 +555,7 @@ if __name__ == '__main__':
 **1. 创建项目文件：**
 
 `requirements.txt`:
+
 ```
 python-telegram-bot==20.7
 uvicorn[standard]
@@ -548,16 +563,19 @@ python-dotenv
 ```
 
 `Procfile`:
+
 ```
 web: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
 ```
 
 `runtime.txt`:
+
 ```
 python-3.11.7
 ```
 
 `main.py`:
+
 ```python
 from fastapi import FastAPI, Request
 from telegram import Update
@@ -603,6 +621,7 @@ if __name__ == "__main__":
 ```
 
 `.env`:
+
 ```
 BOT_TOKEN=your_bot_token_here
 WEBHOOK_URL=https://your-app-name.herokuapp.com
@@ -665,6 +684,7 @@ heroku addons:open scheduler  # 在网页中配置定时任务
 **1. 准备 Mini App：**
 
 `vercel.json`:
+
 ```json
 {
   "builds": [
@@ -732,7 +752,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
 **2. 创建 docker-compose.yml：**
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   bot:
@@ -792,6 +812,7 @@ docker-compose up -d --build
 #### Nginx 反向代理配置
 
 `/etc/nginx/sites-available/telegram-bot`:
+
 ```nginx
 server {
     listen 80;
@@ -854,6 +875,7 @@ sudo certbot --nginx -d bot.yourdomain.com
 ### 内联键盘
 
 **创建内联键盘：**
+
 ```python
 def send_inline_keyboard(chat_id):
     keyboard = {
@@ -867,7 +889,7 @@ def send_inline_keyboard(chat_id):
             ]
         ]
     }
-    
+
     requests.post(
         f"{API_URL}/sendMessage",
         json={
@@ -879,18 +901,19 @@ def send_inline_keyboard(chat_id):
 ```
 
 **处理回调：**
+
 ```python
 def handle_callback_query(callback_query):
     query_id = callback_query["id"]
     data = callback_query["data"]
     chat_id = callback_query["message"]["chat"]["id"]
-    
+
     # 响应回调
     requests.post(
         f"{API_URL}/answerCallbackQuery",
         json={"callback_query_id": query_id, "text": f"你点击了 {data}"}
     )
-    
+
     # 更新消息
     requests.post(
         f"{API_URL}/editMessageText",
@@ -908,11 +931,12 @@ def handle_callback_query(callback_query):
 与 @BotFather 对话，发送 `/setinline`
 
 **处理内联查询：**
+
 ```python
 def handle_inline_query(inline_query):
     query_id = inline_query["id"]
     query_text = inline_query["query"]
-    
+
     # 创建结果
     results = [
         {
@@ -924,7 +948,7 @@ def handle_inline_query(inline_query):
             }
         }
     ]
-    
+
     requests.post(
         f"{API_URL}/answerInlineQuery",
         json={"inline_query_id": query_id, "results": results}
@@ -936,173 +960,182 @@ def handle_inline_query(inline_query):
 ### 初始化 Mini App
 
 **HTML 模板：**
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title>My Mini App</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Telegram Mini App</h1>
     <button id="mainBtn">主按钮</button>
-    
+
     <script>
-        // 获取 Telegram WebApp 对象
-        const tg = window.Telegram.WebApp;
-        
-        // 通知 Telegram 应用已准备好
-        tg.ready();
-        
-        // 展开到全屏
-        tg.expand();
-        
-        // 显示用户信息
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            console.log("用户名:", user.first_name);
-            console.log("用户ID:", user.id);
-        }
-        
-        // 配置主按钮
-        tg.MainButton.text = "提交";
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            // 发送数据到 Bot
-            tg.sendData(JSON.stringify({action: "submit"}));
-        });
-        
-        // 添加返回按钮
-        tg.BackButton.show();
-        tg.BackButton.onClick(() => {
-            tg.close();
-        });
+      // 获取 Telegram WebApp 对象
+      const tg = window.Telegram.WebApp;
+
+      // 通知 Telegram 应用已准备好
+      tg.ready();
+
+      // 展开到全屏
+      tg.expand();
+
+      // 显示用户信息
+      const user = tg.initDataUnsafe?.user;
+      if (user) {
+        console.log("用户名:", user.first_name);
+        console.log("用户ID:", user.id);
+      }
+
+      // 配置主按钮
+      tg.MainButton.text = "提交";
+      tg.MainButton.show();
+      tg.MainButton.onClick(() => {
+        // 发送数据到 Bot
+        tg.sendData(JSON.stringify({ action: "submit" }));
+      });
+
+      // 添加返回按钮
+      tg.BackButton.show();
+      tg.BackButton.onClick(() => {
+        tg.close();
+      });
     </script>
-</body>
+  </body>
 </html>
 ```
 
 ### Mini App 核心 API
 
 **WebApp 对象主要属性：**
+
 ```javascript
 // 初始化数据
-tg.initData           // 原始初始化字符串
-tg.initDataUnsafe     // 解析后的对象
+tg.initData; // 原始初始化字符串
+tg.initDataUnsafe; // 解析后的对象
 
 // 用户和主题
-tg.initDataUnsafe.user       // 用户信息
-tg.themeParams                // 主题颜色
-tg.colorScheme                // 'light' 或 'dark'
+tg.initDataUnsafe.user; // 用户信息
+tg.themeParams; // 主题颜色
+tg.colorScheme; // 'light' 或 'dark'
 
 // 状态
-tg.isExpanded         // 是否全屏
-tg.isFullscreen       // 是否全屏
-tg.viewportHeight     // 视口高度
-tg.platform           // 平台类型
+tg.isExpanded; // 是否全屏
+tg.isFullscreen; // 是否全屏
+tg.viewportHeight; // 视口高度
+tg.platform; // 平台类型
 
 // 版本
-tg.version            // WebApp 版本
+tg.version; // WebApp 版本
 ```
 
 **主要方法：**
+
 ```javascript
 // 窗口控制
-tg.ready()            // 标记应用准备就绪
-tg.expand()           // 展开到全高度
-tg.close()            // 关闭 Mini App
-tg.requestFullscreen() // 请求全屏
+tg.ready(); // 标记应用准备就绪
+tg.expand(); // 展开到全高度
+tg.close(); // 关闭 Mini App
+tg.requestFullscreen(); // 请求全屏
 
 // 数据发送
-tg.sendData(data)     // 发送数据到 Bot
+tg.sendData(data); // 发送数据到 Bot
 
 // 导航
-tg.openLink(url)      // 打开外部链接
-tg.openTelegramLink(url) // 打开 Telegram 链接
+tg.openLink(url); // 打开外部链接
+tg.openTelegramLink(url); // 打开 Telegram 链接
 
 // 对话框
-tg.showPopup(params, callback)  // 显示弹窗
-tg.showAlert(message)           // 显示警告
-tg.showConfirm(message)         // 显示确认
+tg.showPopup(params, callback); // 显示弹窗
+tg.showAlert(message); // 显示警告
+tg.showConfirm(message); // 显示确认
 
 // 分享
-tg.shareMessage(message)        // 分享消息
-tg.shareUrl(url)                // 分享链接
+tg.shareMessage(message); // 分享消息
+tg.shareUrl(url); // 分享链接
 ```
 
 ### UI 控件
 
 **主按钮 (MainButton)：**
+
 ```javascript
 tg.MainButton.setText("点击我");
 tg.MainButton.show();
 tg.MainButton.enable();
-tg.MainButton.showProgress();  // 显示加载
+tg.MainButton.showProgress(); // 显示加载
 tg.MainButton.hideProgress();
 
 tg.MainButton.onClick(() => {
-    console.log("主按钮被点击");
+  console.log("主按钮被点击");
 });
 ```
 
 **次要按钮 (SecondaryButton)：**
+
 ```javascript
 tg.SecondaryButton.setText("取消");
 tg.SecondaryButton.show();
 tg.SecondaryButton.onClick(() => {
-    tg.close();
+  tg.close();
 });
 ```
 
 **返回按钮 (BackButton)：**
+
 ```javascript
 tg.BackButton.show();
 tg.BackButton.onClick(() => {
-    // 返回逻辑
+  // 返回逻辑
 });
 ```
 
 **触觉反馈：**
+
 ```javascript
-tg.HapticFeedback.impactOccurred('light');  // light, medium, heavy
-tg.HapticFeedback.notificationOccurred('success'); // success, warning, error
+tg.HapticFeedback.impactOccurred("light"); // light, medium, heavy
+tg.HapticFeedback.notificationOccurred("success"); // success, warning, error
 tg.HapticFeedback.selectionChanged();
 ```
 
 ### 存储 API
 
 **云存储：**
+
 ```javascript
 // 保存数据
-tg.CloudStorage.setItem('key', 'value', (error, success) => {
-    if (success) console.log('保存成功');
+tg.CloudStorage.setItem("key", "value", (error, success) => {
+  if (success) console.log("保存成功");
 });
 
 // 获取数据
-tg.CloudStorage.getItem('key', (error, value) => {
-    console.log('值:', value);
+tg.CloudStorage.getItem("key", (error, value) => {
+  console.log("值:", value);
 });
 
 // 删除数据
-tg.CloudStorage.removeItem('key');
+tg.CloudStorage.removeItem("key");
 
 // 获取所有键
 tg.CloudStorage.getKeys((error, keys) => {
-    console.log('所有键:', keys);
+  console.log("所有键:", keys);
 });
 ```
 
 **本地存储：**
+
 ```javascript
 // 普通本地存储
-localStorage.setItem('key', 'value');
-const value = localStorage.getItem('key');
+localStorage.setItem("key", "value");
+const value = localStorage.getItem("key");
 
 // 安全存储（需要生物识别）
-tg.SecureStorage.setItem('secret', 'value', callback);
-tg.SecureStorage.getItem('secret', callback);
+tg.SecureStorage.setItem("secret", "value", callback);
+tg.SecureStorage.getItem("secret", callback);
 ```
 
 ### 生物识别认证
@@ -1112,53 +1145,55 @@ const bioManager = tg.BiometricManager;
 
 // 初始化
 bioManager.init(() => {
-    if (bioManager.isInited) {
-        console.log('支持的类型:', bioManager.biometricType);
-        // 'finger', 'face', 'unknown'
-        
-        if (bioManager.isAccessGranted) {
-            // 已授权，可以使用
-        } else {
-            // 请求授权
-            bioManager.requestAccess({reason: '需要验证身份'}, (success) => {
-                if (success) {
-                    console.log('授权成功');
-                }
-            });
+  if (bioManager.isInited) {
+    console.log("支持的类型:", bioManager.biometricType);
+    // 'finger', 'face', 'unknown'
+
+    if (bioManager.isAccessGranted) {
+      // 已授权，可以使用
+    } else {
+      // 请求授权
+      bioManager.requestAccess({ reason: "需要验证身份" }, (success) => {
+        if (success) {
+          console.log("授权成功");
         }
+      });
     }
+  }
 });
 
 // 执行认证
-bioManager.authenticate({reason: '确认操作'}, (success, token) => {
-    if (success) {
-        console.log('认证成功，token:', token);
-    }
+bioManager.authenticate({ reason: "确认操作" }, (success, token) => {
+  if (success) {
+    console.log("认证成功，token:", token);
+  }
 });
 ```
 
 ### 位置和传感器
 
 **获取位置：**
+
 ```javascript
 tg.LocationManager.init(() => {
-    if (tg.LocationManager.isInited) {
-        tg.LocationManager.getLocation((location) => {
-            console.log('纬度:', location.latitude);
-            console.log('经度:', location.longitude);
-        });
-    }
+  if (tg.LocationManager.isInited) {
+    tg.LocationManager.getLocation((location) => {
+      console.log("纬度:", location.latitude);
+      console.log("经度:", location.longitude);
+    });
+  }
 });
 ```
 
 **加速度计：**
+
 ```javascript
-tg.Accelerometer.start({refresh_rate: 100}, (started) => {
-    if (started) {
-        tg.Accelerometer.onEvent((event) => {
-            console.log('加速度:', event.x, event.y, event.z);
-        });
-    }
+tg.Accelerometer.start({ refresh_rate: 100 }, (started) => {
+  if (started) {
+    tg.Accelerometer.onEvent((event) => {
+      console.log("加速度:", event.x, event.y, event.z);
+    });
+  }
 });
 
 // 停止
@@ -1166,39 +1201,43 @@ tg.Accelerometer.stop();
 ```
 
 **陀螺仪：**
+
 ```javascript
-tg.Gyroscope.start({refresh_rate: 100}, callback);
+tg.Gyroscope.start({ refresh_rate: 100 }, callback);
 tg.Gyroscope.onEvent((event) => {
-    console.log('旋转速度:', event.x, event.y, event.z);
+  console.log("旋转速度:", event.x, event.y, event.z);
 });
 ```
 
 **设备方向：**
+
 ```javascript
-tg.DeviceOrientation.start({refresh_rate: 100}, callback);
+tg.DeviceOrientation.start({ refresh_rate: 100 }, callback);
 tg.DeviceOrientation.onEvent((event) => {
-    console.log('方向:', event.absolute, event.alpha, event.beta, event.gamma);
+  console.log("方向:", event.absolute, event.alpha, event.beta, event.gamma);
 });
 ```
 
 ### 支付集成
 
 **发起支付 (Telegram Stars)：**
+
 ```javascript
-tg.openInvoice('https://t.me/$invoice_link', (status) => {
-    if (status === 'paid') {
-        console.log('支付成功');
-    } else if (status === 'cancelled') {
-        console.log('支付取消');
-    } else if (status === 'failed') {
-        console.log('支付失败');
-    }
+tg.openInvoice("https://t.me/$invoice_link", (status) => {
+  if (status === "paid") {
+    console.log("支付成功");
+  } else if (status === "cancelled") {
+    console.log("支付取消");
+  } else if (status === "failed") {
+    console.log("支付失败");
+  }
 });
 ```
 
 ### 数据验证
 
 **服务器端验证 initData (Python)：**
+
 ```python
 import hmac
 import hashlib
@@ -1208,37 +1247,38 @@ def validate_init_data(init_data, bot_token):
     # 解析数据
     parsed = parse_qs(init_data)
     received_hash = parsed.get('hash', [''])[0]
-    
+
     # 移除 hash
     data_check_arr = []
     for key, value in parsed.items():
         if key != 'hash':
             data_check_arr.append(f"{key}={value[0]}")
-    
+
     # 排序
     data_check_arr.sort()
     data_check_string = '\n'.join(data_check_arr)
-    
+
     # 计算密钥
     secret_key = hmac.new(
         b"WebAppData",
         bot_token.encode(),
         hashlib.sha256
     ).digest()
-    
+
     # 计算哈希
     calculated_hash = hmac.new(
         secret_key,
         data_check_string.encode(),
         hashlib.sha256
     ).hexdigest()
-    
+
     return calculated_hash == received_hash
 ```
 
 ### 启动 Mini App
 
 **从键盘按钮：**
+
 ```python
 keyboard = {
     "keyboard": [[
@@ -1261,6 +1301,7 @@ requests.post(
 ```
 
 **从内联按钮：**
+
 ```python
 keyboard = {
     "inline_keyboard": [[
@@ -1274,6 +1315,7 @@ keyboard = {
 
 **从菜单按钮：**
 与 @BotFather 对话：
+
 ```
 /setmenubutton
 → 选择你的 Bot
@@ -1285,6 +1327,7 @@ keyboard = {
 ### 使用 TDLib
 
 **Python 示例 (python-telegram)：**
+
 ```python
 from telegram.client import Telegram
 
@@ -1320,6 +1363,7 @@ tg.stop()
 **快速开始：**
 
 `package.json`:
+
 ```json
 {
   "name": "telegram-bot",
@@ -1333,22 +1377,24 @@ tg.stop()
 ```
 
 `.env`:
+
 ```
 BOT_TOKEN=your_bot_token_here
 WEBHOOK_URL=https://yourdomain.com/webhook
 ```
 
 `src/index.js`:
+
 ```javascript
-import { Telegraf } from 'telegraf';
-import dotenv from 'dotenv';
+import { Telegraf } from "telegraf";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 // /start 命令
-bot.start((ctx) => ctx.reply('欢迎！使用 /help 查看帮助'));
+bot.start((ctx) => ctx.reply("欢迎！使用 /help 查看帮助"));
 
 // /help 命令
 bot.help((ctx) => {
@@ -1361,19 +1407,19 @@ bot.help((ctx) => {
 });
 
 // /info 命令
-bot.command('info', (ctx) => {
+bot.command("info", (ctx) => {
   const user = ctx.from;
   ctx.reply(`
 📊 用户信息：
 ID: ${user.id}
-姓名: ${user.first_name} ${user.last_name || ''}
-用户名: @${user.username || '无'}
+姓名: ${user.first_name} ${user.last_name || ""}
+用户名: @${user.username || "无"}
 语言: ${user.language_code}
   `);
 });
 
 // 处理文本消息
-bot.on('text', (ctx) => {
+bot.on("text", (ctx) => {
   ctx.reply(`你说了：${ctx.message.text}`);
 });
 
@@ -1381,43 +1427,43 @@ bot.on('text', (ctx) => {
 bot.launch();
 
 // 优雅关闭
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
 ```
 
 **内联键盘：**
 
 ```javascript
-bot.command('menu', (ctx) => {
+bot.command("menu", (ctx) => {
   const keyboard = {
     inline_keyboard: [
       [
-        { text: '🔍 搜索', callback_data: 'search' },
-        { text: '⚙️ 设置', callback_data: 'settings' },
+        { text: "🔍 搜索", callback_data: "search" },
+        { text: "⚙️ 设置", callback_data: "settings" },
       ],
       [
-        { text: '🌐 访问网站', url: 'https://example.com' },
-        { text: '📞 联系客服', url: 'https://t.me/support' },
+        { text: "🌐 访问网站", url: "https://example.com" },
+        { text: "📞 联系客服", url: "https://t.me/support" },
       ],
       [
-        { text: '❤️ 喜欢', callback_data: 'like' },
-        { text: '👎 不喜欢', callback_data: 'dislike' },
+        { text: "❤️ 喜欢", callback_data: "like" },
+        { text: "👎 不喜欢", callback_data: "dislike" },
       ],
     ],
   };
 
-  ctx.reply('请选择操作：', { reply_markup: keyboard });
+  ctx.reply("请选择操作：", { reply_markup: keyboard });
 });
 
 // 处理回调
-bot.action('search', (ctx) => {
-  ctx.answerCbQuery('打开搜索...');
-  ctx.editMessageText('搜索功能开发中...');
+bot.action("search", (ctx) => {
+  ctx.answerCbQuery("打开搜索...");
+  ctx.editMessageText("搜索功能开发中...");
 });
 
-bot.action('like', (ctx) => {
-  ctx.answerCbQuery('❤️ 感谢点赞！');
-  ctx.reply('感谢您的反馈！');
+bot.action("like", (ctx) => {
+  ctx.answerCbQuery("❤️ 感谢点赞！");
+  ctx.reply("感谢您的反馈！");
 });
 
 // 模式匹配回调
@@ -1430,35 +1476,35 @@ bot.action(/settings_(\d+)/, (ctx) => {
 **回复键盘：**
 
 ```javascript
-bot.command('keyboard', (ctx) => {
+bot.command("keyboard", (ctx) => {
   const keyboard = {
     keyboard: [
-      ['📊 数据统计', '📈 趋势分析'],
-      ['🔔 通知设置', '🔒 隐私设置'],
-      ['❓ 帮助', '👤 个人资料'],
+      ["📊 数据统计", "📈 趋势分析"],
+      ["🔔 通知设置", "🔒 隐私设置"],
+      ["❓ 帮助", "👤 个人资料"],
     ],
     resize_keyboard: true,
     one_time_keyboard: false,
   };
 
-  ctx.reply('功能菜单：', { reply_markup: keyboard });
+  ctx.reply("功能菜单：", { reply_markup: keyboard });
 });
 
 // 键盘按钮处理
-bot.hears('📊 数据统计', (ctx) => {
-  ctx.reply('📊 统计数据...\n\n总用户: 1,234\n今日活跃: 56');
+bot.hears("📊 数据统计", (ctx) => {
+  ctx.reply("📊 统计数据...\n\n总用户: 1,234\n今日活跃: 56");
 });
 
-bot.hears('📈 趋势分析', (ctx) => {
-  ctx.reply('📈 趋势分析...\n\n7天增长: +23%\n30天增长: +156%');
+bot.hears("📈 趋势分析", (ctx) => {
+  ctx.reply("📈 趋势分析...\n\n7天增长: +23%\n30天增长: +156%");
 });
 ```
 
 **Webhook 模式：**
 
 ```javascript
-import express from 'express';
-import { Telegraf } from 'telegraf';
+import express from "express";
+import { Telegraf } from "telegraf";
 
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -1467,7 +1513,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 app.use(webhookPath, bot.webhookCallback(webhookPath));
 
 // 健康检查
-app.get('/health', (req, res) => res.send('OK'));
+app.get("/health", (req, res) => res.send("OK"));
 
 // 启动服务器
 const PORT = process.env.PORT || 3000;
@@ -1487,7 +1533,9 @@ app.listen(PORT, () => {
 ```javascript
 // 日志中间件
 bot.use((ctx, next) => {
-  console.log(`[${new Date().toISOString()}] ${ctx.from.username}: ${ctx.message?.text}`);
+  console.log(
+    `[${new Date().toISOString()}] ${ctx.from.username}: ${ctx.message?.text}`
+  );
   return next();
 });
 
@@ -1495,13 +1543,13 @@ bot.use((ctx, next) => {
 const authMiddleware = (ctx, next) => {
   const allowedUsers = [123456789, 987654321]; // 允许的用户 ID
   if (!allowedUsers.includes(ctx.from.id)) {
-    return ctx.reply('❌ 您没有权限使用此功能');
+    return ctx.reply("❌ 您没有权限使用此功能");
   }
   return next();
 };
 
-bot.command('admin', authMiddleware, (ctx) => {
-  ctx.reply('🔧 管理员面板');
+bot.command("admin", authMiddleware, (ctx) => {
+  ctx.reply("🔧 管理员面板");
 });
 ```
 
@@ -1510,6 +1558,7 @@ bot.command('admin', authMiddleware, (ctx) => {
 **快速开始：**
 
 `package.json`:
+
 ```json
 {
   "dependencies": {
@@ -1519,15 +1568,16 @@ bot.command('admin', authMiddleware, (ctx) => {
 ```
 
 `src/index.js`:
+
 ```javascript
-import { Bot } from 'grammy';
+import { Bot } from "grammy";
 
 const bot = new Bot(process.env.BOT_TOKEN);
 
 // 路由器
-bot.command('start', (ctx) => ctx.reply('欢迎使用！'));
+bot.command("start", (ctx) => ctx.reply("欢迎使用！"));
 
-bot.on('message:text', (ctx) => ctx.reply(`你说了：${ctx.message.text}`));
+bot.on("message:text", (ctx) => ctx.reply(`你说了：${ctx.message.text}`));
 
 // 启动
 bot.start();
@@ -1536,34 +1586,36 @@ bot.start();
 **会话管理：**
 
 ```javascript
-import { Bot, session } from 'grammy';
-import { MemorySessionStorage } from 'grammy';
+import { Bot, session } from "grammy";
+import { MemorySessionStorage } from "grammy";
 
 const bot = new Bot(process.env.BOT_TOKEN);
 
 // 会话存储
-bot.use(session({
-  initial: () => ({
-    step: 0,
-    data: {},
-  }),
-  storage: new MemorySessionStorage(),
-}));
+bot.use(
+  session({
+    initial: () => ({
+      step: 0,
+      data: {},
+    }),
+    storage: new MemorySessionStorage(),
+  })
+);
 
 // 多步骤表单
-bot.command('register', async (ctx) => {
+bot.command("register", async (ctx) => {
   ctx.session.step = 1;
-  await ctx.reply('请输入您的姓名：');
+  await ctx.reply("请输入您的姓名：");
 });
 
-bot.on('message:text', async (ctx) => {
+bot.on("message:text", async (ctx) => {
   const step = ctx.session.step;
 
   switch (step) {
     case 1:
       ctx.session.data.name = ctx.message.text;
       ctx.session.step = 2;
-      await ctx.reply('请输入您的邮箱：');
+      await ctx.reply("请输入您的邮箱：");
       break;
 
     case 2:
@@ -1577,7 +1629,7 @@ bot.on('message:text', async (ctx) => {
       break;
 
     default:
-      await ctx.reply('使用 /register 开始注册');
+      await ctx.reply("使用 /register 开始注册");
   }
 });
 ```
@@ -1588,10 +1640,10 @@ bot.on('message:text', async (ctx) => {
 // 设置菜单按钮
 await bot.api.setChatMenuButton({
   menuButton: {
-    type: 'web_app',
-    text: '打开应用',
+    type: "web_app",
+    text: "打开应用",
     web_app: {
-      url: 'https://your-mini-app.com',
+      url: "https://your-mini-app.com",
     },
   },
 });
@@ -1599,7 +1651,7 @@ await bot.api.setChatMenuButton({
 // 移除菜单按钮
 await bot.api.setChatMenuButton({
   menuButton: {
-    type: 'default',
+    type: "default",
   },
 });
 ```
@@ -1613,7 +1665,7 @@ bot.catch((err, ctx) => {
   console.error(`❌ 处理更新 ${ctx.update.update_id} 时出错:`, err);
 
   // 通知用户
-  ctx.reply('抱歉，发生错误。请稍后重试。').catch(console.error);
+  ctx.reply("抱歉，发生错误。请稍后重试。").catch(console.error);
 
   // 记录错误日志
   logError(err, ctx);
@@ -1626,12 +1678,12 @@ async function withRetry(fn, maxRetries = 3) {
       return await fn();
     } catch (err) {
       if (i === maxRetries - 1) throw err;
-      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
     }
   }
 }
 
-bot.command('heavy', async (ctx) => {
+bot.command("heavy", async (ctx) => {
   const result = await withRetry(async () => {
     return await performHeavyOperation();
   });
@@ -1642,35 +1694,38 @@ bot.command('heavy', async (ctx) => {
 **数据库集成：**
 
 ```javascript
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 await client.connect();
-const db = client.db('telegram-bot');
+const db = client.db("telegram-bot");
 
 // 保存用户
 async function saveUser(userId, username) {
-  await db.collection('users').updateOne(
-    { userId },
-    { $set: { username, lastSeen: new Date() } },
-    { upsert: true }
-  );
+  await db
+    .collection("users")
+    .updateOne(
+      { userId },
+      { $set: { username, lastSeen: new Date() } },
+      { upsert: true }
+    );
 }
 
-bot.command('save', async (ctx) => {
+bot.command("save", async (ctx) => {
   await saveUser(ctx.from.id, ctx.from.username);
-  ctx.reply('✅ 数据已保存');
+  ctx.reply("✅ 数据已保存");
 });
 
 // 查询用户
 async function getUser(userId) {
-  return await db.collection('users').findOne({ userId });
+  return await db.collection("users").findOne({ userId });
 }
 ```
 
 ### MTProto 协议
 
 **特点：**
+
 - 端到端加密
 - 高性能
 - 支持所有 Telegram 功能
@@ -1681,6 +1736,7 @@ async function getUser(userId) {
 ### 完整错误处理框架
 
 **Python (python-telegram-bot) 异步错误处理：**
+
 ```python
 import asyncio
 import logging
@@ -1745,6 +1801,7 @@ application.add_error_handler(error_handler)
 ```
 
 **请求验证和参数检查：**
+
 ```python
 from typing import Optional
 
@@ -1777,6 +1834,7 @@ except ValueError as e:
 ### 日志和监控
 
 **结构化日志记录：**
+
 ```python
 import json
 from datetime import datetime
@@ -1820,6 +1878,7 @@ logger.log_error("API 错误", {"chat_id": 123456, "error_code": 400})
 ### 调试技巧
 
 **开发环境 Webhook 测试：**
+
 ```bash
 # 使用 ngrok 暴露本地服务器
 ngrok http 5000
@@ -1832,6 +1891,7 @@ curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
 ```
 
 **调试模式：**
+
 ```python
 import os
 
@@ -1865,6 +1925,7 @@ application.add_handler(CommandHandler("debug", debug_handler))
 ```
 
 **Webhook 健康检查：**
+
 ```python
 from fastapi import FastAPI, Request, HTTPException
 
@@ -1894,6 +1955,7 @@ async def get_webhook_info():
 ### 数据验证和清理
 
 **使用 Pydantic 验证输入：**
+
 ```python
 from pydantic import BaseModel, validator
 from typing import Optional
@@ -1928,6 +1990,7 @@ except ValueError as e:
 ```
 
 **消息内容清理：**
+
 ```python
 import re
 
@@ -1958,20 +2021,23 @@ def sanitize_markdown(text: str) -> str:
 ### Bot 开发
 
 1. **错误处理**
-    ```python
-    try:
-        response = requests.post(url, json=data, timeout=10)
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f"请求失败: {e}")
-    ```
+
+   ```python
+   try:
+       response = requests.post(url, json=data, timeout=10)
+       response.raise_for_status()
+   except requests.exceptions.RequestException as e:
+       print(f"请求失败: {e}")
+   ```
 
 2. **速率限制**
+
    - 群组消息：最多 20 条/分钟
    - 私聊消息：最多 30 条/秒
    - 全局限制：避免过于频繁
 
 3. **使用 Webhook 而非长轮询**
+
    - 更高效
    - 更低延迟
    - 更好的可扩展性
@@ -1984,34 +2050,37 @@ def sanitize_markdown(text: str) -> str:
 ### Mini Apps 开发
 
 1. **响应式设计**
+
    ```javascript
    // 监听主题变化
-   tg.onEvent('themeChanged', () => {
-       document.body.style.backgroundColor = tg.themeParams.bg_color;
+   tg.onEvent("themeChanged", () => {
+     document.body.style.backgroundColor = tg.themeParams.bg_color;
    });
-   
+
    // 监听视口变化
-   tg.onEvent('viewportChanged', () => {
-       console.log('新高度:', tg.viewportHeight);
+   tg.onEvent("viewportChanged", () => {
+     console.log("新高度:", tg.viewportHeight);
    });
    ```
 
 2. **性能优化**
+
    - 最小化 JavaScript 包大小
    - 使用懒加载
    - 优化图片和资源
 
 3. **用户体验**
+
    - 适配深色/浅色主题
    - 使用原生 UI 控件（MainButton 等）
    - 提供触觉反馈
    - 快速响应用户操作
 
 4. **安全考虑**
-    - HTTPS 强制
-    - 验证 initData
-    - 不在客户端存储敏感信息
-    - 使用 SecureStorage 存储密钥
+   - HTTPS 强制
+   - 验证 initData
+   - 不在客户端存储敏感信息
+   - 使用 SecureStorage 存储密钥
 
 ## 安全最佳实践
 
@@ -2020,6 +2089,7 @@ def sanitize_markdown(text: str) -> str:
 **环境变量配置：**
 
 `.env`:
+
 ```env
 # Bot Token
 BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
@@ -2043,7 +2113,8 @@ JWT_SECRET=your-super-secret-key-at-least-32-chars
 WEBHOOK_SECRET=random-secret-string
 ```
 
-**.env.example`:
+\*\*.env.example`:
+
 ```env
 # 复制此文件为 .env 并填写实际值
 BOT_TOKEN=your_bot_token_here
@@ -2409,23 +2480,22 @@ await audit_action(
 ```javascript
 // 生成随机 nonce
 function generateNonce() {
-  return crypto.getRandomValues(new Uint8Array(16))
-    .toString();
+  return crypto.getRandomValues(new Uint8Array(16)).toString();
 }
 
 // 在 Mini App 启动时生成 nonce
 const nonce = generateNonce();
-localStorage.setItem('csrf_nonce', nonce);
+localStorage.setItem("csrf_nonce", nonce);
 
 // 发送请求时包含 nonce
 async function makeRequest(data) {
-  const response = await fetch('/api/action', {
-    method: 'POST',
+  const response = await fetch("/api/action", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Nonce': localStorage.getItem('csrf_nonce')
+      "Content-Type": "application/json",
+      "X-CSRF-Nonce": localStorage.getItem("csrf_nonce"),
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
   return response.json();
 }
@@ -2725,7 +2795,7 @@ await request_queue.add(bot.send_message, chat_id, "Hello")
 
 ```javascript
 // 动态导入
-const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
+const HeavyComponent = React.lazy(() => import("./HeavyComponent"));
 
 function App() {
   return (
@@ -2764,14 +2834,10 @@ function App() {
 **虚拟滚动：**
 
 ```javascript
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList } from "react-window";
 
 function VirtualList({ items }) {
-  const Row = ({ index, style }) => (
-    <div style={style}>
-      {items[index]}
-    </div>
-  );
+  const Row = ({ index, style }) => <div style={style}>{items[index]}</div>;
 
   return (
     <FixedSizeList
@@ -2790,19 +2856,19 @@ function VirtualList({ items }) {
 
 ```javascript
 // 使用 IndexedDB 存储大量数据
-import { openDB } from 'idb';
+import { openDB } from "idb";
 
-const db = await openDB('my-db', 1, {
+const db = await openDB("my-db", 1, {
   upgrade(db) {
-    db.createObjectStore('cache');
+    db.createObjectStore("cache");
   },
 });
 
 // 存储数据
-await db.put('cache', largeData, 'key');
+await db.put("cache", largeData, "key");
 
 // 获取数据
-const data = await db.get('cache', 'key');
+const data = await db.get("cache", "key");
 ```
 
 ### 6. 内存和资源管理
@@ -2896,6 +2962,7 @@ python -m aiodebug.log_slow_callbacks main.py
 ### 8. 性能优化检查清单
 
 **Bot 性能：**
+
 - [ ] 使用异步 I/O
 - [ ] 实施缓存策略（Redis）
 - [ ] 数据库查询优化（索引、批量操作）
@@ -2904,6 +2971,7 @@ python -m aiodebug.log_slow_callbacks main.py
 - [ ] 实施速率限制防止滥用
 
 **Mini Apps 性能：**
+
 - [ ] 代码分割和懒加载
 - [ ] 图片优化（延迟加载、响应式）
 - [ ] 虚拟滚动（长列表）
@@ -2912,6 +2980,7 @@ python -m aiodebug.log_slow_callbacks main.py
 - [ ] 使用 CDN 分发静态资源
 
 **监控和调优：**
+
 - [ ] 配置性能监控
 - [ ] 定期分析慢查询
 - [ ] 监控内存和 CPU 使用
@@ -3099,9 +3168,10 @@ async def test_token():
     const tg = window.Telegram.WebApp;
     tg.ready();
   } else {
-    console.error('Telegram WebApp API 不可用');
+    console.error("Telegram WebApp API 不可用");
     // 提供回退 UI
-    document.getElementById('app').innerHTML = '<p>请在 Telegram 中打开此应用</p>';
+    document.getElementById("app").innerHTML =
+      "<p>请在 Telegram 中打开此应用</p>";
   }
 </script>
 ```
@@ -3194,10 +3264,10 @@ if ('serviceWorker' in navigator) {
 if (tg.HapticFeedback) {
   // 触觉反馈必须在用户交互后触发
   button.onclick = () => {
-    tg.HapticFeedback.impactOccurred('light');
+    tg.HapticFeedback.impactOccurred("light");
   };
 } else {
-  console.log('此平台不支持触觉反馈');
+  console.log("此平台不支持触觉反馈");
 }
 ```
 
@@ -3325,24 +3395,26 @@ async def log_update(update, handler):
 
 ### 常见错误代码参考
 
-| 错误代码 | 说明 | 解决方案 |
-|---------|------|---------|
-| 401 | Unauthorized (Token 无效) | 检查 Token 是否正确 |
-| 403 | Forbidden (权限不足) | Bot 需要管理员权限或加入群组 |
-| 404 | Not Found (聊天不存在) | 检查 chat_id 或邀请链接 |
-| 429 | Too Many Requests (速率限制) | 实施速率限制或等待 |
-| 500 | Internal Server Error (服务器错误) | 重试或联系 Telegram 支持 |
-| `Bad Request: message is not modified` | 尝试编辑未修改的消息 | 检查消息内容是否真正改变 |
-| `Bad Request: can't parse entities` | Markdown/HTML 格式错误 | 检查特殊字符转义 |
+| 错误代码                               | 说明                               | 解决方案                     |
+| -------------------------------------- | ---------------------------------- | ---------------------------- |
+| 401                                    | Unauthorized (Token 无效)          | 检查 Token 是否正确          |
+| 403                                    | Forbidden (权限不足)               | Bot 需要管理员权限或加入群组 |
+| 404                                    | Not Found (聊天不存在)             | 检查 chat_id 或邀请链接      |
+| 429                                    | Too Many Requests (速率限制)       | 实施速率限制或等待           |
+| 500                                    | Internal Server Error (服务器错误) | 重试或联系 Telegram 支持     |
+| `Bad Request: message is not modified` | 尝试编辑未修改的消息               | 检查消息内容是否真正改变     |
+| `Bad Request: can't parse entities`    | Markdown/HTML 格式错误             | 检查特殊字符转义             |
 
 ### 获取帮助
 
 **官方资源：**
+
 - Bot API 文档: https://core.telegram.org/bots/api
 - FAQ: https://core.telegram.org/bots/faq
 - GitHub Issues: https://github.com/tdlib/telegram-bot-api/issues
 
 **社区资源：**
+
 - Python Telegram Bot Forum: https://t.me/pythontelegrambotgroup
 - Node Telegram Bot Group: https://t.me/node_telegram_bot_group
 - Stack Overflow (标签: telegram-bot)
@@ -3350,16 +3422,19 @@ async def log_update(update, handler):
 ## 常用库和工具
 
 ### Python
+
 - `python-telegram-bot` - 功能强大的 Bot 框架
 - `aiogram` - 异步 Bot 框架
 - `telethon` / `pyrogram` - MTProto 客户端
 
 ### Node.js
+
 - `node-telegram-bot-api` - Bot API 包装器
 - `telegraf` - 现代 Bot 框架
 - `grammy` - 轻量级框架
 
 ### 其他语言
+
 - PHP: `telegram-bot-sdk`
 - Go: `telegram-bot-api`
 - Java: `TelegramBots`
@@ -3372,6 +3447,7 @@ async def log_update(update, handler):
 **Python (pytest):**
 
 `tests/test_bot.py`:
+
 ```python
 import pytest
 from telegram import Update, Message, User, Chat
@@ -3473,6 +3549,7 @@ async def test_callback_query_handler():
 ```
 
 `requirements-dev.txt`:
+
 ```
 pytest==7.4.0
 pytest-asyncio==0.21.0
@@ -3507,6 +3584,7 @@ pytest --cov=main --cov-report=term-missing
 **集成测试：**
 
 `tests/test_integration.py`:
+
 ```python
 import pytest
 from telegram import Update
@@ -3592,13 +3670,14 @@ lt --port 5000
 **Playwright 测试：**
 
 `tests/mini-app.spec.js`:
-```javascript
-import { test, expect } from '@playwright/test';
 
-test.describe('Telegram Mini App', () => {
-  test('应显示用户信息', async ({ page }) => {
+```javascript
+import { test, expect } from "@playwright/test";
+
+test.describe("Telegram Mini App", () => {
+  test("应显示用户信息", async ({ page }) => {
     // 模拟 Telegram WebApp 环境
-    await page.goto('http://localhost:3000');
+    await page.goto("http://localhost:3000");
 
     // 注入模拟的 Telegram WebApp 对象
     await page.evaluate(() => {
@@ -3607,45 +3686,45 @@ test.describe('Telegram Mini App', () => {
           initDataUnsafe: {
             user: {
               id: 123,
-              first_name: 'Test',
-              username: 'testuser'
-            }
+              first_name: "Test",
+              username: "testuser",
+            },
           },
           themeParams: {
-            bg_color: '#ffffff',
-            text_color: '#000000'
+            bg_color: "#ffffff",
+            text_color: "#000000",
           },
           ready: () => {},
           expand: () => {},
-          version: '6.9'
-        }
+          version: "6.9",
+        },
       };
     });
 
     // 等待页面加载
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState("networkidle");
 
     // 验证用户信息显示
-    await expect(page.locator('text=Test')).toBeVisible();
-    await expect(page.locator('text=testuser')).toBeVisible();
+    await expect(page.locator("text=Test")).toBeVisible();
+    await expect(page.locator("text=testuser")).toBeVisible();
   });
 
-  test('主按钮应可点击', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+  test("主按钮应可点击", async ({ page }) => {
+    await page.goto("http://localhost:3000");
 
     // 注入模拟环境
     await page.evaluate(() => {
       window.Telegram = {
         WebApp: {
           MainButton: {
-            text: '提交',
+            text: "提交",
             show: () => {},
             onClick: (callback) => {},
             isVisible: true,
-            isActive: true
+            isActive: true,
           },
-          ready: () => {}
-        }
+          ready: () => {},
+        },
       };
     });
 
@@ -3653,37 +3732,41 @@ test.describe('Telegram Mini App', () => {
     await page.click('button[data-testid="main-button"]');
 
     // 验证发送数据
-    await expect(page.locator('text=提交成功')).toBeVisible();
+    await expect(page.locator("text=提交成功")).toBeVisible();
   });
 
-  test('应响应主题变化', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+  test("应响应主题变化", async ({ page }) => {
+    await page.goto("http://localhost:3000");
 
     // 注入模拟环境
     await page.evaluate(() => {
       window.Telegram = {
         WebApp: {
           themeParams: {
-            bg_color: '#ffffff'
+            bg_color: "#ffffff",
           },
           ready: () => {},
           onEvent: (event, callback) => {
-            if (event === 'themeChanged') {
-              setTimeout(() => callback({
-                theme_params: { bg_color: '#1a1a1a' }
-              }), 100);
+            if (event === "themeChanged") {
+              setTimeout(
+                () =>
+                  callback({
+                    theme_params: { bg_color: "#1a1a1a" },
+                  }),
+                100
+              );
             }
-          }
-        }
+          },
+        },
       };
     });
 
     // 验证深色主题应用
     await page.waitForTimeout(200);
-    const bgColor = await page.locator('body').evaluate(el => {
+    const bgColor = await page.locator("body").evaluate((el) => {
       return window.getComputedStyle(el).backgroundColor;
     });
-    expect(bgColor).toBe('rgb(26, 26, 26)');
+    expect(bgColor).toBe("rgb(26, 26, 26)");
   });
 });
 ```
@@ -3814,6 +3897,7 @@ async def test_handler_performance():
 **负载测试：**
 
 `tests/load_test.py`:
+
 ```python
 import asyncio
 import aiohttp
@@ -4361,6 +4445,7 @@ LOG_LEVEL=WARNING
 ### 案例 1: 电商 Bot
 
 **功能需求：**
+
 - 商品展示和搜索
 - 购物车管理
 - Telegram Stars 支付
@@ -4501,6 +4586,7 @@ async def successful_payment_handler(message: Message):
 ### 案例 2: 投票 Bot
 
 **功能需求：**
+
 - 创建投票（最多 12 选项）
 - 匿名投票
 - 实时结果统计
@@ -4648,6 +4734,7 @@ async def create_vote_command(update: Update, context: ContextTypes.DEFAULT_TYPE
 ### 案例 3: 客服 Bot
 
 **功能需求：**
+
 - 自动回复常见问题（FAQ）
 - 收集用户消息
 - 人工转接
@@ -4742,7 +4829,7 @@ class SupportService:
 
 ```javascript
 // 客服 Mini App
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function SupportPanel() {
   const [tickets, setTickets] = useState([]);
@@ -4753,26 +4840,26 @@ function SupportPanel() {
   }, []);
 
   const loadTickets = async () => {
-    const response = await fetch('/api/support/tickets');
+    const response = await fetch("/api/support/tickets");
     const data = await response.json();
     setTickets(data);
   };
 
   const sendMessage = async (message) => {
-    await fetch('/api/support/tickets/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/support/tickets/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ticket_id: selectedTicket.id,
-        message: message
-      })
+        message: message,
+      }),
     });
   };
 
   return (
     <div className="support-panel">
       <div className="ticket-list">
-        {tickets.map(ticket => (
+        {tickets.map((ticket) => (
           <div key={ticket.id} onClick={() => setSelectedTicket(ticket)}>
             #{ticket.id} - {ticket.user_name}
           </div>
@@ -4781,13 +4868,15 @@ function SupportPanel() {
       {selectedTicket && (
         <div className="ticket-chat">
           <div className="messages">
-            {selectedTicket.messages.map(msg => (
-              <div key={msg.id} className={msg.is_agent ? 'agent' : 'user'}>
+            {selectedTicket.messages.map((msg) => (
+              <div key={msg.id} className={msg.is_agent ? "agent" : "user"}>
                 {msg.message}
               </div>
             ))}
           </div>
-          <textarea onKeyPress={(e) => e.key === 'Enter' && sendMessage(e.target.value)} />
+          <textarea
+            onKeyPress={(e) => e.key === "Enter" && sendMessage(e.target.value)}
+          />
         </div>
       )}
     </div>
@@ -4877,18 +4966,21 @@ STRIPE_API_KEY=sk_test_...
 ## 参考资源
 
 ### 官方文档
+
 - Bot API: https://core.telegram.org/bots/api
 - Mini Apps: https://core.telegram.org/bots/webapps
 - Mini Apps Platform: https://docs.telegram-mini-apps.com
 - Telegram API: https://core.telegram.org
 
 ### GitHub 仓库
+
 - Bot API 服务器: https://github.com/tdlib/telegram-bot-api
 - Android 客户端: https://github.com/DrKLO/Telegram
 - Desktop 客户端: https://github.com/telegramdesktop/tdesktop
 - 官方组织: https://github.com/orgs/TelegramOfficial/repositories
 
 ### 工具
+
 - @BotFather - 创建和管理 Bot
 - https://my.telegram.org - 获取 API ID/Hash
 - Telegram Web App 测试环境
@@ -4898,7 +4990,7 @@ STRIPE_API_KEY=sk_test_...
 此技能包含详细的 Telegram 开发资源索引和完整实现模板：
 
 - **index.md** - 完整的资源链接和快速导航
-- **Telegram_Bot_按钮和键盘实现模板.md** - 交互式按钮和键盘实现指南（404 行，12 KB）
+- **Telegram*Bot*按钮和键盘实现模板.md** - 交互式按钮和键盘实现指南（404 行，12 KB）
   - 三种按钮类型详解（Inline/Reply/Command Menu）
   - python-telegram-bot 和 Telethon 双实现对比
   - 完整的即用代码示例和项目结构
@@ -4910,6 +5002,7 @@ STRIPE_API_KEY=sk_test_...
   - 排行榜和数据表格专业展示
 
 这些精简指南提供了核心的 Telegram Bot 开发解决方案：
+
 - 按钮和键盘交互的所有实现方式
 - 消息和数据的专业格式化展示
 - 实用的最佳实践和快速参考
