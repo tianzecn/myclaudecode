@@ -40,6 +40,7 @@
 		"./commands/troubleshooting-guide-故障排除指南.md",
 		"./commands/update-claudemd-更新Claude配置.md",
 		"./commands/update-docs-更新文档.md",
+		"./commands/update-docs-自动化文档.md",
 		"./commands/优化CLAUDE.md",
 		"./commands/开发归档.md",
 		"./commands/开发总结.md",
