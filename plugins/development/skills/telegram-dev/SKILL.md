@@ -239,3 +239,382 @@ async def start_with_app(update: Update, context: ContextTypes.DEFAULT_TYPE):
 Telegram Stars 是 Telegram 的虚拟货币系统，支持小额支付。
 
 **创建 Stars 发票：**
+
+```python
+from telegram import LabeledPrice
+
+await bot.send_invoice(
+    chat_id=chat_id,
+    title='高级订阅',
+    description='1 个月的高级功能访问',
+    payload='premium_subscription',
+    provider_token='',  # Telegram Stars 支付不需要
+    currency='XTR',  # XTR = Telegram Stars
+    prices=[
+        LabeledPrice('1 个月', 100),  # 100 Stars
+        LabeledPrice('3 个月', 250),  # 250 Stars（优惠）
+    ],
+    start_parameter='premium_start',
+    photo_url='https://example.com/premium.jpg',
+    photo_size=800,
+    photo_width=800,
+    photo_height=800,
+    is_flexible=False  # 价格不可变
+)
+```
+
+**处理预结账查询：**
+
+```python
+from telegram import PreCheckoutQuery
+
+@bot.pre_checkout_query_handler
+async def pre_checkout_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.pre_checkout_query
+
+    # 验证订单
+    if await validate_order(query.invoice_payload, query.from_user.id):
+        await query.answer(ok=True)
+    else:
+        await query.answer(
+            ok=False,
+            error_message='订单验证失败，请联系客服'
+        )
+
+async def validate_order(payload: str, user_id: int) -> bool:
+    """验证订单有效性"""
+    # 检查用户是否有权限购买
+    # 检查订单是否已处理
+    # 检查价格是否正确
+    return True
+```
+
+**处理支付成功：**
+
+```python
+@bot.message_handler(content_types=['successful_payment'])
+async def successful_payment_handler(message: Message):
+    payment = message.successful_payment
+
+    # 解析支付信息
+    user_id = message.chat.id
+    payload = payment.invoice_payload
+    currency = payment.currency  # XTR
+    total_amount = payment.total_amount  # Stars 数量
+
+    # 验证并处理支付
+    await process_payment(user_id, payload, total_amount)
+
+    await message.reply_text(
+        f'✅ 支付成功！\n'
+        f'支付: {total_amount} {currency}\n'
+        f'订单: {payload}'
+    )
+
+async def process_payment(user_id: int, payload: str, amount: int):
+    """处理支付后的业务逻辑"""
+    if payload == 'premium_subscription':
+        # 激活高级功能
+        await activate_premium(user_id, duration_days=30)
+    elif payload == 'credits':
+        # 充值积分
+        await add_credits(user_id, amount)
+```
+
+**在 Mini App 中发起支付：**
+
+```javascript
+const tg = window.Telegram.WebApp;
+
+// 打开发票链接
+tg.openInvoice("https://t.me/$invoice_link", (status) => {
+  if (status === "paid") {
+    console.log("支付成功");
+    // 通知 Bot 支付完成
+    tg.sendData(
+      JSON.stringify({
+        action: "payment_completed",
+        invoice_id: "...",
+      })
+    );
+  } else if (status === "cancelled") {
+    console.log("支付取消");
+  } else if (status === "pending") {
+    console.log("支付处理中");
+  } else if (status === "failed") {
+    console.log("支付失败");
+  }
+});
+```
+
+**消息编辑限制**
+
+Telegram 允许编辑消息，但有 48 小时的限制。
+
+```python
+import datetime
+from telegram.error import BadRequest
+
+async def edit_message_safely(chat_id: int, message_id: int, new_text: str):
+    """安全编辑消息，处理时间限制"""
+    try:
+        # 尝试编辑消息
+        await bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=message_id,
+            text=new_text
+        )
+        return True
+
+    except BadRequest as e:
+        error_msg = str(e)
+
+        if 'message is not modified' in error_msg:
+            # 消息内容未改变
+            print('消息内容未修改')
+            return True
+
+        elif 'message to edit not found' in error_msg:
+            # 消息已被删除
+            print('消息不存在')
+            return False
+
+        elif "message can't be edited" in error_msg:
+            # 超过 48 小时编辑限制
+            print('消息超过 48 小时，无法编辑')
+
+            # 替代方案：发送新消息
+            await bot.send_message(
+                chat_id=chat_id,
+                text=f"（更新）{new_text}"
+            )
+            return False
+
+        else:
+            print(f"编辑失败: {e}")
+            return False
+```
+
+**获取消息信息：**
+
+```python
+# 获取原始消息时间戳
+message = await bot.send_message(chat_id, "测试消息")
+message_time = message.date  # datetime 对象
+
+# 计算是否可编辑
+now = datetime.datetime.now()
+can_edit = (now - message_time).total_seconds() < 48 * 3600  # 48 小时
+
+if can_edit:
+    await message.edit_text("更新后的文本")
+else:
+    await bot.send_message(chat_id, "新消息（原消息已过期无法编辑）")
+```
+
+**API 端点：**
+
+```
+https://api.telegram.org/bot<TOKEN>/METHOD_NAME
+```
+
+**获取 Bot Token：**
+
+1. 与 @BotFather 对话
+2. 发送 `/newbot`
+3. 按提示设置名称
+4. 获取 token
+
+**第一个 Bot (Python)：**
+
+```python
+import requests
+
+BOT_TOKEN = "your_bot_token_here"
+API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
+
+# 发送消息
+def send_message(chat_id, text):
+    url = f"{API_URL}/sendMessage"
+    data = {"chat_id": chat_id, "text": text}
+    return requests.post(url, json=data)
+
+# 获取更新（长轮询）
+def get_updates(offset=None):
+    url = f"{API_URL}/getUpdates"
+    params = {"offset": offset, "timeout": 30}
+    return requests.get(url, params=params).json()
+
+# 主循环
+offset = None
+while True:
+    updates = get_updates(offset)
+    for update in updates.get("result", []):
+        chat_id = update["message"]["chat"]["id"]
+        text = update["message"]["text"]
+
+        # 回复消息
+        send_message(chat_id, f"你说了：{text}")
+
+        offset = update["update_id"] + 1
+```
+
+### 核心 API 方法
+
+**更新管理：**
+
+- `getUpdates` - 长轮询获取更新
+- `setWebhook` - 设置 Webhook
+- `deleteWebhook` - 删除 Webhook
+- `getWebhookInfo` - 查询 Webhook 状态
+
+**消息操作：**
+
+- `sendMessage` - 发送文本消息
+- `sendPhoto` / `sendVideo` / `sendDocument` - 发送媒体
+- `sendAudio` / `sendVoice` - 发送音频
+- `sendLocation` / `sendVenue` - 发送位置
+- `editMessageText` - 编辑消息
+- `deleteMessage` - 删除消息
+- `forwardMessage` / `copyMessage` - 转发/复制消息
+
+**交互元素：**
+
+- `sendPoll` - 发送投票（最多 12 个选项）
+- 内联键盘 (InlineKeyboardMarkup)
+- 回复键盘 (ReplyKeyboardMarkup)
+- `answerCallbackQuery` - 响应回调查询
+
+**文件操作：**
+
+- `getFile` - 获取文件信息
+- `downloadFile` - 下载文件
+- 支持最大 2GB 文件（本地 Bot API 模式）
+
+**支付功能：**
+
+- `sendInvoice` - 发送发票
+- `answerPreCheckoutQuery` - 处理支付
+- Telegram Stars 支付（最高 10,000 Stars）
+
+### Webhook 配置
+
+**设置 Webhook：**
+
+```python
+import requests
+
+BOT_TOKEN = "your_token"
+WEBHOOK_URL = "https://yourdomain.com/webhook"
+
+requests.post(
+    f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook",
+    json={"url": WEBHOOK_URL}
+)
+```
+
+**Flask Webhook 示例：**
+
+```python
+from flask import Flask, request
+import requests
+
+app = Flask(__name__)
+BOT_TOKEN = "your_token"
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    update = request.get_json()
+
+    chat_id = update["message"]["chat"]["id"]
+    text = update["message"]["text"]
+
+    # 发送回复
+    requests.post(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        json={"chat_id": chat_id, "text": f"收到: {text}"}
+    )
+
+    return "OK"
+
+if __name__ == '__main__':
+    app.run(port=5000)
+```
+
+### Mini App 核心 API
+
+**WebApp 对象主要属性：**
+
+```javascript
+// 初始化数据
+tg.initData; // 原始初始化字符串
+tg.initDataUnsafe; // 解析后的对象
+
+// 用户和主题
+tg.initDataUnsafe.user; // 用户信息
+tg.themeParams; // 主题颜色
+tg.colorScheme; // 'light' 或 'dark'
+
+// 状态
+tg.isExpanded; // 是否全屏
+tg.isFullscreen; // 是否全屏
+tg.viewportHeight; // 视口高度
+tg.platform; // 平台类型
+
+// 版本
+tg.version; // WebApp 版本
+```
+
+**主要方法：**
+
+```javascript
+// 窗口控制
+tg.ready(); // 标记应用准备就绪
+tg.expand(); // 展开到全高度
+tg.close(); // 关闭 Mini App
+tg.requestFullscreen(); // 请求全屏
+
+// 数据发送
+tg.sendData(data); // 发送数据到 Bot
+
+// 导航
+tg.openLink(url); // 打开外部链接
+tg.openTelegramLink(url); // 打开 Telegram 链接
+
+// 对话框
+tg.showPopup(params, callback); // 显示弹窗
+tg.showAlert(message); // 显示警告
+tg.showConfirm(message); // 显示确认
+
+// 分享
+tg.shareMessage(message); // 分享消息
+tg.shareUrl(url); // 分享链接
+```
+
+### UI 控件
+
+**主按钮 (MainButton)：**
+
+```javascript
+tg.MainButton.setText("点击我");
+tg.MainButton.show();
+tg.MainButton.enable();
+tg.MainButton.showProgress(); // 显示加载
+tg.MainButton.hideProgress();
+
+tg.MainButton.onClick(() => {
+  console.log("主按钮被点击");
+});
+```
+
+**次要按钮 (SecondaryButton)：**
+
+```javascript
+tg.SecondaryButton.setText("取消");
+tg.SecondaryButton.show();
+tg.SecondaryButton.onClick(() => {
+  tg.close();
+});
+```
+
+**返回按钮 (BackButton)：**
