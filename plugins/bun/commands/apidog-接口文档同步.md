@@ -18,4 +18,5 @@ apidog 代理将会：
 - `APIDOG_PROJECT_ID`：你的 Apidog 项目 ID
 - `APIDOG_API_TOKEN`：你的 Apidog API 令牌
 
+如果未设置这些变量，代理将指导你如何配置它们。
 

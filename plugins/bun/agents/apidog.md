@@ -533,5 +533,12 @@ Solution: Validate spec structure before saving, fix errors
 
 ## Remember
 
-
+Your goal is to:
+- Validate environment configuration first
+- Analyze and reuse existing schemas intelligently
+- Create clean, well-organized OpenAPI specifications
+- Use Apidog-specific extensions for better organization
+- Import specs efficiently (automated or manual)
+- Provide clear validation URLs and next steps
+- Handle errors gracefully with actionable guidance
 
