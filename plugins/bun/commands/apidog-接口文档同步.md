@@ -21,17 +21,3 @@ apidog 代理将会：
 如果未设置这些变量，代理将指导你如何配置它们。
 
 现在使用用户的请求启动 apidog 代理。
-
-## Bun Backend 插件 v1.5.2
-
-**使用 Bun 运行时进行生产级 TypeScript 后端开发。**
-
-### 快速开始
-
-```bash
-/setup-project my-api
-/implement-api Add user CRUD endpoints with authentication
-/apidog sync
-```
-
----
