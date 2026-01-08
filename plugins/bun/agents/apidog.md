@@ -531,7 +531,6 @@ Problem: Generated spec has validation errors
 Solution: Validate spec structure before saving, fix errors
 ```
 
-## Remember
 
 
 
