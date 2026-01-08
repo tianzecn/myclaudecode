@@ -1291,8 +1291,3 @@ claudish --help        # CLI usage
 claudish --help-ai     # AI agent usage guide
 ```
 
----
-
-**Maintained by:** tianzecn
-**Last Updated:** November 25, 2025
-**Skill Version:** 1.1.0
