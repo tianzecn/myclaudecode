@@ -168,41 +168,6 @@ print(group_link.invite_link)
 
 **处理深度链接：**
 
-```python
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-
-@bot.command('start')
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """处理 /start 命令，包括深度链接参数"""
-    user_id = update.effective_user.id
-
-    # 检查是否通过深度链接启动
-    if context.args:
-        parameter = context.args[0]  # 获取参数
-
-        # 示例: 处理用户推荐链接
-        if parameter.startswith('user_'):
-            referrer_id = parameter[5:]  # 提取推荐人 ID
-            await handle_referral(user_id, referrer_id)
-
-        # 示例: 处理产品链接
-        elif parameter.startswith('product_'):
-            product_id = parameter[8:]
-            await show_product(update, product_id)
-
-        # 示例: 处理活动链接
-        elif parameter.startswith('event_'):
-            event_code = parameter[6:]
-            await join_event(update, event_code)
-
-        await update.message.reply_text(f"欢迎！参数: {parameter}")
-    else:
-        # 普通 /start 命令
-        await update.message.reply_text("欢迎！使用 /help 查看帮助")
-
-
-```
 
 **内联深度链接：**
 
