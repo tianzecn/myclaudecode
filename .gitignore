@@ -8,6 +8,11 @@
 !output-styles/
 !ai-docs/
 !tools/
+!.claude/
+
+# 排除本地私有配置
+.claude/*.local.json
+
 # 保留 .gitignore 本身
 !.gitignore
 !.gitmodules

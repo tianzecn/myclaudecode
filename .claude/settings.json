@@ -1,0 +1,14 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledPlugins": {
+    "orchestration@tianzecn-plugins": false,
+    "agent-sdk-dev@claude-code-plugins": false,
+    "commit-commands@claude-code-plugins": false,
+    "explanatory-output-style@claude-code-plugins": false,
+    "learning-output-style@claude-code-plugins": false,
+    "ralph-wiggum@claude-code-plugins": false,
+    "feature-dev@claude-code-plugins": false,
+    "frontend@tianzecn-plugins": false,
+    "frontend@mag-claude-plugins": true
+  }
+}
