@@ -1,0 +1,23 @@
+{
+	"name": "collected",
+	"version": "1.0.0",
+	"description": "社区精选高质量 Skill 合集。包含 skill-from-masters：帮助基于领域专家（如 Jobs、Bezos、Munger 等）的成熟方法论创建 Skill。内置方法论数据库，涵盖 15+ 领域（写作、产品、销售、领导力、工程等）。",
+	"author": {
+		"name": "tianzecn",
+		"email": "",
+		"company": ""
+	},
+	"license": "MIT",
+	"keywords": [
+		"skills",
+		"methodology",
+		"best-practices",
+		"experts",
+		"frameworks",
+		"collected",
+		"community"
+	],
+	"skills": [
+		"./skills/skill-from-masters"
+	]
+}
